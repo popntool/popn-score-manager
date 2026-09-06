@@ -13,47 +13,244 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="./"><span class="brand-icon">♪</span><span><small>UNOFFICIAL SCORE TOOL</small><strong>pop'n Score Manager</strong></span></a>
-    <div class="header-actions"><button id="themeButton" class="icon-button" type="button" aria-label="テーマ切替">☾</button><button id="authButton" class="main-button" type="button">ログイン</button></div>
+    <a class="brand" href="./">
+<span class="brand-icon">♪</span>
+<span>
+<small>UNOFFICIAL SCORE TOOL</small>
+<strong>pop'n Score Manager</strong>
+</span>
+</a>
+    <div class="header-actions">
+<button id="themeButton" class="icon-button" type="button" aria-label="テーマ切替">☾</button>
+<button id="authButton" class="main-button" type="button">ログイン</button>
+</div>
   </header>
 
   <main class="page-shell">
-    <section class="player-bar"><span class="avatar">●</span><span><small>PLAYER</small><strong id="playerName">GUEST</strong></span><button id="logoutButton" class="text-button" type="button" hidden>ログアウト</button></section>
-    <div id="setupNotice" class="notice" hidden><strong>Supabaseが未設定です</strong><span><code>js/config.js</code>へURLとAnon Keyを設定してください。</span></div>
+    <section class="player-bar">
+<span class="avatar">●</span>
+<span>
+<small>PLAYER</small>
+<strong id="playerName">GUEST</strong>
+</span>
+<button id="logoutButton" class="text-button" type="button" hidden>ログアウト</button>
+</section>
+    <div id="setupNotice" class="notice" hidden>
+<strong>Supabaseが未設定です</strong>
+<span>
+<code>js/config.js</code>へURLとAnon Keyを設定してください。</span>
+</div>
 
     <section class="summary-grid" aria-label="スコア概要">
-      <article class="summary pink"><span>登録譜面</span><strong id="registeredCount">0</strong><small>CHARTS</small></article>
-      <article class="summary blue"><span>平均スコア</span><strong id="averageScore">0</strong><small>AVERAGE</small></article>
-      <article class="summary yellow"><span>クリア率</span><strong><span id="clearRate">0</span>%</strong><small>CLEAR</small></article>
-      <article class="summary green"><span>FC以上</span><strong id="fullComboCount">0</strong><small>FULL COMBO</small></article>
+      <article class="summary pink">
+<span>登録譜面</span>
+<strong id="registeredCount">0</strong>
+<small>CHARTS</small>
+</article>
+      <article class="summary blue">
+<span>平均スコア</span>
+<strong id="averageScore">0</strong>
+<small>AVERAGE</small>
+</article>
+      <article class="summary yellow">
+<span>クリア率</span>
+<strong>
+<span id="clearRate">0</span>%</strong>
+<small>CLEAR</small>
+</article>
+      <article class="summary green">
+<span>FC以上</span>
+<strong id="fullComboCount">0</strong>
+<small>FULL COMBO</small>
+</article>
     </section>
 
-    <nav class="tabs" aria-label="メインメニュー"><button class="active" data-tab="scores" type="button">スコア</button><button data-tab="users" type="button">ユーザー</button><button data-tab="settings" type="button">設定</button></nav>
+    <nav class="tabs" aria-label="メインメニュー">
+<button class="active" data-tab="scores" type="button">スコア</button>
+<button data-tab="users" type="button">ユーザー</button>
+<button data-tab="settings" type="button">設定</button>
+</nav>
 
     <section id="scoresPanel" class="panel tab-panel">
-      <div class="panel-heading"><div><small>MY PLAY DATA</small><h1>登録スコア</h1></div><div class="action-row"><button id="syncHelpButton" class="main-button" type="button">スコア同期</button><button id="manualButton" class="sub-button" type="button">＋ 手動登録</button></div></div>
-      <div class="filters"><label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="曲名・ジャンル・アーティスト検索"></label><select id="chartFilter" aria-label="譜面"><option value="ALL">全譜面</option><option>LIGHT</option><option>NORMAL</option><option>HYPER</option><option>EX</option></select><select id="levelFilter" aria-label="レベル"><option value="ALL">全レベル</option></select><select id="medalFilter" aria-label="メダル"><option value="ALL">全メダル</option><option value="none">未プレー</option><option value="f">FAILED</option><option value="e">EASY</option><option value="bronze">銅</option><option value="silver">銀</option><option value="gold">金</option></select></div>
-      <div id="scoreList" class="score-list"><div class="empty">ログインすると登録スコアを表示します。</div></div>
+      <div class="panel-heading">
+<div>
+<small>MY PLAY DATA</small>
+<h1>登録スコア</h1>
+</div>
+<div class="action-row">
+<button id="syncHelpButton" class="main-button" type="button">スコア同期</button>
+<button id="manualButton" class="sub-button" type="button">＋ 手動登録</button>
+</div>
+</div>
+      <div class="filters">
+<label class="search">
+<span>⌕</span>
+<input id="searchInput" type="search" placeholder="曲名・ジャンル・アーティスト検索">
+</label>
+<select id="chartFilter" aria-label="譜面">
+<option value="ALL">全譜面</option>
+<option>LIGHT</option>
+<option>NORMAL</option>
+<option>HYPER</option>
+<option>EX</option>
+</select>
+<select id="levelFilter" aria-label="レベル">
+<option value="ALL">全レベル</option>
+</select>
+<select id="medalFilter" aria-label="クリアメダル">
+<option value="ALL">全メダル</option>
+<option value="none">未プレー</option>
+<option value="perfect">PERFECT</option>
+<option value="fc_1_5">FC・GOOD 1～5</option>
+<option value="fc_6_20">FC・GOOD 6～20</option>
+<option value="fc_21_plus">FC・GOOD 21以上</option>
+<option value="clear_bad_1_5">クリア・BAD 1～5</option>
+<option value="clear_bad_6_20">クリア・BAD 6～20</option>
+<option value="clear_bad_21_plus">クリア・BAD 21以上</option>
+<option value="long_off">ロングオフ</option>
+<option value="easy">EASYクリア</option>
+<option value="failed_15_16">FAILED・15～16粒</option>
+<option value="failed_12_14">FAILED・12～14粒</option>
+<option value="failed_0_11">FAILED・11粒以下</option>
+</select>
+</div>
+      <div id="scoreList" class="score-list">
+<div class="empty">ログインすると登録スコアを表示します。</div>
+</div>
     </section>
 
-    <section id="usersPanel" class="panel tab-panel" hidden><div class="panel-heading"><div><small>RIVALS</small><h1>ユーザーリスト</h1></div></div><label class="search"><span>⌕</span><input id="userSearchInput" type="search" placeholder="ユーザー名検索"></label><div id="userList" class="user-list"><div class="empty">ユーザーを読み込みます。</div></div></section>
+    <section id="usersPanel" class="panel tab-panel" hidden>
+<div class="panel-heading">
+<div>
+<small>RIVALS</small>
+<h1>ユーザーリスト</h1>
+</div>
+</div>
+<label class="search">
+<span>⌕</span>
+<input id="userSearchInput" type="search" placeholder="ユーザー名検索">
+</label>
+<div id="userList" class="user-list">
+<div class="empty">ユーザーを読み込みます。</div>
+</div>
+</section>
 
     <section id="settingsPanel" class="panel tab-panel settings" hidden>
-      <div class="panel-heading"><div><small>SETTINGS</small><h1>設定</h1></div></div>
-      <button id="settingsThemeButton" class="setting-row" type="button"><span><strong>表示テーマ</strong><small>ライト／ダークを切り替えます</small></span><b id="themeLabel">ライト</b></button>
-      <a class="setting-row" href="./tools/popn-master-extractor.txt" download><span><strong>曲マスター抽出</strong><small>全曲・バナー画像・4譜面難易度を取得</small></span><b>↓</b></a>
-      <label class="setting-row file-row"><span><strong>曲マスター投入</strong><small>ZIP内のpopn_song_masterテキストを選択</small></span><input id="masterFileInput" type="file" accept=".txt,text/plain"><b>＋</b></label>
-      <div class="setting-row"><span><strong>APP VERSION</strong><small>pop'n Score Manager</small></span><b>0.2.0</b></div>
+      <div class="panel-heading">
+<div>
+<small>SETTINGS</small>
+<h1>設定</h1>
+</div>
+</div>
+      <button id="settingsThemeButton" class="setting-row" type="button">
+<span>
+<strong>表示テーマ</strong>
+<small>ライト／ダークを切り替えます</small>
+</span>
+<b id="themeLabel">ライト</b>
+</button>
+      <a class="setting-row" href="./tools/popn-master-extractor.txt" download>
+<span>
+<strong>曲マスター抽出</strong>
+<small>全曲・バナー画像・4譜面難易度を取得</small>
+</span>
+<b>↓</b>
+</a>
+      <label class="setting-row file-row">
+<span>
+<strong>曲マスター投入</strong>
+<small>ZIP内のpopn_song_masterテキストを選択</small>
+</span>
+<input id="masterFileInput" type="file" accept=".txt,text/plain">
+<b>＋</b>
+</label>
+      <div class="setting-row">
+<span>
+<strong>APP VERSION</strong>
+<small>pop'n Score Manager</small>
+</span>
+<b>0.2.1</b>
+</div>
     </section>
   </main>
 
   <footer>本サイトは非公式のファン制作ツールです。KONAMIおよび各権利者とは関係ありません。</footer>
 
-  <dialog id="authDialog"><form id="authForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close aria-label="閉じる">×</button><h2 id="authTitle">ログイン</h2><label>アカウント名<input name="username" required maxlength="32" autocomplete="username"></label><label>パスワード<input name="password" type="password" required minlength="6" autocomplete="current-password"></label><p id="authError" class="error"></p><div class="dialog-actions"><button id="authModeButton" class="text-button" type="button">新規登録へ</button><button class="main-button" type="submit">ログイン</button></div></form></dialog>
-  <dialog id="manualDialog"><form id="manualForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close aria-label="閉じる">×</button><h2>スコアを手動登録</h2><label>曲マスター<input id="songSearchInput" type="search" placeholder="曲名を入力" autocomplete="off" required></label><div id="songSuggestions" class="suggestions"></div><input name="song_id" type="hidden"><div class="form-grid"><label>スコア<input name="score" type="number" min="0" max="100000" required></label><label>メダル<select name="medal_code" required><option value="none">未プレー</option><option value="f">FAILED</option><option value="e">EASY</option><option value="bronze">銅</option><option value="silver">銀</option><option value="gold">金</option></select></label></div><p id="manualError" class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">保存</button></div></form></dialog>
-  <dialog id="syncDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2>e-amusementから同期</h2><ol><li>同期スクリプトをダウンロード</li><li>公式の曲データページでConsoleから実行</li><li>このサイトへ戻ると自動保存</li></ol><p class="notice">ログイン情報やパスワードは取得しません。</p><div class="dialog-actions"><a class="sub-button" href="./tools/popn-score-sync.txt" download>同期スクリプト</a><button class="main-button" value="cancel">閉じる</button></div></form></dialog>
+  <dialog id="authDialog">
+<form id="authForm" method="dialog">
+<button class="dialog-close" type="button" data-dialog-close aria-label="閉じる">×</button>
+<h2 id="authTitle">ログイン</h2>
+<label>アカウント名<input name="username" required maxlength="32" autocomplete="username">
+</label>
+<label>パスワード<input name="password" type="password" required minlength="6" autocomplete="current-password">
+</label>
+<p id="authError" class="error">
+</p>
+<div class="dialog-actions">
+<button id="authModeButton" class="text-button" type="button">新規登録へ</button>
+<button class="main-button" type="submit">ログイン</button>
+</div>
+</form>
+</dialog>
+  <dialog id="manualDialog">
+<form id="manualForm" method="dialog">
+<button class="dialog-close" type="button" data-dialog-close aria-label="閉じる">×</button>
+<h2>スコアを手動登録</h2>
+<label>曲マスター<input id="songSearchInput" type="search" placeholder="曲名を入力" autocomplete="off" required>
+</label>
+<div id="songSuggestions" class="suggestions">
+</div>
+<input name="song_id" type="hidden">
+<div class="form-grid">
+<label>スコア<input id="manualScoreInput" name="score" type="number" min="0" max="100000" required>
+</label>
+<label>クリアランク<span id="manualRank" class="rank-preview">E</span>
+</label>
+</div>
+<label>クリアメダル<select name="medal_code" required>
+<option value="none">未プレー</option>
+<option value="perfect">PERFECT（BAD・GOOD 0）</option>
+<option value="fc_1_5">FULL COMBO（GOOD 1～5）</option>
+<option value="fc_6_20">FULL COMBO（GOOD 6～20）</option>
+<option value="fc_21_plus">FULL COMBO（GOOD 21以上）</option>
+<option value="clear_bad_1_5">クリア（BAD 1～5）</option>
+<option value="clear_bad_6_20">クリア（BAD 6～20）</option>
+<option value="clear_bad_21_plus">クリア（BAD 21以上）</option>
+<option value="long_off">ロングポップ君オフでクリア</option>
+<option value="easy">EASYクリア</option>
+<option value="failed_15_16">FAILED（ゲージ15～16粒）</option>
+<option value="failed_12_14">FAILED（ゲージ12～14粒）</option>
+<option value="failed_0_11">FAILED（ゲージ11粒以下）</option>
+</select>
+</label>
+<p id="manualError" class="error">
+</p>
+<div class="dialog-actions">
+<button class="sub-button" type="button" data-dialog-close>キャンセル</button>
+<button class="main-button" type="submit">保存</button>
+</div>
+</form>
+</dialog>
+  <dialog id="syncDialog">
+<form method="dialog">
+<button class="dialog-close" value="cancel" aria-label="閉じる">×</button>
+<h2>e-amusementから同期</h2>
+<ol>
+<li>同期スクリプトをダウンロード</li>
+<li>公式の曲データページでConsoleから実行</li>
+<li>このサイトへ戻ると自動保存</li>
+</ol>
+<p class="notice">ログイン情報やパスワードは取得しません。</p>
+<div class="dialog-actions">
+<a class="sub-button" href="./tools/popn-score-sync.txt" download>同期スクリプト</a>
+<button class="main-button" value="cancel">閉じる</button>
+</div>
+</form>
+</dialog>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="./js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
+  <script type="module" src="./js/app.js">
+</script>
 </body>
 </html>

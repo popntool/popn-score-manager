@@ -1,7 +1,7 @@
 import{isConfigured}from"./supabase.js";
 import{currentUser,currentUsername,login,logout,onAuthChange,register}from"./auth.js";
 import{importSongMaster,searchSongs}from"./songs.js";
-import{loadMyScores,saveScore,syncScores}from"./scores.js";
+import{loadMyScores,rankFromScore,saveScore,syncScores}from"./scores.js";
 import{loadUsers}from"./users.js";
 import{filterScores,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js";
 
@@ -24,8 +24,9 @@ $("#authButton").addEventListener("click",()=>$("#authDialog").showModal());$("#
 $("#authModeButton").addEventListener("click",()=>{authMode=authMode==="login"?"register":"login";$("#authTitle").textContent=authMode==="login"?"ログイン":"新規登録";$("#authModeButton").textContent=authMode==="login"?"新規登録へ":"ログインへ";$("#authForm button[type=submit]").textContent=authMode==="login"?"ログイン":"登録";});
 $("#authForm").addEventListener("submit",async event=>{event.preventDefault();const form=new FormData(event.currentTarget);try{if(authMode==="login")await login(form.get("username"),form.get("password"));else await register(form.get("username"),form.get("password"));$("#authDialog").close();await refreshAuth();}catch(error){$("#authError").textContent=error.message||error;}});
 $("#manualButton").addEventListener("click",()=>$("#manualDialog").showModal());$("#syncHelpButton").addEventListener("click",()=>$("#syncDialog").showModal());
+$("#manualScoreInput").addEventListener("input",event=>{$("#manualRank").textContent=rankFromScore(event.target.value);});
 $("#songSearchInput").addEventListener("input",wait(async event=>{selectedSong=null;const box=$("#songSuggestions"),query=event.target.value.trim();if(!query){box.innerHTML="";return;}try{const rows=await searchSongs(query);box.innerHTML=rows.map((row,index)=>`<button type="button" data-index="${index}">${row.title} / ${row.chart} Lv.${row.level}</button>`).join("");box.querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>{selectedSong=rows[Number(button.dataset.index)];$("#songSearchInput").value=`${selectedSong.title} / ${selectedSong.chart} Lv.${selectedSong.level}`;box.innerHTML="";}));}catch(error){box.textContent=error.message||error;}}));
-$("#manualForm").addEventListener("submit",async event=>{event.preventDefault();if(!selectedSong){$("#manualError").textContent="曲マスターから譜面を選択してください。";return;}const form=new FormData(event.currentTarget);try{await saveScore(selectedSong.id,form.get("score"),form.get("medal_code"));$("#manualDialog").close();event.target.reset();selectedSong=null;await refreshAuth();}catch(error){$("#manualError").textContent=error.message||error;}});
+$("#manualForm").addEventListener("submit",async event=>{event.preventDefault();if(!selectedSong){$("#manualError").textContent="曲マスターから譜面を選択してください。";return;}const formElement=event.currentTarget,form=new FormData(formElement);try{await saveScore(selectedSong.id,form.get("score"),form.get("medal_code"));$("#manualDialog").close();formElement.reset();$("#manualRank").textContent="E";selectedSong=null;await refreshAuth();}catch(error){$("#manualError").textContent=error.message||error;}});
 $("#masterFileInput").addEventListener("change",async event=>{const file=event.target.files?.[0];if(!file)return;try{const count=await importSongMaster(file);alert(`${count}譜面を曲マスターへ登録・更新しました。`);}catch(error){alert(`曲マスター投入に失敗しました：${error.message||error}`);}finally{event.target.value="";}});
 $("#userSearchInput").addEventListener("input",wait(async event=>{try{renderUsers(await loadUsers(event.target.value));}catch(error){console.error(error);}},350));
 onAuthChange(refreshAuth);await refreshAuth();await importHash();
