@@ -1,0 +1,131 @@
+/* pop'n music 曲マスター抽出 v0.2.0
+ * pop'n music UniLabの「収録楽曲」ページでConsoleから実行してください。
+ * 出力ZIP:
+ *   - popn_song_catalog_YYYY-MM-DD.txt（曲単位・バナー・4譜面難易度）
+ *   - popn_song_master_YYYY-MM-DD.txt（Supabase投入用・譜面単位）
+ *   - banners/（バナー実画像）
+ */
+(async()=>{
+  'use strict';
+  const CONCURRENCY=10,MAX_PAGES=500;
+  const LIST_PATH='/game/popn/popn29/music/list.html';
+  if(location.hostname!=='p.eagate.573.jp'){alert('e-amusementの「収録楽曲」ページで実行してください。');return;}
+  if(window.__POPN_CATALOG_RUNNING__){alert('抽出処理は実行中です。');return;}
+  window.__POPN_CATALOG_RUNNING__=true;
+  const state={cancelled:false,pages:0,songs:[],started:Date.now()};
+  const box=document.createElement('div');
+  Object.assign(box.style,{position:'fixed',top:'12px',right:'12px',zIndex:2147483647,width:'min(400px,calc(100vw - 24px))',padding:'14px',border:'3px solid #334b93',borderRadius:'14px',background:'#fff9df',color:'#17244d',font:'bold 14px/1.5 sans-serif',boxShadow:'0 6px 24px #0006'});
+  box.innerHTML='<b>ポップン 曲マスター抽出</b><div data-status>準備中…</div><progress value="0" style="width:100%"></progress><div style="display:flex;gap:8px;margin-top:8px"><button data-main>中止</button><button data-close type="button">閉じる</button></div>';
+  document.body.appendChild(box);
+  const status=box.querySelector('[data-status]'),progress=box.querySelector('progress'),main=box.querySelector('[data-main]'),close=box.querySelector('[data-close]');
+  main.onclick=()=>{state.cancelled=true;main.disabled=true;};
+  close.onclick=()=>box.remove();
+  const clean=v=>String(v??'').replace(/\u00a0/g,' ').replace(/[\t\r\n ]+/g,' ').trim();
+  const normalize=v=>clean(v).normalize('NFKC').replace(/[\u00AD\u200B-\u200D\u2060\uFEFF]/g,'').toLocaleLowerCase('ja-JP');
+  const esc=v=>String(v??'').replace(/\|/g,'｜').replace(/[\r\n]+/g,' ');
+  const charts=['LIGHT','NORMAL','HYPER','EX'];
+  async function hash(values){
+    const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(values.join('|')));
+    return [...new Uint8Array(bytes)].map(v=>v.toString(16).padStart(2,'0')).join('');
+  }
+  function listUrl(page){
+    const u=new URL(LIST_PATH,location.origin);
+    u.search=new URLSearchParams({page:String(page),version:'-1',lv:'0',bemani:'0',category:'0',keyword:'',sort:'music',sort_type:'up'});
+    return u;
+  }
+  async function getDoc(page){
+    const r=await fetch(listUrl(page),{credentials:'include',cache:'no-store'});
+    if(!r.ok)throw new Error(`page=${page}: HTTP ${r.status}`);
+    const text=await r.text();
+    const doc=new DOMParser().parseFromString(text,'text/html');
+    if(!doc.querySelector('ul.mu_list_table:not(.mu_head)'))throw new Error(`page=${page}: 楽曲一覧を取得できませんでした。`);
+    return doc;
+  }
+  function parse(doc,page){
+    const rows=[],cells=[...doc.querySelectorAll('ul.mu_list_table:not(.mu_head) > li')];
+    for(let i=0;i<cells.length;i++){
+      const image=cells[i].querySelector('img');
+      if(!image)continue;
+      const info=cells[i+1],difficulty=cells[i+2];
+      if(!info||!difficulty)continue;
+      const text=[...info.querySelectorAll(':scope > p')].map(p=>clean(p.textContent));
+      const levels={LIGHT:null,NORMAL:null,HYPER:null,EX:null};
+      for(const p of difficulty.querySelectorAll(':scope > p')){
+        const chart=clean(p.querySelector('span')?.textContent).toUpperCase();
+        const raw=clean(p.getAttribute('data-d')||[...p.childNodes].filter(n=>n.nodeType===Node.TEXT_NODE).map(n=>n.textContent).join(''));
+        if(charts.includes(chart)&&/^\d{1,2}$/.test(raw))levels[chart]=Number(raw);
+      }
+      const bannerUrl=new URL(image.getAttribute('src')||'',location.origin).href;
+      const song={page,genre:text[0]||'',title:text[1]||'',artist:text[2]||'',banner_url:bannerUrl,levels};
+      if(song.genre&&song.title&&song.artist&&/^https?:/.test(song.banner_url))rows.push(song);
+      i+=2;
+    }
+    return rows;
+  }
+  async function addIds(song){
+    const identity=[normalize(song.genre),normalize(song.title),normalize(song.artist)];
+    return {...song,song_id:await hash(identity)};
+  }
+  async function mapLimit(items,limit,worker,onDone){
+    let cursor=0,done=0;const results=new Array(items.length);
+    await Promise.all(Array.from({length:Math.min(limit,items.length)},async()=>{
+      while(!state.cancelled){const index=cursor++;if(index>=items.length)return;results[index]=await worker(items[index],index);done++;onDone?.(done,items.length);}
+    }));
+    return results;
+  }
+  const crcTable=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+  function crc32(bytes){let c=0xffffffff;for(const b of bytes)c=crcTable[(c^b)&255]^(c>>>8);return (c^0xffffffff)>>>0;}
+  function zip(files){
+    const encoder=new TextEncoder(),locals=[],centrals=[];let offset=0,centralSize=0;
+    for(const file of files){
+      const name=encoder.encode(file.name),data=file.data,crc=crc32(data);
+      const local=new Uint8Array(30+name.length),ld=new DataView(local.buffer);
+      ld.setUint32(0,0x04034b50,true);ld.setUint16(4,20,true);ld.setUint16(6,0x0800,true);ld.setUint32(14,crc,true);ld.setUint32(18,data.length,true);ld.setUint32(22,data.length,true);ld.setUint16(26,name.length,true);local.set(name,30);
+      locals.push(local,data);
+      const central=new Uint8Array(46+name.length),cd=new DataView(central.buffer);
+      cd.setUint32(0,0x02014b50,true);cd.setUint16(4,20,true);cd.setUint16(6,20,true);cd.setUint16(8,0x0800,true);cd.setUint32(16,crc,true);cd.setUint32(20,data.length,true);cd.setUint32(24,data.length,true);cd.setUint16(28,name.length,true);cd.setUint32(42,offset,true);central.set(name,46);
+      centrals.push(central);centralSize+=central.length;offset+=local.length+data.length;
+    }
+    const end=new Uint8Array(22),ed=new DataView(end.buffer);ed.setUint32(0,0x06054b50,true);ed.setUint16(8,files.length,true);ed.setUint16(10,files.length,true);ed.setUint32(12,centralSize,true);ed.setUint32(16,offset,true);
+    return new Blob([...locals,...centrals,end],{type:'application/zip'});
+  }
+  function extension(contentType){if(/png/i.test(contentType))return 'png';if(/gif/i.test(contentType))return 'gif';if(/webp/i.test(contentType))return 'webp';return 'jpg';}
+  try{
+    status.textContent='ページ数を確認中…';
+    const first=await getDoc(0),options=[...first.querySelectorAll('#s_page option')].map(o=>Number(o.value)).filter(Number.isFinite);
+    const totalPages=Math.max(0,...options)+1;
+    if(totalPages>MAX_PAGES)throw new Error(`ページ数が上限(${MAX_PAGES})を超えました。`);
+    progress.max=totalPages;progress.value=1;state.pages=1;state.songs.push(...parse(first,0));
+    const rest=Array.from({length:totalPages-1},(_,i)=>i+1);
+    const docs=await mapLimit(rest,CONCURRENCY,getDoc,(done,total)=>{progress.value=done+1;status.textContent=`楽曲ページ ${done+1}/${total+1}`;});
+    if(state.cancelled)throw new Error('中止しました。');
+    docs.forEach((doc,i)=>{state.songs.push(...parse(doc,i+1));});
+    const songs=await Promise.all(state.songs.map(addIds));
+    const unique=[...new Map(songs.map(s=>[s.song_id,s])).values()].sort((a,b)=>a.title.localeCompare(b.title,'ja'));
+    if(!unique.length)throw new Error('楽曲を1件も解析できませんでした。');
+    progress.max=unique.length;progress.value=0;status.textContent=`${unique.length}曲のバナーを取得中…`;
+    const bannerFiles=new Map(),failed=[];
+    await mapLimit(unique,CONCURRENCY,async(song)=>{
+      if(bannerFiles.has(song.banner_url)){song.banner_file=bannerFiles.get(song.banner_url).name;return;}
+      try{
+        const r=await fetch(song.banner_url,{credentials:'include',cache:'force-cache'});if(!r.ok)throw new Error(`HTTP ${r.status}`);
+        const type=r.headers.get('content-type')||'';if(!/^image\//i.test(type))throw new Error(type||'画像ではありません');
+        const file={name:`banners/${song.song_id.slice(0,16)}.${extension(type)}`,data:new Uint8Array(await r.arrayBuffer())};bannerFiles.set(song.banner_url,file);song.banner_file=file.name;
+      }catch(e){song.banner_file='';failed.push(`${song.title}: ${e?.message||e}`);}
+    },(done,total)=>{progress.value=done;status.textContent=`バナー ${done}/${total}・失敗 ${failed.length}`;});
+    if(state.cancelled)throw new Error('中止しました。');
+    for(const song of unique)if(!song.banner_file&&bannerFiles.has(song.banner_url))song.banner_file=bannerFiles.get(song.banner_url).name;
+    const date=new Date().toISOString().slice(0,10),encoder=new TextEncoder();
+    const catalog=['曲ID|バナー画像|バナーURL|ジャンル名|曲名|アーティスト|LIGHT|NORMAL|HYPER|EX',...unique.map(s=>[s.song_id,s.banner_file,s.banner_url,s.genre,s.title,s.artist,...charts.map(c=>s.levels[c]??'-')].map(esc).join('|'))].join('\r\n');
+    const chartRows=[];
+    for(const song of unique)for(const chart of charts){const level=song.levels[chart];if(level==null)continue;chartRows.push({master_key:await hash([level,normalize(song.genre),normalize(song.title),normalize(song.artist),chart]),level,genre:song.genre,title:song.title,artist:song.artist,chart,banner_url:song.banner_url});}
+    const master=['曲ID|レベル|ジャンル名|曲名|アーティスト|譜面|バナーURL',...chartRows.map(r=>[r.master_key,r.level,r.genre,r.title,r.artist,r.chart,r.banner_url].map(esc).join('|'))].join('\r\n');
+    const files=[{name:`popn_song_catalog_${date}.txt`,data:encoder.encode('\ufeff'+catalog)},{name:`popn_song_master_${date}.txt`,data:encoder.encode('\ufeff'+master)},...bannerFiles.values()];
+    if(failed.length)files.push({name:`banner_errors_${date}.txt`,data:encoder.encode('\ufeff'+failed.join('\r\n'))});
+    status.textContent='ZIPを作成中…';const blob=zip(files),objectUrl=URL.createObjectURL(blob),filename=`popn_song_catalog_${date}.zip`;
+    const save=()=>{const a=document.createElement('a');a.href=objectUrl;a.download=filename;document.body.appendChild(a);a.click();a.remove();};
+    save();
+    status.textContent=`完了：${unique.length}曲・${chartRows.length}譜面・バナー${bannerFiles.size}枚（${((Date.now()-state.started)/1000).toFixed(1)}秒）`;
+    main.disabled=false;main.textContent='ZIPを保存';main.onclick=save;close.onclick=()=>{URL.revokeObjectURL(objectUrl);box.remove();};
+  }catch(e){status.textContent=`エラー：${e?.message||e}`;main.textContent='閉じる';main.disabled=false;main.onclick=()=>box.remove();console.error(e);}finally{window.__POPN_CATALOG_RUNNING__=false;}
+})();

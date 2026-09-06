@@ -1,0 +1,6 @@
+import{requireDb}from"./supabase.js";
+
+export async function searchSongs(query,limit=20){const client=requireDb(),needle=String(query||"").trim();if(!needle)return[];const{data,error}=await client.from("songs").select("id,master_key,level,genre,title,artist,chart,banner_url").or(`title.ilike.%${needle}%,genre.ilike.%${needle}%,artist.ilike.%${needle}%`).order("title").limit(limit);if(error)throw error;return data||[];}
+
+export async function importSongMaster(file){const client=requireDb();const lines=(await file.text()).replace(/^\ufeff/,"").split(/\r?\n/).filter(Boolean);if(lines.length<2)throw new Error("曲マスターデータが空です。");const records=lines.slice(1).map(line=>{const[master_key,level,genre,title,artist,chart,banner_url=""]=line.split("|");return{master_key,level:Number(level),genre,title,artist,chart,banner_url};}).filter(row=>row.master_key&&row.genre&&row.title&&row.artist&&["LIGHT","NORMAL","HYPER","EX"].includes(row.chart)&&row.level>=1&&row.level<=50);const chunkSize=500;let imported=0;for(let index=0;index<records.length;index+=chunkSize){const{data,error}=await client.rpc("import_song_master",{p_records:records.slice(index,index+chunkSize)});if(error)throw error;imported+=Number(data)||0;}return imported;}
+
