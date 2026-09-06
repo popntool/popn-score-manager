@@ -16,6 +16,7 @@
 .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px;margin-bottom:12px;background:var(--surface);border:2px solid var(--line);border-radius:16px}
 .tabs button{min-height:46px;border:0;border-radius:10px;background:transparent;color:var(--muted);font-weight:900}
 .tabs button.active{background:var(--navy);color:var(--surface)}
+.tabs.has-admin{grid-template-columns:repeat(4,1fr)}
 .panel{padding:20px;background:var(--surface);border:2px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
 .panel-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
 .panel-heading>div:first-child{display:grid;gap:2px}
@@ -24,7 +25,9 @@
 .search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text)}
 select,input{min-height:44px;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:var(--page);color:var(--text)}
 .score-list,.user-list{display:grid;gap:8px}
-.score-row{display:grid;grid-template-columns:112px minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px;border:2px solid var(--line);border-radius:14px;background:var(--page)}
+.score-row{display:grid;grid-template-columns:150px 112px minmax(0,1fr) auto;align-items:center;gap:12px;padding:12px;border:2px solid var(--line);border-radius:14px;background:var(--page)}
+.song-banner{display:block;width:150px;max-height:64px;object-fit:contain;border-radius:7px;background:#fff}
+.banner-empty{display:grid;place-items:center;min-height:56px;color:var(--muted);font-size:.7rem;font-weight:900;border:1px dashed var(--line)}
 .difficulty{display:grid;text-align:center;border-radius:10px;overflow:hidden;border:2px solid currentColor}
 .difficulty b{padding:5px}
 .difficulty span{padding:4px;background:var(--surface);color:var(--text)}
@@ -61,3 +64,23 @@ dialog label{display:grid;gap:5px;font-weight:800}
 .medal,.rank-badge,.rank-preview{padding:3px 8px;border-radius:999px;font-size:.76rem;font-weight:900}
 .rank-badge,.rank-preview{background:var(--navy);color:var(--surface);text-align:center}
 .rank-preview{display:grid;place-items:center;min-height:44px;border-radius:10px;font-size:1.15rem}
+.result-badges{display:flex;justify-content:flex-end;gap:5px}
+.score-values{display:grid;grid-template-columns:auto auto;gap:10px;text-align:right}
+.score-values span{display:grid}
+.score-values small{color:var(--muted);font-size:.7rem;font-weight:800}
+.score-values strong,.score-values b{font-size:1.15rem;line-height:1.2}
+.score-edit,.source-badge{border:0;border-radius:999px;padding:3px 8px;background:var(--blue);color:#10234e;font-size:.7rem;font-weight:900}
+.source-badge{background:var(--green)}
+textarea{min-height:120px;padding:10px;border:2px solid var(--line);border-radius:10px;background:var(--page);color:var(--text);resize:vertical}
+.admin-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
+.admin-tabs button{min-height:42px;border:2px solid var(--line);border-radius:10px;background:var(--page);color:var(--text);font-weight:900}
+.admin-tabs button.active{background:var(--navy);color:var(--surface)}
+.admin-toolbar{display:flex;gap:8px;margin-bottom:12px}.admin-toolbar input{flex:1}
+.admin-content{display:grid;gap:8px}.admin-summary{color:var(--muted);font-size:.85rem}
+.admin-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--page)}
+.admin-card>div:first-child{display:grid;gap:3px;min-width:0}.admin-card small{display:block;color:var(--muted)}.admin-card p{white-space:pre-wrap;word-break:break-word}
+.admin-card-main{display:flex!important;align-items:center;gap:10px}.admin-card-main img{width:110px;max-height:48px;object-fit:contain;background:#fff;border-radius:5px}
+.admin-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end}.admin-actions button{border:0;border-radius:7px;padding:7px 9px;background:var(--blue);color:#10234e;font-weight:800}
+.status{padding:4px 7px;border-radius:999px;background:var(--surface-2);font-size:.72rem}.status.approved,.status.resolved,.status.answered{background:var(--green);color:#10234e}.status.rejected{background:var(--pink);color:#10234e}
+.admin-reply{padding:8px;background:var(--surface-2);border-radius:8px}.check-row{display:flex!important;align-items:center;gap:8px}.check-row input{width:20px;min-height:20px}
+#adminEditFields{display:grid;gap:10px}

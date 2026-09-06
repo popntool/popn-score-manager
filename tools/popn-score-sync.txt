@@ -1,43 +1,13 @@
-/* pop'n music スコア同期 v0.1.0
- * e-amusementへログインし、曲データのレベル別ページでConsoleから実行してください。
- */
-(async()=>{
+(()=>{
   'use strict';
-  const RETURN_URL='https://popntool.github.io/popn-score-manager/';
-  const MIN_LV=1,MAX_LV=50,CONCURRENCY=8,MAX_PAGE=200;
-  if(location.hostname!=='p.eagate.573.jp'){alert('e-amusementの曲データページで実行してください。');return;}
-  if(window.__POPN_SCORE_SYNC_RUNNING__){alert('同期処理は実行中です。');return;}
-  window.__POPN_SCORE_SYNC_RUNNING__=true;
-  const state={cancelled:false,pages:0,records:[],started:Date.now()};
-  const box=document.createElement('div');
-  Object.assign(box.style,{position:'fixed',top:'12px',right:'12px',zIndex:2147483647,width:'min(380px,calc(100vw - 24px))',padding:'14px',border:'3px solid #334b93',borderRadius:'14px',background:'#fff9df',color:'#17244d',font:'bold 14px/1.5 sans-serif',boxShadow:'0 6px 24px #0006'});
-  box.innerHTML='<b>ポップン スコア同期</b><div data-status>準備中…</div><progress max="50" value="0" style="width:100%"></progress><button style="margin-top:8px">中止</button>';
-  document.body.appendChild(box);
-  const status=box.querySelector('[data-status]'),progress=box.querySelector('progress'),cancel=box.querySelector('button');
-  cancel.onclick=()=>{state.cancelled=true;cancel.disabled=true;};
-  const clean=v=>String(v??'').replace(/\u00a0/g,' ').replace(/[\t\r\n ]+/g,' ').trim();
-  const normalize=v=>clean(v).normalize('NFKC').replace(/[\u00AD\u200B-\u200D\u2060\uFEFF]/g,'').toLocaleLowerCase('ja-JP');
-  async function masterKey({level,genre,title,artist,chart}){const source=[level,normalize(genre),normalize(title),normalize(artist),chart].join('|');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(source));return [...new Uint8Array(bytes)].map(v=>v.toString(16).padStart(2,'0')).join('');}
-  function code(img,prefix){const src=img?.getAttribute('src')||'';const file=src.split('/').pop()?.split('?')[0]||'';return file.replace(/\.[^.]+$/,'').replace(new RegExp(`^${prefix}(?:_big)?_`,'i'),'');}
-  function url(lv,page){const u=new URL('/game/popn/popn29/playdata/mu_lv.html',location.origin);u.search=new URLSearchParams({page:String(page),version:'-1',bemani:'0',category:'0',keyword:'',sort:'none',lv:String(lv)});return u;}
-  async function getDoc(lv,page){const r=await fetch(url(lv,page),{credentials:'include',cache:'no-store'});if(!r.ok)throw new Error(`Lv.${lv} page=${page}: HTTP ${r.status}`);const text=await r.text();if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');return new DOMParser().parseFromString(text,'text/html');}
-  async function parse(doc){
-    const rows=[];
-    const anchors=[...doc.querySelectorAll('a[href*="mu_detail.html"]')].filter(a=>/[?&]no=/.test(a.getAttribute('href')||''));
-    for(const a of anchors){const li=a.closest('li');if(!li)continue;const d=[...li.children].filter(e=>e.tagName==='DIV');if(d.length<4)continue;const info=[...d[0].querySelectorAll('p')].map(p=>clean(p.textContent));const cell=d[3],scoreText=clean(cell.querySelector('p')?.textContent),item={level:Number(clean(d[2].textContent)),genre:info[0]||'',title:clean(a.textContent),artist:info[1]||'',chart:clean(d[1].textContent).toUpperCase(),score:/^\d{1,6}$/.test(scoreText)?Number(scoreText):0,medal_code:code([...cell.querySelectorAll('img')].find(i=>/meda_/i.test(i.getAttribute('src')||'')),'meda'),rank_code:code([...cell.querySelectorAll('img')].find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')};if(!item.title||!item.genre||!item.artist||!['LIGHT','NORMAL','HYPER','EX'].includes(item.chart)||!Number.isFinite(item.level))continue;rows.push({master_key:await masterKey(item),...item});}
-    return {rows,signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
-  }
-  async function scan(lv){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const parsed=await parse(await getDoc(lv,page));if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;}}
-  function toBase64(bytes){let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary);}
-  const levels=Array.from({length:MAX_LV-MIN_LV+1},(_,i)=>MIN_LV+i);let cursor=0,done=0;
-  try{
-    await Promise.all(Array.from({length:CONCURRENCY},async()=>{while(!state.cancelled){const i=cursor++;if(i>=levels.length)return;await scan(levels[i]);done++;progress.value=done;status.textContent=`${done}/50レベル・${state.pages}ページ・${state.records.length}譜面`;}}));
-    if(state.cancelled)throw new Error('中止しました。');
-    const rows=[...new Map(state.records.map(r=>[r.master_key,r])).values()];
-    status.textContent=`${rows.length}譜面を圧縮中…`;
-    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:1,records:rows}));
-    const compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
-    status.textContent='取得完了。スコア管理サイトへ戻ります…';
-    location.href=RETURN_URL+'#popn-sync-gzip='+encodeURIComponent(toBase64(compressed));
-  }catch(e){status.textContent=`エラー：${e?.message||e}`;cancel.textContent='閉じる';cancel.disabled=false;cancel.onclick=()=>box.remove();console.error(e);window.__POPN_SCORE_SYNC_RUNNING__=false;}
+  if(location.hostname!=='p.eagate.573.jp'){alert('e-amusementのページで実行してください。');return;}
+  if(!location.pathname.startsWith('/game/popn/popn29/')){alert('pop\'n musicのページで実行してください。');return;}
+  const id='popn-score-manager-sync-loader';
+  document.getElementById(id)?.remove();
+  const script=document.createElement('script');
+  script.id=id;
+  script.src=`https://popntool.github.io/popn-score-manager/js/eamusement-sync/popn29.js?t=${Date.now()}`;
+  script.onload=()=>script.remove();
+  script.onerror=()=>{script.remove();alert('同期プログラムを読み込めませんでした。');};
+  document.head.appendChild(script);
 })();

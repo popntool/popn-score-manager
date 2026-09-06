@@ -1,4 +1,4 @@
--- pop'n Score Manager 初期スキーマ v0.2.0
+-- pop'n Score Manager 初期スキーマ v0.3.0
 -- 新規SupabaseプロジェクトのSQL Editorで、このファイル全体を1回実行してください。
 
 create extension if not exists pgcrypto;
@@ -21,6 +21,7 @@ create index if not exists songs_level_chart_idx on public.songs(level,chart);
 create table if not exists public.user_scores(
   id uuid primary key default gen_random_uuid(),user_id uuid not null references auth.users(id) on delete cascade,
   song_id uuid not null references public.songs(id) on delete cascade,score integer not null default 0 check(score between 0 and 100000),
+  version_score integer not null default 0 check(version_score between 0 and 100000),
   medal_code text not null default 'none',rank_code text not null default 'none',source text not null default 'manual' check(source in('manual','sync')),
   created_at timestamptz not null default now(),updated_at timestamptz not null default now(),unique(user_id,song_id)
 );
@@ -59,11 +60,12 @@ returns table(saved integer,unmatched integer) language plpgsql security invoker
 declare v_saved integer;v_total integer;
 begin
   if auth.uid() is null then raise exception 'login required';end if;
-  select count(*) into v_total from jsonb_array_elements(p_records);
-  insert into public.user_scores(user_id,song_id,score,medal_code,rank_code,source)
-  select auth.uid(),s.id,greatest(0,least(100000,x.score)),coalesce(nullif(x.medal_code,''),'none'),coalesce(nullif(x.rank_code,''),'none'),'sync'
-  from jsonb_to_recordset(p_records) as x(master_key text,score integer,medal_code text,rank_code text) join public.songs s on s.master_key=x.master_key
-  on conflict(user_id,song_id) do update set score=excluded.score,medal_code=excluded.medal_code,rank_code=excluded.rank_code,source='sync',updated_at=now();
+  select count(*) into v_total from jsonb_to_recordset(p_records) as x(score integer) where coalesce(x.score,0)>0;
+  insert into public.user_scores(user_id,song_id,score,version_score,medal_code,rank_code,source)
+  select auth.uid(),s.id,greatest(1,least(100000,x.score)),greatest(0,least(100000,coalesce(x.version_score,0))),coalesce(nullif(x.medal_code,''),'none'),coalesce(nullif(x.rank_code,''),'none'),'sync'
+  from jsonb_to_recordset(p_records) as x(master_key text,score integer,version_score integer,medal_code text,rank_code text) join public.songs s on s.master_key=x.master_key
+  where coalesce(x.score,0)>0
+  on conflict(user_id,song_id) do update set score=excluded.score,version_score=excluded.version_score,medal_code=excluded.medal_code,rank_code=excluded.rank_code,source='sync',updated_at=now();
   get diagnostics v_saved=row_count;return query select v_saved,greatest(0,v_total-v_saved);
 end$$;
 create or replace function public.list_user_summaries(p_search text default '')
@@ -98,4 +100,3 @@ grant execute on function public.list_user_summaries(text) to anon,authenticated
 
 -- 管理者登録は、サイトで最初のユーザーを作成した後に行います。
 -- insert into public.admin_users(user_id) values('管理者ユーザーのUUID');
-

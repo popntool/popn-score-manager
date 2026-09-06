@@ -69,6 +69,7 @@
 <button class="active" data-tab="scores" type="button">スコア</button>
 <button data-tab="users" type="button">ユーザー</button>
 <button data-tab="settings" type="button">設定</button>
+<button id="adminTabButton" data-tab="admin" type="button" hidden>管理</button>
 </nav>
 
     <section id="scoresPanel" class="panel tab-panel">
@@ -169,8 +170,23 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>0.2.1</b>
+<b>1.0.0</b>
 </div>
+      <button id="songRequestButton" class="setting-row" type="button"><span><strong>曲の登録依頼</strong><small>曲マスターにない譜面を管理者へ知らせます</small></span><b>＋</b></button>
+      <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
+    </section>
+
+    <section id="adminPanel" class="panel tab-panel" hidden>
+      <div class="panel-heading"><div><small>ADMINISTRATION</small><h1>管理者画面</h1></div></div>
+      <nav class="admin-tabs" aria-label="管理メニュー">
+        <button class="active" data-admin-tab="master" type="button">曲マスター</button>
+        <button data-admin-tab="versions" type="button">バージョン管理</button>
+        <button data-admin-tab="users" type="button">ユーザーリスト</button>
+        <button data-admin-tab="requests" type="button">登録依頼</button>
+        <button data-admin-tab="feedback" type="button">要望・不具合</button>
+      </nav>
+      <div class="admin-toolbar"><input id="adminSearch" type="search" placeholder="検索"><button id="adminAddButton" class="main-button" type="button">追加</button></div>
+      <div id="adminContent" class="admin-content"><div class="empty">管理データを読み込みます。</div></div>
     </section>
   </main>
 
@@ -247,6 +263,9 @@
 </div>
 </form>
 </dialog>
+  <dialog id="songRequestDialog"><form id="songRequestForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2>曲の登録依頼</h2><div class="form-grid"><label>ジャンル名<input name="genre" required maxlength="100"></label><label>曲名<input name="title" required maxlength="200"></label></div><label>アーティスト<input name="artist" required maxlength="200"></label><div class="form-grid"><label>譜面<select name="chart"><option>LIGHT</option><option>NORMAL</option><option>HYPER</option><option>EX</option></select></label><label>レベル<input name="level" type="number" min="1" max="50" required></label></div><label>補足<textarea name="note" maxlength="1000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">送信</button></div></form></dialog>
+  <dialog id="feedbackDialog"><form id="feedbackForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2>要望・不具合</h2><label>種類<select name="category"><option value="request">要望</option><option value="bug">不具合</option></select></label><label>内容<textarea name="message" required maxlength="3000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">送信</button></div></form></dialog>
+  <dialog id="adminEditDialog"><form id="adminEditForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2 id="adminEditTitle">編集</h2><div id="adminEditFields"></div><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">保存</button></div></form></dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
