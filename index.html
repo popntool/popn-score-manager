@@ -15,7 +15,6 @@
   <link rel="stylesheet" href="./css/responsive.css">
 </head>
 <body>
-  <div id="appLoading" class="app-loading" role="status" aria-live="polite"><div><span class="loading-spinner"></span><strong>読み込み中…</strong></div></div>
   <header class="topbar">
     <a class="brand" href="./">
 <span class="brand-icon">♪</span>
@@ -24,7 +23,8 @@
 <strong>pop'n Score Manager</strong>
 </span>
 </a>
-    <div class="header-actions">
+<div class="header-actions">
+<button id="reloadButton" class="icon-button" type="button" aria-label="データを再読み込み" title="データを再読み込み">↻</button>
 <button id="themeButton" class="icon-button" type="button" aria-label="テーマ切替">☾</button>
 <button id="authButton" class="main-button" type="button">ログイン</button>
 </div>
@@ -35,7 +35,7 @@
 <span class="avatar">●</span>
 <span>
 <small>PLAYER</small>
-<strong id="playerName">読み込み中…</strong>
+<strong id="playerName"></strong>
 </span>
 <button id="logoutButton" class="text-button" type="button" hidden>ログアウト</button>
 </section>
@@ -49,23 +49,19 @@
       <article class="summary pink">
 <span>登録譜面</span>
 <strong id="registeredCount">0</strong>
-<small>CHARTS</small>
 </article>
       <article class="summary blue">
 <span>平均スコア</span>
 <strong id="averageScore">0</strong>
-<small>AVERAGE</small>
 </article>
       <article class="summary yellow">
 <span>クリア率</span>
 <strong>
 <span id="clearRate">0</span>%</strong>
-<small>CLEAR</small>
 </article>
       <article class="summary green">
 <span>FC以上</span>
 <strong id="fullComboCount">0</strong>
-<small>FULL COMBO</small>
 </article>
     </section>
 
@@ -91,32 +87,10 @@
 <span>⌕</span>
 <input id="searchInput" type="search" placeholder="曲名・ジャンル・アーティスト検索">
 </label>
-<select id="chartFilter" aria-label="譜面">
-<option value="ALL">全譜面</option>
-<option>LIGHT</option>
-<option>NORMAL</option>
-<option>HYPER</option>
-<option>EX</option>
-</select>
 <select id="levelFilter" aria-label="レベル">
 <option value="ALL">全レベル</option>
 </select>
-<select id="medalFilter" aria-label="クリアメダル">
-<option value="ALL">全メダル</option>
-<option value="none">未プレー</option>
-<option value="perfect">PERFECT</option>
-<option value="fc_1_5">FC・GOOD 1～5</option>
-<option value="fc_6_20">FC・GOOD 6～20</option>
-<option value="fc_21_plus">FC・GOOD 21以上</option>
-<option value="clear_bad_1_5">クリア・BAD 1～5</option>
-<option value="clear_bad_6_20">クリア・BAD 6～20</option>
-<option value="clear_bad_21_plus">クリア・BAD 21以上</option>
-<option value="long_off">ロングオフ</option>
-<option value="easy">EASYクリア</option>
-<option value="failed_15_16">FAILED・15～16粒</option>
-<option value="failed_12_14">FAILED・12～14粒</option>
-<option value="failed_0_11">FAILED・11粒以下</option>
-</select>
+<div class="filter-medal-wrap"><input id="medalFilter" type="hidden" value="ALL"><button id="filterMedalButton" class="filter-medal-button" type="button"><span>全メダル</span><b>⌄</b></button><div id="filterMedalPicker" class="filter-medal-picker" hidden></div></div>
 </div>
       <div id="scoreList" class="score-list">
 <div class="empty">ログインすると登録スコアを表示します。</div>
@@ -178,7 +152,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>2.4.0</b>
+<b>2.5.0</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="songRequestButton" class="setting-row" type="button"><span><strong>曲の登録依頼</strong><small>曲マスターにない譜面を管理者へ知らせます</small></span><b>＋</b></button>
@@ -240,22 +214,15 @@
 </div>
 </form>
 </dialog>
-  <dialog id="syncDialog">
+  <dialog id="syncDialog" class="sync-dialog">
 <form method="dialog">
 <button class="dialog-close" value="cancel" aria-label="閉じる">×</button>
-<h2>e-amusementから同期</h2>
-<ol>
-<li>下のボタンで同期用コードをコピー</li>
-<li>このページをブックマークし、ブックマークのURL欄をコピーしたコードに置き換える</li>
-<li>公式の曲データページを開いたまま、作成した同期用ブックマークを実行</li>
-<li>取得完了後、このサイトへ戻ると自動保存</li>
-</ol>
-<p class="sync-note">ブックマーク名は「ポップンスコア同期」など、好きな名前で設定できます。2回目以降も同じブックマークを使用できます。</p>
-<p class="notice">ログイン情報やパスワードは取得しません。</p>
-<div class="dialog-actions">
-<button id="copySyncButton" class="sub-button" type="button">同期コードをコピー</button>
-<button class="main-button" value="cancel">閉じる</button>
-</div>
+<small class="sync-kicker">e-amusement連携</small><h2>スコアを同期する</h2>
+<p class="sync-lead"><strong>実行前にe-amusementへログインしてください。</strong><br>「同期用ブックマーク」を使ってスコアを取得します。2回目以降も同じブックマークを使えます。</p>
+<div class="sync-status">待機中</div>
+<section class="sync-step"><b>1</b><div><h3>同期用ブックマークの作成</h3><p>「コードをコピー」を押し、このページをブックマークしてURL欄をコピーしたコードに置き換えます。</p><button id="copySyncButton" class="sub-button" type="button">コードをコピー</button></div></section>
+<section class="sync-step"><b>2</b><div><h3>e-amusementを開く</h3><p>公式サイトへログインした状態で曲データページを開きます。</p><a class="official-link" href="https://p.eagate.573.jp/game/popn/popn29/playdata/mu_top.html?page=0&amp;version=-1&amp;bemani=0&amp;category=0&amp;keyword=&amp;sort=music&amp;sort_type=up" target="_blank" rel="noopener">pop'n music公式サイトを開く</a></div></section>
+<section class="sync-step"><b>3</b><div><h3>自動取得・登録</h3><p>公式サイト上で作成した同期用ブックマークを実行します。完了後、このサイトへ戻ると自動保存されます。</p></div></section>
 </form>
 </dialog>
   <dialog id="myPageDialog"><form id="usernameForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2>マイページ</h2><section class="mypage-section"><h3>ユーザー名変更</h3><label>新しいユーザー名<input id="newUsernameInput" name="username" required maxlength="32" autocomplete="username"></label><button class="main-button" type="submit">ユーザー名を変更</button><p class="error"></p></section></form><form id="poptomoForm" method="dialog"><section class="mypage-section"><h3>ポプともID</h3><label>ポプともID（12桁）<input id="poptomoIdInput" name="poptomo_id" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="123456789012"></label><label class="check-row"><input id="poptomoPublicInput" name="poptomo_public" type="checkbox">ユーザーリストに公開する</label><button class="main-button" type="submit">ポプとも設定を保存</button><p class="error"></p></section></form><form id="passwordForm" method="dialog"><section class="mypage-section"><h3>パスワード変更</h3><label>新しいパスワード<input name="password" type="password" required minlength="6" autocomplete="new-password"></label><label>新しいパスワード（確認）<input name="password_confirm" type="password" required minlength="6" autocomplete="new-password"></label><button class="main-button" type="submit">パスワードを変更</button><p class="error"></p></section></form></dialog>
