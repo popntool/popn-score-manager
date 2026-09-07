@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v0.3.0
+/* pop'n music スコア同期 v2.0.0
  * e-amusementへログインし、曲データのレベル別ページでConsoleから実行してください。
  * レベル別一覧で全譜面を集め、曲詳細から「歴代」と「VERSION（今作）」を取得します。
  */
@@ -18,7 +18,7 @@
   cancel.onclick=()=>{state.cancelled=true;cancel.disabled=true;};
   const clean=v=>String(v??'').replace(/\u00a0/g,' ').replace(/[\t\r\n ]+/g,' ').trim();
   const normalize=v=>clean(v).normalize('NFKC').replace(/[\u00AD\u200B-\u200D\u2060\uFEFF]/g,'').toLocaleLowerCase('ja-JP');
-  async function masterKey({level,genre,title,artist,chart}){const source=[level,normalize(genre),normalize(title),normalize(artist),chart].join('|');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(source));return [...new Uint8Array(bytes)].map(v=>v.toString(16).padStart(2,'0')).join('');}
+  async function masterKey({genre,title,artist}){const source=[normalize(genre),normalize(title),normalize(artist)].join('|');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(source));return [...new Uint8Array(bytes)].map(v=>v.toString(16).padStart(2,'0')).join('');}
   function code(img,prefix){const src=img?.getAttribute('src')||'';const file=src.split('/').pop()?.split('?')[0]||'';return file.replace(/\.[^.]+$/,'').replace(new RegExp(`^${prefix}(?:_big)?_`,'i'),'');}
   function number(text){const value=clean(text);return /^\d{1,6}$/.test(value)?Number(value):0;}
   function listUrl(lv,page){const u=new URL('/game/popn/popn29/playdata/mu_lv.html',location.origin);u.search=new URLSearchParams({page:String(page),version:'-1',bemani:'0',category:'0',keyword:'',sort:'none',lv:String(lv)});return u;}
@@ -52,7 +52,7 @@
   try{
     await Promise.all(Array.from({length:LIST_CONCURRENCY},async()=>{while(!state.cancelled){const i=cursor++;if(i>=levels.length)return;await scanLevel(levels[i]);done++;progress.value=done;status.textContent=`一覧 ${done}/50レベル・${state.pages}ページ・${state.records.length}譜面`;}}));
     if(state.cancelled)throw new Error('中止しました。');
-    const base=[...new Map(state.records.map(r=>[r.master_key,r])).values()];
+    const base=[...new Map(state.records.map(r=>[`${r.master_key}|${r.chart}`,r])).values()];
     const detailUrls=[...new Set(base.map(r=>r.detail_url))];progress.max=detailUrls.length;progress.value=0;
     const parsed=await mapLimit(detailUrls,DETAIL_CONCURRENCY,async url=>parseDetail(await getDoc(url,'曲詳細'),url),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}・歴代/今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');

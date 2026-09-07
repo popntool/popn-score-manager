@@ -1,8 +1,8 @@
-/* pop'n music 曲マスター抽出 v0.2.0
+/* pop'n music 曲マスター抽出 v2.0.0
  * pop'n music UniLabの「収録楽曲」ページでConsoleから実行してください。
  * 出力ZIP:
  *   - popn_song_catalog_YYYY-MM-DD.txt（曲単位・バナー・4譜面難易度）
- *   - popn_song_master_YYYY-MM-DD.txt（Supabase投入用・譜面単位）
+ *   - popn_song_master_YYYY-MM-DD.txt（Supabase投入用・曲単位）
  *   - banners/（バナー実画像）
  */
 (async()=>{
@@ -117,15 +117,13 @@
     for(const song of unique)if(!song.banner_file&&bannerFiles.has(song.banner_url))song.banner_file=bannerFiles.get(song.banner_url).name;
     const date=new Date().toISOString().slice(0,10),encoder=new TextEncoder();
     const catalog=['曲ID|バナー画像|バナーURL|ジャンル名|曲名|アーティスト|LIGHT|NORMAL|HYPER|EX',...unique.map(s=>[s.song_id,s.banner_file,s.banner_url,s.genre,s.title,s.artist,...charts.map(c=>s.levels[c]??'-')].map(esc).join('|'))].join('\r\n');
-    const chartRows=[];
-    for(const song of unique)for(const chart of charts){const level=song.levels[chart];if(level==null)continue;chartRows.push({master_key:await hash([level,normalize(song.genre),normalize(song.title),normalize(song.artist),chart]),level,genre:song.genre,title:song.title,artist:song.artist,chart,banner_url:song.banner_url});}
-    const master=['曲ID|レベル|ジャンル名|曲名|アーティスト|譜面|バナーURL',...chartRows.map(r=>[r.master_key,r.level,r.genre,r.title,r.artist,r.chart,r.banner_url].map(esc).join('|'))].join('\r\n');
+    const master=['曲ID|バナーURL|ジャンル名|曲名|アーティスト|LIGHT|NORMAL|HYPER|EX',...unique.map(s=>[s.song_id,s.banner_url,s.genre,s.title,s.artist,...charts.map(c=>s.levels[c]??'-')].map(esc).join('|'))].join('\r\n');
     const files=[{name:`popn_song_catalog_${date}.txt`,data:encoder.encode('\ufeff'+catalog)},{name:`popn_song_master_${date}.txt`,data:encoder.encode('\ufeff'+master)},...bannerFiles.values()];
     if(failed.length)files.push({name:`banner_errors_${date}.txt`,data:encoder.encode('\ufeff'+failed.join('\r\n'))});
     status.textContent='ZIPを作成中…';const blob=zip(files),objectUrl=URL.createObjectURL(blob),filename=`popn_song_catalog_${date}.zip`;
     const save=()=>{const a=document.createElement('a');a.href=objectUrl;a.download=filename;document.body.appendChild(a);a.click();a.remove();};
     save();
-    status.textContent=`完了：${unique.length}曲・${chartRows.length}譜面・バナー${bannerFiles.size}枚（${((Date.now()-state.started)/1000).toFixed(1)}秒）`;
+    status.textContent=`完了：${unique.length}曲・バナー${bannerFiles.size}枚（${((Date.now()-state.started)/1000).toFixed(1)}秒）`;
     main.disabled=false;main.textContent='ZIPを保存';main.onclick=save;close.onclick=()=>{URL.revokeObjectURL(objectUrl);box.remove();};
   }catch(e){status.textContent=`エラー：${e?.message||e}`;main.textContent='閉じる';main.disabled=false;main.onclick=()=>box.remove();console.error(e);}finally{window.__POPN_CATALOG_RUNNING__=false;}
 })();

@@ -27,6 +27,6 @@ pop'n musicのスコア・メダルを管理する非公式Webアプリです。
 5. Project URLとPublishable/Anon Keyを`js/config.js`へ設定します。
 6. GitHub Pagesを`main`ブランチのルートから公開します。
 
-既存のv0.2.1環境を更新する場合は、`v0.3.0_version_score.sql`、`v1.0.0_admin.sql`の順に実行します。公式同期は常に保存済みデータを更新し、手動編集後に再同期した場合も公式値が優先されます。
+既存環境を更新する場合は、`v0.3.0_version_score.sql`、`v1.0.0_admin.sql`、`v2.0.0_song_master.sql`の順に実行します。v2.0.0では曲マスターを「1譜面1行」から「1曲1行＋4譜面レベル」へ変換します。既存スコアは保持され、手動編集後に再同期した場合も公式値が優先されます。
 
 `service_role key`、データベースパスワード、個人用アクセストークンはGitHubへ登録しないでください。
