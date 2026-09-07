@@ -1,13 +1,1 @@
-javascript:(()=>{
-  'use strict';
-  if(location.hostname!=='p.eagate.573.jp'){alert('e-amusementのページで実行してください。');return;}
-  if(!location.pathname.startsWith('/game/popn/popn29/')){alert('pop\'n musicのページで実行してください。');return;}
-  const id='popn-score-manager-sync-loader';
-  document.getElementById(id)?.remove();
-  const script=document.createElement('script');
-  script.id=id;
-  script.src=`https://popntool.github.io/popn-score-manager/js/eamusement-sync/popn29.js?t=${Date.now()}`;
-  script.onload=()=>script.remove();
-  script.onerror=()=>{script.remove();alert('同期プログラムを読み込めませんでした。');};
-  document.head.appendChild(script);
-})();
+javascript:(s=>{s.src='https://popntool.github.io/popn-score-manager/js/eamusement-sync/popn29.js?'+Date.now();document.head.append(s)})(document.createElement('script'))
