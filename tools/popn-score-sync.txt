@@ -1,4 +1,4 @@
-(()=>{
+javascript:(()=>{
   'use strict';
   if(location.hostname!=='p.eagate.573.jp'){alert('e-amusementのページで実行してください。');return;}
   if(!location.pathname.startsWith('/game/popn/popn29/')){alert('pop\'n musicのページで実行してください。');return;}

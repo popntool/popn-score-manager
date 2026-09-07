@@ -1,5 +1,5 @@
-/* pop'n music スコア同期 v2.0.0
- * e-amusementへログインし、曲データのレベル別ページでConsoleから実行してください。
+/* pop'n music スコア同期 v2.2.0
+ * e-amusementへログインし、同期用ブックマークから実行してください。
  * レベル別一覧で全譜面を集め、曲詳細から「歴代」と「VERSION（今作）」を取得します。
  */
 (async()=>{
@@ -39,8 +39,10 @@
     const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};
     for(const [chart,id] of Object.entries(ids)){
       const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;
-      const historyRow=tables[0].querySelector('tr.score:nth-of-type(2)')||tables[0].querySelectorAll('tr.score')[1];
-      const versionRow=tables[1].querySelector('tr.score:nth-of-type(2)')||tables[1].querySelectorAll('tr.score')[1];
+      const historyTable=tables.find(table=>/歴代/.test(table.previousElementSibling?.textContent||''))||tables[0];
+      const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1];
+      const historyRow=historyTable?.querySelector('tr.score td.play_value')?.closest('tr');
+      const versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr');
       const images=[...(historyRow?.querySelectorAll('img')||[])];
       result.set(`${detailUrl}|${chart}`,{score:number(historyRow?.querySelector('td.play_value')?.textContent),version_score:number(versionRow?.querySelector('td.play_value')?.textContent),medal_code:code(images.find(i=>/meda_/i.test(i.getAttribute('src')||'')),'meda')||'none',rank_code:code(images.find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')||'none'});
     }

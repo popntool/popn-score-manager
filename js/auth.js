@@ -9,5 +9,6 @@ export async function login(username,password){const client=requireDb();const{da
 export async function logout(){if(!db)return;const{error}=await db.auth.signOut();if(error)throw error;}
 export async function currentUser(){if(!db)return null;const{data}=await db.auth.getUser();return data.user||null;}
 export async function currentUsername(user){if(!db||!user)return"";const{data}=await db.from("profiles").select("username").eq("id",user.id).maybeSingle();return String(data?.username||user.user_metadata?.username||"PLAYER");}
+export async function changeUsername(username){const client=requireDb(),name=clean(username);if(!name||Array.from(name).length>32)throw new Error("ユーザー名は1～32文字で入力してください。");const{error}=await client.rpc("change_my_username",{p_username:name,p_login_email:await usernameToEmail(name)});if(error)throw error;return name;}
+export async function changePassword(password){if(String(password||"").length<6)throw new Error("パスワードは6文字以上で入力してください。");const{error}=await requireDb().auth.updateUser({password});if(error)throw error;}
 export function onAuthChange(callback){if(!db)return()=>{};const{data}=db.auth.onAuthStateChange(()=>callback());return()=>data.subscription.unsubscribe();}
-
