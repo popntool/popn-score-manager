@@ -1,0 +1,17 @@
+{
+  "name": "pop'n Score Manager",
+  "short_name": "pop'n Score",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f4e5",
+  "theme_color": "#ffd64f",
+  "icons": [
+    {
+      "src": "./assets/popn-score-icon.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
