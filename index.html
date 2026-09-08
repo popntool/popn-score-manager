@@ -13,8 +13,7 @@
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/v2.10.2.css">
-<link rel="stylesheet" href="./css/v2.12.0.css">
+<link rel="stylesheet" href="./css/v2.13.0.css">
 </head>
 <body>
   <header class="topbar">
@@ -152,7 +151,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>2.12.0</b>
+<b>2.13.0</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
@@ -168,6 +167,7 @@
         <button data-admin-tab="feedback" type="button">要望・不具合</button>
       </nav>
       <div class="admin-toolbar"><input id="adminSearch" type="search" placeholder="検索"><button id="adminAddButton" class="main-button" type="button">追加</button></div>
+      <div id="adminMasterFilters" class="admin-master-filters"><select id="adminLevelFilter" aria-label="レベル"><option value="ALL">全レベル</option></select><select id="adminVersionFilter" aria-label="登場バージョン"><option value="ALL">全バージョン</option></select><select id="adminChartFilter" aria-label="譜面"><option value="ALL">全譜面</option><option>LIGHT</option><option>NORMAL</option><option>HYPER</option><option>EX</option></select></div>
       <div id="adminContent" class="admin-content"><div class="empty">管理データを読み込みます。</div></div>
     </section>
   </main>
