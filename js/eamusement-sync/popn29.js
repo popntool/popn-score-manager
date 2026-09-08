@@ -5,7 +5,7 @@
 (async()=>{
   'use strict';
   const RETURN_URL='https://popntool.github.io/popn-score-manager/';
-  const MIN_LV=1,MAX_LV=50,LIST_CONCURRENCY=8,DETAIL_CONCURRENCY=10,MAX_PAGE=200;
+  const MIN_LV=1,MAX_LV=50,LIST_CONCURRENCY=12,DETAIL_CONCURRENCY=16,MAX_PAGE=200;
   if(location.hostname!=='p.eagate.573.jp'){alert('e-amusementの曲データページで実行してください。');return;}
   if(window.__POPN_SCORE_SYNC_RUNNING__){alert('同期処理は実行中です。');return;}
   window.__POPN_SCORE_SYNC_RUNNING__=true;
