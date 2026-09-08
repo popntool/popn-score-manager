@@ -1,0 +1,17 @@
+/* v2.10.2 header balance */
+.score-overview{display:block}
+.medal-summary{grid-template-columns:repeat(14,minmax(46px,1fr))}
+.clear-rate-stat{background:#ffe990}
+.clear-rate-stat small{color:#10234e;font-size:.62rem;white-space:nowrap}
+.clear-rate-stat strong{color:#10234e;font-size:.78rem}
+
+@media(max-width:760px){
+  .score-overview{display:block}
+  .medal-summary{grid-template-columns:repeat(7,1fr)}
+  .medal-stat:nth-child(7){border-right:1px solid var(--surface-2)}
+  .medal-stat:nth-child(14){border-right:0}
+  .medal-stat:nth-child(-n+7){border-bottom:1px solid var(--surface-2)}
+  .clear-rate-stat{min-height:46px}
+  .clear-rate-stat small{font-size:.5rem}
+  .clear-rate-stat strong{font-size:.65rem}
+}
