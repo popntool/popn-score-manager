@@ -1,22 +1,24 @@
 /* Unified application overrides. Keep this filename for future releases. */
 .filters{grid-template-columns:repeat(4,minmax(0,1fr))}
 .filters .search{grid-column:1/-1}
-.filters .search{height:44px;min-height:44px}
-.filters .search input{height:100%;min-height:0;padding:0;border:0}
-.filters select,.filter-medal-button,.admin-master-filters select{width:100%;height:44px;min-height:44px}
+.search{height:38px;min-height:38px}
+.search input{height:100%;min-height:0;padding:0;border:0}
+.filters select,.filter-medal-button,.admin-master-filters select{width:100%;height:38px;min-height:38px}
+.filter-medal-button{padding-block:2px}
 .filters select,.admin-master-filters select,.default-level-row select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 8px) 50%;background-repeat:no-repeat;background-size:6px 6px;padding-right:25px}
 .filter-medal-button b{width:8px;height:8px;margin:0 4px 4px 8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);flex:none}
 .filter-medal-button img{width:30px;height:30px;object-fit:contain}
-.default-level-row select{width:min(160px,42%);min-height:38px;border:2px solid var(--line);border-radius:9px;background-color:var(--surface);color:var(--text);padding:5px 28px 5px 8px}
+.default-level-row select{width:min(160px,42%);height:38px;min-height:38px;border:2px solid var(--line);border-radius:9px;background-color:var(--surface);color:var(--text);padding:5px 28px 5px 8px}
 .admin-master-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .admin-master-filters select{border:2px solid var(--line);border-radius:10px;background-color:var(--page);color:var(--text);padding-left:10px}
+.admin-toolbar input{height:38px;min-height:38px}
 .list-sort-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,.45fr);gap:8px;margin:-2px 0 10px}
 .list-sort-controls label{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px;color:var(--muted);font-size:.72rem;font-weight:900}
-.list-sort-controls select{width:100%;height:40px;min-height:40px;appearance:none;border:2px solid var(--line);border-radius:10px;background-color:var(--page);background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 8px) 50%;background-repeat:no-repeat;background-size:6px 6px;padding:5px 25px 5px 9px;color:var(--text)}
+.list-sort-controls select{width:100%;height:38px;min-height:38px;appearance:none;border:2px solid var(--line);border-radius:10px;background-color:var(--page);background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 8px) 50%;background-repeat:no-repeat;background-size:6px 6px;padding:5px 25px 5px 9px;color:var(--text)}
 .user-sort-controls{margin-top:8px}
 .score-overview{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:7px}
 .medal-summary{grid-template-columns:repeat(13,minmax(46px,1fr))}
-.no-play-stat small{font-size:.55rem;white-space:nowrap}
+.no-play-label{display:grid;place-items:center;width:29px;height:29px;color:var(--muted);font-size:.52rem;font-weight:900;line-height:.95}
 .clear-rate-summary{display:grid;place-items:center;align-content:center;gap:3px;min-width:0;border:2px solid var(--line);border-radius:14px;background:#ffe990;color:#10234e;box-shadow:var(--shadow)}
 .clear-rate-summary small{font-size:.62rem;white-space:nowrap}
 .clear-rate-summary strong{font-size:.82rem;font-variant-numeric:tabular-nums}
@@ -62,23 +64,23 @@
 .request-levels label{gap:5px;text-align:center;font-size:.76rem}
 .request-levels input{text-align:center;font-variant-numeric:tabular-nums}
 .request-levels .light{color:#1762b8}.request-levels .normal{color:#1b8b38}.request-levels .hyper{color:#8a7100}.request-levels .ex{color:#b50064}
-.score-entry-grid{grid-template-columns:minmax(78px,.85fr) minmax(58px,.56fr) minmax(105px,1fr) minmax(105px,1fr);align-items:end;gap:7px}
+.score-entry-grid{grid-template-columns:64px 64px minmax(105px,1fr) minmax(105px,1fr);align-items:end;gap:7px}
 .score-entry-grid .history-score-input{display:grid;gap:5px;padding:0;border:0;border-radius:0;background:transparent}
 .score-entry-grid .history-score-input small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input{width:100%;height:52px;min-height:52px}
 .score-entry-grid .medal-picker-button{padding:3px;justify-content:center}
 .score-entry-grid .rank-text{display:grid;place-items:center!important;padding:0;text-align:center!important;line-height:1}
+.score-entry-grid input{padding:5px 6px;font-size:.95rem;letter-spacing:-.04em}
 
 @media(max-width:760px){
   .filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
   .filters .search{grid-column:1/-1}
-  .filters .search{height:42px;min-height:42px}
-  .filters select,.filter-medal-button{height:42px;min-height:42px;padding-left:7px;padding-right:22px;font-size:.72rem}
+  .filters select,.filter-medal-button{height:38px;min-height:38px;padding-left:7px;padding-right:22px;font-size:.72rem}
   .filter-medal-button{padding-right:8px}
   .list-sort-controls{grid-template-columns:minmax(0,1.35fr) minmax(0,.8fr);gap:5px;margin-bottom:7px}
   .list-sort-controls label{grid-template-columns:1fr;gap:2px;font-size:.58rem}
   .list-sort-controls select{height:38px;min-height:38px;font-size:.72rem}
-  .score-card-v212{grid-template-columns:minmax(92px,1fr) 38px 38px 38px 40px 40px;grid-template-rows:40px 21px 27px}
+  .score-card-v212{grid-template-columns:minmax(92px,1fr) 38px 38px 38px 48px 48px;grid-template-rows:40px 21px 27px}
   .score-card-v212 .song-banner{height:40px}
   .score-card-v212 .card-difficulty b{font-size:.52rem}
   .score-card-v212 .card-difficulty strong{font-size:.68rem}
@@ -95,18 +97,19 @@
   .user-metric-head span,.user-metric-values span{padding:1px 5px}
   .user-metric-values{font-size:.78rem}
   .request-levels{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .score-entry-grid{grid-template-columns:minmax(72px,.82fr) minmax(54px,.56fr) minmax(88px,1fr) minmax(88px,1fr);gap:5px}
+  .score-entry-grid{grid-template-columns:54px 54px minmax(92px,1fr) minmax(92px,1fr);gap:5px}
   .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input{height:48px;min-height:48px}
+  .score-entry-grid input{font-size:.86rem}
   .score-overview{grid-template-columns:minmax(0,1fr) 76px;gap:5px}
   .medal-summary{grid-template-columns:repeat(7,1fr)}
   .medal-stat:nth-child(7){border-right:1px solid var(--surface-2)}
   .medal-stat:nth-child(13){border-right:0}
-  .no-play-stat small{font-size:.45rem}
+  .no-play-label{font-size:.44rem}
   .clear-rate-summary small{font-size:.5rem}
   .clear-rate-summary strong{font-size:.66rem}
 }
 @media(max-width:380px){
-  .score-card-v212{grid-template-columns:minmax(62px,1fr) 34px 34px 34px 40px 40px}
-  .score-entry-grid{grid-template-columns:minmax(60px,.82fr) minmax(48px,.56fr) minmax(76px,1fr) minmax(76px,1fr);gap:4px}
+  .score-card-v212{grid-template-columns:minmax(62px,1fr) 34px 34px 34px 46px 46px}
+  .score-entry-grid{grid-template-columns:50px 50px minmax(88px,1fr) minmax(88px,1fr);gap:4px}
   .score-entry-grid label{font-size:.7rem}
 }
