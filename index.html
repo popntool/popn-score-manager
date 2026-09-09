@@ -46,16 +46,16 @@
 <code>js/config.js</code>へURLとAnon Keyを設定してください。</span>
 </div>
 
-    <section class="score-overview" aria-label="スコア概要">
-      <div id="medalSummary" class="medal-summary" aria-label="メダル別登録数とNO PLAY数"></div>
-      <div id="clearRateSummary" class="clear-rate-summary" aria-label="クリア率"></div>
-    </section>
-
     <nav class="tabs" aria-label="メインメニュー">
 <button class="active" data-tab="scores" type="button">スコア</button>
 <button data-tab="users" type="button">ユーザー</button>
 <button id="adminTabButton" data-tab="admin" type="button" hidden>管理</button>
 </nav>
+
+    <section id="scoreOverview" class="score-overview" aria-label="スコア概要">
+      <div id="medalSummary" class="medal-summary" aria-label="メダル別登録数とNO PLAY数"></div>
+      <div id="clearRateSummary" class="clear-rate-summary" aria-label="クリア率"></div>
+    </section>
 
     <section id="scoresPanel" class="panel tab-panel">
       <div class="panel-heading">
@@ -161,7 +161,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>2.16.1</b>
+<b>2.18.0</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
