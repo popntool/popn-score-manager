@@ -8,6 +8,9 @@
 .default-level-row select{width:min(160px,42%);min-height:38px;border:2px solid var(--line);border-radius:9px;background-color:var(--surface);color:var(--text);padding:5px 28px 5px 8px}
 .admin-master-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .admin-master-filters select{border:2px solid var(--line);border-radius:10px;background-color:var(--page);color:var(--text);padding-left:10px}
+.score-sort-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,.45fr);gap:8px;margin:-2px 0 10px}
+.score-sort-controls label{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:8px;color:var(--muted);font-size:.72rem;font-weight:900}
+.score-sort-controls select{width:100%;height:40px;min-height:40px;appearance:none;border:2px solid var(--line);border-radius:10px;background-color:var(--page);background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 8px) 50%;background-repeat:no-repeat;background-size:6px 6px;padding:5px 25px 5px 9px;color:var(--text)}
 .score-overview{display:block}
 .medal-summary{grid-template-columns:repeat(14,minmax(46px,1fr))}
 .clear-rate-stat small{color:#10234e;font-size:.62rem;white-space:nowrap}
@@ -65,6 +68,9 @@
   .filters .search{grid-column:1/-1}
   .filters select,.filter-medal-button{height:42px;min-height:42px;padding-left:7px;padding-right:22px;font-size:.72rem}
   .filter-medal-button{padding-right:8px}
+  .score-sort-controls{grid-template-columns:minmax(0,1.35fr) minmax(0,.8fr);gap:5px;margin-bottom:7px}
+  .score-sort-controls label{grid-template-columns:1fr;gap:2px;font-size:.58rem}
+  .score-sort-controls select{height:38px;min-height:38px;font-size:.72rem}
   .score-card-v212{grid-template-columns:minmax(92px,1fr) 38px 38px 38px minmax(44px,.72fr) minmax(44px,.72fr);grid-template-rows:40px 21px 27px}
   .score-card-v212 .song-banner{height:40px}
   .score-card-v212 .card-difficulty b{font-size:.52rem}
