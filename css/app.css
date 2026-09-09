@@ -70,6 +70,7 @@
 .feedback-admin-card{align-items:stretch}
 .feedback-admin-card>div:first-child{flex:1}
 .feedback-admin-card .admin-actions{align-content:center}
+.feedback-sender{color:var(--text)!important;font-weight:800}
 .feedback-history{display:grid;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 .feedback-history-card{display:grid;gap:5px;padding:9px;border:1px solid var(--line);border-radius:10px;background:var(--page)}
 .feedback-history-card p{white-space:pre-wrap;word-break:break-word}
