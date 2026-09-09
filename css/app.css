@@ -25,9 +25,9 @@
 .clear-rate-summary small{font-size:.62rem;white-space:nowrap}
 .clear-rate-summary strong{font-size:.82rem;font-variant-numeric:tabular-nums}
 
-.score-card-v300{display:grid;grid-template-columns:52px minmax(168px,1fr) 52px 52px 64px 64px 66px 58px;grid-template-rows:46px 24px 32px;align-items:stretch;min-width:0;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:var(--page);box-shadow:var(--shadow)}
+.score-card-v300{display:grid;grid-template-columns:52px minmax(0,1fr) 58px 58px 66px 66px 66px;grid-template-rows:46px 24px 32px;align-items:stretch;min-width:0;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:var(--page);box-shadow:var(--shadow)}
 .score-card-v300>*{min-width:0}
-.score-card-v300 .song-banner{grid-column:1/3;grid-row:1;width:100%;height:46px;min-height:0;max-width:none;max-height:none;overflow:hidden;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0;object-fit:contain}
+.score-card-v300 .song-banner{grid-column:1/3;grid-row:1;width:100%;height:46px;min-height:0;max-width:none;max-height:none;overflow:hidden;border:0;border-bottom:1px solid var(--line);border-radius:0;object-fit:contain}
 .score-card-v300 .banner-empty{display:grid;place-items:center;white-space:nowrap}
 .score-card-v300 .card-medal{grid-column:3;grid-row:1}
 .score-card-v300 .card-rank{grid-column:4;grid-row:1}
@@ -44,9 +44,9 @@
 .score-card-v300 .card-chart{grid-row:2;color:#fff;font-size:.66rem;font-weight:900;text-shadow:0 1px 1px #0005}
 .score-card-v300 .card-level{grid-row:3;font-size:.78rem}
 .score-card-v300 .card-chart.light{background:#3f8fdd}.score-card-v300 .card-chart.normal{background:#38a754}.score-card-v300 .card-chart.hyper{background:#e6c82f;color:#332b00;text-shadow:none}.score-card-v300 .card-chart.ex{background:#f14e61}
-.score-card-v300 .card-genre{grid-column:2/8;grid-row:2;display:flex;align-items:center;padding:2px 8px;border-bottom:1px solid var(--line);color:var(--muted);font-size:.66rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.score-card-v300 .card-title{grid-column:2/8;grid-row:3;display:flex;align-items:center;padding:2px 8px;font-size:1rem;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.score-card-v300 .score-edit{grid-column:8;grid-row:2/span 2;align-self:stretch;justify-self:stretch;width:auto;height:auto;min-width:0;min-height:0;margin:0;padding:0;border:0;border-left:1px solid var(--line);border-radius:0;background:var(--blue);color:#10234e;font-weight:900}
+.score-card-v300 .card-genre{grid-column:2/7;grid-row:2;display:flex;align-items:center;padding:2px 8px;border-bottom:1px solid var(--line);color:var(--muted);font-size:.66rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score-card-v300 .card-title{grid-column:2/7;grid-row:3;display:flex;align-items:center;padding:2px 8px;font-size:1rem;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score-card-v300 .score-edit{grid-column:7;grid-row:2/span 2;align-self:stretch;justify-self:stretch;width:auto;height:auto;min-width:0;min-height:0;margin:0;padding:0;border:0;border-left:1px solid var(--line);border-radius:0;background:var(--blue);color:#10234e;font-weight:900}
 .player-popclass{display:flex;align-items:baseline;gap:6px;margin-left:auto;text-align:right;white-space:nowrap}.player-popclass strong{font-variant-numeric:tabular-nums;font-size:1.1rem}.popclass-group{display:grid;gap:7px}.popclass-group+.popclass-group{margin-top:14px}.popclass-group-title{display:flex;align-items:end;justify-content:space-between;border-bottom:1px solid var(--line);padding:2px}.popclass-group-title span{color:var(--muted);font-size:.75rem;font-weight:800}.manual-popclass{display:grid;place-items:center;width:100%;height:52px;border:2px solid var(--line);border-radius:10px;background:var(--surface-2);font-weight:900;font-variant-numeric:tabular-nums}
 
 .user-row-v212{display:grid;grid-template-columns:1fr;gap:2px;min-width:0;margin:0;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--page)}
@@ -85,7 +85,12 @@
 .request-levels label{gap:5px;text-align:center;font-size:.76rem}
 .request-levels input{text-align:center;font-variant-numeric:tabular-nums}
 .request-levels .light{color:#1762b8}.request-levels .normal{color:#1b8b38}.request-levels .hyper{color:#8a7100}.request-levels .ex{color:#b50064}
-.score-entry-grid{grid-template-columns:64px 64px minmax(100px,1fr) minmax(100px,1fr) 72px;align-items:end;gap:7px}
+.score-entry-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:auto auto;align-items:end;gap:7px}
+.score-entry-grid>label:nth-child(1){grid-column:1/4;grid-row:1}
+.score-entry-grid>label:nth-child(2){grid-column:4/7;grid-row:1}
+.score-entry-grid>label:nth-child(3){grid-column:1/3;grid-row:2}
+.score-entry-grid>label:nth-child(4){grid-column:3/5;grid-row:2}
+.score-entry-grid>label:nth-child(5){grid-column:5/7;grid-row:2}
 .score-entry-grid .history-score-input{display:grid;gap:5px;padding:0;border:0;border-radius:0;background:transparent}
 .score-entry-grid .history-score-input small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input{width:100%;height:52px;min-height:52px}
@@ -101,7 +106,7 @@
   .list-sort-controls{grid-template-columns:minmax(0,1.35fr) minmax(0,.8fr);gap:5px;margin-bottom:7px}
   .list-sort-controls label{grid-template-columns:1fr;gap:2px;font-size:.58rem}
   .list-sort-controls select{height:38px;min-height:38px;font-size:.72rem}
-  .score-card-v300{grid-template-columns:36px minmax(64px,1fr) 38px 38px 48px 48px 50px 42px;grid-template-rows:40px 21px 27px}
+  .score-card-v300{grid-template-columns:36px minmax(0,1fr) 40px 40px 50px 50px 50px;grid-template-rows:40px 21px 27px}
   .score-card-v300 .song-banner{height:40px}
   .score-card-v300 .card-medal img{width:28px;height:28px}
   .score-card-v300 .card-rank{font-size:.62rem}
@@ -126,7 +131,7 @@
   .master-song-card>[data-edit-song]{min-height:31px;padding:3px 7px;font-size:.7rem}
   .feedback-admin-card{flex-direction:column}
   .request-levels{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .score-entry-grid{grid-template-columns:48px 48px minmax(0,1fr) minmax(0,1fr) 58px;gap:5px}
+  .score-entry-grid{gap:6px}
   .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input{height:48px;min-height:48px}
   .score-entry-grid input{font-size:.86rem}
   .score-overview{grid-template-columns:minmax(0,1fr) 76px;gap:5px}
@@ -138,59 +143,7 @@
   .clear-rate-summary strong{font-size:.66rem}
 }
 @media(max-width:380px){
-  .score-card-v300{grid-template-columns:32px minmax(42px,1fr) 34px 34px 45px 45px 47px 38px}
-  .score-entry-grid{grid-template-columns:44px 44px minmax(0,1fr) minmax(0,1fr) 54px;gap:4px}
-  .score-entry-grid label{font-size:.7rem}
-}
-
-/* v3.0.8: score card edit-button position / manual score modal balance */
-.score-card-v300{
-  grid-template-columns:52px minmax(72px,100px) 58px 60px repeat(3,minmax(72px,1fr));
-}
-.score-card-v300 .card-popclass{grid-column:7;grid-row:1}
-.score-card-v300 .card-genre,.score-card-v300 .card-title{grid-column:2/7}
-.score-card-v300 .score-edit{grid-column:7;grid-row:2/span 2}
-
-.score-entry-grid{
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  grid-template-rows:auto auto;
-}
-.score-entry-grid>label:nth-child(1){grid-column:1/4;grid-row:1}
-.score-entry-grid>label:nth-child(2){grid-column:4/7;grid-row:1}
-.score-entry-grid>label:nth-child(3){grid-column:1/3;grid-row:2}
-.score-entry-grid>label:nth-child(4){grid-column:3/5;grid-row:2}
-.score-entry-grid>label:nth-child(5){grid-column:5/7;grid-row:2}
-
-@media(max-width:760px){
-  .score-card-v300{
-    grid-template-columns:36px 72px 40px 44px repeat(3,minmax(48px,1fr));
-  }
-  .score-entry-grid{gap:6px}
-}
-
-@media(max-width:380px){
-  .score-card-v300{
-    grid-template-columns:34px 64px 36px 40px repeat(3,minmax(44px,1fr));
-  }
+  .score-card-v300{grid-template-columns:34px minmax(0,1fr) 36px 36px 46px 46px 46px}
   .score-entry-grid{gap:5px}
-}
-
-/* v3.0.9: score card column balance */
-.score-card-v300{
-  /* chart/level | banner remainder | medal | rank | history | current | popclass */
-  grid-template-columns:52px minmax(0,1fr) 58px 58px 66px 66px 66px;
-}
-/* The medal cell already supplies the divider; avoid a doubled banner/right border. */
-.score-card-v300 .song-banner{border-right:0}
-
-@media(max-width:760px){
-  .score-card-v300{
-    grid-template-columns:36px minmax(0,1fr) 40px 40px 50px 50px 50px;
-  }
-}
-
-@media(max-width:380px){
-  .score-card-v300{
-    grid-template-columns:34px minmax(0,1fr) 36px 36px 46px 46px 46px;
-  }
+  .score-entry-grid label{font-size:.7rem}
 }
