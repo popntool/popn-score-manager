@@ -47,7 +47,8 @@
 </div>
 
     <section class="score-overview" aria-label="スコア概要">
-      <div id="medalSummary" class="medal-summary" aria-label="クリア率とメダル別登録数"></div>
+      <div id="medalSummary" class="medal-summary" aria-label="メダル別登録数とNO PLAY数"></div>
+      <div id="clearRateSummary" class="clear-rate-summary" aria-label="クリア率"></div>
     </section>
 
     <nav class="tabs" aria-label="メインメニュー">
@@ -75,11 +76,11 @@
 <option value="ALL">全レベル</option>
 </select>
 <select id="versionFilter" aria-label="登場バージョン"><option value="ALL">全バージョン</option></select>
-<div class="filter-medal-wrap"><input id="medalFilter" type="hidden" value="ALL"><button id="filterMedalButton" class="filter-medal-button" type="button"><img alt="" hidden><span>すべて</span><b aria-hidden="true"></b></button><div id="filterMedalPicker" class="filter-medal-picker" hidden></div></div>
+<div class="filter-medal-wrap"><input id="medalFilter" type="hidden" value="ALL"><button id="filterMedalButton" class="filter-medal-button" type="button"><img alt="" hidden><span>全メダル</span><b aria-hidden="true"></b></button><div id="filterMedalPicker" class="filter-medal-picker" hidden></div></div>
 <select id="rankFilter" aria-label="クリアランク"><option value="ALL">全ランク</option><option>S+</option><option>S</option><option>AAA</option><option>AA+</option><option>AA</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D</option><option>E</option><option value="UNPLAYED">未プレー</option></select>
 </div>
-<div class="score-sort-controls">
-<label>並び替え項目<select id="scoreSortField"><option value="genre">ジャンル名</option><option value="title" selected>曲名</option><option value="medal">メダル</option><option value="score">歴代スコア</option><option value="version_score">今作スコア</option></select></label>
+<div class="list-sort-controls">
+<label>並び替え項目<select id="scoreSortField"><option value="level">レベル</option><option value="medal" selected>メダル</option><option value="score">歴代スコア</option><option value="version_score">今作スコア</option></select></label>
 <label>並び順<select id="scoreSortOrder"><option value="asc" selected>昇順</option><option value="desc">降順</option></select></label>
 </div>
       <div id="scoreList" class="score-list">
@@ -97,6 +98,10 @@
 <span>⌕</span>
 <input id="userSearchInput" type="search" placeholder="ユーザー名検索">
 </label>
+<div class="list-sort-controls user-sort-controls">
+<label>並び替え項目<select id="userSortField"><option value="username" selected>ユーザー名</option><option value="highest_clear_level">最高クリア</option><option value="pop_class">ポックラ</option></select></label>
+<label>並び順<select id="userSortOrder"><option value="asc" selected>昇順</option><option value="desc">降順</option></select></label>
+</div>
 <div id="userList" class="user-list">
 <div class="empty">ユーザーを読み込みます。</div>
 </div>
@@ -156,7 +161,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>2.14.0</b>
+<b>2.16.0</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
