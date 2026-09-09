@@ -17,7 +17,7 @@
 .list-sort-controls select{width:100%;height:38px;min-height:38px;appearance:none;border:2px solid var(--line);border-radius:10px;background-color:var(--page);background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 8px) 50%;background-repeat:no-repeat;background-size:6px 6px;padding:5px 25px 5px 9px;color:var(--text)}
 .user-sort-controls{margin-top:8px}
 .score-overview{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:7px}
-.medal-summary{grid-template-columns:repeat(13,minmax(46px,1fr))}
+.medal-summary{grid-template-columns:repeat(14,minmax(46px,1fr))}
 .no-play-label{display:grid;place-items:center;width:29px;height:29px;color:var(--muted);font-size:.52rem;font-weight:900;line-height:.95}
 .clear-rate-summary{display:grid;place-items:center;align-content:center;gap:3px;min-width:0;border:2px solid var(--line);border-radius:14px;background:#ffe990;color:#10234e;box-shadow:var(--shadow)}
 .clear-rate-summary small{font-size:.62rem;white-space:nowrap}
@@ -46,11 +46,11 @@
 .score-card-v212 .card-title{grid-column:1/6;grid-row:3;display:flex;align-items:center;padding:2px 8px;font-size:1rem;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .score-card-v212 .score-edit{grid-column:6;grid-row:2/4;width:100%;height:100%;min-height:0;border:0;border-left:1px solid var(--line);border-radius:0;background:var(--blue);color:#10234e;font-weight:900}
 
-.user-row-v212{display:grid;grid-template-columns:1fr;gap:6px;min-width:0;margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--page)}
-.user-row-v212 .user-name{font-size:1.05rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-row-v212{display:grid;grid-template-columns:1fr;gap:2px;min-width:0;margin:0;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--page)}
+.user-row-v212 .user-name{font-size:1.05rem;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .user-metric-head,.user-metric-values{display:grid;grid-template-columns:minmax(82px,.8fr) minmax(76px,.7fr) minmax(132px,1.25fr);gap:0;min-width:0}
-.user-metric-head{color:var(--muted);font-size:.62rem;font-weight:900}
-.user-metric-values{font-variant-numeric:tabular-nums;font-size:.9rem}
+.user-metric-head{color:var(--muted);font-size:.62rem;font-weight:900;line-height:1.15}
+.user-metric-values{font-variant-numeric:tabular-nums;font-size:.9rem;line-height:1.15}
 .user-metric-head span,.user-metric-values span{min-width:0;padding:1px 8px;border-left:1px solid var(--surface-2);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .user-row-v212 .user-metric-head span,.user-row-v212 .user-metric-values span{display:block}
 .user-row-v212>.user-name{grid-area:auto!important;grid-column:1;grid-row:1}
@@ -58,6 +58,23 @@
 .user-row-v212>.user-metric-values{grid-column:1;grid-row:3}
 .user-metric-head span:first-child,.user-metric-values span:first-child{border-left:0;text-align:left}
 .poptomo-copy{display:block;width:100%;min-width:0;padding:0;border:0;background:transparent;color:var(--focus);font:inherit;text-align:center;text-decoration:underline;text-underline-offset:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.master-song-card{align-items:stretch;gap:8px;padding:7px 8px}
+.master-song-card .admin-card-main{flex:1;display:grid!important;grid-template-columns:96px minmax(0,1fr);gap:8px;align-items:center}
+.master-song-card .admin-card-main img,.master-song-card .admin-no-image{display:grid;width:96px;height:38px;max-height:none;place-items:center;object-fit:contain;border:1px solid var(--line);border-radius:5px;background:#fff;color:#76809b;font-size:.68rem;font-weight:900}
+.master-song-copy{display:grid;gap:1px;min-width:0;line-height:1.2}
+.master-song-copy strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.9rem}
+.master-song-copy small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.65rem}
+.master-song-card>[data-edit-song]{flex:0 0 auto;align-self:stretch;min-height:38px;padding:5px 10px}
+.feedback-card-title{display:flex!important;align-items:center;justify-content:space-between;gap:8px}
+.feedback-admin-card{align-items:stretch}
+.feedback-admin-card>div:first-child{flex:1}
+.feedback-admin-card .admin-actions{align-content:center}
+.feedback-history{display:grid;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.feedback-history-card{display:grid;gap:5px;padding:9px;border:1px solid var(--line);border-radius:10px;background:var(--page)}
+.feedback-history-card p{white-space:pre-wrap;word-break:break-word}
+.feedback-history-card small,.feedback-history-card time{color:var(--muted);font-size:.7rem}
+.feedback-history-card .admin-reply{display:grid;gap:2px}
 
 .request-levels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0;padding:10px;border:2px solid var(--line);border-radius:11px}
 .request-levels legend{padding:0 5px;font-weight:900}
@@ -92,10 +109,17 @@
   .score-card-v212 .card-genre{padding:1px 5px;font-size:.55rem}
   .score-card-v212 .card-title{padding:1px 5px;font-size:.78rem}
   .score-card-v212 .score-edit{padding:1px;font-size:.65rem}
-  .user-row-v212{gap:5px;padding:9px 10px}
+  .user-row-v212{gap:1px;padding:5px 8px}
   .user-metric-head,.user-metric-values{grid-template-columns:minmax(76px,.8fr) minmax(68px,.7fr) minmax(0,1.25fr)}
   .user-metric-head span,.user-metric-values span{padding:1px 5px}
   .user-metric-values{font-size:.78rem}
+  .master-song-card{flex-direction:row;align-items:stretch;gap:5px;padding:5px}
+  .master-song-card .admin-card-main{grid-template-columns:76px minmax(0,1fr);gap:6px}
+  .master-song-card .admin-card-main img,.master-song-card .admin-no-image{width:76px;height:31px}
+  .master-song-copy strong{font-size:.78rem}
+  .master-song-copy small{font-size:.56rem}
+  .master-song-card>[data-edit-song]{min-height:31px;padding:3px 7px;font-size:.7rem}
+  .feedback-admin-card{flex-direction:column}
   .request-levels{grid-template-columns:repeat(2,minmax(0,1fr))}
   .score-entry-grid{grid-template-columns:54px 54px minmax(92px,1fr) minmax(92px,1fr);gap:5px}
   .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input{height:48px;min-height:48px}
@@ -103,7 +127,7 @@
   .score-overview{grid-template-columns:minmax(0,1fr) 76px;gap:5px}
   .medal-summary{grid-template-columns:repeat(7,1fr)}
   .medal-stat:nth-child(7){border-right:1px solid var(--surface-2)}
-  .medal-stat:nth-child(13){border-right:0}
+  .medal-stat:nth-child(14){border-right:0}
   .no-play-label{font-size:.44rem}
   .clear-rate-summary small{font-size:.5rem}
   .clear-rate-summary strong{font-size:.66rem}
