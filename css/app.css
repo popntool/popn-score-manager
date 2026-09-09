@@ -174,3 +174,23 @@
   }
   .score-entry-grid{gap:5px}
 }
+
+/* v3.0.9: score card column balance */
+.score-card-v300{
+  /* chart/level | banner remainder | medal | rank | history | current | popclass */
+  grid-template-columns:52px minmax(0,1fr) 58px 58px 66px 66px 66px;
+}
+/* The medal cell already supplies the divider; avoid a doubled banner/right border. */
+.score-card-v300 .song-banner{border-right:0}
+
+@media(max-width:760px){
+  .score-card-v300{
+    grid-template-columns:36px minmax(0,1fr) 40px 40px 50px 50px 50px;
+  }
+}
+
+@media(max-width:380px){
+  .score-card-v300{
+    grid-template-columns:34px minmax(0,1fr) 36px 36px 46px 46px 46px;
+  }
+}
