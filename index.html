@@ -219,9 +219,9 @@
 <div class="score-entry-grid">
 <label>メダル<input name="medal_code" type="hidden" value="none" required><button id="medalPickerButton" class="medal-picker-button" type="button"><img alt=""><span>－</span></button></label>
 <label>ランク<i id="manualRank" class="rank-text rank-e" role="img" aria-label="E">E</i></label>
-<label>ポックラ<output id="manualPopClass" class="manual-popclass">0.00</output></label>
 <label class="history-score-input">歴代<input id="manualHistoryScore" name="history_score" type="number" min="0" max="100000" placeholder="未入力"><small id="historyScoreGuide">今作が上回る場合は同じ値を表示</small></label>
 <label>今作<input id="manualScoreInput" name="version_score" type="number" min="0" max="100000" required></label>
+<label>ポックラ<output id="manualPopClass" class="manual-popclass">0.00</output></label>
 </div>
 <div id="medalPicker" class="medal-picker" hidden></div>
 <p id="manualError" class="error">
@@ -253,7 +253,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.8">
+  <script type="module" src="./js/app.js?v=3.0.12">
 </script>
 </body>
 </html>
