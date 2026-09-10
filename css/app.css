@@ -191,3 +191,15 @@ body.auth-user>.auth-gate{display:none}
 #syncDialog .sync-step{padding-top:9px;padding-bottom:9px}
 #syncDialog .sync-lead,#syncDialog .sync-status{padding:8px 10px}
 @media(max-width:760px){#myPageDialog>form{padding:10px 12px}#myPageDialog>.mypage-section{margin:0 12px 10px}#myPageDialog .mypage-section{padding:8px 10px}.dialog-back{min-height:32px;padding:3px 9px}#feedbackDialog form,#syncDialog form{padding:11px 12px}}
+
+
+/* v3.0.31: clearer text hierarchy on My Page */
+#myPageDialog>form>h2{color:var(--navy);font-size:1.18rem;letter-spacing:.02em}
+#myPageDialog .mypage-section h3{color:var(--navy);font-size:1rem;font-weight:900}
+#myPageDialog .mypage-section label:not(.check-row){color:var(--muted);font-size:.78rem;font-weight:900}
+#myPageDialog .mypage-section label:not(.check-row) input{color:var(--text);font-size:.98rem;font-weight:800}
+#myPageDialog .check-row{color:var(--text);font-size:.82rem;font-weight:800}
+#myPageDialog .main-button{font-size:.9rem}
+#myPageDialog .error{color:var(--danger);font-size:.72rem}
+[data-theme="dark"] #myPageDialog>form>h2,[data-theme="dark"] #myPageDialog .mypage-section h3{color:var(--text)}
+@media(max-width:760px){#myPageDialog>form>h2{font-size:1.1rem}#myPageDialog .mypage-section h3{font-size:.94rem}#myPageDialog .mypage-section label:not(.check-row){font-size:.74rem}#myPageDialog .mypage-section label:not(.check-row) input{font-size:.92rem}}
