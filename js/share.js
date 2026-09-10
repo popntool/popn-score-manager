@@ -51,11 +51,11 @@ function sectionTitle(ctx,label,count,x,y,w){text(ctx,label,x,y+18,21,900,INK);t
 export async function sharePopClassImage(rows,username){const {current,other,total}=popClassSelection(rows),all=[...current,...other];if(!all.length)throw new Error("ポックラ対象曲がありません。");await preload(all);const width=900,pad=22,gap=8,tileW=(width-pad*2-gap)/2,tileH=58;const curRows=Math.ceil(current.length/2),otherRows=Math.ceil(other.length/2),height=84+48+curRows*(tileH+gap)+48+otherRows*(tileH+gap)+42;const[c,ctx]=canvas(width,height);header(ctx,"ポックラ対象一覧",`TOTAL ${total.toFixed(2)}`,username,width);ctx.save();ctx.scale(.75,.75);ctx.restore();let y=96;sectionTitle(ctx,"今作 TOP 20",current.length,pad,y,width-pad*2);y+=42;for(let i=0;i<current.length;i++){const col=i%2,row=Math.floor(i/2);await drawScoreTile(ctx,current[i],pad+col*(tileW+gap),y+row*(tileH+gap),tileW,tileH);}y+=curRows*(tileH+gap)+2;sectionTitle(ctx,"その他 TOP 40",other.length,pad,y,width-pad*2);y+=42;for(let i=0;i<other.length;i++){const col=i%2,row=Math.floor(i/2);await drawScoreTile(ctx,other[i],pad+col*(tileW+gap),y+row*(tileH+gap),tileW,tileH);}footer(ctx,width,height);const blob=await blobFromCanvas(c);return shareBlob(blob,`popn_popclass_${escFile(username)}.jpg`,"pop'n Score Manager ポックラ対象一覧");}
 
 async function drawLevelTile(ctx,row,x,y,w,h){
- rounded(ctx,x,y,w,h,9,PANEL,LINE,2);
- await drawBanner(ctx,row,x+6,y+6,w-12,44);
- await drawMedal(ctx,row,x+8,y+57,34);
- text(ctx,ellipsize(ctx,row.title,w-58,15,900),x+49,y+64,15,900,INK);
- chartBadge(ctx,row.chart,row.level,x+49,y+78);
+ rounded(ctx,x,y,w,h,8,PANEL,LINE,2);
+ const medalSize=Math.min(42,Math.max(28,h-10));
+ const medalW=medalSize+12;
+ await drawBanner(ctx,row,x+6,y+6,w-medalW-18,h-12);
+ await drawMedal(ctx,row,x+w-medalW+1,y+(h-medalSize)/2,medalSize);
 }
 
 const MEDAL_GROUPS=[
@@ -74,4 +74,46 @@ function medalShareSort(a,b){
   ||String(a.title||"").localeCompare(String(b.title||""),"ja")
   ||(chartOrder[a.chart]??9)-(chartOrder[b.chart]??9);
 }
-export async function shareLevelMedalImage(rows,level,username){const target=rows.filter(row=>Number(row.level)===Number(level)).sort(medalShareSort);if(!target.length)throw new Error(`Lv.${level} の譜面がありません。`);await preload(target);const width=900,pad=20,gap=8,cols=3,tileW=(width-pad*2-gap*(cols-1))/cols,tileH=110,rowCount=Math.ceil(target.length/cols),height=84+46+rowCount*(tileH+gap)+40;const[c,ctx]=canvas(width,height);const cleared=target.filter(row=>String(row.medal_code||"none").toLowerCase()!=="none").length,rate=target.length?Math.floor(cleared/target.length*10000)/100:0;header(ctx,`Lv.${level} メダル一覧`,`クリア率 ${rate.toFixed(2)}%`,username,width);let y=100;text(ctx,"バナー・クリアメダル一覧",pad,y+14,19,900,INK);y+=36;for(let i=0;i<target.length;i++){const col=i%cols,row=Math.floor(i/cols);await drawLevelTile(ctx,target[i],pad+col*(tileW+gap),y+row*(tileH+gap),tileW,tileH);}footer(ctx,width,height);const blob=await blobFromCanvas(c);return shareBlob(blob,`popn_level${level}_${escFile(username)}.jpg`,`pop'n Score Manager Lv.${level} メダル一覧`);}
+function gridForCount(count){
+ const candidates=[];
+ for(let cols=3;cols<=8;cols++){
+  const rows=Math.ceil(count/cols),ratio=cols/Math.max(rows,1);
+  const target=1.45;
+  const score=Math.abs(Math.log(ratio/target))+(rows>8?(rows-8)*.18:0)+(cols>6?(cols-6)*.06:0);
+  candidates.push({cols,rows,score});
+ }
+ return candidates.sort((a,b)=>a.score-b.score)[0];
+}
+async function drawMedalLegend(ctx,rows,x,y,w){
+ const ordered=[];
+ for(const row of rows){
+  const info=effectiveMedal(row),key=Number(row.score)===100000?"cool-perfect":String(row.medal_code||"none").toLowerCase();
+  if(!ordered.some(item=>item.key===key))ordered.push({key,info,row});
+ }
+ ordered.sort((a,b)=>{const av=a.key==="cool-perfect"?-1:medalOrder(a.key),bv=b.key==="cool-perfect"?-1:medalOrder(b.key);return av-bv;});
+ const items=ordered.slice(0,15),cellW=w/Math.max(items.length,1);
+ for(let i=0;i<items.length;i++){
+  const cx=x+i*cellW;
+  await drawMedal(ctx,items[i].row,cx+(cellW-28)/2,y,28);
+ }
+}
+export async function shareLevelMedalImage(rows,level,username){
+ const target=rows.filter(row=>Number(row.level)===Number(level)).sort(medalShareSort);
+ if(!target.length)throw new Error(`Lv.${level} の譜面がありません。`);
+ await preload(target);
+ const width=900,pad=18,gap=7,{cols,rows:rowCount}=gridForCount(target.length),tileW=(width-pad*2-gap*(cols-1))/cols;
+ const tileH=Math.max(54,Math.min(72,Math.round(tileW*.34)));
+ const cleared=target.filter(row=>String(row.medal_code||"none").toLowerCase()!=="none").length,rate=target.length?Math.floor(cleared/target.length*10000)/100:0;
+ const legendH=42,topH=84+legendH+14,height=topH+rowCount*(tileH+gap)+38;
+ const[c,ctx]=canvas(width,height);
+ header(ctx,`Lv.${level} メダル一覧`,`クリア率 ${rate.toFixed(2)}%`,username,width);
+ await drawMedalLegend(ctx,target,pad,92,width-pad*2);
+ let y=topH;
+ for(let i=0;i<target.length;i++){
+  const col=i%cols,row=Math.floor(i/cols);
+  await drawLevelTile(ctx,target[i],pad+col*(tileW+gap),y+row*(tileH+gap),tileW,tileH);
+ }
+ footer(ctx,width,height);
+ const blob=await blobFromCanvas(c);
+ return shareBlob(blob,`popn_level${level}_${escFile(username)}.jpg`,`pop'n Score Manager Lv.${level} メダル一覧`);
+}
