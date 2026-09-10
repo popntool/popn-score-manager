@@ -1,11 +1,11 @@
-/* pop'n music スコア同期 v2.2.0
+/* pop'n music スコア同期 v2.3.0
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * レベル別一覧で全譜面を集め、曲詳細から「歴代」と「VERSION（今作）」を取得します。
  */
 (async()=>{
   'use strict';
   const RETURN_URL='https://popntool.github.io/popn-score-manager/';
-  const MIN_LV=1,MAX_LV=50,LIST_CONCURRENCY=12,DETAIL_CONCURRENCY=16,MAX_PAGE=200;
+  const MIN_LV=1,MAX_LV=50,LIST_CONCURRENCY=16,DETAIL_CONCURRENCY=32,MAX_PAGE=200;
   if(location.hostname!=='p.eagate.573.jp'){alert('e-amusementの曲データページで実行してください。');return;}
   if(window.__POPN_SCORE_SYNC_RUNNING__){alert('同期処理は実行中です。');return;}
   window.__POPN_SCORE_SYNC_RUNNING__=true;
@@ -22,16 +22,26 @@
   function code(img,prefix){const src=img?.getAttribute('src')||'';const file=src.split('/').pop()?.split('?')[0]||'';return file.replace(/\.[^.]+$/,'').replace(new RegExp(`^${prefix}(?:_big)?_`,'i'),'');}
   function number(text){const value=clean(text);return /^\d{1,6}$/.test(value)?Number(value):0;}
   function listUrl(lv,page){const u=new URL('/game/popn/popn29/playdata/mu_lv.html',location.origin);u.search=new URLSearchParams({page:String(page),version:'-1',bemani:'0',category:'0',keyword:'',sort:'none',lv:String(lv)});return u;}
-  async function getDoc(url,label){const r=await fetch(url,{credentials:'include',cache:'no-store'});if(!r.ok)throw new Error(`${label}: HTTP ${r.status}`);const text=await r.text();if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');return new DOMParser().parseFromString(text,'text/html');}
+  async function getDoc(url,label,retry=2){
+    for(let attempt=0;;attempt++){
+      const r=await fetch(url,{credentials:'include',cache:'no-store'});
+      if(r.ok){const text=await r.text();if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');return new DOMParser().parseFromString(text,'text/html');}
+      if(attempt>=retry||![429,500,502,503,504].includes(r.status))throw new Error(`${label}: HTTP ${r.status}`);
+      await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));
+    }
+  }
   async function parseList(doc){
-    const rows=[],anchors=[...doc.querySelectorAll('a[href*="mu_detail.html"]')].filter(a=>/[?&]no=/.test(a.getAttribute('href')||''));
+    const anchors=[...doc.querySelectorAll('a[href*="mu_detail.html"]')].filter(a=>/[?&]no=/.test(a.getAttribute('href')||''));
+    const items=[];
     for(const a of anchors){
       const li=a.closest('li');if(!li)continue;const d=[...li.children].filter(e=>e.tagName==='DIV');if(d.length<4)continue;
       const info=[...d[0].querySelectorAll('p')].map(p=>clean(p.textContent));
       const item={level:Number(clean(d[2].textContent)),genre:info[0]||'',title:clean(a.textContent),artist:info[1]||'',chart:clean(d[1].textContent).toUpperCase(),detail_url:new URL(a.getAttribute('href'),location.origin).href};
       if(!item.title||!item.genre||!item.artist||!['LIGHT','NORMAL','HYPER','EX'].includes(item.chart)||!Number.isFinite(item.level))continue;
-      rows.push({master_key:await masterKey(item),...item});
+      items.push(item);
     }
+    const keys=await Promise.all(items.map(masterKey));
+    const rows=items.map((item,i)=>({master_key:keys[i],...item}));
     return {rows,signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
   }
   async function scanLevel(lv){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const parsed=await parseList(await getDoc(listUrl(lv,page),`Lv.${lv} page=${page}`));if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;}}
