@@ -36,7 +36,12 @@
     for(const a of anchors){
       const li=a.closest('li');if(!li)continue;const d=[...li.children].filter(e=>e.tagName==='DIV');if(d.length<4)continue;
       const info=[...d[0].querySelectorAll('p')].map(p=>clean(p.textContent));
-      const item={level:Number(clean(d[2].textContent)),genre:info[0]||'',title:clean(a.textContent),artist:info[1]||'',chart:clean(d[1].textContent).toUpperCase(),detail_url:new URL(a.getAttribute('href'),location.origin).href};
+      const scoreCell=d[3];
+      const scoreText=clean(scoreCell?.querySelector('.play_value')?.textContent||scoreCell?.textContent||'');
+      const scoreMatch=scoreText.replace(/,/g,'').match(/(?:^|\D)(\d{1,6})(?:\D|$)/);
+      const historyScore=scoreMatch?Math.min(100000,Number(scoreMatch[1])||0):0;
+      const scoreImages=[...(scoreCell?.querySelectorAll('img')||[])];
+      const item={level:Number(clean(d[2].textContent)),genre:info[0]||'',title:clean(a.textContent),artist:info[1]||'',chart:clean(d[1].textContent).toUpperCase(),detail_url:new URL(a.getAttribute('href'),location.origin).href,score:historyScore,medal_code:code(scoreImages.find(i=>/meda_/i.test(i.getAttribute('src')||'')),'meda')||'none',rank_code:code(scoreImages.find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')||'none'};
       if(!item.title||!item.genre||!item.artist||!['LIGHT','NORMAL','HYPER','EX'].includes(item.chart)||!Number.isFinite(item.level))continue;
       items.push(item);
     }
@@ -74,11 +79,14 @@
       if(!group){group={url:url.href,rows:[]};detailGroupMap.set(detailKey,group);}
       group.rows.push(row);
     }
-    const detailGroups=[...detailGroupMap.values()];progress.max=detailGroups.length;progress.value=0;
+    const allDetailGroups=[...detailGroupMap.values()];
+    const detailGroups=allDetailGroups.filter(group=>group.rows.some(row=>Number(row.score)>0));
+    progress.max=Math.max(1,detailGroups.length);progress.value=0;
+    status.textContent=`一覧から${base.filter(row=>Number(row.score)>0).length}譜面を確認・詳細取得 ${detailGroups.length}/${allDetailGroups.length}曲`;
     const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({rows:group.rows,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・歴代/今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');
     const details=new Map();for(const group of parsed)for(const row of group.rows){const value=group.values.get(row.chart);if(value)details.set(`${row.master_key}|${row.chart}`,value);}
-    const rows=base.map(row=>({...row,...details.get(`${row.master_key}|${row.chart}`)})).filter(row=>Number(row.score)>0).map(({detail_url,...row})=>row);
+    const rows=base.filter(row=>Number(row.score)>0).map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,...detail,score:Number(detail.score)||Number(row.score)||0,medal_code:detail.medal_code&&detail.medal_code!=='none'?detail.medal_code:row.medal_code,rank_code:detail.rank_code&&detail.rank_code!=='none'?detail.rank_code:row.rank_code};}).map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面を圧縮中…`;
     const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:2,records:rows}));
     const compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
