@@ -1,6 +1,6 @@
-/* pop'n music スコア同期 v2.5.0
+/* pop'n music スコア同期 v2.6.0
  * e-amusementへログインし、同期用ブックマークから実行してください。
- * レベル別一覧で全譜面を集め、曲詳細から「歴代」と「VERSION（今作）」を取得します。
+ * レベル別一覧から歴代スコア・メダル・ランクを取得し、歴代スコアがある曲だけ曲詳細からVERSION（今作）スコアを取得します。
  */
 (async()=>{
   'use strict';
@@ -54,12 +54,9 @@
     const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};
     for(const [chart,id] of Object.entries(ids)){
       const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;
-      const historyTable=tables.find(table=>/歴代/.test(table.previousElementSibling?.textContent||''))||tables[0];
       const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1];
-      const historyRow=historyTable?.querySelector('tr.score td.play_value')?.closest('tr');
       const versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr');
-      const images=[...(historyRow?.querySelectorAll('img')||[])];
-      result.set(chart,{score:number(historyRow?.querySelector('td.play_value')?.textContent),version_score:number(versionRow?.querySelector('td.play_value')?.textContent),medal_code:code(images.find(i=>/meda_/i.test(i.getAttribute('src')||'')),'meda')||'none',rank_code:code(images.find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')||'none'});
+      result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent)});
     }
     return result;
   }
@@ -83,10 +80,10 @@
     const detailGroups=allDetailGroups.filter(group=>group.rows.some(row=>Number(row.score)>0));
     progress.max=Math.max(1,detailGroups.length);progress.value=0;
     status.textContent=`一覧から${base.filter(row=>Number(row.score)>0).length}譜面を確認・詳細取得 ${detailGroups.length}/${allDetailGroups.length}曲`;
-    const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({rows:group.rows,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・歴代/今作スコアを取得中`;});
+    const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({rows:group.rows,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');
     const details=new Map();for(const group of parsed)for(const row of group.rows){const value=group.values.get(row.chart);if(value)details.set(`${row.master_key}|${row.chart}`,value);}
-    const rows=base.filter(row=>Number(row.score)>0).map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,...detail,score:Number(detail.score)||Number(row.score)||0,medal_code:detail.medal_code&&detail.medal_code!=='none'?detail.medal_code:row.medal_code,rank_code:detail.rank_code&&detail.rank_code!=='none'?detail.rank_code:row.rank_code};}).map(({detail_url,...row})=>row);
+    const rows=base.filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none').map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0};}).map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面を圧縮中…`;
     const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:2,records:rows}));
     const compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
