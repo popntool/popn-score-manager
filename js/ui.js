@@ -1,4 +1,4 @@
-import{popClassSelection,rankFromScore,songPopClass}from"./scores.js?v=3.0.34";
+import{popClassSelection,rankFromScore,songPopClass}from"./scores.js?v=3.0.35";
 
 const BASE="https://eacache.s.konaminet.jp/game/popn/popn29/images/p/";
 const PAGE_SIZE=50;
@@ -8,7 +8,7 @@ export const MEDALS=[
  ["clear_bad_21_plus","クリア・BAD 21以上","bad_02.png"],["long_off","ロングオフ","long_off.png"],["easy","EASYクリア","easy.png"],["failed_15_16","FAILED・15～16粒","groove_00.png"],["failed_12_14","FAILED・12～14粒","groove_01.png"],["failed_0_11","FAILED・11粒以下","groove_02.png"]
 ];
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function coolPerfectMedalHtml(extraClass=""){return `<span class="cool-perfect-medal${extraClass?` ${extraClass}`:""}" role="img" aria-label="COOL PERFECT"><i>CP</i></span>`;}
+function coolPerfectMedalHtml(extraClass=""){return `<img class="cool-perfect-medal${extraClass?` ${extraClass}`:""}" src="./assets/cool-perfect.png" alt="COOL PERFECT" title="COOL PERFECT">`;}
 
 export function medalInfo(code){const key=String(code||"none").toLowerCase(),logical=MEDALS.find(x=>x[0]===key);if(logical)return{label:logical[1],url:logical[2]?BASE+"howto/more/"+logical[2]:""};return{label:key==="f"?"FAILED":key.toUpperCase(),url:BASE+"common/medal/meda_big_"+key+".png"};}
 export function setTheme(theme){const v=theme==="dark"?"dark":"light";document.documentElement.dataset.theme=v;const headerButton=document.querySelector("#themeButton");if(headerButton)headerButton.textContent=v==="light"?"☾":"☀";document.querySelector("#themeLabel").textContent=v==="light"?"ライト":"ダーク";localStorage.setItem("popn-theme",v);}
