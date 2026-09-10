@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.28">
+<link rel="stylesheet" href="./css/app.css?v=3.0.29">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -29,8 +29,13 @@
       </div>
       <form id="authGateForm" class="auth-gate-form">
         <h2 id="authGateTitle">ログイン</h2>
-        <label>アカウント名<input name="username" required maxlength="32" autocomplete="username"></label>
-        <label>パスワード<input name="password" type="password" required minlength="6" autocomplete="current-password"></label>
+        <label>ユーザー名<input name="username" required maxlength="32" autocomplete="username" placeholder="日本語可・32文字まで"></label>
+        <label>パスワード<input name="password" type="password" required minlength="6" autocomplete="current-password" placeholder="パスワードを入力"></label>
+        <label id="authGatePasswordConfirmRow" hidden>パスワード（確認）<input name="password_confirm" type="password" minlength="8" autocomplete="new-password" placeholder="もう一度入力"></label>
+        <aside id="authGatePasswordNotice" class="auth-password-notice" hidden>
+          <strong>パスワードについての重要なお知らせ</strong>
+          <p>このサイトではメールアドレスなどの個人情報を取得していないため、通常のパスワード再発行はできません。<br>パスワードは忘れないように保管してください。原則、パスワードを忘れた場合は再登録が必要です。<br>どうしてもパスワードの再発行が必要な場合は、管理者の <a href="https://x.com/fizz_rky" target="_blank" rel="noopener noreferrer">X（旧Twitter）</a> へ直接ご連絡ください。</p>
+        </aside>
         <p id="authGateError" class="error" aria-live="polite"></p>
         <button class="main-button auth-gate-submit" type="submit">ログイン</button>
       </form>
@@ -194,7 +199,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.28</b>
+<b>3.0.29</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
@@ -264,7 +269,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.28">
+  <script type="module" src="./js/app.js?v=3.0.29">
 </script>
 </body>
 </html>

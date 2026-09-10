@@ -163,3 +163,13 @@ body.auth-user>.auth-gate{display:none}
 .auth-gate-form{display:grid;gap:13px}.auth-gate-form h2{text-align:center;margin-bottom:2px}.auth-gate-form label{display:grid;gap:5px;font-weight:900}.auth-gate-form input{width:100%;min-height:46px;padding:9px 11px;border:2px solid var(--line);border-radius:10px;background:var(--page);color:var(--text)}
 .auth-gate-form .error{min-height:1.3em}.auth-gate-submit{width:100%;min-height:48px}.auth-gate-submit:disabled{opacity:.55;cursor:wait}.auth-gate-note{margin-top:18px;text-align:center;color:var(--muted);font-size:.7rem}
 @media(max-width:520px){.auth-gate{padding:14px 10px;background:linear-gradient(180deg,var(--header) 0 96px,var(--page) 96px 100%)}.auth-gate-card{padding:20px 16px;border-radius:16px}.auth-gate-brand .brand-icon{width:40px;height:40px}.auth-gate-brand h1{font-size:1.12rem}.auth-gate-lead{margin:14px 0 16px}.auth-gate-tabs{margin-bottom:14px}}
+
+/* v3.0.29 registration form */
+.auth-gate-form label[hidden],.auth-password-notice[hidden]{display:none!important}
+.auth-password-notice{display:grid;gap:7px;padding:12px 14px;border:2px solid #e6a400;border-radius:10px;background:#fff6d7;color:var(--text);font-size:.78rem;line-height:1.55}
+.auth-password-notice strong{color:#bb7600;font-size:.86rem}
+.auth-password-notice p{margin:0}
+.auth-password-notice a{color:var(--focus);font-weight:900;text-decoration:underline;text-underline-offset:2px}
+[data-theme="dark"] .auth-password-notice{background:#2d2d2d;border-color:#e6a400;color:#f2f4f8}
+[data-theme="dark"] .auth-password-notice strong{color:#ffbf27}
+@media(max-width:520px){.auth-password-notice{padding:10px 12px;font-size:.74rem}.auth-password-notice strong{font-size:.82rem}}
