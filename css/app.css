@@ -97,7 +97,6 @@
 .score-entry-grid .medal-picker-button{padding:3px;justify-content:center}
 .score-entry-grid .rank-text{display:grid;place-items:center!important;padding:0;text-align:center!important;line-height:1}
 .score-entry-grid input{padding:5px 6px;font-size:.95rem;letter-spacing:-.04em}
-#manualHistoryScore,#manualScoreInput{text-align:center}
 
 @media(max-width:760px){
   .filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
