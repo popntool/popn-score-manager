@@ -3,7 +3,7 @@ import{changePassword,changeUsername,currentUser,currentUsername,loadMyProfile,l
 import{downloadSongMaster,importSongMaster}from"./songs.js";
 import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores}from"./scores.js?v=3.0.21";
 import{loadUsers}from"./users.js";
-import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.32";
+import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.33";
 import{loadFeedbackHistory,submitFeedback,submitSongRequest}from"./requests.js";
 import{approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,isAdmin,loadVersions,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js";
 
