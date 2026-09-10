@@ -6,7 +6,7 @@ import{loadUsers}from"./users.js";
 import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.37";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,exportUserScoresCsv,isAdmin,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.0.48";
-import{shareLevelMedalImage,sharePopClassImage}from"./share.js?v=3.0.50";
+import{shareLevelMedalImage,sharePopClassImage}from"./share.js?v=3.0.53";
 
 let scores=[],scorePage=1,userRows=[],userPage=1,authMode="login",selectedSong=null,editingScoreId=null,admin=false,adminEdit=null,preferenceUserId=null;
 const $=selector=>document.querySelector(selector);
