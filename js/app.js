@@ -34,7 +34,9 @@ $("#defaultLevelFilter").addEventListener("change",async event=>{const value=eve
 async function refreshUsers(reset=false){if(reset)userPage=1;userRows=await loadUsers($("#userSearchInput").value);userPage=renderUsers(userRows,userPage);}
 for(const button of document.querySelectorAll(".tabs button"))button.addEventListener("click",async()=>{if(button.dataset.tab==="admin"&&!admin)return;showTab(button.dataset.tab);if(button.dataset.tab==="admin")await renderAdmin();if(button.dataset.tab==="users"&&isConfigured){try{await refreshUsers(false);}catch(error){alert(error.message||error);}}});
 for(const selector of["#searchInput","#levelFilter","#versionFilter","#medalFilter","#rankFilter"])$(selector).addEventListener(selector==="#searchInput"?"input":"change",()=>applyFilters(true));
-for(const selector of["#scoreSortField","#scoreSortOrder"])$(selector).addEventListener("change",()=>applyFilters(true));
+const DEFAULT_SCORE_SORT_ORDER={level:"desc",medal:"asc",score:"desc",version_score:"desc",pop_class:"desc"};
+$("#scoreSortField").addEventListener("change",()=>{$("#scoreSortOrder").value=DEFAULT_SCORE_SORT_ORDER[$("#scoreSortField").value]||"asc";applyFilters(true);});
+$("#scoreSortOrder").addEventListener("change",()=>applyFilters(true));
 $("#reloadButton").addEventListener("click",event=>{event.currentTarget.classList.add("is-loading");location.reload();});
 $("#authButton").addEventListener("click",()=>$("#authDialog").showModal());$("#logoutButton").addEventListener("click",async()=>{$("#myPageDialog").close();await logout();await refreshAuth();});
 $("#authModeButton").addEventListener("click",()=>{authMode=authMode==="login"?"register":"login";$("#authTitle").textContent=authMode==="login"?"ログイン":"新規登録";$("#authModeButton").textContent=authMode==="login"?"新規登録へ":"ログインへ";$("#authForm button[type=submit]").textContent=authMode==="login"?"ログイン":"登録";});
