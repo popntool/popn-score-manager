@@ -333,3 +333,18 @@ body.auth-user>.auth-gate{display:none}
  .banner-request-admin-main img{max-height:64px}
  .banner-admin-card{flex-direction:column}
 }
+
+/* v3.0.43: image sharing */
+.image-share-dialog .image-share-shell{display:grid;gap:10px;padding:14px}
+.image-share-dialog h2,.image-share-dialog h3,.image-share-dialog p{margin:0}
+.image-share-lead{color:var(--muted);font-size:.78rem;line-height:1.6}
+.image-share-section{display:grid;gap:8px;padding:12px;border:2px solid var(--line);border-radius:14px;background:var(--surface-2)}
+.image-share-section h3{font-size:1rem}
+.image-share-section p{color:var(--muted);font-size:.72rem;line-height:1.5}
+.image-share-section label{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;font-weight:900}
+.image-share-section select{min-height:42px;width:100%;border:2px solid var(--line);border-radius:10px;background:var(--page);color:var(--text);padding:6px 10px;font-weight:800}
+.image-share-hashtag{padding:2px 4px;color:var(--muted);font-size:.72rem}
+.image-share-hashtag strong{color:var(--text)}
+.image-share-status{min-height:1.3em;color:var(--muted);font-size:.74rem;font-weight:800;text-align:center}
+.image-share-dialog .main-button[disabled]{opacity:.55;cursor:wait}
+@media(max-width:760px){.image-share-dialog .image-share-shell{padding:10px;gap:8px}.image-share-section{padding:10px}.image-share-section label{grid-template-columns:1fr;gap:5px}}
