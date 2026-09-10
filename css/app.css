@@ -173,3 +173,21 @@ body.auth-user>.auth-gate{display:none}
 [data-theme="dark"] .auth-password-notice{background:#2d2d2d;border-color:#e6a400;color:#f2f4f8}
 [data-theme="dark"] .auth-password-notice strong{color:#ffbf27}
 @media(max-width:520px){.auth-password-notice{padding:10px 12px;font-size:.74rem}.auth-password-notice strong{font-size:.82rem}}
+
+/* v3.0.30: compact menu sub-pages, back navigation, and non-white banner backgrounds */
+.score-card-v300 .song-banner{background:var(--page)!important}
+.master-song-card .admin-card-main img,.master-song-card .admin-no-image{background:var(--page)!important}
+.dialog-back{position:relative;justify-self:start;display:inline-grid;place-items:center;min-height:34px;padding:4px 10px;border:2px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--text);font-weight:900;line-height:1}
+#myPageDialog>form{gap:8px;padding:12px 14px}
+#myPageDialog>form+form{padding-top:0}
+#myPageDialog>.mypage-section{margin:0 14px 12px}
+#myPageDialog .mypage-section{gap:6px;padding:10px 12px}
+#myPageDialog .mypage-section h3{margin:0 0 2px}
+#myPageDialog label{gap:3px}
+#myPageDialog input{min-height:40px;padding-top:6px;padding-bottom:6px}
+#myPageDialog .main-button{min-height:40px;padding-top:6px;padding-bottom:6px}
+#feedbackDialog form,#syncDialog form{gap:8px;padding:14px}
+#feedbackDialog .dialog-back,#syncDialog .dialog-back{margin-bottom:2px}
+#syncDialog .sync-step{padding-top:9px;padding-bottom:9px}
+#syncDialog .sync-lead,#syncDialog .sync-status{padding:8px 10px}
+@media(max-width:760px){#myPageDialog>form{padding:10px 12px}#myPageDialog>.mypage-section{margin:0 12px 10px}#myPageDialog .mypage-section{padding:8px 10px}.dialog-back{min-height:32px;padding:3px 9px}#feedbackDialog form,#syncDialog form{padding:11px 12px}}
