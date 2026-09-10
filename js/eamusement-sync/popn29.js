@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.4.0
+/* pop'n music スコア同期 v2.5.0
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * レベル別一覧で全譜面を集め、曲詳細から「歴代」と「VERSION（今作）」を取得します。
  */
@@ -65,10 +65,19 @@
     await Promise.all(Array.from({length:LIST_CONCURRENCY},async()=>{while(!state.cancelled){const i=cursor++;if(i>=levels.length)return;await scanLevel(levels[i]);done++;progress.value=done;status.textContent=`一覧 ${done}/50レベル・${state.pages}ページ・${state.records.length}譜面`;}}));
     if(state.cancelled)throw new Error('中止しました。');
     const base=[...new Map(state.records.map(r=>[`${r.master_key}|${r.chart}`,r])).values()];
-    const detailGroups=[...new Map(base.map(row=>{const url=new URL(row.detail_url);url.hash='';return[row.master_key,{master_key:row.master_key,url:url.href}];})).values()];progress.max=detailGroups.length;progress.value=0;
-    const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({master_key:group.master_key,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・歴代/今作スコアを取得中`;});
+    const detailGroupMap=new Map();
+    for(const row of base){
+      const url=new URL(row.detail_url);url.hash='';
+      const no=url.searchParams.get('no');
+      const detailKey=no?`${url.pathname}?no=${no}`:url.href;
+      let group=detailGroupMap.get(detailKey);
+      if(!group){group={url:url.href,rows:[]};detailGroupMap.set(detailKey,group);}
+      group.rows.push(row);
+    }
+    const detailGroups=[...detailGroupMap.values()];progress.max=detailGroups.length;progress.value=0;
+    const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({rows:group.rows,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・歴代/今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');
-    const details=new Map();for(const group of parsed)for(const [chart,value] of group.values)details.set(`${group.master_key}|${chart}`,value);
+    const details=new Map();for(const group of parsed)for(const row of group.rows){const value=group.values.get(row.chart);if(value)details.set(`${row.master_key}|${row.chart}`,value);}
     const rows=base.map(row=>({...row,...details.get(`${row.master_key}|${row.chart}`)})).filter(row=>Number(row.score)>0).map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面を圧縮中…`;
     const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:2,records:rows}));
