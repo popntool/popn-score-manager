@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.41">
+<link rel="stylesheet" href="./css/app.css?v=3.0.42">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -169,6 +169,7 @@
 <select id="defaultLevelFilter" aria-label="デフォルト表示レベル"><option value="ALL">全レベル</option></select>
 </label>
       <button id="syncHelpButton" class="setting-row" type="button"><span><strong>スコア同期</strong><small>公式サイトで実行する同期用ブックマークを設定します</small></span><b>›</b></button>
+      <button id="bannerRequestButton" class="setting-row" type="button"><span><strong>バナー送信</strong><small>バナー未登録の曲へ画像を送信します</small></span><b>＋</b></button>
       <h2 class="menu-section-title admin-only" hidden>管理者ツール</h2>
       <button class="setting-row admin-only" data-copy-tool="master" type="button" hidden>
 <span>
@@ -204,7 +205,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.41</b>
+<b>3.0.42</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
@@ -217,6 +218,7 @@
         <button data-admin-tab="versions" type="button">バージョン管理</button>
         <button data-admin-tab="users" type="button">ユーザーリスト</button>
         <button data-admin-tab="requests" type="button">登録依頼</button>
+        <button data-admin-tab="banners" type="button">バナー依頼</button>
         <button data-admin-tab="feedback" type="button">要望・不具合</button>
       </nav>
       <div class="admin-toolbar"><input id="adminSearch" type="search" placeholder="検索"><button id="adminAddButton" class="main-button" type="button">追加</button></div>
@@ -266,6 +268,17 @@
 </dialog>
   <dialog id="myPageDialog"><form id="usernameForm" method="dialog"><button class="dialog-back" type="button" data-menu-back>← 戻る</button><h2>マイページ</h2><section class="mypage-section"><h3>ユーザー名変更</h3><label>新しいユーザー名<input id="newUsernameInput" name="username" required maxlength="32" autocomplete="username"></label><button class="main-button" type="submit">ユーザー名を変更</button><p class="error"></p></section></form><form id="poptomoForm" method="dialog"><section class="mypage-section"><h3>ポプともID</h3><label>ポプともID（12桁）<input id="poptomoIdInput" name="poptomo_id" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="123456789012"></label><label class="check-row"><input id="poptomoPublicInput" name="poptomo_public" type="checkbox">ユーザーリストに公開する</label><button class="main-button" type="submit">ポプとも設定を保存</button><p class="error"></p></section></form><form id="passwordForm" method="dialog"><section class="mypage-section"><h3>パスワード変更</h3><label>新しいパスワード<input name="password" type="password" required minlength="6" autocomplete="new-password"></label><label>新しいパスワード（確認）<input name="password_confirm" type="password" required minlength="6" autocomplete="new-password"></label><button class="main-button" type="submit">パスワードを変更</button><p class="error"></p></section></form><section class="mypage-section"><h3>ログアウト</h3><button id="logoutButton" class="main-button" type="button" hidden>ログアウト</button></section></dialog>
   <dialog id="songRequestDialog"><form id="songRequestForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2>曲の登録依頼</h2><div class="form-grid"><label>ジャンル名<input name="genre" required maxlength="100"></label><label>曲名<input name="title" required maxlength="200"></label></div><label>アーティスト<input name="artist" required maxlength="200"></label><fieldset class="request-levels"><legend>譜面・レベル（1つ以上入力）</legend><label class="light">LIGHT<input name="light_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="normal">NORMAL<input name="normal_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="hyper">HYPER<input name="hyper_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="ex">EX<input name="ex_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label></fieldset><label>補足<textarea name="note" maxlength="1000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">送信</button></div></form></dialog>
+  <dialog id="bannerRequestDialog" class="banner-request-dialog"><form id="bannerRequestForm" method="dialog">
+<button class="dialog-back" type="button" data-menu-back>← 戻る</button>
+<h2>バナーを送信</h2>
+<p class="banner-request-lead">曲マスターにバナーがない曲だけ送信できます。</p>
+<p class="banner-source-link"><a href="https://p.eagate.573.jp/game/popn/popn29/music/list.html?page=0&amp;version=-1&amp;lv=0&amp;bemani=0&amp;category=0&amp;keyword=&amp;sort=music&amp;sort_type=up" target="_blank" rel="noopener noreferrer">バナー取得はこちらから ↗</a></p>
+<label>対象曲<select id="bannerRequestSong" name="song_id" required><option value="">読み込み中…</option></select></label>
+<label>バナー画像<input id="bannerRequestFile" name="banner_file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" required><small>PNG・JPEG・WebP・GIF / 2MB以下</small></label>
+<div id="bannerRequestPreview" class="banner-request-preview" hidden><img alt="選択したバナー画像のプレビュー"></div>
+<p class="error"></p>
+<div class="dialog-actions"><button class="sub-button" type="button" data-menu-back>戻る</button><button id="bannerRequestSubmit" class="main-button" type="submit">管理者へ送信</button></div>
+</form></dialog>
   <dialog id="feedbackDialog"><form id="feedbackForm" method="dialog"><button class="dialog-back" type="button" data-menu-back>← 戻る</button><h2>要望・不具合</h2><label>種類<select name="category"><option value="request">要望</option><option value="bug">不具合</option></select></label><div class="form-grid"><label>機種名（任意）<input name="device_name" maxlength="100" placeholder="例：iPhone 16"></label><label>ブラウザ名（任意）<input name="browser_name" maxlength="100" placeholder="例：Safari"></label></div><label>内容<textarea name="message" required maxlength="3000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>閉じる</button><button class="main-button" type="submit">送信</button></div><section class="feedback-history"><h3>送信履歴</h3><div id="feedbackHistory"></div></section></form></dialog>
   <dialog id="adminEditDialog"><form id="adminEditForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2 id="adminEditTitle">編集</h2><div id="adminEditFields"></div><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">保存</button></div></form></dialog>
   <dialog id="noticeDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2>お知らせ</h2><p id="noticeMessage"></p><div class="dialog-actions"><button class="main-button" value="ok">閉じる</button></div></form></dialog>
@@ -274,7 +287,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.41">
+  <script type="module" src="./js/app.js?v=3.0.42">
 </script>
 </body>
 </html>
