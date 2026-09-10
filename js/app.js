@@ -5,7 +5,7 @@ import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores}from"./s
 import{loadUsers}from"./users.js";
 import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.7";
 import{loadFeedbackHistory,submitFeedback,submitSongRequest}from"./requests.js";
-import{approveSongRequest,currentAdminTab,deleteFeedback,deleteUser,isAdmin,loadVersions,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js";
+import{approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,isAdmin,loadVersions,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js";
 
 let scores=[],scorePage=1,userRows=[],userPage=1,authMode="login",selectedSong=null,editingScoreId=null,admin=false,adminEdit=null,preferenceUserId=null;
 const $=selector=>document.querySelector(selector);
@@ -66,6 +66,7 @@ $("#poptomoForm").addEventListener("submit",async event=>{event.preventDefault()
 $("#usernameForm").addEventListener("submit",async event=>{event.preventDefault();const errorBox=event.currentTarget.querySelector(".error");try{const name=await changeUsername(new FormData(event.currentTarget).get("username"));$("#playerName").textContent=name;errorBox.textContent="";alert("ユーザー名を変更しました。次回から新しいユーザー名でログインしてください。");}catch(error){errorBox.textContent=error.message||error;}});
 $("#passwordForm").addEventListener("submit",async event=>{event.preventDefault();const form=new FormData(event.currentTarget),password=String(form.get("password")||""),confirm=String(form.get("password_confirm")||""),errorBox=event.currentTarget.querySelector(".error");if(password!==confirm){errorBox.textContent="確認用パスワードが一致しません。";return;}try{await changePassword(password);event.currentTarget.reset();errorBox.textContent="";alert("パスワードを変更しました。");}catch(error){errorBox.textContent=error.message||error;}});
 document.querySelector('[data-copy-tool="master"]').addEventListener("click",()=>copyTool("popn-master-extractor.txt").then(alert).catch(error=>alert(error.message||error)));
+$("#adminClearMyScoresButton").addEventListener("click",async()=>{if(!await askConfirm("管理者アカウントに登録されている全スコアデータを削除しますか？\nこの操作は取り消せません。"))return;try{await clearMyRegisteredScores();await refreshAuth();alert("管理者アカウントの登録データをすべて削除しました。");}catch(error){alert(`一括削除に失敗しました：${error.message||error}`);}});
 for(const button of document.querySelectorAll("[data-admin-tab]"))button.addEventListener("click",()=>setAdminTab(button.dataset.adminTab));
 $("#adminSearch").addEventListener("input",wait(event=>setAdminSearch(event.target.value),300));
 for(const selector of["#adminLevelFilter","#adminVersionFilter","#adminChartFilter"])$(selector).addEventListener("change",()=>setAdminMasterFilters({level:$("#adminLevelFilter").value,version:$("#adminVersionFilter").value,chart:$("#adminChartFilter").value}));

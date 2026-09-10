@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.3.0
+/* pop'n music スコア同期 v2.4.0
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * レベル別一覧で全譜面を集め、曲詳細から「歴代」と「VERSION（今作）」を取得します。
  */
@@ -45,7 +45,7 @@
     return {rows,signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
   }
   async function scanLevel(lv){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const parsed=await parseList(await getDoc(listUrl(lv,page),`Lv.${lv} page=${page}`));if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;}}
-  function parseDetail(doc,detailUrl){
+  function parseDetail(doc){
     const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};
     for(const [chart,id] of Object.entries(ids)){
       const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;
@@ -54,7 +54,7 @@
       const historyRow=historyTable?.querySelector('tr.score td.play_value')?.closest('tr');
       const versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr');
       const images=[...(historyRow?.querySelectorAll('img')||[])];
-      result.set(`${detailUrl}|${chart}`,{score:number(historyRow?.querySelector('td.play_value')?.textContent),version_score:number(versionRow?.querySelector('td.play_value')?.textContent),medal_code:code(images.find(i=>/meda_/i.test(i.getAttribute('src')||'')),'meda')||'none',rank_code:code(images.find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')||'none'});
+      result.set(chart,{score:number(historyRow?.querySelector('td.play_value')?.textContent),version_score:number(versionRow?.querySelector('td.play_value')?.textContent),medal_code:code(images.find(i=>/meda_/i.test(i.getAttribute('src')||'')),'meda')||'none',rank_code:code(images.find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')||'none'});
     }
     return result;
   }
@@ -65,11 +65,11 @@
     await Promise.all(Array.from({length:LIST_CONCURRENCY},async()=>{while(!state.cancelled){const i=cursor++;if(i>=levels.length)return;await scanLevel(levels[i]);done++;progress.value=done;status.textContent=`一覧 ${done}/50レベル・${state.pages}ページ・${state.records.length}譜面`;}}));
     if(state.cancelled)throw new Error('中止しました。');
     const base=[...new Map(state.records.map(r=>[`${r.master_key}|${r.chart}`,r])).values()];
-    const detailUrls=[...new Set(base.map(r=>r.detail_url))];progress.max=detailUrls.length;progress.value=0;
-    const parsed=await mapLimit(detailUrls,DETAIL_CONCURRENCY,async url=>parseDetail(await getDoc(url,'曲詳細'),url),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}・歴代/今作スコアを取得中`;});
+    const detailGroups=[...new Map(base.map(row=>{const url=new URL(row.detail_url);url.hash='';return[row.master_key,{master_key:row.master_key,url:url.href}];})).values()];progress.max=detailGroups.length;progress.value=0;
+    const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({master_key:group.master_key,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・歴代/今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');
-    const details=new Map();for(const map of parsed)for(const [key,value] of map)details.set(key,value);
-    const rows=base.map(row=>({...row,...details.get(`${row.detail_url}|${row.chart}`)})).filter(row=>Number(row.score)>0).map(({detail_url,...row})=>row);
+    const details=new Map();for(const group of parsed)for(const [chart,value] of group.values)details.set(`${group.master_key}|${chart}`,value);
+    const rows=base.map(row=>({...row,...details.get(`${row.master_key}|${row.chart}`)})).filter(row=>Number(row.score)>0).map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面を圧縮中…`;
     const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:2,records:rows}));
     const compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
