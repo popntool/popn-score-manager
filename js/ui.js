@@ -1,4 +1,4 @@
-import{popClassSelection,rankFromScore,songPopClass}from"./scores.js?v=3.0.35";
+import{popClassSelection,rankFromScore,songPopClass}from"./scores.js?v=3.0.55";
 
 const BASE="https://eacache.s.konaminet.jp/game/popn/popn29/images/p/";
 const PAGE_SIZE=50;

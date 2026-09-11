@@ -1,6 +1,6 @@
-/* pop'n music スコア同期 v2.6.0
+/* pop'n music スコア同期 v2.7.0
  * e-amusementへログインし、同期用ブックマークから実行してください。
- * レベル別一覧から歴代スコア・メダル・ランクを取得し、歴代スコアがある曲だけ曲詳細からVERSION（今作）スコアを取得します。
+ * レベル別一覧から歴代スコア・メダル・ランクを取得し、歴代スコアがある曲だけ曲詳細からVERSION（今作）スコアと今作クリア状況を取得します。
  */
 (async()=>{
   'use strict';
@@ -56,7 +56,17 @@
       const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;
       const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1];
       const versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr');
-      result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent)});
+      const counts={play:0,clear:0,full_combo:0,perfect:0};
+      for(const tr of versionTable?.querySelectorAll('tr')||[]){
+        const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,'');
+        const value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);
+        if(/PERFECT回数/i.test(label))counts.perfect=value;
+        else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;
+        else if(/クリア回数/.test(label))counts.clear=value;
+        else if(/プレー回数/.test(label))counts.play=value;
+      }
+      const current_clear_status=counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';
+      result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});
     }
     return result;
   }
@@ -83,9 +93,9 @@
     const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({rows:group.rows,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');
     const details=new Map();for(const group of parsed)for(const row of group.rows){const value=group.values.get(row.chart);if(value)details.set(`${row.master_key}|${row.chart}`,value);}
-    const rows=base.filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none').map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0};}).map(({detail_url,...row})=>row);
+    const rows=base.filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none').map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0,current_clear_status:detail.current_clear_status||'failed'};}).map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面を圧縮中…`;
-    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:2,records:rows}));
+    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:3,records:rows}));
     const compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
     status.textContent=`取得完了：${rows.length}譜面。サイトへ戻ります…`;
     location.href=RETURN_URL+'#popn-sync-gzip='+encodeURIComponent(toBase64(compressed));

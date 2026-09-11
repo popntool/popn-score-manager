@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.53">
+<link rel="stylesheet" href="./css/app.css?v=3.0.55">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -206,7 +206,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.53</b>
+<b>3.0.55</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
@@ -246,6 +246,7 @@
 <label class="history-score-input">歴代<input id="manualHistoryScore" name="history_score" type="number" min="0" max="100000" placeholder="未入力"><small id="historyScoreGuide">今作が上回る場合は同じ値を表示</small></label>
 <label>今作<input id="manualScoreInput" name="version_score" type="number" min="0" max="100000" required></label>
 <label>ポックラ<output id="manualPopClass" class="manual-popclass">0.00</output></label>
+<label class="current-clear-status">今作クリア状況<select id="manualCurrentClearStatus" name="current_clear_status" required><option value="failed">未クリア</option><option value="clear">クリア</option><option value="full_combo">FULL COMBO</option><option value="perfect">PERFECT</option></select></label>
 </div>
 <div id="medalPicker" class="medal-picker" hidden></div>
 <p id="manualError" class="error">
@@ -308,7 +309,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.53">
+  <script type="module" src="./js/app.js?v=3.0.55">
 </script>
 </body>
 </html>
