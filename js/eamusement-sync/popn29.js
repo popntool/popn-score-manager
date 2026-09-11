@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.7.0
+/* pop'n music スコア同期 v2.7.1
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * レベル別一覧から歴代スコア・メダル・ランクを取得し、歴代スコアがある曲だけ曲詳細からVERSION（今作）スコアと今作クリア状況を取得します。
  */
@@ -20,7 +20,7 @@
   const normalize=v=>clean(v).normalize('NFKC').replace(/[\u00AD\u200B-\u200D\u2060\uFEFF]/g,'').toLocaleLowerCase('ja-JP');
   async function masterKey({genre,title,artist}){const source=[normalize(genre),normalize(title),normalize(artist)].join('|');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(source));return [...new Uint8Array(bytes)].map(v=>v.toString(16).padStart(2,'0')).join('');}
   function code(img,prefix){const src=img?.getAttribute('src')||'';const file=src.split('/').pop()?.split('?')[0]||'';return file.replace(/\.[^.]+$/,'').replace(new RegExp(`^${prefix}(?:_big)?_`,'i'),'');}
-  function number(text){const value=clean(text);return /^\d{1,6}$/.test(value)?Number(value):0;}
+  function number(text){const match=clean(text).replace(/,/g,'').match(/\d{1,6}/);return match?Number(match[0]):0;}
   function listUrl(lv,page){const u=new URL('/game/popn/popn29/playdata/mu_lv.html',location.origin);u.search=new URLSearchParams({page:String(page),version:'-1',bemani:'0',category:'0',keyword:'',sort:'none',lv:String(lv)});return u;}
   async function getDoc(url,label,retry=2){
     for(let attempt=0;;attempt++){
