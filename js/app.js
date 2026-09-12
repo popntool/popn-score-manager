@@ -1,12 +1,12 @@
 import{isConfigured}from"./supabase.js";
 import{changePassword,changeUsername,currentUser,currentUsername,loadMyProfile,login,logout,onAuthChange,register,saveDisplayPreferences,savePoptomo}from"./auth.js";
 import{downloadSongMaster,importSongMaster}from"./songs.js";
-import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores}from"./scores.js?v=3.0.62";
+import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores}from"./scores.js?v=3.0.66";
 import{loadUsers}from"./users.js";
-import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.62";
+import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.66";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.0.65";
-import{shareLevelMedalImage,sharePopClassImage}from"./share.js?v=3.0.62";
+import{shareLevelMedalImage,sharePopClassImage}from"./share.js?v=3.0.66";
 
 let scores=[],scorePage=1,userRows=[],userPage=1,authMode="login",selectedSong=null,editingScoreId=null,admin=false,adminEdit=null,preferenceUserId=null;
 const $=selector=>document.querySelector(selector);
