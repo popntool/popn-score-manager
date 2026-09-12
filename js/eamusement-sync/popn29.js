@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.8.1
+/* pop'n music スコア同期 v2.8.2
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -55,11 +55,19 @@
   }
 
   function listUrl(target,page){
-    const isLevel=target.kind==='level';
-    const u=new URL(`/game/popn/popn29/playdata/${isLevel?'mu_lv.html':'mu_top.html'}`,location.origin);
-    const params=isLevel
-      ?{page:String(page),version:'-1',bemani:'0',category:'0',keyword:'',sort:'none',lv:String(target.lv)}
-      :{page:String(page),version:String(target.version??-1),bemani:String(target.bemani??0),category:'0',keyword:'',sort:'music',sort_type:'up'};
+    // 曲データ一覧はレベル指定・バージョン指定・BEMANI指定のいずれも
+    // mu_lv.html を使う。lv=0 は「全レベル」。
+    const u=new URL('/game/popn/popn29/playdata/mu_lv.html',location.origin);
+    const params={
+      page:String(page),
+      version:String(target.version??-1),
+      bemani:String(target.bemani??0),
+      category:'0',
+      keyword:'',
+      sort:target.kind==='level'?'none':'music',
+      lv:String(target.kind==='level'?target.lv:0)
+    };
+    if(target.kind!=='level')params.sort_type='up';
     u.search=new URLSearchParams(params);
     return u;
   }
