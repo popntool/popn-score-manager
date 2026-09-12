@@ -442,3 +442,18 @@ body.auth-user>.auth-gate{display:none}
   #manualDialog form{gap:8px;padding-top:16px;padding-bottom:16px}
   #manualDialog .score-entry-grid{row-gap:7px}
 }
+
+
+/* v3.0.79: improve rank readability in score editor */
+#manualDialog .auto-field>.rank-text{
+  background:var(--surface-2)!important;
+  background-clip:border-box!important;
+  -webkit-background-clip:border-box!important;
+  color:var(--rank-border)!important;
+  -webkit-text-fill-color:var(--rank-border)!important;
+  -webkit-text-stroke:0!important;
+  box-shadow:none!important;
+  text-shadow:0 1px 0 var(--surface),0 0 1px currentColor;
+  font-size:1.24rem;
+  font-weight:1000
+}
