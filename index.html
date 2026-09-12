@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.73">
+<link rel="stylesheet" href="./css/app.css?v=3.0.75">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -206,7 +206,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.73</b>
+<b>3.0.75</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
@@ -214,6 +214,7 @@
 
     <section id="adminPanel" class="panel tab-panel" hidden>
       <div class="panel-heading"><div><small>ADMINISTRATION</small><h1>管理者画面</h1></div></div>
+      <div id="adminNoticeList" class="admin-notice-list" hidden></div>
       <nav class="admin-tabs" aria-label="管理メニュー">
         <button class="active" data-admin-tab="master" type="button">曲マスター</button>
         <button data-admin-tab="versions" type="button">バージョン管理</button>
@@ -309,7 +310,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.73">
+  <script type="module" src="./js/app.js?v=3.0.75">
 </script>
 </body>
 </html>

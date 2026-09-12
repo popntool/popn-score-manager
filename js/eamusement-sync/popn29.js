@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.8.4
+/* pop'n music スコア同期 v2.8.5
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -40,7 +40,7 @@
       <label style="display:flex;align-items:center;gap:8px;margin:8px 0"><input type="radio" name="popn-sync-mode" value="version">バージョン
         <select data-version style="margin-left:auto;max-width:260px;padding:4px">${versions}</select>
       </label>
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px"><button data-cancel type="button">中止</button><button data-start type="button">同期する</button></div>`;
+      <div style="display:flex;align-items:center;width:100%;gap:8px;margin-top:12px"><button data-cancel type="button">中止</button><button data-start type="button" style="margin-left:auto">同期する</button></div>`;
     const minSel=box.querySelector('[data-min]'),maxSel=box.querySelector('[data-max]'),versionSel=box.querySelector('[data-version]');
     minSel.value='1';maxSel.value='50';
     const setMode=mode=>{box.querySelector(`input[value="${mode}"]`).checked=true;};
@@ -96,8 +96,10 @@
 
       // バージョン/BEMANI一覧(mu_top.html)は、1曲につき LIGHT/NORMAL/HYPER/EX の4セルを持つ。
       // 各セルの medal/rank/score をそのまま歴代データとして取得する。
-      const songCells=d.slice(1,5);
-      if(songCells.length===4&&songCells.every(cell=>cell.querySelector('img[src*="meda_"]'))){
+      // mu_top.html は曲情報の直後に「でっかポップ君」列があり、その後に
+      // LIGHT / NORMAL / HYPER / EX の4列が並ぶ。末尾4セルだけを譜面として扱う。
+      const songCells=d.slice(-4);
+      if(d.length>=6&&songCells.length===4&&songCells.every(cell=>cell.querySelector('img[src*="meda_"]'))){
         for(const [index,chart] of ['LIGHT','NORMAL','HYPER','EX'].entries()){
           const history=historyCell(songCells[index]);
           items.push({...base,level:0,chart,...history});
