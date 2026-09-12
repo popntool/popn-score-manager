@@ -242,10 +242,10 @@
 <p id="manualVersion" class="manual-artist" hidden></p>
 <input name="song_id" type="hidden">
 <div class="score-entry-grid">
-<label>ポックラ<output id="manualPopClass" class="manual-popclass">0.00</output></label>
+<label class="auto-entry-field"><span class="score-entry-label">ポックラ<small>自動</small></span><output id="manualPopClass" class="manual-popclass">0.00</output></label>
 <label class="history-score-input">歴代スコア<input id="manualHistoryScore" name="history_score" type="number" min="0" max="100000" placeholder="未入力"><small id="historyScoreGuide">今作が上回る場合は同じ値を表示</small></label>
 <label>今作スコア<input id="manualScoreInput" name="version_score" type="number" min="0" max="100000" required></label>
-<label>ランク<i id="manualRank" class="rank-text rank-e" role="img" aria-label="E">E</i></label>
+<label class="auto-entry-field"><span class="score-entry-label">ランク<small>自動</small></span><i id="manualRank" class="rank-text rank-e" role="img" aria-label="E">E</i></label>
 <label>メダル<input name="medal_code" type="hidden" value="none" required><button id="medalPickerButton" class="medal-picker-button" type="button"><img alt=""><span>－</span></button></label>
 <label class="current-clear-status">今作クリア状況<select id="manualCurrentClearStatus" name="current_clear_status" required><option value="failed">未クリア</option><option value="clear">クリア</option><option value="full_combo">FULL COMBO</option><option value="perfect">PERFECT</option></select></label>
 </div>

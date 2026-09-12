@@ -89,6 +89,10 @@
 .score-entry-grid>label{min-width:0}
 .score-entry-grid .history-score-input{display:grid;gap:5px;padding:0;border:0;border-radius:0;background:transparent}
 .score-entry-grid .history-score-input small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.score-entry-grid .auto-entry-field{display:grid;gap:5px}
+.score-entry-grid .score-entry-label{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.score-entry-grid .score-entry-label small{display:inline-grid;place-items:center;min-width:32px;padding:2px 6px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--muted);font-size:.58rem;font-weight:900;line-height:1}
+.score-entry-grid .auto-entry-field .manual-popclass,.score-entry-grid .auto-entry-field .rank-text{border-style:dashed}
 .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input,.score-entry-grid select{width:100%;height:52px;min-height:52px}
 .score-entry-grid .medal-picker-button{padding:3px;justify-content:center}
 .score-entry-grid .rank-text{display:grid;place-items:center!important;padding:0;text-align:center!important;line-height:1}
