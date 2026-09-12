@@ -356,7 +356,7 @@ body.auth-user>.auth-gate{display:none}
 .admin-notice-list b{font-size:1.25rem}
 @media(max-width:520px){.admin-notice-list button{min-height:44px;padding:7px 9px}.admin-notice-list strong{font-size:.84rem}.admin-notice-list span{font-size:.72rem}}
 
-/* v3.0.77: score editor 3-row layout and read-only background distinction */
+/* v3.0.78: compact unified single-line field heights */
 #manualDialog .auto-field{position:relative}
 #manualDialog .auto-field>input:disabled,
 #manualDialog .auto-field>input[readonly],
@@ -412,4 +412,33 @@ body.auth-user>.auth-gate{display:none}
   #manualDialog #manualHistoryScore,
   #manualDialog #manualScoreInput{font-size:.92rem}
   #manualDialog .current-clear-status select{font-size:.9rem;padding-left:10px;padding-right:34px}
+}
+
+/* v3.0.78: compact and unify single-line fields in score editor */
+#manualDialog form{gap:10px}
+#manualDialog .song-search-fields{gap:8px}
+#manualDialog .song-search-fields label{gap:4px}
+#manualDialog .song-search-fields input,
+#manualDialog .score-entry-grid .medal-picker-button,
+#manualDialog .score-entry-grid .rank-text,
+#manualDialog .score-entry-grid input,
+#manualDialog .score-entry-grid select,
+#manualDialog .manual-popclass{
+  height:44px!important;
+  min-height:44px!important
+}
+#manualDialog .manual-artist{
+  min-height:44px;
+  display:flex;
+  align-items:center;
+  padding-top:5px;
+  padding-bottom:5px
+}
+#manualDialog .score-entry-grid{row-gap:8px}
+#manualDialog .history-score-input input{background:var(--page)!important}
+#manualDialog .score-entry-grid .medal-picker-button img{width:32px;height:32px}
+#manualDialog .dialog-actions{margin-top:2px}
+@media(max-width:760px){
+  #manualDialog form{gap:8px;padding-top:16px;padding-bottom:16px}
+  #manualDialog .score-entry-grid{row-gap:7px}
 }
