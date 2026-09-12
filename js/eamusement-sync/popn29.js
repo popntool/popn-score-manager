@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.8.3
+/* pop'n music スコア同期 v2.8.4
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -40,7 +40,7 @@
       <label style="display:flex;align-items:center;gap:8px;margin:8px 0"><input type="radio" name="popn-sync-mode" value="version">バージョン
         <select data-version style="margin-left:auto;max-width:260px;padding:4px">${versions}</select>
       </label>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><button data-cancel type="button">中止</button><button data-start type="button">同期する</button></div>`;
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px"><button data-cancel type="button">中止</button><button data-start type="button">同期する</button></div>`;
     const minSel=box.querySelector('[data-min]'),maxSel=box.querySelector('[data-max]'),versionSel=box.querySelector('[data-version]');
     minSel.value='1';maxSel.value='50';
     const setMode=mode=>{box.querySelector(`input[value="${mode}"]`).checked=true;};
@@ -55,31 +55,61 @@
   }
 
   function listUrl(target,page){
-    // 曲データ一覧はレベル指定・バージョン指定・BEMANI指定のいずれも
-    // mu_lv.html を使う。lv=0 は「全レベル」。
-    const u=new URL('/game/popn/popn29/playdata/mu_lv.html',location.origin);
+    const isLevel=target.kind==='level';
+    // レベル指定は mu_lv.html、バージョン/BEMANI指定は公式画面と同じ mu_top.html を使う。
+    const u=new URL(`/game/popn/popn29/playdata/${isLevel?'mu_lv':'mu_top'}.html`,location.origin);
     const params={
       page:String(page),
       version:String(target.version??-1),
       bemani:String(target.bemani??0),
       category:'0',
       keyword:'',
-      sort:target.kind==='level'?'none':'music',
-      lv:String(target.kind==='level'?target.lv:0)
+      sort:isLevel?'none':'music'
     };
-    if(target.kind!=='level')params.sort_type='up';
+    if(isLevel)params.lv=String(target.lv);
+    else params.sort_type='up';
     u.search=new URLSearchParams(params);
     return u;
+  }
+
+  function historyCell(cell){
+    const images=[...(cell?.querySelectorAll('img')||[])];
+    const text=clean(cell?.querySelector('.play_value')?.textContent||cell?.querySelector('p')?.textContent||cell?.textContent||'');
+    const match=text.replace(/,/g,'').match(/(?:^|\D)(\d{1,6})(?:\D|$)/);
+    return {
+      score:match?Math.min(100000,Number(match[1])||0):0,
+      medal_code:code(images.find(i=>/meda_/i.test(i.getAttribute('src')||'')),'meda')||'none',
+      rank_code:code(images.find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')||'none'
+    };
   }
 
   async function parseList(doc){
     const anchors=[...doc.querySelectorAll('a[href*="mu_detail.html"]')].filter(a=>/[?&]no=/.test(a.getAttribute('href')||''));
     const items=[];
+    const seenLi=new Set();
     for(const a of anchors){
-      const li=a.closest('li');if(!li)continue;const d=[...li.children].filter(e=>e.tagName==='DIV');if(d.length<4)continue;
-      const info=[...d[0].querySelectorAll('p')].map(p=>clean(p.textContent)),scoreCell=d[3],scoreText=clean(scoreCell?.querySelector('.play_value')?.textContent||scoreCell?.textContent||''),scoreMatch=scoreText.replace(/,/g,'').match(/(?:^|\D)(\d{1,6})(?:\D|$)/),historyScore=scoreMatch?Math.min(100000,Number(scoreMatch[1])||0):0,scoreImages=[...(scoreCell?.querySelectorAll('img')||[])];
-      const item={level:Number(clean(d[2].textContent)),genre:info[0]||'',title:clean(a.textContent),artist:info[1]||'',chart:clean(d[1].textContent).toUpperCase(),detail_url:new URL(a.getAttribute('href'),location.origin).href,score:historyScore,medal_code:code(scoreImages.find(i=>/meda_/i.test(i.getAttribute('src')||'')),'meda')||'none',rank_code:code(scoreImages.find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')||'none'};
-      if(!item.title||!item.genre||!item.artist||!['LIGHT','NORMAL','HYPER','EX'].includes(item.chart)||!Number.isFinite(item.level))continue;
+      const li=a.closest('li');if(!li||seenLi.has(li))continue;seenLi.add(li);
+      const d=[...li.children].filter(e=>e.tagName==='DIV');
+      const info=[...d[0]?.querySelectorAll('p')||[]].map(p=>clean(p.textContent));
+      const base={genre:info[0]||'',title:clean(a.textContent),artist:info[1]||'',detail_url:new URL(a.getAttribute('href'),location.origin).href};
+      if(!base.title||!base.genre||!base.artist)continue;
+
+      // バージョン/BEMANI一覧(mu_top.html)は、1曲につき LIGHT/NORMAL/HYPER/EX の4セルを持つ。
+      // 各セルの medal/rank/score をそのまま歴代データとして取得する。
+      const songCells=d.slice(1,5);
+      if(songCells.length===4&&songCells.every(cell=>cell.querySelector('img[src*="meda_"]'))){
+        for(const [index,chart] of ['LIGHT','NORMAL','HYPER','EX'].entries()){
+          const history=historyCell(songCells[index]);
+          items.push({...base,level:0,chart,...history});
+        }
+        continue;
+      }
+
+      // レベル一覧(mu_lv.html)は従来どおり1行=1譜面。
+      if(d.length<4)continue;
+      const history=historyCell(d[3]);
+      const item={...base,level:Number(clean(d[2].textContent)),chart:clean(d[1].textContent).toUpperCase(),...history};
+      if(!['LIGHT','NORMAL','HYPER','EX'].includes(item.chart)||!Number.isFinite(item.level))continue;
       items.push(item);
     }
     const keys=await Promise.all(items.map(masterKey));
