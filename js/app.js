@@ -1,7 +1,7 @@
 import{isConfigured}from"./supabase.js";
 import{changePassword,changeUsername,currentUser,currentUsername,loadMyProfile,login,logout,onAuthChange,register,saveDisplayPreferences,savePoptomo}from"./auth.js";
 import{downloadSongMaster,importSongMaster}from"./songs.js";
-import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores}from"./scores.js?v=3.0.66";
+import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores}from"./scores.js?v=3.0.69";
 import{loadUsers}from"./users.js";
 import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.66";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
