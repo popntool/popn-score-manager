@@ -356,25 +356,13 @@ body.auth-user>.auth-gate{display:none}
 .admin-notice-list b{font-size:1.25rem}
 @media(max-width:520px){.admin-notice-list button{min-height:44px;padding:7px 9px}.admin-notice-list strong{font-size:.84rem}.admin-notice-list span{font-size:.72rem}}
 
-
-/* v3.0.76: distinguish read-only score-editor fields and improve input legibility */
+/* v3.0.77: score editor 3-row layout and read-only background distinction */
 #manualDialog .auto-field{position:relative}
-#manualDialog .auto-badge{
-  position:absolute;right:0;top:1px;
-  padding:1px 7px;border:1px solid var(--line);border-radius:999px;
-  background:var(--surface-2);color:var(--muted);
-  font-size:.58rem;font-weight:800;line-height:1.35
-}
 #manualDialog .auto-field>input:disabled,
 #manualDialog .auto-field>input[readonly],
-#manualDialog .manual-popclass{
-  border-style:solid!important;
-  background:var(--surface-2)!important;
-  opacity:1;
-}
+#manualDialog .manual-popclass,
 #manualDialog .auto-field>.rank-text{
-  border-style:solid!important;
-  box-shadow:inset 0 0 0 999px var(--surface-2);
+  background:var(--surface-2)!important;
   opacity:1
 }
 #manualDialog .auto-field>input:disabled{
@@ -382,21 +370,46 @@ body.auth-user>.auth-gate{display:none}
   -webkit-text-fill-color:var(--text);
   cursor:default
 }
+#manualDialog .auto-field>.rank-text{
+  box-shadow:inset 0 0 0 999px color-mix(in srgb,var(--surface-2) 82%,transparent);
+  font-size:1.2rem;
+  font-weight:900
+}
+#manualDialog .score-entry-grid{
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-template-areas:
+    "pop pop pop rank rank rank"
+    "medal medal history history current current"
+    "clear clear clear clear clear clear";
+  align-items:end;
+  column-gap:8px;
+  row-gap:12px
+}
+#manualDialog .score-row-popclass{grid-area:pop}
+#manualDialog .score-row-rank{grid-area:rank}
+#manualDialog .score-row-medal{grid-area:medal}
+#manualDialog .score-row-history{grid-area:history}
+#manualDialog .score-row-current{grid-area:current}
+#manualDialog .score-row-clear{grid-area:clear}
 #manualDialog #manualHistoryScore,
 #manualDialog #manualScoreInput{
-  font-size:1.05rem;
+  font-size:1rem;
   font-weight:800;
-  letter-spacing:0
+  letter-spacing:0;
+  text-align:center
 }
+#manualDialog .current-clear-status{width:100%}
 #manualDialog .current-clear-status select{
-  padding-left:8px;
-  padding-right:30px;
-  font-size:.82rem;
+  width:100%;
+  padding:5px 38px 5px 12px;
+  font-size:.95rem;
   font-weight:800;
-  letter-spacing:-.03em
+  letter-spacing:0;
+  white-space:nowrap
 }
 @media(max-width:760px){
+  #manualDialog .score-entry-grid{column-gap:6px;row-gap:10px}
   #manualDialog #manualHistoryScore,
-  #manualDialog #manualScoreInput{font-size:1rem}
-  #manualDialog .current-clear-status select{font-size:.76rem;padding-left:7px;padding-right:27px}
+  #manualDialog #manualScoreInput{font-size:.92rem}
+  #manualDialog .current-clear-status select{font-size:.9rem;padding-left:10px;padding-right:34px}
 }
