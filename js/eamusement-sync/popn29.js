@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.8.0
+/* pop'n music スコア同期 v2.8.1
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -15,7 +15,11 @@
 
   const state={cancelled:false,pages:0,records:[],started:Date.now()};
   const box=document.createElement('div');
-  Object.assign(box.style,{position:'fixed',top:'12px',right:'12px',zIndex:2147483647,width:'min(430px,calc(100vw - 24px))',padding:'14px',border:'3px solid #334b93',borderRadius:'14px',background:'#fff9df',color:'#17244d',font:'bold 14px/1.5 sans-serif',boxShadow:'0 6px 24px #0006'});
+  Object.assign(box.style,{position:'fixed',top:'12px',right:'12px',zIndex:2147483647,width:'min(430px,calc(100vw - 24px))',padding:'14px',border:'3px solid #334b93',borderRadius:'14px',background:'#fff9df',color:'#17244d',fontFamily:'Arial, "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif',fontSize:'14px',fontWeight:'700',lineHeight:'1.5',boxShadow:'0 6px 24px #0006'});
+  box.className='popn-score-sync-box';
+  const style=document.createElement('style');
+  style.textContent='.popn-score-sync-box,.popn-score-sync-box *{font-family:Arial,"Noto Sans JP","Yu Gothic",Meiryo,sans-serif;box-sizing:border-box}.popn-score-sync-box button,.popn-score-sync-box select,.popn-score-sync-box input{font:inherit}.popn-score-sync-box button{font-weight:700}';
+  document.head.appendChild(style);
   document.body.appendChild(box);
 
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -36,7 +40,7 @@
       <label style="display:flex;align-items:center;gap:8px;margin:8px 0"><input type="radio" name="popn-sync-mode" value="version">バージョン
         <select data-version style="margin-left:auto;max-width:260px;padding:4px">${versions}</select>
       </label>
-      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><button data-cancel type="button">中止</button><button data-start type="button" style="font-weight:bold">同期する</button></div>`;
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px"><button data-cancel type="button">中止</button><button data-start type="button">同期する</button></div>`;
     const minSel=box.querySelector('[data-min]'),maxSel=box.querySelector('[data-max]'),versionSel=box.querySelector('[data-version]');
     minSel.value='1';maxSel.value='50';
     const setMode=mode=>{box.querySelector(`input[value="${mode}"]`).checked=true;};
@@ -53,8 +57,9 @@
   function listUrl(target,page){
     const isLevel=target.kind==='level';
     const u=new URL(`/game/popn/popn29/playdata/${isLevel?'mu_lv.html':'mu_top.html'}`,location.origin);
-    const params={page:String(page),version:String(target.version??-1),bemani:String(target.bemani??0),category:'0',keyword:'',sort:'none'};
-    if(isLevel)params.lv=String(target.lv);
+    const params=isLevel
+      ?{page:String(page),version:'-1',bemani:'0',category:'0',keyword:'',sort:'none',lv:String(target.lv)}
+      :{page:String(page),version:String(target.version??-1),bemani:String(target.bemani??0),category:'0',keyword:'',sort:'music',sort_type:'up'};
     u.search=new URLSearchParams(params);
     return u;
   }
