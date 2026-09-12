@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.8.2
+/* pop'n music スコア同期 v2.8.3
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -109,12 +109,23 @@
     const base=[...new Map(state.records.map(r=>[`${r.master_key}|${r.chart}`,r])).values()];
     const detailGroupMap=new Map();
     for(const row of base){const url=new URL(row.detail_url);url.hash='';const no=url.searchParams.get('no'),detailKey=no?`${url.pathname}?no=${no}`:url.href;let group=detailGroupMap.get(detailKey);if(!group){group={url:url.href,rows:[]};detailGroupMap.set(detailKey,group);}group.rows.push(row);}
-    const allDetailGroups=[...detailGroupMap.values()],detailGroups=allDetailGroups.filter(group=>group.rows.some(row=>Number(row.score)>0));
-    progress.max=Math.max(1,detailGroups.length);progress.value=0;status.textContent=`一覧から${base.filter(row=>Number(row.score)>0).length}譜面を確認・詳細取得 ${detailGroups.length}/${allDetailGroups.length}曲`;
+    const allDetailGroups=[...detailGroupMap.values()];
+    // レベル範囲同期では一覧の歴代スコアを使って未プレー曲の詳細取得を省略する。
+    // バージョン/BEMANI同期では一覧側で個人スコア欄が空になるページがあるため、
+    // 対象曲の詳細ページをすべて確認して今作スコア・今作クリア状況を取得する。
+    const detailGroups=scope.mode==='level'
+      ? allDetailGroups.filter(group=>group.rows.some(row=>Number(row.score)>0))
+      : allDetailGroups;
+    progress.max=Math.max(1,detailGroups.length);progress.value=0;
+    status.textContent=scope.mode==='level'
+      ? `一覧から${base.filter(row=>Number(row.score)>0).length}譜面を確認・詳細取得 ${detailGroups.length}/${allDetailGroups.length}曲`
+      : `対象${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
     const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({rows:group.rows,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');
     const details=new Map();for(const group of parsed)for(const row of group.rows){const value=group.values.get(row.chart);if(value)details.set(`${row.master_key}|${row.chart}`,value);}
-    const rows=base.filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none').map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0,current_clear_status:detail.current_clear_status||'failed'};}).map(({detail_url,...row})=>row);
+    const rows=base.map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0,current_clear_status:detail.current_clear_status||'failed'};})
+      .filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none'||Number(row.version_score)>0||row.current_clear_status!=='failed')
+      .map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面を圧縮中…`;
     const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:3,records:rows})),compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
     status.textContent=`取得完了：${rows.length}譜面。サイトへ戻ります…`;
