@@ -89,10 +89,6 @@
 .score-entry-grid>label{min-width:0}
 .score-entry-grid .history-score-input{display:grid;gap:5px;padding:0;border:0;border-radius:0;background:transparent}
 .score-entry-grid .history-score-input small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-.score-entry-grid .auto-entry-field{display:grid;gap:5px}
-.score-entry-grid .score-entry-label{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.score-entry-grid .score-entry-label small{display:inline-grid;place-items:center;min-width:32px;padding:2px 6px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--muted);font-size:.58rem;font-weight:900;line-height:1}
-.score-entry-grid .auto-entry-field .manual-popclass,.score-entry-grid .auto-entry-field .rank-text{border-style:dashed}
 .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input,.score-entry-grid select{width:100%;height:52px;min-height:52px}
 .score-entry-grid .medal-picker-button{padding:3px;justify-content:center}
 .score-entry-grid .rank-text{display:grid;place-items:center!important;padding:0;text-align:center!important;line-height:1}
@@ -359,3 +355,48 @@ body.auth-user>.auth-gate{display:none}
 .admin-notice-list span{font-size:.78rem;font-weight:800;color:var(--danger,#d52d58)}
 .admin-notice-list b{font-size:1.25rem}
 @media(max-width:520px){.admin-notice-list button{min-height:44px;padding:7px 9px}.admin-notice-list strong{font-size:.84rem}.admin-notice-list span{font-size:.72rem}}
+
+
+/* v3.0.76: distinguish read-only score-editor fields and improve input legibility */
+#manualDialog .auto-field{position:relative}
+#manualDialog .auto-badge{
+  position:absolute;right:0;top:1px;
+  padding:1px 7px;border:1px solid var(--line);border-radius:999px;
+  background:var(--surface-2);color:var(--muted);
+  font-size:.58rem;font-weight:800;line-height:1.35
+}
+#manualDialog .auto-field>input:disabled,
+#manualDialog .auto-field>input[readonly],
+#manualDialog .manual-popclass{
+  border-style:solid!important;
+  background:var(--surface-2)!important;
+  opacity:1;
+}
+#manualDialog .auto-field>.rank-text{
+  border-style:solid!important;
+  box-shadow:inset 0 0 0 999px var(--surface-2);
+  opacity:1
+}
+#manualDialog .auto-field>input:disabled{
+  color:var(--text);
+  -webkit-text-fill-color:var(--text);
+  cursor:default
+}
+#manualDialog #manualHistoryScore,
+#manualDialog #manualScoreInput{
+  font-size:1.05rem;
+  font-weight:800;
+  letter-spacing:0
+}
+#manualDialog .current-clear-status select{
+  padding-left:8px;
+  padding-right:30px;
+  font-size:.82rem;
+  font-weight:800;
+  letter-spacing:-.03em
+}
+@media(max-width:760px){
+  #manualDialog #manualHistoryScore,
+  #manualDialog #manualScoreInput{font-size:1rem}
+  #manualDialog .current-clear-status select{font-size:.76rem;padding-left:7px;padding-right:27px}
+}
