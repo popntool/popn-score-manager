@@ -1,5 +1,5 @@
 import{popClassSelection,songPopClass}from"./scores.js?v=3.0.88";
-import{medalInfo}from"./ui.js?v=3.0.37";
+import{medalInfo}from"./ui.js?v=3.0.95";
 
 const HASHTAG="#popn_score_manager",SHARE_TEXT=`${HASHTAG}\n`,BG="#fffaf0",PANEL="#fffdf6",INK="#142b67",MUTED="#69789d",LINE="#3153a0",ACCENT="#ffd851",PINK="#ff789a";
 const TARGET_BYTES=1024*1024;
@@ -31,7 +31,7 @@ function fitLine(ctx,value,x,y,maxWidth,maxSize=13,minSize=8,weight=800,color=IN
  if(ctx.measureText(shown).width>maxWidth){while(shown.length>1&&ctx.measureText(`${shown}…`).width>maxWidth)shown=shown.slice(0,-1);shown+=shown===raw?"":"…";}
  ctx.fillStyle=color;ctx.fillText(shown,x,y);
 }
-async function drawBanner(ctx,row,x,y,w,h){rounded(ctx,x,y,w,h,5,"#f5f0df",null,0);const img=await loadImage(row.banner_url);if(!contain(ctx,img,x,y,w,h))fitLine(ctx,row.title,x+w/2,y+h/2,w-10,12,8,800,MUTED);ctx.lineWidth=1;ctx.strokeStyle=LINE;ctx.strokeRect(x,y,w,h);}
+async function drawBanner(ctx,row,x,y,w,h,stroke=true){rounded(ctx,x,y,w,h,5,"#f5f0df",null,0);const img=await loadImage(row.banner_url);if(!contain(ctx,img,x,y,w,h))fitLine(ctx,row.title,x+w/2,y+h/2,w-10,12,8,800,MUTED);if(stroke){ctx.lineWidth=1;ctx.strokeStyle=LINE;ctx.strokeRect(x,y,w,h);}}
 function header(ctx,title,subtitle,username,width){
  ctx.fillStyle=ACCENT;ctx.fillRect(0,0,width,84);
  ctx.beginPath();ctx.arc(32,42,23,0,Math.PI*2);ctx.fillStyle=PINK;ctx.fill();ctx.lineWidth=4;ctx.strokeStyle=INK;ctx.stroke();
@@ -48,38 +48,37 @@ const CHART_STYLE={EX:["#ef426f","#fff"],HYPER:["#fff2a6","#7b6500"],NORMAL:["#b
 function chartLevelStack(ctx,chart,level,x,y,w,h){
  const[bg,fg]=CHART_STYLE[chart]||["#eef1f7",INK],chartH=Math.floor(h*.53),shortChart={LIGHT:"LT",NORMAL:"NM",HYPER:"HP",EX:"EX"}[chart]||String(chart||"").slice(0,2);rounded(ctx,x,y,w,chartH,4,bg,null,0);text(ctx,shortChart,x+w/2,y+chartH/2,10,900,fg,"center");text(ctx,String(level??"-"),x+w/2,y+chartH+Math.max(7,(h-chartH)/2),11,900,INK,"center");
 }
-function compactPairWidth(ctx,label,value,labelSize=9.2,valueSize=9.8,gap=2){
- ctx.font=`800 ${labelSize}px ${FONT}`;const labelW=ctx.measureText(label).width;
- ctx.font=`900 ${valueSize}px ${FONT}`;const valueW=ctx.measureText(value).width;
- return labelW+gap+valueW;
-}
-function drawCompactPair(ctx,label,value,x,y){
- const gap=2,labelSize=9.2,valueSize=9.8;
- ctx.font=`800 ${labelSize}px ${FONT}`;const labelW=ctx.measureText(label).width;
- text(ctx,label,x,y,labelSize,800,INK,"left");
- text(ctx,value,x+labelW+gap,y,valueSize,900,INK,"left");
+function fixedPairMetrics(ctx){
+ const labelSize=9.2,valueSize=9.8,pairGap=2;
+ ctx.font=`800 ${labelSize}px ${FONT}`;const labelW=Math.ceil(Math.max(ctx.measureText("スコア").width,ctx.measureText("PSR").width));
+ ctx.font=`900 ${valueSize}px ${FONT}`;const valueW=Math.ceil(Math.max(ctx.measureText("100000").width,ctx.measureText("223.33").width));
+ return{labelSize,valueSize,pairGap,labelW,valueW};
 }
 function scoreTileLayout(ctx,row,x,y,w,h){
- const inner=4,gap=3,medalW=Math.min(24,h-14),stackW=29,bannerH=h-inner*2;
- const score=String(Number(row.version_score||0)),psr=songPopClass(row).toFixed(2);
- // 情報欄は実際に表示する文字幅だけ確保する。100000でも計測幅で収まる。
- const infoW=Math.ceil(Math.max(compactPairWidth(ctx,"スコア",score),compactPairWidth(ctx,"PSR",psr)));
- const bannerW=Math.max(100,Math.floor(w-inner*2-medalW-stackW-infoW-gap*3));
+ const inner=3,cellGap=2,medalCellW=28,stackCellW=31,bannerH=h-inner*2;
+ const score=String(Number(row.version_score||0)),psr=songPopClass(row).toFixed(2),pair=fixedPairMetrics(ctx);
+ const infoW=pair.labelW+pair.pairGap+pair.valueW;
+ const bannerW=Math.max(96,Math.floor(w-inner*2-medalCellW-stackCellW-infoW-cellGap*3));
  const banner={x:x+inner,y:y+inner,w:bannerW,h:bannerH};
- const medal={x:banner.x+banner.w+gap,y:y+(h-medalW)/2,w:medalW,h:medalW};
- const stack={x:medal.x+medal.w+gap,y:y+inner,w:stackW,h:bannerH};
- const info={x:stack.x+stack.w+gap,y:y+inner,w:infoW,h:bannerH};
+ const medal={x:banner.x+banner.w+cellGap,y:y+inner,w:medalCellW,h:bannerH};
+ const stack={x:medal.x+medal.w+cellGap,y:y+inner,w:stackCellW,h:bannerH};
+ const info={x:stack.x+stack.w+cellGap,y:y+inner,w:infoW,h:bannerH,labelW:pair.labelW,valueW:pair.valueW,pairGap:pair.pairGap,labelSize:pair.labelSize,valueSize:pair.valueSize};
  return{banner,medal,stack,info,score,psr};
+}
+function drawFixedPair(ctx,label,value,cell,y){
+ text(ctx,label,cell.x,y,cell.labelSize,800,INK,"left");
+ const valueRight=cell.x+cell.labelW+cell.pairGap+cell.valueW;
+ text(ctx,value,valueRight,y,cell.valueSize,900,INK,"right");
 }
 async function drawScoreTile(ctx,row,x,y,w,h){
  rounded(ctx,x,y,w,h,7,PANEL,LINE,2);
  const cell=scoreTileLayout(ctx,row,x,y,w,h);
- await drawBanner(ctx,row,cell.banner.x,cell.banner.y,cell.banner.w,cell.banner.h);
- await drawMedal(ctx,row,cell.medal.x,cell.medal.y,cell.medal.w);
+ await drawBanner(ctx,row,cell.banner.x,cell.banner.y,cell.banner.w,cell.banner.h,false);
+ const medalSize=Math.min(24,cell.medal.h);
+ await drawMedal(ctx,row,cell.medal.x+(cell.medal.w-medalSize)/2,cell.medal.y+(cell.medal.h-medalSize)/2,medalSize);
  chartLevelStack(ctx,row.chart,row.level,cell.stack.x,cell.stack.y,cell.stack.w,cell.stack.h);
- // 「スコア 100000」のように、項目名と数値の間は最小限だけ空ける。
- drawCompactPair(ctx,"スコア",cell.score,cell.info.x,y+16);
- drawCompactPair(ctx,"PSR",cell.psr,cell.info.x,y+31);
+ drawFixedPair(ctx,"スコア",cell.score,cell.info,y+16);
+ drawFixedPair(ctx,"PSR",cell.psr,cell.info,y+31);
 }
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username,officialPopnClass=null){
