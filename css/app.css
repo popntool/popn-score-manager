@@ -375,7 +375,10 @@ body.auth-user>.auth-gate{display:none}
 .score-card-v300 .card-rank.rank-text{font-weight:1000;filter:drop-shadow(0 .5px 0 rgba(255,255,255,.72))}
 #manualDialog .auto-field>.rank-text{filter:drop-shadow(0 1px 0 rgba(255,255,255,.86));text-shadow:none!important}
 
-/* iPhone Safari: inputs below 16px trigger focus zoom and can leave the page enlarged. */
+/* iPhone Safari: form controls below 16px trigger focus zoom and can leave the page enlarged.
+   Keep all editable controls in the score editor, My Page and feedback dialogs at 16px or above. */
 @media(max-width:760px){
-  #manualDialog input,#manualDialog select,#manualDialog textarea{font-size:16px!important}
+  #manualDialog input,#manualDialog select,#manualDialog textarea,
+  #myPageDialog input,#myPageDialog select,#myPageDialog textarea,
+  #feedbackDialog input,#feedbackDialog select,#feedbackDialog textarea{font-size:16px!important}
 }
