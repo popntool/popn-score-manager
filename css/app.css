@@ -347,28 +347,63 @@ body.auth-user>.auth-gate{display:none}
   .menu-modal .setting-row>span>small{font-size:.74rem}
 }
 
-/* v3.0.102: rank gradients sampled/tuned from the official rank artwork. */
+/* v3.0.104: rank colors matched to the official artwork.
+   The gradient is sized to 1em (the glyph height), not the whole fixed-height cell.
+   This keeps every color band visible in both score cards and the edit dialog. */
 .rank-text{
   display:inline-block;
   background-repeat:no-repeat!important;
-  background-size:100% 100%!important;
+  background-size:100% 1em!important;
+  background-position:center!important;
   background-clip:text!important;
   -webkit-background-clip:text!important;
   color:transparent!important;
   -webkit-text-fill-color:transparent!important;
-  -webkit-text-stroke:.34px rgba(38,55,92,.78)!important;
-  filter:drop-shadow(0 .7px 0 rgba(255,246,198,.82));
+  -webkit-text-stroke:.32px #263b59!important;
+  filter:drop-shadow(0 0 .35px rgba(255,211,72,.9));
 }
-.rank-text.rank-splus,.rank-text.rank-s{background-image:linear-gradient(180deg,#f05070 0%,#f47f79 22%,#f4d354 46%,#8bdc63 67%,#49b6df 83%,#4090f0 100%)!important}
-.rank-text.rank-aaa,.rank-text.rank-aaplus,.rank-text.rank-aa,.rank-text.rank-aplus,.rank-text.rank-a{background-image:linear-gradient(180deg,#f88c90 0%,#f45d75 30%,#ef305f 54%,#d7193f 76%,#bd1029 100%)!important}
-.rank-text.rank-bplus{background-image:linear-gradient(180deg,#ffd13b 0%,#ffb400 34%,#f58f00 65%,#df6500 100%)!important}
-.rank-text.rank-b{background-image:linear-gradient(180deg,#ffd13b 0%,#faae00 36%,#ef8600 66%,#dd6200 100%)!important}
-.rank-text.rank-c{background-image:linear-gradient(180deg,#a9ee55 0%,#78dc45 33%,#43c43a 65%,#22ad3b 100%)!important}
-.rank-text.rank-d{background-image:linear-gradient(180deg,#7debf5 0%,#56d5ef 34%,#39b4e5 66%,#4090f0 100%)!important}
-.rank-text.rank-e{background-image:linear-gradient(180deg,#cc84ef 0%,#b766e1 34%,#9450d2 66%,#6640bf 100%)!important}
-/* Keep the same visible rank treatment on compact score cards. */
-.score-card-v300 .card-rank.rank-text{font-weight:1000;filter:drop-shadow(0 .5px 0 rgba(255,255,255,.72))}
-#manualDialog .auto-field>.rank-text{filter:drop-shadow(0 1px 0 rgba(255,255,255,.86));text-shadow:none!important}
+/* S / S+: red-pink -> yellow -> green -> cyan -> blue, as in the official rainbow S. */
+.rank-text.rank-splus,.rank-text.rank-s{background-image:linear-gradient(180deg,
+  #f05070 0%,#f05070 23%,
+  #f47b72 30%,
+  #f8dc60 42%,#f5ec68 49%,
+  #90dc58 59%,#47c86b 67%,
+  #50d8e8 77%,
+  #4198f8 88%,#3f8fe8 100%)!important}
+/* AAA through A: pale pink at the top into vivid/deep red at the bottom. */
+.rank-text.rank-aaa,.rank-text.rank-aaplus,.rank-text.rank-aa,.rank-text.rank-aplus,.rank-text.rank-a{background-image:linear-gradient(180deg,
+  #f98a86 0%,#f98a86 20%,
+  #f45d76 38%,
+  #ef365f 55%,
+  #d7193f 76%,
+  #c81026 100%)!important}
+/* B family: yellow -> orange -> deep orange. */
+.rank-text.rank-bplus,.rank-text.rank-b{background-image:linear-gradient(180deg,
+  #ffd02a 0%,#ffc900 27%,
+  #ff9800 55%,
+  #ed7000 76%,
+  #e45f08 100%)!important}
+/* C: lime -> green. */
+.rank-text.rank-c{background-image:linear-gradient(180deg,
+  #a8f050 0%,#a0e84b 28%,
+  #78d83f 50%,
+  #36bd3b 72%,
+  #28ae38 100%)!important}
+/* D: cyan -> sky blue -> blue. */
+.rank-text.rank-d{background-image:linear-gradient(180deg,
+  #55e0f0 0%,#50d9ef 30%,
+  #35b8e8 55%,
+  #419cf3 78%,
+  #418ff0 100%)!important}
+/* E: light violet -> purple. */
+.rank-text.rank-e{background-image:linear-gradient(180deg,
+  #c47cf0 0%,#bd70e8 28%,
+  #a653db 53%,
+  #8244cc 76%,
+  #6040c2 100%)!important}
+/* The compact card and edit dialog use the exact same fill; only font weight is contextual. */
+.score-card-v300 .card-rank.rank-text{font-weight:1000}
+#manualDialog .auto-field>.rank-text{filter:drop-shadow(0 0 .45px rgba(255,211,72,.95));text-shadow:none!important}
 
 /* iPhone Safari: form controls below 16px trigger focus zoom and can leave the page enlarged.
    Keep all editable controls in the score editor, My Page and feedback dialogs at 16px or above. */
