@@ -50,13 +50,14 @@ function chartLevelStack(ctx,chart,level,x,y,w,h){
 }
 async function drawScoreTile(ctx,row,x,y,w,h){
  rounded(ctx,x,y,w,h,7,PANEL,LINE,2);
- const bannerW=132,bannerH=h-8,medalSize=Math.min(25,h-14),stackW=30;
- await drawBanner(ctx,row,x+4,y+4,bannerW,bannerH);
- await drawMedal(ctx,row,x+139,y+(h-medalSize)/2,medalSize);
- chartLevelStack(ctx,row.chart,row.level,x+168,y+4,stackW,h-8);
- const valueRight=x+w-6;
- text(ctx,`スコア ${String(Number(row.version_score||0)).padStart(5,"0")}`,valueRight,y+16,10,800,INK,"right");
- text(ctx,`PSR ${songPopClass(row).toFixed(2)}`,valueRight,y+31,10,900,INK,"right");
+ const inner=4,bannerW=132,bannerH=h-inner*2,medalSize=Math.min(25,h-14),stackW=30,gap=5;
+ const bannerX=x+inner,medalX=bannerX+bannerW+gap,stackX=medalX+medalSize+gap;
+ await drawBanner(ctx,row,bannerX,y+inner,bannerW,bannerH);
+ await drawMedal(ctx,row,medalX,y+(h-medalSize)/2,medalSize);
+ chartLevelStack(ctx,row.chart,row.level,stackX,y+inner,stackW,h-inner*2);
+ const infoLeft=stackX+stackW+gap,infoRight=x+w-inner,infoCenter=(infoLeft+infoRight)/2;
+ text(ctx,`スコア ${String(Number(row.version_score||0)).padStart(5,"0")}`,infoCenter,y+16,10,800,INK,"center");
+ text(ctx,`PSR ${songPopClass(row).toFixed(2)}`,infoCenter,y+31,10,900,INK,"center");
 }
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username,officialPopnClass=null){

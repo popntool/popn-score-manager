@@ -3,10 +3,10 @@ import{changePassword,changeUsername,currentUser,currentUsername,loadMyProfile,l
 import{downloadSongMaster,importSongMaster}from"./songs.js";
 import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores}from"./scores.js?v=3.0.81";
 import{loadUsers}from"./users.js";
-import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.82";
+import{filterScores,MEDALS,medalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.0.86";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.0.74";
-import{shareLevelMedalImage,sharePopClassImage}from"./share.js?v=3.0.84";
+import{shareLevelMedalImage,sharePopClassImage}from"./share.js?v=3.0.87";
 
 let scores=[],scorePage=1,userRows=[],userPage=1,authMode="login",selectedSong=null,editingScoreId=null,admin=false,adminEdit=null,preferenceUserId=null,officialPopnClass=null;
 const $=selector=>document.querySelector(selector);
