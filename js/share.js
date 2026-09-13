@@ -50,14 +50,16 @@ function chartLevelStack(ctx,chart,level,x,y,w,h){
 }
 async function drawScoreTile(ctx,row,x,y,w,h){
  rounded(ctx,x,y,w,h,7,PANEL,LINE,2);
- const inner=4,bannerW=134,bannerH=h-inner*2,medalSize=Math.min(24,h-14),stackW=29,gap=4;
+ const inner=4,bannerW=134,bannerH=h-inner*2,medalSize=Math.min(24,h-14),stackW=29,gap=3;
  const bannerX=x+inner,medalX=bannerX+bannerW+gap,stackX=medalX+medalSize+gap;
  await drawBanner(ctx,row,bannerX,y+inner,bannerW,bannerH);
  await drawMedal(ctx,row,medalX,y+(h-medalSize)/2,medalSize);
  chartLevelStack(ctx,row.chart,row.level,stackX,y+inner,stackW,h-inner*2);
- const infoLeft=stackX+stackW+gap,infoRight=x+w-inner,infoW=Math.max(0,infoRight-infoLeft),infoCenter=infoLeft+infoW/2;
- text(ctx,`スコア ${String(Number(row.version_score||0)).padStart(5,"0")}`,infoCenter,y+16,9.7,800,INK,"center");
- text(ctx,`PSR ${songPopClass(row).toFixed(2)}`,infoCenter,y+31,9.7,900,INK,"center");
+ const infoLeft=stackX+stackW+gap,infoRight=x+w-inner;
+ text(ctx,"スコア",infoLeft,y+16,9.2,800,INK,"left");
+ text(ctx,String(Number(row.version_score||0)).padStart(5,"0"),infoRight,y+16,9.8,900,INK,"right");
+ text(ctx,"PSR",infoLeft,y+31,9.2,800,INK,"left");
+ text(ctx,songPopClass(row).toFixed(2),infoRight,y+31,9.8,900,INK,"right");
 }
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username,officialPopnClass=null){
