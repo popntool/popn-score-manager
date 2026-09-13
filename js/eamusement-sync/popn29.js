@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v2.8.5
+/* pop'n music スコア同期 v3.0.80
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -119,7 +119,7 @@
   }
 
   async function scanTarget(target,onPage){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const parsed=await parseList(await getDoc(listUrl(target,page),`${target.label} page=${page}`));if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;onPage?.();}}
-  function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label))counts.play=value;}const current_clear_status=counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
+  function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}const current_clear_status=hasPlayCount&&counts.play===0?'unplayed':counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
   async function mapLimit(items,limit,worker,onDone){let cursor=0,done=0;const out=new Array(items.length);await Promise.all(Array.from({length:Math.min(limit,items.length)},async()=>{while(!state.cancelled){const index=cursor++;if(index>=items.length)return;out[index]=await worker(items[index],index);done++;onDone?.(done,items.length);}}));return out;}
   function toBase64(bytes){let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary);}
 
@@ -142,16 +142,10 @@
     const detailGroupMap=new Map();
     for(const row of base){const url=new URL(row.detail_url);url.hash='';const no=url.searchParams.get('no'),detailKey=no?`${url.pathname}?no=${no}`:url.href;let group=detailGroupMap.get(detailKey);if(!group){group={url:url.href,rows:[]};detailGroupMap.set(detailKey,group);}group.rows.push(row);}
     const allDetailGroups=[...detailGroupMap.values()];
-    // レベル範囲同期では一覧の歴代スコアを使って未プレー曲の詳細取得を省略する。
-    // バージョン/BEMANI同期では一覧側で個人スコア欄が空になるページがあるため、
-    // 対象曲の詳細ページをすべて確認して今作スコア・今作クリア状況を取得する。
-    const detailGroups=scope.mode==='level'
-      ? allDetailGroups.filter(group=>group.rows.some(row=>Number(row.score)>0))
-      : allDetailGroups;
+    // VERSIONプレー回数0回を未プレーとして判定するため、同期対象はすべて詳細ページを確認する。
+    const detailGroups=allDetailGroups;
     progress.max=Math.max(1,detailGroups.length);progress.value=0;
-    status.textContent=scope.mode==='level'
-      ? `一覧から${base.filter(row=>Number(row.score)>0).length}譜面を確認・詳細取得 ${detailGroups.length}/${allDetailGroups.length}曲`
-      : `対象${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
+    status.textContent=`対象${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
     const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({rows:group.rows,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');
     const details=new Map();for(const group of parsed)for(const row of group.rows){const value=group.values.get(row.chart);if(value)details.set(`${row.master_key}|${row.chart}`,value);}

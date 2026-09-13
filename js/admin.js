@@ -28,7 +28,7 @@ export async function exportUserScoresCsv(userId,username="user"){
   const{data,error}=await db.from("user_scores").select("chart,version_score,current_clear_status,songs!inner(title,light_level,normal_level,hyper_level,ex_level,game_versions(name))").eq("user_id",userId).order("updated_at",{ascending:false}).range(from,from+999);
   if(error)throw error;all.push(...(data||[]));if(!data||data.length<1000)break;
  }
- const csvCell=v=>`"${String(v??"").replaceAll('"','""')}"`,statusLabel={failed:"未クリア",clear:"クリア",full_combo:"FULL COMBO",perfect:"PERFECT"},header=["バージョン","曲名","レベル","今作クリア状況","今作スコア"],lines=[header.map(csvCell).join(",")];
+ const csvCell=v=>`"${String(v??"").replaceAll('"','""')}"`,statusLabel={unplayed:"未プレー",failed:"未クリア",easy:"イージー",long_off:"ロングオフ",clear:"クリア",full_combo:"フルコンボ",perfect:"パーフェクト"},header=["バージョン","曲名","レベル","今作クリア状況","今作スコア"],lines=[header.map(csvCell).join(",")];
  for(const row of all){const chart=String(row.chart||"").toLowerCase(),level=row.songs?.[`${chart}_level`]??"",status=statusLabel[String(row.current_clear_status||"failed").toLowerCase()]||"未クリア";lines.push([row.songs?.game_versions?.name||"未設定",row.songs?.title||"",level,status,Number(row.version_score)||0].map(csvCell).join(","));}
  const blob=new Blob(["\uFEFF"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a"),safe=String(username||"user").replace(/[\\/:*?"<>|]/g,"_");a.href=url;a.download=`${safe}_登録データ.csv`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return all.length;
 }
