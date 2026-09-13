@@ -347,7 +347,7 @@ body.auth-user>.auth-gate{display:none}
   .menu-modal .setting-row>span>small{font-size:.74rem}
 }
 
-/* v3.0.99: higher-contrast official-rank inspired gradients shared by cards/editor. */
+/* v3.0.101: official-rank inspired gradients shared by cards/editor. */
 .rank-text{
   display:inline-block;
   background-repeat:no-repeat!important;
@@ -359,13 +359,8 @@ body.auth-user>.auth-gate{display:none}
   -webkit-text-stroke:.22px rgba(73,36,76,.45)!important;
   filter:drop-shadow(0 1px 0 rgba(255,255,255,.72));
 }
-.rank-text.rank-splus{background-image:linear-gradient(180deg,#ff63bd 0%,#f337a4 38%,#c23ed0 70%,#ff9a32 100%)!important}
-.rank-text.rank-s{background-image:linear-gradient(180deg,#ff5fb4 0%,#e736a6 48%,#a53dcc 100%)!important}
-.rank-text.rank-aaa{background-image:linear-gradient(180deg,#ff9a94 0%,#f14b63 46%,#c91f42 100%)!important}
-.rank-text.rank-aaplus{background-image:linear-gradient(180deg,#ff9d91 0%,#ef5664 48%,#ce2d47 100%)!important}
-.rank-text.rank-aa{background-image:linear-gradient(180deg,#ffa18b 0%,#ee5a5d 50%,#d03543 100%)!important}
-.rank-text.rank-aplus{background-image:linear-gradient(180deg,#ffaa79 0%,#ef6852 52%,#d6453f 100%)!important}
-.rank-text.rank-a{background-image:linear-gradient(180deg,#ffad73 0%,#eb674f 52%,#cf443e 100%)!important}
+.rank-text.rank-splus,.rank-text.rank-s{background-image:linear-gradient(180deg,#f55272 0%,#f78b3d 22%,#f3d52f 40%,#53bd68 58%,#37aee2 76%,#7655cf 100%)!important}
+.rank-text.rank-aaa,.rank-text.rank-aaplus,.rank-text.rank-aa,.rank-text.rank-aplus,.rank-text.rank-a{background-image:linear-gradient(180deg,#ff8fa8 0%,#f55f78 42%,#df334f 72%,#b91f38 100%)!important}
 .rank-text.rank-bplus{background-image:linear-gradient(180deg,#ffd23d 0%,#f5a20a 46%,#df7200 100%)!important}
 .rank-text.rank-b{background-image:linear-gradient(180deg,#ffc834 0%,#f1910b 48%,#d86a00 100%)!important}
 .rank-text.rank-c{background-image:linear-gradient(180deg,#b5ef4a 0%,#58c139 52%,#22863a 100%)!important}
