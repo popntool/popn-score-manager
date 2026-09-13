@@ -1,4 +1,4 @@
-import{popClassSelection,songPopClass}from"./scores.js?v=3.0.66";
+import{popClassSelection,songPopClass}from"./scores.js?v=3.0.81";
 import{medalInfo}from"./ui.js?v=3.0.37";
 
 const HASHTAG="#popn_score_manager",SHARE_TEXT=`${HASHTAG}\n`,BG="#fffaf0",PANEL="#fffdf6",INK="#142b67",MUTED="#69789d",LINE="#3153a0",ACCENT="#ffd851",PINK="#ff789a";
@@ -56,20 +56,20 @@ async function drawScoreTile(ctx,row,x,y,w,h){
  chartLevelStack(ctx,row.chart,row.level,x+158,y+4,stackW,h-8);
  const valueX=x+193;
  text(ctx,`スコア ${String(Number(row.version_score||0)).padStart(5,"0")}`,valueX,y+16,10,800,INK,"left");
- text(ctx,`ポックラ ${songPopClass(row).toFixed(2)}`,valueX,y+31,10,900,INK,"left");
+ text(ctx,`PSR ${songPopClass(row).toFixed(2)}`,valueX,y+31,10,900,INK,"left");
 }
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username){
- const{current,other,total}=popClassSelection(rows),all=[...current,...other];if(!all.length)throw new Error("ポックラ対象曲がありません。");
+ const{current,other,total}=popClassSelection(rows),all=[...current,...other];if(!all.length)throw new Error("PSR対象曲がありません。");
  await preload(all);
  const width=900,pad=15,gapX=7,gapY=5,cols=3,rowsPerCol=20,tileW=(width-pad*2-gapX*(cols-1))/cols,tileH=45,gridY=116;
  const height=gridY+rowsPerCol*(tileH+gapY)+29;
- const[c,ctx]=canvas(width,height);header(ctx,"ポックラ対象一覧",`TOTAL ${total.toFixed(2)}`,username,width);
+ const[c,ctx]=canvas(width,height);header(ctx,"PSR対象一覧",`TOTAL ${total.toFixed(2)}`,username,width);
  columnHeader(ctx,"今作 TOP 20",current.length,pad,87,tileW);
  columnHeader(ctx,"その他 TOP 40",other.length,pad+tileW+gapX,87,tileW*2+gapX);
  const columns=[current,other.slice(0,20),other.slice(20,40)];
  for(let col=0;col<cols;col++)for(let row=0;row<columns[col].length;row++)await drawScoreTile(ctx,columns[col][row],pad+col*(tileW+gapX),gridY+row*(tileH+gapY),tileW,tileH);
- footer(ctx,width,height);return shareBlob(await blobFromCanvas(c),`popn_popclass_${escFile(username)}.jpg`,"pop'n Score Manager ポックラ対象一覧");
+ footer(ctx,width,height);return shareBlob(await blobFromCanvas(c),`popn_psr_${escFile(username)}.jpg`,"pop'n Score Manager PSR対象一覧");
 }
 
 const MEDAL_GROUPS=[

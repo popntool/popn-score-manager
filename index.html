@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.80">
+<link rel="stylesheet" href="./css/app.css?v=3.0.81">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -22,7 +22,7 @@
         <span class="brand-icon" aria-hidden="true">♪</span>
         <div><small>UNOFFICIAL SCORE TOOL</small><h1>pop'n Score Manager</h1></div>
       </div>
-      <p class="auth-gate-lead">pop'n musicのスコア・メダル・ポックラを管理します。</p>
+      <p class="auth-gate-lead">pop'n musicのスコア・メダル・Popn Score Ratingを管理します。</p>
       <div class="auth-gate-tabs" role="tablist" aria-label="認証方法">
         <button id="gateLoginTab" class="active" type="button" role="tab" aria-selected="true">ログイン</button>
         <button id="gateRegisterTab" type="button" role="tab" aria-selected="false">新規登録</button>
@@ -63,7 +63,7 @@
 <small>PLAYER</small>
 <strong id="playerName"></strong>
 </span>
-<span class="player-popclass"><small>ポックラ</small><strong id="totalPopClass">0.00</strong></span>
+<span class="player-popclass"><small>Popn Score Rating</small><strong id="totalPopClass">0.00</strong></span>
 </section>
     <div id="setupNotice" class="notice" hidden>
 <strong>Supabaseが未設定です</strong>
@@ -72,7 +72,7 @@
 </div>
 
     <nav class="tabs" aria-label="メインメニュー">
-<button data-tab="popclass" type="button">ポックラ</button>
+<button data-tab="popclass" type="button">PSR</button>
 <button class="active" data-tab="scores" type="button">スコア</button>
 <button data-tab="users" type="button">ユーザー</button>
 <button id="adminTabButton" data-tab="admin" type="button" hidden>管理</button>
@@ -84,8 +84,8 @@
     </section>
 
     <section id="popclassPanel" class="panel tab-panel" hidden>
-      <div class="panel-heading"><div><h1>ポックラ対象曲</h1></div></div>
-      <div id="popclassContent"><div class="empty">ログインするとポックラ対象曲を表示します。</div></div>
+      <div class="panel-heading"><div><h1>PSR対象曲</h1></div></div>
+      <div id="popclassContent"><div class="empty">ログインするとPSR対象曲を表示します。</div></div>
     </section>
 
     <section id="scoresPanel" class="panel tab-panel">
@@ -116,7 +116,7 @@
 <select id="rankFilter" aria-label="クリアランク"><option value="ALL">全ランク</option><option>S+</option><option>S</option><option>AAA</option><option>AA+</option><option>AA</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D</option><option>E</option><option value="UNPLAYED">未プレー</option></select>
 </div>
 <div class="list-sort-controls">
-<label>並び替え項目<select id="scoreSortField"><option value="level">レベル</option><option value="medal" selected>メダル</option><option value="score">歴代スコア</option><option value="version_score">今作スコア</option><option value="pop_class">ポックラ</option></select></label>
+<label>並び替え項目<select id="scoreSortField"><option value="level">レベル</option><option value="medal" selected>メダル</option><option value="score">歴代スコア</option><option value="version_score">今作スコア</option><option value="pop_class">PSR</option></select></label>
 <label>並び順<select id="scoreSortOrder"><option value="asc" selected>昇順</option><option value="desc">降順</option></select></label>
 </div>
       <div id="scoreList" class="score-list">
@@ -135,7 +135,7 @@
 <input id="userSearchInput" type="search" placeholder="ユーザー名検索">
 </label>
 <div class="list-sort-controls user-sort-controls">
-<label>並び替え項目<select id="userSortField"><option value="username" selected>ユーザー名</option><option value="highest_clear_level">最高クリア</option><option value="pop_class">ポックラ</option></select></label>
+<label>並び替え項目<select id="userSortField"><option value="username" selected>ユーザー名</option><option value="highest_clear_level">最高クリア</option><option value="pop_class">Popn Score Rating</option></select></label>
 <label>並び順<select id="userSortOrder"><option value="asc" selected>昇順</option><option value="desc">降順</option></select></label>
 </div>
 <div id="userList" class="user-list">
@@ -170,7 +170,7 @@
 </label>
       <button id="syncHelpButton" class="setting-row" type="button"><span><strong>スコア同期</strong><small>公式サイトで実行する同期用ブックマークを設定します</small></span><b>›</b></button>
       <button id="bannerRequestButton" class="setting-row" type="button"><span><strong>バナー送信</strong><small>バナー未登録の曲へ画像を送信します</small></span><b>＋</b></button>
-      <button id="imageShareButton" class="setting-row" type="button"><span><strong>画像共有</strong><small>ポックラ対象・レベル別メダル一覧を画像で共有します</small></span><b>↗</b></button>
+      <button id="imageShareButton" class="setting-row" type="button"><span><strong>画像共有</strong><small>PSR対象・レベル別メダル一覧を画像で共有します</small></span><b>↗</b></button>
       <h2 class="menu-section-title admin-only" hidden>管理者ツール</h2>
       <button class="setting-row admin-only" data-copy-tool="master" type="button" hidden>
 <span>
@@ -206,7 +206,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.80</b>
+<b>3.0.81</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
@@ -242,7 +242,7 @@
 <p id="manualVersion" class="manual-artist" hidden></p>
 <input name="song_id" type="hidden">
 <div class="score-entry-grid">
-<label class="auto-field score-row-popclass">ポックラ<output id="manualPopClass" class="manual-popclass">0.00</output></label>
+<label class="auto-field score-row-popclass">PSR<output id="manualPopClass" class="manual-popclass">0.00</output></label>
 <label class="history-score-input score-row-history">歴代スコア<input id="manualHistoryScore" name="history_score" type="number" min="0" max="100000" placeholder="未入力"><small id="historyScoreGuide">今作が上回る場合は同じ値を表示</small></label>
 <label class="score-row-current">今作スコア<input id="manualScoreInput" name="version_score" type="number" min="0" max="100000" required></label>
 <label class="auto-field score-row-rank">ランク<i id="manualRank" class="rank-text rank-e" role="img" aria-label="E">E</i></label>
@@ -277,9 +277,9 @@
 <h2>画像共有</h2>
 <p class="image-share-lead">共有ボタンからSNS・共有先を選べます。共有機能が使えない端末では画像として保存します。</p>
 <section class="image-share-section">
-<h3>ポックラ対象一覧</h3>
-<p>今作20曲＋その他40曲のポックラ対象を1枚の画像にします。</p>
-<button id="sharePopClassButton" class="main-button" type="button">ポックラ対象を共有</button>
+<h3>PSR対象一覧</h3>
+<p>新曲枠20曲＋旧曲枠40曲のPSR対象を1枚の画像にします。</p>
+<button id="sharePopClassButton" class="main-button" type="button">PSR対象を共有</button>
 </section>
 <section class="image-share-section">
 <h3>レベル別メダル一覧</h3>
@@ -310,7 +310,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.80">
+  <script type="module" src="./js/app.js?v=3.0.81">
 </script>
 </body>
 </html>
