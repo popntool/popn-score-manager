@@ -1,5 +1,5 @@
 import{popClassSelection,songPopClass}from"./scores.js?v=3.0.88";
-import{medalInfo}from"./ui.js?v=3.0.95";
+import{medalInfo}from"./ui.js?v=3.0.96";
 
 const HASHTAG="#popn_score_manager",SHARE_TEXT=`${HASHTAG}\n`,BG="#fffaf0",PANEL="#fffdf6",INK="#142b67",MUTED="#69789d",LINE="#3153a0",ACCENT="#ffd851",PINK="#ff789a";
 const TARGET_BYTES=1024*1024;
@@ -48,37 +48,31 @@ const CHART_STYLE={EX:["#ef426f","#fff"],HYPER:["#fff2a6","#7b6500"],NORMAL:["#b
 function chartLevelStack(ctx,chart,level,x,y,w,h){
  const[bg,fg]=CHART_STYLE[chart]||["#eef1f7",INK],chartH=Math.floor(h*.53),shortChart={LIGHT:"LT",NORMAL:"NM",HYPER:"HP",EX:"EX"}[chart]||String(chart||"").slice(0,2);rounded(ctx,x,y,w,chartH,4,bg,null,0);text(ctx,shortChart,x+w/2,y+chartH/2,10,900,fg,"center");text(ctx,String(level??"-"),x+w/2,y+chartH+Math.max(7,(h-chartH)/2),11,900,INK,"center");
 }
-function fixedPairMetrics(ctx){
- const labelSize=9.2,valueSize=9.8,pairGap=2;
- ctx.font=`800 ${labelSize}px ${FONT}`;const labelW=Math.ceil(Math.max(ctx.measureText("スコア").width,ctx.measureText("PSR").width));
- ctx.font=`900 ${valueSize}px ${FONT}`;const valueW=Math.ceil(Math.max(ctx.measureText("100000").width,ctx.measureText("223.33").width));
- return{labelSize,valueSize,pairGap,labelW,valueW};
-}
-function scoreTileLayout(ctx,row,x,y,w,h){
- const inner=3,cellGap=2,medalCellW=28,stackCellW=31,bannerH=h-inner*2;
- const score=String(Number(row.version_score||0)),psr=songPopClass(row).toFixed(2),pair=fixedPairMetrics(ctx);
- const infoW=pair.labelW+pair.pairGap+pair.valueW;
- const bannerW=Math.max(96,Math.floor(w-inner*2-medalCellW-stackCellW-infoW-cellGap*3));
+function scoreTileLayout(row,x,y,w,h){
+ const inner=3,cellGap=2,medalCellW=28,stackCellW=31,scoreCellW=44,psrCellW=42,bannerH=h-inner*2;
+ const score=String(Number(row.version_score||0)),psr=songPopClass(row).toFixed(2);
+ const fixedW=medalCellW+stackCellW+scoreCellW+psrCellW+cellGap*4;
+ const bannerW=Math.max(96,Math.floor(w-inner*2-fixedW));
  const banner={x:x+inner,y:y+inner,w:bannerW,h:bannerH};
  const medal={x:banner.x+banner.w+cellGap,y:y+inner,w:medalCellW,h:bannerH};
  const stack={x:medal.x+medal.w+cellGap,y:y+inner,w:stackCellW,h:bannerH};
- const info={x:stack.x+stack.w+cellGap,y:y+inner,w:infoW,h:bannerH,labelW:pair.labelW,valueW:pair.valueW,pairGap:pair.pairGap,labelSize:pair.labelSize,valueSize:pair.valueSize};
- return{banner,medal,stack,info,score,psr};
+ const scoreCell={x:stack.x+stack.w+cellGap,y:y+inner,w:scoreCellW,h:bannerH};
+ const psrCell={x:scoreCell.x+scoreCell.w+cellGap,y:y+inner,w:psrCellW,h:bannerH};
+ return{banner,medal,stack,scoreCell,psrCell,score,psr};
 }
-function drawFixedPair(ctx,label,value,cell,y){
- text(ctx,label,cell.x,y,cell.labelSize,800,INK,"left");
- const valueRight=cell.x+cell.labelW+cell.pairGap+cell.valueW;
- text(ctx,value,valueRight,y,cell.valueSize,900,INK,"right");
+function drawMetricColumn(ctx,label,value,cell){
+ text(ctx,label,cell.x+cell.w/2,cell.y+Math.round(cell.h*.30),8.2,800,MUTED,"center");
+ text(ctx,value,cell.x+cell.w/2,cell.y+Math.round(cell.h*.72),9.5,900,INK,"center");
 }
 async function drawScoreTile(ctx,row,x,y,w,h){
  rounded(ctx,x,y,w,h,7,PANEL,LINE,2);
- const cell=scoreTileLayout(ctx,row,x,y,w,h);
+ const cell=scoreTileLayout(row,x,y,w,h);
  await drawBanner(ctx,row,cell.banner.x,cell.banner.y,cell.banner.w,cell.banner.h,false);
  const medalSize=Math.min(24,cell.medal.h);
  await drawMedal(ctx,row,cell.medal.x+(cell.medal.w-medalSize)/2,cell.medal.y+(cell.medal.h-medalSize)/2,medalSize);
  chartLevelStack(ctx,row.chart,row.level,cell.stack.x,cell.stack.y,cell.stack.w,cell.stack.h);
- drawFixedPair(ctx,"スコア",cell.score,cell.info,y+16);
- drawFixedPair(ctx,"PSR",cell.psr,cell.info,y+31);
+ drawMetricColumn(ctx,"スコア",cell.score,cell.scoreCell);
+ drawMetricColumn(ctx,"PSR",cell.psr,cell.psrCell);
 }
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username,officialPopnClass=null){
