@@ -370,3 +370,6 @@ body.auth-user>.auth-gate{display:none}
 .user-row-v212 .user-psr strong{font-size:.95rem}
 .user-row-v212>.user-name-line{grid-column:1;grid-row:1}
 @media(max-width:760px){.player-ratings{gap:0}.player-ratings .player-official-class small,.player-ratings .player-popclass small{font-size:.58rem}.player-ratings .player-official-class strong{font-size:.8rem}.player-ratings .player-popclass strong{font-size:1rem}.user-row-v212 .user-psr small{font-size:.56rem}.user-row-v212 .user-psr strong{font-size:.88rem}}
+
+/* v3.0.83: header username is intentionally hidden; keep #playerName in DOM for sharing/auth logic. */
+.player-bar .player-identity{display:none!important}
