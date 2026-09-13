@@ -50,10 +50,10 @@ function chartLevelStack(ctx,chart,level,x,y,w,h){
 }
 async function drawScoreTile(ctx,row,x,y,w,h){
  rounded(ctx,x,y,w,h,7,PANEL,LINE,2);
- const bannerW=122,bannerH=h-8,medalSize=Math.min(25,h-14),stackW=30;
+ const bannerW=132,bannerH=h-8,medalSize=Math.min(25,h-14),stackW=30;
  await drawBanner(ctx,row,x+4,y+4,bannerW,bannerH);
- await drawMedal(ctx,row,x+129,y+(h-medalSize)/2,medalSize);
- chartLevelStack(ctx,row.chart,row.level,x+158,y+4,stackW,h-8);
+ await drawMedal(ctx,row,x+139,y+(h-medalSize)/2,medalSize);
+ chartLevelStack(ctx,row.chart,row.level,x+168,y+4,stackW,h-8);
  const valueRight=x+w-6;
  text(ctx,`スコア ${String(Number(row.version_score||0)).padStart(5,"0")}`,valueRight,y+16,10,800,INK,"right");
  text(ctx,`PSR ${songPopClass(row).toFixed(2)}`,valueRight,y+31,10,900,INK,"right");
@@ -62,7 +62,7 @@ function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);t
 export async function sharePopClassImage(rows,username,officialPopnClass=null){
  const{current,other,total}=popClassSelection(rows),all=[...current,...other];if(!all.length)throw new Error("PSR対象曲がありません。");
  await preload(all);
- const width=900,pad=15,gapX=7,gapY=5,cols=3,rowsPerCol=20,tileW=(width-pad*2-gapX*(cols-1))/cols,tileH=45,gridY=116;
+ const width=900,pad=15,gapX=7,gapY=5,cols=3,rowsPerCol=20,tileW=(width-pad*2-gapX*(cols-1))/cols,tileH=45,gridY=123;
  const height=gridY+rowsPerCol*(tileH+gapY)+29;
  const[c,ctx]=canvas(width,height),hasOfficial=officialPopnClass!==null&&officialPopnClass!==""&&Number.isFinite(Number(officialPopnClass)),official=hasOfficial?Number(officialPopnClass):null;header(ctx,"Popn Score Rating 対象曲一覧",`${hasOfficial?`ポップンクラス ${official.toFixed(2)}　`:""}PSR ${total.toFixed(2)}`,username,width);
  columnHeader(ctx,"今作 TOP 20",current.length,pad,87,tileW);

@@ -373,3 +373,15 @@ body.auth-user>.auth-gate{display:none}
 
 /* v3.0.83: header username is intentionally hidden; keep #playerName in DOM for sharing/auth logic. */
 .player-bar .player-identity{display:none!important}
+
+
+/* v3.0.84: compact rating header + unified menu typography */
+.player-bar{padding-top:10px;padding-bottom:10px}
+.player-ratings{flex:1;min-width:0;margin-left:0;display:grid;grid-template-columns:1fr 1fr;gap:0;text-align:center}
+.player-ratings .player-official-class,.player-ratings .player-popclass{display:grid;grid-template-rows:auto auto;justify-items:center;align-content:center;gap:2px;margin:0;padding:0 8px;white-space:nowrap}
+.player-ratings .player-official-class{border-right:1px solid var(--line)}
+.player-ratings .player-official-class small,.player-ratings .player-popclass small{font-size:.68rem;font-weight:900;letter-spacing:.05em;color:var(--muted);line-height:1.15}
+.player-ratings .player-official-class strong,.player-ratings .player-popclass strong{font-size:1.14rem;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.menu-modal .setting-row>span>strong{display:block;font-size:1rem;font-weight:900;line-height:1.25}
+.menu-modal .setting-row>span>small{display:block;margin-top:3px;color:var(--muted);font-size:.78rem;font-weight:400;line-height:1.45;letter-spacing:0}
+@media(max-width:760px){.player-bar{gap:8px;padding-left:10px;padding-right:10px}.player-ratings .player-official-class,.player-ratings .player-popclass{padding:0 5px}.player-ratings .player-official-class small,.player-ratings .player-popclass small{font-size:.61rem}.player-ratings .player-official-class strong,.player-ratings .player-popclass strong{font-size:1.03rem}.menu-modal .setting-row>span>strong{font-size:.96rem}.menu-modal .setting-row>span>small{font-size:.74rem}}
