@@ -48,28 +48,38 @@ const CHART_STYLE={EX:["#ef426f","#fff"],HYPER:["#fff2a6","#7b6500"],NORMAL:["#b
 function chartLevelStack(ctx,chart,level,x,y,w,h){
  const[bg,fg]=CHART_STYLE[chart]||["#eef1f7",INK],chartH=Math.floor(h*.53),shortChart={LIGHT:"LT",NORMAL:"NM",HYPER:"HP",EX:"EX"}[chart]||String(chart||"").slice(0,2);rounded(ctx,x,y,w,chartH,4,bg,null,0);text(ctx,shortChart,x+w/2,y+chartH/2,10,900,fg,"center");text(ctx,String(level??"-"),x+w/2,y+chartH+Math.max(7,(h-chartH)/2),11,900,INK,"center");
 }
-function compactPairWidth(ctx,label,value,labelSize=9.2,valueSize=9.8,gap=3){
+function compactPairWidth(ctx,label,value,labelSize=9.2,valueSize=9.8,gap=2){
  ctx.font=`800 ${labelSize}px ${FONT}`;const labelW=ctx.measureText(label).width;
  ctx.font=`900 ${valueSize}px ${FONT}`;const valueW=ctx.measureText(value).width;
  return labelW+gap+valueW;
 }
 function drawCompactPair(ctx,label,value,x,y){
- const gap=3,labelSize=9.2,valueSize=9.8;
+ const gap=2,labelSize=9.2,valueSize=9.8;
  ctx.font=`800 ${labelSize}px ${FONT}`;const labelW=ctx.measureText(label).width;
  text(ctx,label,x,y,labelSize,800,INK,"left");
  text(ctx,value,x+labelW+gap,y,valueSize,900,INK,"left");
 }
+function scoreTileLayout(ctx,row,x,y,w,h){
+ const inner=4,gap=3,medalW=Math.min(24,h-14),stackW=29,bannerH=h-inner*2;
+ const score=String(Number(row.version_score||0)),psr=songPopClass(row).toFixed(2);
+ // 情報欄は実際に表示する文字幅だけ確保する。100000でも計測幅で収まる。
+ const infoW=Math.ceil(Math.max(compactPairWidth(ctx,"スコア",score),compactPairWidth(ctx,"PSR",psr)));
+ const bannerW=Math.max(100,Math.floor(w-inner*2-medalW-stackW-infoW-gap*3));
+ const banner={x:x+inner,y:y+inner,w:bannerW,h:bannerH};
+ const medal={x:banner.x+banner.w+gap,y:y+(h-medalW)/2,w:medalW,h:medalW};
+ const stack={x:medal.x+medal.w+gap,y:y+inner,w:stackW,h:bannerH};
+ const info={x:stack.x+stack.w+gap,y:y+inner,w:infoW,h:bannerH};
+ return{banner,medal,stack,info,score,psr};
+}
 async function drawScoreTile(ctx,row,x,y,w,h){
  rounded(ctx,x,y,w,h,7,PANEL,LINE,2);
- const inner=4,medalSize=Math.min(24,h-14),stackW=29,gap=3,bannerH=h-inner*2;
- const scoreMaxW=compactPairWidth(ctx,"スコア","100000"),psrMaxW=compactPairWidth(ctx,"PSR","999.99"),infoW=Math.ceil(Math.max(scoreMaxW,psrMaxW));
- const bannerW=Math.max(100,Math.floor(w-inner*2-medalSize-stackW-infoW-gap*3));
- const bannerX=x+inner,medalX=bannerX+bannerW+gap,stackX=medalX+medalSize+gap,infoX=stackX+stackW+gap;
- await drawBanner(ctx,row,bannerX,y+inner,bannerW,bannerH);
- await drawMedal(ctx,row,medalX,y+(h-medalSize)/2,medalSize);
- chartLevelStack(ctx,row.chart,row.level,stackX,y+inner,stackW,h-inner*2);
- drawCompactPair(ctx,"スコア",String(Number(row.version_score||0)),infoX,y+16);
- drawCompactPair(ctx,"PSR",songPopClass(row).toFixed(2),infoX,y+31);
+ const cell=scoreTileLayout(ctx,row,x,y,w,h);
+ await drawBanner(ctx,row,cell.banner.x,cell.banner.y,cell.banner.w,cell.banner.h);
+ await drawMedal(ctx,row,cell.medal.x,cell.medal.y,cell.medal.w);
+ chartLevelStack(ctx,row.chart,row.level,cell.stack.x,cell.stack.y,cell.stack.w,cell.stack.h);
+ // 「スコア 100000」のように、項目名と数値の間は最小限だけ空ける。
+ drawCompactPair(ctx,"スコア",cell.score,cell.info.x,y+16);
+ drawCompactPair(ctx,"PSR",cell.psr,cell.info.x,y+31);
 }
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username,officialPopnClass=null){
