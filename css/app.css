@@ -419,3 +419,13 @@ body.auth-user>.auth-gate{display:none}
   .user-metric-v3086:last-child{padding-left:5px;padding-right:1px}
   .user-metric-v3086 .poptomo-copy{font-size:.68rem}
 }
+
+
+/* v3.0.89: true half-width centering for header ratings.
+   Older v3.0.82 rules left justify-content:flex-end on these grid containers. */
+.player-ratings .player-official-class,
+.player-ratings .player-popclass{
+  justify-content:center;
+  justify-items:center;
+  text-align:center;
+}
