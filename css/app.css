@@ -356,104 +356,17 @@ body.auth-user>.auth-gate{display:none}
 .admin-notice-list b{font-size:1.25rem}
 @media(max-width:520px){.admin-notice-list button{min-height:44px;padding:7px 9px}.admin-notice-list strong{font-size:.84rem}.admin-notice-list span{font-size:.72rem}}
 
-/* v3.0.78: compact unified single-line field heights */
-#manualDialog .auto-field{position:relative}
-#manualDialog .auto-field>input:disabled,
-#manualDialog .auto-field>input[readonly],
-#manualDialog .manual-popclass,
-#manualDialog .auto-field>.rank-text{
-  background:var(--surface-2)!important;
-  opacity:1
-}
-#manualDialog .auto-field>input:disabled{
-  color:var(--text);
-  -webkit-text-fill-color:var(--text);
-  cursor:default
-}
-#manualDialog .auto-field>.rank-text{
-  box-shadow:inset 0 0 0 999px color-mix(in srgb,var(--surface-2) 82%,transparent);
-  font-size:1.2rem;
-  font-weight:900
-}
-#manualDialog .score-entry-grid{
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  grid-template-areas:
-    "pop pop pop rank rank rank"
-    "medal medal history history current current"
-    "clear clear clear clear clear clear";
-  align-items:end;
-  column-gap:8px;
-  row-gap:12px
-}
-#manualDialog .score-row-popclass{grid-area:pop}
-#manualDialog .score-row-rank{grid-area:rank}
-#manualDialog .score-row-medal{grid-area:medal}
-#manualDialog .score-row-history{grid-area:history}
-#manualDialog .score-row-current{grid-area:current}
-#manualDialog .score-row-clear{grid-area:clear}
-#manualDialog #manualHistoryScore,
-#manualDialog #manualScoreInput{
-  font-size:1rem;
-  font-weight:800;
-  letter-spacing:0;
-  text-align:center
-}
-#manualDialog .current-clear-status{width:100%}
-#manualDialog .current-clear-status select{
-  width:100%;
-  padding:5px 38px 5px 12px;
-  font-size:.95rem;
-  font-weight:800;
-  letter-spacing:0;
-  white-space:nowrap
-}
-@media(max-width:760px){
-  #manualDialog .score-entry-grid{column-gap:6px;row-gap:10px}
-  #manualDialog #manualHistoryScore,
-  #manualDialog #manualScoreInput{font-size:.92rem}
-  #manualDialog .current-clear-status select{font-size:.9rem;padding-left:10px;padding-right:34px}
-}
-
-/* v3.0.78: compact and unify single-line fields in score editor */
-#manualDialog form{gap:10px}
-#manualDialog .song-search-fields{gap:8px}
-#manualDialog .song-search-fields label{gap:4px}
-#manualDialog .song-search-fields input,
-#manualDialog .score-entry-grid .medal-picker-button,
-#manualDialog .score-entry-grid .rank-text,
-#manualDialog .score-entry-grid input,
-#manualDialog .score-entry-grid select,
-#manualDialog .manual-popclass{
-  height:44px!important;
-  min-height:44px!important
-}
-#manualDialog .manual-artist{
-  min-height:44px;
-  display:flex;
-  align-items:center;
-  padding-top:5px;
-  padding-bottom:5px
-}
-#manualDialog .score-entry-grid{row-gap:8px}
-#manualDialog .history-score-input input{background:var(--page)!important}
-#manualDialog .score-entry-grid .medal-picker-button img{width:32px;height:32px}
-#manualDialog .dialog-actions{margin-top:2px}
-@media(max-width:760px){
-  #manualDialog form{gap:8px;padding-top:16px;padding-bottom:16px}
-  #manualDialog .score-entry-grid{row-gap:7px}
-}
-
-
-/* v3.0.79: improve rank readability in score editor */
-#manualDialog .auto-field>.rank-text{
-  background:var(--surface-2)!important;
-  background-clip:border-box!important;
-  -webkit-background-clip:border-box!important;
-  color:var(--rank-border)!important;
-  -webkit-text-fill-color:var(--rank-border)!important;
-  -webkit-text-stroke:0!important;
-  box-shadow:none!important;
-  text-shadow:0 1px 0 var(--surface),0 0 1px currentColor;
-  font-size:1.24rem;
-  font-weight:1000
-}
+/* v3.0.82: official Popn Class + PSR layout */
+.player-ratings{display:grid;gap:1px;margin-left:auto;text-align:right;white-space:nowrap}
+.player-ratings .player-official-class,.player-ratings .player-popclass{display:flex;align-items:baseline;justify-content:flex-end;gap:6px;margin-left:0}
+.player-ratings .player-official-class small{font-size:.67rem;color:var(--muted);font-weight:800}
+.player-ratings .player-official-class strong{font-size:.9rem;font-variant-numeric:tabular-nums}
+.player-ratings .player-popclass small{font-size:.67rem}
+.player-ratings .player-popclass strong{font-size:1.1rem}
+.user-row-v212 .user-name-line{display:flex;align-items:baseline;justify-content:space-between;gap:10px;min-width:0}
+.user-row-v212 .user-name-line .user-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-row-v212 .user-psr{display:flex;align-items:baseline;gap:5px;flex:0 0 auto;font-variant-numeric:tabular-nums}
+.user-row-v212 .user-psr small{color:var(--muted);font-size:.62rem;font-weight:900}
+.user-row-v212 .user-psr strong{font-size:.95rem}
+.user-row-v212>.user-name-line{grid-column:1;grid-row:1}
+@media(max-width:760px){.player-ratings{gap:0}.player-ratings .player-official-class small,.player-ratings .player-popclass small{font-size:.58rem}.player-ratings .player-official-class strong{font-size:.8rem}.player-ratings .player-popclass strong{font-size:1rem}.user-row-v212 .user-psr small{font-size:.56rem}.user-row-v212 .user-psr strong{font-size:.88rem}}

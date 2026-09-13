@@ -54,22 +54,22 @@ async function drawScoreTile(ctx,row,x,y,w,h){
  await drawBanner(ctx,row,x+4,y+4,bannerW,bannerH);
  await drawMedal(ctx,row,x+129,y+(h-medalSize)/2,medalSize);
  chartLevelStack(ctx,row.chart,row.level,x+158,y+4,stackW,h-8);
- const valueX=x+193;
- text(ctx,`スコア ${String(Number(row.version_score||0)).padStart(5,"0")}`,valueX,y+16,10,800,INK,"left");
- text(ctx,`PSR ${songPopClass(row).toFixed(2)}`,valueX,y+31,10,900,INK,"left");
+ const valueRight=x+w-6;
+ text(ctx,`スコア ${String(Number(row.version_score||0)).padStart(5,"0")}`,valueRight,y+16,10,800,INK,"right");
+ text(ctx,`PSR ${songPopClass(row).toFixed(2)}`,valueRight,y+31,10,900,INK,"right");
 }
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
-export async function sharePopClassImage(rows,username){
+export async function sharePopClassImage(rows,username,officialPopnClass=null){
  const{current,other,total}=popClassSelection(rows),all=[...current,...other];if(!all.length)throw new Error("PSR対象曲がありません。");
  await preload(all);
  const width=900,pad=15,gapX=7,gapY=5,cols=3,rowsPerCol=20,tileW=(width-pad*2-gapX*(cols-1))/cols,tileH=45,gridY=116;
  const height=gridY+rowsPerCol*(tileH+gapY)+29;
- const[c,ctx]=canvas(width,height);header(ctx,"PSR対象一覧",`TOTAL ${total.toFixed(2)}`,username,width);
+ const[c,ctx]=canvas(width,height),hasOfficial=officialPopnClass!==null&&officialPopnClass!==""&&Number.isFinite(Number(officialPopnClass)),official=hasOfficial?Number(officialPopnClass):null;header(ctx,"Popn Score Rating 対象曲一覧",`${hasOfficial?`ポップンクラス ${official.toFixed(2)}　`:""}PSR ${total.toFixed(2)}`,username,width);
  columnHeader(ctx,"今作 TOP 20",current.length,pad,87,tileW);
  columnHeader(ctx,"その他 TOP 40",other.length,pad+tileW+gapX,87,tileW*2+gapX);
  const columns=[current,other.slice(0,20),other.slice(20,40)];
  for(let col=0;col<cols;col++)for(let row=0;row<columns[col].length;row++)await drawScoreTile(ctx,columns[col][row],pad+col*(tileW+gapX),gridY+row*(tileH+gapY),tileW,tileH);
- footer(ctx,width,height);return shareBlob(await blobFromCanvas(c),`popn_psr_${escFile(username)}.jpg`,"pop'n Score Manager PSR対象一覧");
+ footer(ctx,width,height);return shareBlob(await blobFromCanvas(c),`popn_psr_${escFile(username)}.jpg`,"pop'n Score Manager Popn Score Rating 対象曲一覧");
 }
 
 const MEDAL_GROUPS=[
@@ -109,7 +109,7 @@ export async function shareLevelMedalImage(rows,level,username){
  const target=rows.filter(row=>Number(row.level)===Number(level)).sort(medalShareSort);if(!target.length)throw new Error(`Lv.${level} の譜面がありません。`);
  const stats=levelMedalStats(target),legendUrls=stats.filter(item=>item.url).map(item=>item.url);await preload(target,legendUrls);
  const width=900,pad=18,gap=6,cols=4,rowCount=Math.ceil(target.length/cols),tileW=(width-pad*2-gap*(cols-1))/cols,tileH=50;
- const registered=target.filter(row=>!noPlay(row)),failed=row=>/^(h|i|j|l|m|n)$/.test(String(row.medal_code||"none").toLowerCase())||String(row.medal_code||"").toLowerCase().startsWith("failed_"),cleared=registered.filter(row=>String(row.medal_code||"none").toLowerCase()!=="none"&&!failed(row)).length,rate=registered.length?Math.floor(cleared/registered.length*10000)/100:0;
+ const registered=target.filter(row=>!noPlay(row)),code=row=>String(row.medal_code||"none").toLowerCase(),failed=row=>/^(h|i|j|l|m|n)$/.test(code(row))||code(row).startsWith("failed_"),cleared=registered.filter(row=>code(row)!=="none"&&code(row)!=="easy"&&code(row)!=="k"&&code(row)!=="long_off"&&!failed(row)).length,rate=registered.length?Math.floor(cleared/registered.length*10000)/100:0;
  const summaryY=91,summaryH=64,gridY=163,height=gridY+rowCount*(tileH+gap)+31;
  const[c,ctx]=canvas(width,height);header(ctx,`Lv.${level} メダル一覧`,`クリア率 ${rate.toFixed(2)}%`,username,width);await drawMedalSummary(ctx,target,pad,summaryY,width-pad*2,summaryH);
  for(let i=0;i<target.length;i++){const col=i%cols,row=Math.floor(i/cols);await drawLevelTile(ctx,target[i],pad+col*(tileW+gap),gridY+row*(tileH+gap),tileW,tileH);}
