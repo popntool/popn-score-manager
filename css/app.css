@@ -80,7 +80,7 @@
 .score-entry-grid select{padding:5px 38px 5px 10px;background:var(--surface-2);font-size:.95rem}
 #manualDialog .auto-field>input:disabled{background:var(--page);color:var(--muted);opacity:1}
 #manualDialog .manual-popclass,#manualDialog .auto-field>.rank-text{background:var(--page)}
-#manualDialog .auto-field>.rank-text{background-clip:border-box!important;-webkit-background-clip:border-box!important;-webkit-text-stroke:0!important;box-shadow:none!important;text-shadow:0 1px 0 var(--surface),0 0 1px currentColor;font-size:1.24rem;font-weight:1000}
+#manualDialog .auto-field>.rank-text{-webkit-text-stroke:0!important;box-shadow:none!important;text-shadow:0 1px 0 var(--surface);font-size:1.24rem;font-weight:1000}
 #manualDialog #medalPickerButton img{display:block;width:36px;height:36px;min-width:36px;min-height:36px;max-width:36px;max-height:36px;object-fit:contain}
 #manualDialog #medalPickerButton.cool-perfect-active>img{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;max-width:36px!important;max-height:36px!important}
 
@@ -118,7 +118,6 @@
   .score-entry-grid>label{grid-template-rows:1.25em 46px;gap:4px}
   .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input,.score-entry-grid select,.score-entry-grid .manual-popclass{height:46px;min-height:46px}
   #manualDialog #medalPickerButton img,#manualDialog #medalPickerButton.cool-perfect-active>img{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;max-width:34px!important;max-height:34px!important}
-  .score-entry-grid input{font-size:.86rem}
   .score-overview{grid-template-columns:minmax(0,1fr) 76px;gap:5px}
   .medal-summary{grid-template-columns:repeat(7,1fr)}
   .medal-stat:nth-child(7){border-right:1px solid var(--surface-2)}
@@ -348,16 +347,22 @@ body.auth-user>.auth-gate{display:none}
   .menu-modal .setting-row>span>small{font-size:.74rem}
 }
 
-/* v3.0.97: official rank-image inspired solid colors. Keep one source of truth for cards/editor. */
-.rank-text.rank-splus{color:#f04d91!important;-webkit-text-fill-color:#f04d91!important}
-.rank-text.rank-s{color:#ee4c86!important;-webkit-text-fill-color:#ee4c86!important}
-.rank-text.rank-aaa{color:#ed4765!important;-webkit-text-fill-color:#ed4765!important}
-.rank-text.rank-aaplus{color:#ef4a6c!important;-webkit-text-fill-color:#ef4a6c!important}
-.rank-text.rank-aa{color:#ec465d!important;-webkit-text-fill-color:#ec465d!important}
-.rank-text.rank-aplus{color:#ed4b5f!important;-webkit-text-fill-color:#ed4b5f!important}
-.rank-text.rank-a{color:#e95457!important;-webkit-text-fill-color:#e95457!important}
-.rank-text.rank-bplus{color:#ef7900!important;-webkit-text-fill-color:#ef7900!important}
-.rank-text.rank-b{color:#e97700!important;-webkit-text-fill-color:#e97700!important}
-.rank-text.rank-c{color:#55b536!important;-webkit-text-fill-color:#55b536!important}
-.rank-text.rank-d{color:#349fdc!important;-webkit-text-fill-color:#349fdc!important}
-.rank-text.rank-e{color:#7047c4!important;-webkit-text-fill-color:#7047c4!important}
+/* v3.0.98: official rank-image inspired gradients. One source of truth for cards/editor. */
+.rank-text{display:inline-block;background-repeat:no-repeat!important;background-size:100% 100%!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important}
+.rank-text.rank-splus{background-image:linear-gradient(180deg,#ff75bc 0%,#f24b9c 43%,#df357f 72%,#f08c36 100%)!important}
+.rank-text.rank-s{background-image:linear-gradient(180deg,#ff72b0 0%,#f24f93 45%,#df3d7b 100%)!important}
+.rank-text.rank-aaa{background-image:linear-gradient(180deg,#ff8d9d 0%,#f0546a 46%,#d6324d 100%)!important}
+.rank-text.rank-aaplus{background-image:linear-gradient(180deg,#ff928f 0%,#ef5867 48%,#d63a4d 100%)!important}
+.rank-text.rank-aa{background-image:linear-gradient(180deg,#ff9a8b 0%,#ef5b62 50%,#d63d47 100%)!important}
+.rank-text.rank-aplus{background-image:linear-gradient(180deg,#ffa27e 0%,#ef6359 52%,#d84943 100%)!important}
+.rank-text.rank-a{background-image:linear-gradient(180deg,#ffa878 0%,#ed6654 52%,#d94a43 100%)!important}
+.rank-text.rank-bplus{background-image:linear-gradient(180deg,#ffc02f 0%,#f59512 46%,#e56b00 100%)!important}
+.rank-text.rank-b{background-image:linear-gradient(180deg,#ffbd32 0%,#f38a10 48%,#df6500 100%)!important}
+.rank-text.rank-c{background-image:linear-gradient(180deg,#9ee83e 0%,#58bd36 52%,#278f38 100%)!important}
+.rank-text.rank-d{background-image:linear-gradient(180deg,#6fe9f4 0%,#3fb7e7 48%,#2782cf 100%)!important}
+.rank-text.rank-e{background-image:linear-gradient(180deg,#bd70e9 0%,#8850cf 50%,#6439ae 100%)!important}
+
+/* iPhone Safari: inputs below 16px trigger focus zoom and can leave the page enlarged. */
+@media(max-width:760px){
+  #manualDialog input,#manualDialog select,#manualDialog textarea{font-size:16px!important}
+}
