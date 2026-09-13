@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v3.0.80
+/* pop'n music スコア同期 v3.0.81
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -29,6 +29,16 @@
   function code(img,prefix){const src=img?.getAttribute('src')||'';const file=src.split('/').pop()?.split('?')[0]||'';return file.replace(/\.[^.]+$/,'').replace(new RegExp(`^${prefix}(?:_big)?_`,'i'),'');}
   function number(text){const match=clean(text).replace(/,/g,'').match(/\d{1,6}/);return match?Number(match[0]):0;}
   async function getDoc(url,label,retry=2){for(let attempt=0;;attempt++){const r=await fetch(url,{credentials:'include',cache:'no-store'});if(r.ok){const text=await r.text();if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');return new DOMParser().parseFromString(text,'text/html');}if(attempt>=retry||![429,500,502,503,504].includes(r.status))throw new Error(`${label}: HTTP ${r.status}`);await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));}}
+
+  async function fetchPopnClass(){
+    const doc=await getDoc(new URL('/game/popn/popn29/playdata/index.html',location.origin),'ポップンクラス');
+    const node=doc.querySelector('#popnclass');
+    const match=clean(node?.textContent).replace(/,/g,'').match(/\d+(?:\.\d+)?/);
+    if(!match)throw new Error('公式ポップンクラスを取得できませんでした。');
+    const value=Number(match[0]);
+    if(!Number.isFinite(value)||value<0)throw new Error('公式ポップンクラスの値が不正です。');
+    return value;
+  }
 
   function chooseScope(){
     const levelOptions=Array.from({length:50},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
@@ -125,6 +135,8 @@
 
   try{
     const scope=await chooseScope();if(!scope)return;
+    // レベル帯・バージョンのどちらで同期しても、公式ステータス画面からポップンクラスを同時取得する。
+    const popn_class=await fetchPopnClass();
     let targets;
     if(scope.mode==='level')targets=Array.from({length:scope.max-scope.min+1},(_,i)=>({kind:'level',lv:scope.min+i,version:-1,bemani:0,label:`Lv.${scope.min+i}`}));
     else if(scope.value==='BEMANI')targets=Array.from({length:10},(_,i)=>({kind:'filter',version:-1,bemani:i+1,label:`BEMANI ${i+1}`}));
@@ -152,9 +164,9 @@
     const rows=base.map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0,current_clear_status:detail.current_clear_status||'failed'};})
       .filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none'||Number(row.version_score)>0||row.current_clear_status!=='failed')
       .map(({detail_url,...row})=>row);
-    status.textContent=`${rows.length}譜面を圧縮中…`;
-    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:3,records:rows})),compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
-    status.textContent=`取得完了：${rows.length}譜面。サイトへ戻ります…`;
+    status.textContent=`${rows.length}譜面・ポップンクラスを確認中…`;
+    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:4,popn_class,records:rows})),compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+    status.textContent=`取得完了：${rows.length}譜面・ポップンクラス ${popn_class.toFixed(2)}。サイトへ戻ります…`;
     location.href=RETURN_URL+'#popn-sync-gzip='+encodeURIComponent(toBase64(compressed));
   }catch(e){const status=box.querySelector('[data-status]');if(status)status.textContent=`エラー：${e?.message||e}`;const cancel=box.querySelector('[data-cancel]');if(cancel){cancel.textContent='閉じる';cancel.disabled=false;cancel.onclick=()=>box.remove();}console.error(e);window.__POPN_SCORE_SYNC_RUNNING__=false;}
 })();

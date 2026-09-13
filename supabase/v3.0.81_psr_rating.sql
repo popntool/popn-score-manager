@@ -57,3 +57,8 @@ language sql stable security definer set search_path=public as $$
 $$;
 
 grant execute on function public.list_user_summaries(text) to anon,authenticated;
+
+
+-- 公式サイトから同期したポップンクラス総合値。PSRとは別の公式値として保持する。
+alter table public.profiles
+  add column if not exists official_popn_class numeric check(official_popn_class is null or official_popn_class>=0);
