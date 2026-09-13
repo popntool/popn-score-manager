@@ -80,7 +80,7 @@
 .score-entry-grid select{padding:5px 38px 5px 10px;background:var(--surface-2);font-size:.95rem}
 #manualDialog .auto-field>input:disabled{background:var(--page);color:var(--muted);opacity:1}
 #manualDialog .manual-popclass,#manualDialog .auto-field>.rank-text{background:var(--page)}
-#manualDialog .auto-field>.rank-text{-webkit-text-stroke:0!important;box-shadow:none!important;text-shadow:0 1px 0 var(--surface);font-size:1.24rem;font-weight:1000}
+#manualDialog .auto-field>.rank-text{box-shadow:none!important;font-size:1.24rem;font-weight:1000}
 #manualDialog #medalPickerButton img{display:block;width:36px;height:36px;min-width:36px;min-height:36px;max-width:36px;max-height:36px;object-fit:contain}
 #manualDialog #medalPickerButton.cool-perfect-active>img{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;max-width:36px!important;max-height:36px!important}
 
@@ -347,20 +347,33 @@ body.auth-user>.auth-gate{display:none}
   .menu-modal .setting-row>span>small{font-size:.74rem}
 }
 
-/* v3.0.98: official rank-image inspired gradients. One source of truth for cards/editor. */
-.rank-text{display:inline-block;background-repeat:no-repeat!important;background-size:100% 100%!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important}
-.rank-text.rank-splus{background-image:linear-gradient(180deg,#ff75bc 0%,#f24b9c 43%,#df357f 72%,#f08c36 100%)!important}
-.rank-text.rank-s{background-image:linear-gradient(180deg,#ff72b0 0%,#f24f93 45%,#df3d7b 100%)!important}
-.rank-text.rank-aaa{background-image:linear-gradient(180deg,#ff8d9d 0%,#f0546a 46%,#d6324d 100%)!important}
-.rank-text.rank-aaplus{background-image:linear-gradient(180deg,#ff928f 0%,#ef5867 48%,#d63a4d 100%)!important}
-.rank-text.rank-aa{background-image:linear-gradient(180deg,#ff9a8b 0%,#ef5b62 50%,#d63d47 100%)!important}
-.rank-text.rank-aplus{background-image:linear-gradient(180deg,#ffa27e 0%,#ef6359 52%,#d84943 100%)!important}
-.rank-text.rank-a{background-image:linear-gradient(180deg,#ffa878 0%,#ed6654 52%,#d94a43 100%)!important}
-.rank-text.rank-bplus{background-image:linear-gradient(180deg,#ffc02f 0%,#f59512 46%,#e56b00 100%)!important}
-.rank-text.rank-b{background-image:linear-gradient(180deg,#ffbd32 0%,#f38a10 48%,#df6500 100%)!important}
-.rank-text.rank-c{background-image:linear-gradient(180deg,#9ee83e 0%,#58bd36 52%,#278f38 100%)!important}
-.rank-text.rank-d{background-image:linear-gradient(180deg,#6fe9f4 0%,#3fb7e7 48%,#2782cf 100%)!important}
-.rank-text.rank-e{background-image:linear-gradient(180deg,#bd70e9 0%,#8850cf 50%,#6439ae 100%)!important}
+/* v3.0.99: higher-contrast official-rank inspired gradients shared by cards/editor. */
+.rank-text{
+  display:inline-block;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  background-clip:text!important;
+  -webkit-background-clip:text!important;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  -webkit-text-stroke:.22px rgba(73,36,76,.45)!important;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.72));
+}
+.rank-text.rank-splus{background-image:linear-gradient(180deg,#ff63bd 0%,#f337a4 38%,#c23ed0 70%,#ff9a32 100%)!important}
+.rank-text.rank-s{background-image:linear-gradient(180deg,#ff5fb4 0%,#e736a6 48%,#a53dcc 100%)!important}
+.rank-text.rank-aaa{background-image:linear-gradient(180deg,#ff9a94 0%,#f14b63 46%,#c91f42 100%)!important}
+.rank-text.rank-aaplus{background-image:linear-gradient(180deg,#ff9d91 0%,#ef5664 48%,#ce2d47 100%)!important}
+.rank-text.rank-aa{background-image:linear-gradient(180deg,#ffa18b 0%,#ee5a5d 50%,#d03543 100%)!important}
+.rank-text.rank-aplus{background-image:linear-gradient(180deg,#ffaa79 0%,#ef6852 52%,#d6453f 100%)!important}
+.rank-text.rank-a{background-image:linear-gradient(180deg,#ffad73 0%,#eb674f 52%,#cf443e 100%)!important}
+.rank-text.rank-bplus{background-image:linear-gradient(180deg,#ffd23d 0%,#f5a20a 46%,#df7200 100%)!important}
+.rank-text.rank-b{background-image:linear-gradient(180deg,#ffc834 0%,#f1910b 48%,#d86a00 100%)!important}
+.rank-text.rank-c{background-image:linear-gradient(180deg,#b5ef4a 0%,#58c139 52%,#22863a 100%)!important}
+.rank-text.rank-d{background-image:linear-gradient(180deg,#7cecf5 0%,#39b7e8 48%,#2079c7 100%)!important}
+.rank-text.rank-e{background-image:linear-gradient(180deg,#c77bf0 0%,#8d4fd4 50%,#5d32aa 100%)!important}
+/* Keep the same visible rank treatment on compact score cards. */
+.score-card-v300 .card-rank.rank-text{font-weight:1000;filter:drop-shadow(0 .5px 0 rgba(255,255,255,.72))}
+#manualDialog .auto-field>.rank-text{filter:drop-shadow(0 1px 0 rgba(255,255,255,.86));text-shadow:none!important}
 
 /* iPhone Safari: inputs below 16px trigger focus zoom and can leave the page enlarged. */
 @media(max-width:760px){
