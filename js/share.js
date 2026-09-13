@@ -1,5 +1,5 @@
 import{popClassSelection,songPopClass}from"./scores.js?v=3.0.88";
-import{medalInfo}from"./ui.js?v=3.0.96";
+import{medalInfo}from"./ui.js?v=3.0.97";
 
 const HASHTAG="#popn_score_manager",SHARE_TEXT=`${HASHTAG}\n`,BG="#fffaf0",PANEL="#fffdf6",INK="#142b67",MUTED="#69789d",LINE="#3153a0",ACCENT="#ffd851",PINK="#ff789a";
 const TARGET_BYTES=1024*1024;
