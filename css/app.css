@@ -486,3 +486,11 @@ body.auth-user>.auth-gate{display:none}
  #visibilityDialog,#rivalListDialog,#songDetailDialog{padding:12px;max-height:calc(100dvh - 12px);}
  #songDetailContent .rival-comparison{grid-template-columns:1fr;}
 }
+
+/* v3.0.110: one-line rival score comparison */
+#songDetailContent .rival-comparison{display:grid;grid-template-columns:minmax(0,1fr) minmax(88px,auto) 44px;align-items:center;gap:10px;padding:10px 12px;min-height:58px;}
+#songDetailContent .rival-comparison strong{min-width:0;overflow-wrap:anywhere;font-size:.95rem;}
+#songDetailContent .rival-history-score{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:700;}
+#songDetailContent .rival-medal{display:flex;align-items:center;justify-content:center;width:44px;height:38px;}
+#songDetailContent .rival-medal img{display:block;width:36px;height:36px;object-fit:contain;}
+#songDetailContent .rival-medal-private{font-size:.72rem;white-space:nowrap;}
