@@ -650,3 +650,47 @@ button,input,select,textarea{letter-spacing:inherit}
 
 /* PSR snapshots */
 .psr-history-dialog{max-width:680px;width:min(96vw,680px);max-height:90dvh;overflow-y:auto}.psr-history-help{font-size:.85rem;color:var(--muted,#68758e);line-height:1.6}.psr-history-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line,#dce3f4)}.psr-history-item>div:first-child{display:grid;gap:3px}.psr-history-item time,.psr-history-item small{font-size:.76rem;color:var(--muted,#68758e)}.psr-history-actions{display:flex;gap:5px;flex-wrap:wrap}.psr-history-actions button{border:1px solid var(--line,#dce3f4);background:var(--panel,#fff);color:inherit;border-radius:10px;padding:8px 10px;font:inherit;cursor:pointer}.psr-history-actions [data-psr-delete]{color:#d63c5b}.psr-compare-total{font-weight:800;font-size:1.1rem}.psr-compare-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line,#dce3f4);font-size:.84rem}.psr-compare-rank b{color:#e64477}.psr-compare-name{min-width:0;overflow-wrap:anywhere;font-weight:700}.psr-compare-name small,.psr-compare-score small{display:block;font-size:.7rem;color:var(--muted,#68758e)}.psr-compare-score{text-align:right;font-variant-numeric:tabular-nums}@media(max-width:430px){.psr-history-item{align-items:flex-start;flex-direction:column}.psr-compare-row{grid-template-columns:60px minmax(0,1fr) auto;gap:5px;font-size:.76rem}}
+
+/* v3.0.121: one consistent, non-sticky menu-dialog heading row. */
+#myPageDialog>.account-dialog-header,
+#rivalListDialog>.account-dialog-header,
+#visibilityDialog>.account-dialog-header,
+#psrHistoryDialog>.account-dialog-header,
+#psrCompareDialog>.account-dialog-header,
+#guideDialog>.account-dialog-header,
+#syncDialog .account-dialog-header,
+#imageShareDialog .account-dialog-header,
+#bannerRequestDialog .account-dialog-header,
+#feedbackDialog .account-dialog-header{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:static;margin:0 0 12px;padding:0 0 10px;
+  border-bottom:1px solid var(--line);background:transparent;
+}
+#myPageDialog>.account-dialog-header>h2,
+#rivalListDialog>.account-dialog-header>h2,
+#visibilityDialog>.account-dialog-header>h2,
+#psrHistoryDialog>.account-dialog-header>h2,
+#psrCompareDialog>.account-dialog-header>h2,
+#guideDialog>.account-dialog-header>h2,
+#syncDialog .account-dialog-header>h2,
+#imageShareDialog .account-dialog-header>h2,
+#bannerRequestDialog .account-dialog-header>h2,
+#feedbackDialog .account-dialog-header>h2{
+  flex:1;min-width:0;margin:0;padding:0;color:var(--text);
+  font-size:1.2rem;font-weight:800;line-height:1.4;letter-spacing:-.025em;
+}
+#myPageDialog>.account-dialog-header>.dialog-back,
+#rivalListDialog>.account-dialog-header>.dialog-back,
+#visibilityDialog>.account-dialog-header>.dialog-back,
+#psrHistoryDialog>.account-dialog-header>.dialog-back,
+#psrCompareDialog>.account-dialog-header>.dialog-back,
+#guideDialog>.account-dialog-header>.dialog-back,
+#syncDialog .account-dialog-header>.dialog-back,
+#imageShareDialog .account-dialog-header>.dialog-back,
+#bannerRequestDialog .account-dialog-header>.dialog-back,
+#feedbackDialog .account-dialog-header>.dialog-back{
+  position:static;flex:none;align-self:center;width:auto;margin:0;
+}
+#myPageDialog>.account-dialog-header{margin:12px 14px 0}
+#myPageDialog>form:first-of-type{padding-top:12px}
+@media(max-width:760px){#myPageDialog>.account-dialog-header{margin:10px 12px 0}}

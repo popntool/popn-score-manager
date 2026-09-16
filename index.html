@@ -10,10 +10,10 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <title>pop'n Score Manager</title>
   <link rel="stylesheet" href="./css/base.css">
-  <link rel="stylesheet" href="./css/components.css?v=3.0.120">
+  <link rel="stylesheet" href="./css/components.css?v=3.0.121">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.120">
+<link rel="stylesheet" href="./css/app.css?v=3.0.121">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -208,7 +208,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.120</b>
+<b>3.0.121</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -263,8 +263,7 @@
 </dialog>
   <dialog id="syncDialog" class="sync-dialog">
 <form method="dialog">
-<button class="dialog-back" type="button" data-menu-back aria-label="メニューに戻る">戻る</button>
-<small class="sync-kicker">e-amusement連携</small><h2>スコアを同期する</h2>
+<div class="account-dialog-header"><h2>スコアを同期する</h2><button class="dialog-back" type="button" data-menu-back aria-label="メニューに戻る">戻る</button></div><small class="sync-kicker">e-amusement連携</small>
 <p class="sync-lead"><strong>実行前にe-amusementへログインしてください。</strong><br>「同期用ブックマーク」を使ってスコアを取得します。2回目以降も同じブックマークを使えます。</p>
 <p class="sync-lead"><strong>注意：</strong>e-amusement ベーシックコース(月額330円)に加入していないと同期が正しく動作しません。加入していない場合でも当サイト上で手動での登録と編集は可能です。</p>
 <div class="sync-status">待機中</div>
@@ -273,7 +272,7 @@
 <section class="sync-step"><b>3</b><div><h3>自動取得・登録</h3><p>公式サイト上で作成した同期用ブックマークを実行します。完了後、このサイトへ戻ると自動保存されます。</p></div></section>
 </form>
 </dialog>
-  <dialog id="myPageDialog"><form id="usernameForm" method="dialog"><button class="dialog-back" type="button" data-menu-back>戻る</button><h2>マイページ</h2><section class="mypage-section"><h3>ユーザー名変更</h3><label>新しいユーザー名<input id="newUsernameInput" name="username" required maxlength="32" autocomplete="username"></label><button class="main-button" type="submit">ユーザー名を変更</button><p class="error"></p></section></form><form id="passwordForm" method="dialog"><section class="mypage-section"><h3>パスワード変更</h3><label>新しいパスワード<input name="password" type="password" required minlength="6" autocomplete="new-password"></label><label>新しいパスワード（確認）<input name="password_confirm" type="password" required minlength="6" autocomplete="new-password"></label><button class="main-button" type="submit">パスワードを変更</button><p class="error"></p></section></form><section class="mypage-section"><h3>ログアウト</h3><button id="logoutButton" class="main-button" type="button" hidden>ログアウト</button></section></dialog>
+  <dialog id="myPageDialog"><div class="account-dialog-header"><h2>マイページ</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><form id="usernameForm" method="dialog"><section class="mypage-section"><h3>ユーザー名変更</h3><label>新しいユーザー名<input id="newUsernameInput" name="username" required maxlength="32" autocomplete="username"></label><button class="main-button" type="submit">ユーザー名を変更</button><p class="error"></p></section></form><form id="passwordForm" method="dialog"><section class="mypage-section"><h3>パスワード変更</h3><label>新しいパスワード<input name="password" type="password" required minlength="6" autocomplete="new-password"></label><label>新しいパスワード（確認）<input name="password_confirm" type="password" required minlength="6" autocomplete="new-password"></label><button class="main-button" type="submit">パスワードを変更</button><p class="error"></p></section></form><section class="mypage-section"><h3>ログアウト</h3><button id="logoutButton" class="main-button" type="button" hidden>ログアウト</button></section></dialog>
   <dialog id="rivalListDialog" class="menu-dialog"><div class="account-dialog-header"><h2>ライバル一覧 <small id="rivalCount">0/10人</small></h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><div id="rivalListContent" class="rival-list"></div></dialog>
 <dialog id="visibilityDialog" class="menu-dialog"><div class="account-dialog-header"><h2>公開情報</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><form id="visibilityForm"><section class="mypage-section"><h3>ポプともID</h3><label>ポプともID（12桁）<input id="poptomoIdInput" name="poptomo_id" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="123456789012"></label><label class="check-row"><input id="poptomoPublicInput" name="poptomo_public" type="checkbox">ポプともIDを公開する</label></section><section class="mypage-section"><h3>公開する項目</h3><label class="check-row"><input type="checkbox" name="highest_clear_public">最高クリア難度</label><label class="check-row"><input type="checkbox" name="popn_class_public">ポップンクラス</label><label class="check-row"><input type="checkbox" name="psr_public">PSR</label><h3>ライバル向け公開</h3><p>自分をライバル登録したユーザーにのみ表示します。</p><label class="check-row"><input type="checkbox" name="rival_scores_public">スコアを公開</label><label class="check-row"><input type="checkbox" name="rival_medals_public">メダルを公開</label></section><button class="main-button" type="submit">公開設定を保存</button><p class="error" aria-live="polite"></p></form></dialog>
 <dialog id="songDetailDialog" class="menu-dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2 id="songDetailTitle">曲詳細</h2><div id="songDetailContent"></div></dialog>
@@ -281,8 +280,7 @@
   <dialog id="psrHistoryDialog" class="menu-dialog psr-history-dialog"><div class="account-dialog-header"><h2>PSR保存履歴</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><p class="psr-history-help">同期完了時に自動保存します。現在のPSRも手動で保存できます。</p><button id="savePsrSnapshotButton" class="main-button" type="button">現在のPSRを保存</button><p id="psrHistoryStatus" class="image-share-status" aria-live="polite"></p><div id="psrHistoryList"></div></dialog>
   <dialog id="psrCompareDialog" class="menu-dialog psr-history-dialog"><div class="account-dialog-header"><h2 id="psrCompareTitle">PSR比較</h2><button class="dialog-back" type="button" id="psrCompareBack">戻る</button></div><div id="psrCompareContent"></div></dialog>
   <dialog id="imageShareDialog" class="image-share-dialog"><div class="image-share-shell">
-<button class="dialog-back" type="button" data-menu-back>戻る</button>
-<h2>画像共有</h2>
+<div class="account-dialog-header"><h2>画像共有</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
 <p class="image-share-lead">共有ボタンからSNS・共有先を選べます。共有機能が使えない端末では画像として保存します。</p>
 <section class="image-share-section">
 <h3>Popn Score Rating 対象曲一覧</h3>
@@ -300,8 +298,7 @@
 </div></dialog>
 
   <dialog id="bannerRequestDialog" class="banner-request-dialog"><form id="bannerRequestForm" method="dialog">
-<button class="dialog-back" type="button" data-menu-back>戻る</button>
-<h2>バナーを送信</h2>
+<div class="account-dialog-header"><h2>バナーを送信</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
 <p class="banner-request-lead">曲マスターにバナーがない曲だけ送信できます。</p>
 <p class="banner-source-link"><a href="https://p.eagate.573.jp/game/popn/popn29/music/list.html?page=0&amp;version=-1&amp;lv=0&amp;bemani=0&amp;category=0&amp;keyword=&amp;sort=music&amp;sort_type=up" target="_blank" rel="noopener noreferrer">バナー取得はこちらから ↗</a></p>
 <label>対象曲<select id="bannerRequestSong" name="song_id" required><option value="">読み込み中…</option></select></label>
@@ -314,18 +311,19 @@
     <div class="account-dialog-header"><h2 id="guideTitle">使い方・サイトマップ</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
     <p class="guide-intro">知りたい項目を選ぶと説明へ移動します。</p>
     <nav class="guide-map" aria-label="使い方の目次">
-      <a href="#guide-start">はじめに</a><a href="#guide-score">スコア</a><a href="#guide-psr">PSR</a><a href="#guide-users">ユーザー・ライバル</a><a href="#guide-settings">設定・共有</a><a href="#guide-help">お問い合わせ</a>
+      <a href="#guide-start">はじめに</a><a href="#guide-score">スコア</a><a href="#guide-psr">PSR</a><a href="#guide-psr-history">PSR保存履歴</a><a href="#guide-users">ユーザー・ライバル</a><a href="#guide-settings">設定・共有</a><a href="#guide-help">お問い合わせ</a>
     </nav>
     <div class="guide-sections">
       <section id="guide-start"><h3>はじめに</h3><p>ログイン後、画面上部の「PSR」「スコア」「ユーザー」から各機能に移動できます。右上のメニューからアカウント設定や同期・共有を利用できます。</p></section>
       <section id="guide-score"><h3>スコアを登録・確認する</h3><ol><li>「スコア」で曲名・レベル・バージョンなどを絞り込みます。</li><li>曲カードの「編集」から歴代スコア、今作スコア、メダル、今作クリア状況を登録します。</li><li>公式サイトのスコアを取り込む場合は「メニュー → スコア同期」の案内に従ってください。</li></ol><p>歴代スコアは自己ベスト、今作スコアは今作の記録です。曲マスターにない曲や譜面は登録依頼の対象となります。</p></section>
       <section id="guide-psr"><h3>PSR（Popn Score Rating）とは？</h3><p>レベル・今作スコア・今作クリア状況から算出する、このサイト独自の指標です。公式のポップンクラスとは別の値です。</p><div class="guide-formula">曲別PSR ＝（レベル × レベル × 今作スコア ÷ 6000 ＋ クリアボーナス）÷ 200</div><p>クリアボーナスは未クリア：0、イージー：200、ロングオフ：300、クリア：1000、フルコンボ：2000、パーフェクト：3000。未プレーは対象外です。曲別PSRは小数第3位以下を切り捨てます。</p><p>「PSR」タブでは新曲枠と旧曲枠の上位曲を表示します。総合値は対象曲の曲別PSRを合計し、所定の曲数で割って算出します。枠に満たない場合も分母は変わりません。</p><p>例：Lv.40・今作90,000点・クリアの場合、曲別PSRは125.00です。</p></section>
+      <section id="guide-psr-history"><h3>PSR保存履歴の使い方</h3><ol><li>「メニュー → PSR保存履歴」を開き、「現在のPSRを保存」を押すと、その時点のPSR対象曲とスコア・メダルを記録できます。</li><li>保存履歴の「画像」から、保存時点の対象曲をPSR共有画像と同じ形式で出力できます。</li><li>「比較」では保存時点と現在の対象曲・スコアを比較できます。順位の変化は「↑」「↓」「new」で表示され、対象外になった曲も確認できます。</li><li>不要な履歴は「削除」で消せます。削除した履歴は元に戻せません。</li></ol><p>スコア同期が正常に完了したときにも自動保存します。過去の履歴は保存時点の記録であり、現在のスコアを変更しても書き換わりません。</p></section>
       <section id="guide-users"><h3>ユーザー・ライバル</h3><p>「ユーザー」で公開されている情報を確認し、☆からライバルを登録できます。登録済みライバルは「メニュー → ライバル一覧」で管理します（最大10人）。公開されていないスコアやメダルは閲覧できません。</p></section>
-      <section id="guide-settings"><h3>公開設定・画像共有</h3><p>「メニュー → 公開情報」でポプともID、最高クリア難度、ポップンクラス、PSR、ライバル向けのスコア・メダル公開を個別に設定できます。公開したい項目だけオンにして保存してください。</p><p>「メニュー → PSR保存履歴」で現在のPSRを保存し、過去の対象曲を画像にしたり、現在の順位・スコアと比較できます。同期完了時にも自動保存します。「メニュー → 画像共有」からPSR対象曲やレベル別メダル一覧を画像にできます。「表示テーマ」ではライト／ダークを切り替えられます。</p></section>
+      <section id="guide-settings"><h3>公開設定・画像共有</h3><p>「メニュー → 公開情報」でポプともID、最高クリア難度、ポップンクラス、PSR、ライバル向けのスコア・メダル公開を個別に設定できます。公開したい項目だけオンにして保存してください。</p><p>PSRの保存・比較・画像出力の詳しい手順は「PSR保存履歴の使い方」を参照してください。「メニュー → 画像共有」からPSR対象曲やレベル別メダル一覧を画像にできます。「表示テーマ」ではライト／ダークを切り替えられます。</p></section>
       <section id="guide-help"><h3>困ったときは</h3><p>操作方法や表示の問題は「メニュー → サポート → 要望・不具合」から送信できます。曲情報の追加・訂正は曲の登録依頼を利用してください。</p></section>
     </div>
   </dialog>
-  <dialog id="feedbackDialog"><form id="feedbackForm" method="dialog"><button class="dialog-back" type="button" data-menu-back>戻る</button><h2>要望・不具合</h2><label>種類<select name="category"><option value="request">要望</option><option value="bug">不具合</option></select></label><div class="form-grid"><label>機種名（任意）<input name="device_name" maxlength="100" placeholder="例：iPhone 16"></label><label>ブラウザ名（任意）<input name="browser_name" maxlength="100" placeholder="例：Safari"></label></div><label>内容<textarea name="message" required maxlength="3000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>閉じる</button><button class="main-button" type="submit">送信</button></div><section class="feedback-history"><h3>送信履歴</h3><div id="feedbackHistory"></div></section></form></dialog>
+  <dialog id="feedbackDialog"><form id="feedbackForm" method="dialog"><div class="account-dialog-header"><h2>要望・不具合</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><label>種類<select name="category"><option value="request">要望</option><option value="bug">不具合</option></select></label><div class="form-grid"><label>機種名（任意）<input name="device_name" maxlength="100" placeholder="例：iPhone 16"></label><label>ブラウザ名（任意）<input name="browser_name" maxlength="100" placeholder="例：Safari"></label></div><label>内容<textarea name="message" required maxlength="3000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>閉じる</button><button class="main-button" type="submit">送信</button></div><section class="feedback-history"><h3>送信履歴</h3><div id="feedbackHistory"></div></section></form></dialog>
   <dialog id="adminEditDialog"><form id="adminEditForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2 id="adminEditTitle">編集</h2><div id="adminEditFields"></div><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">保存</button></div></form></dialog>
   <dialog id="noticeDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2>お知らせ</h2><p id="noticeMessage"></p><div class="dialog-actions"><button class="main-button" value="ok">閉じる</button></div></form></dialog>
   <dialog id="confirmDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2>確認</h2><p id="confirmMessage"></p><div class="dialog-actions"><button class="sub-button" value="cancel">キャンセル</button><button class="main-button" value="ok">実行</button></div></form></dialog>
@@ -333,7 +331,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.120">
+  <script type="module" src="./js/app.js?v=3.0.121">
 </script>
 </body>
 </html>
