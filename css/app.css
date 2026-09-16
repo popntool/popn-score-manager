@@ -631,3 +631,11 @@ button,input,select,textarea{letter-spacing:inherit}
 .score-card-v300 .card-rank.rank-text.rank-c{background-image:linear-gradient(180deg,#a8f050 0%,#78d83f 50%,#28ae38 100%)!important}
 .score-card-v300 .card-rank.rank-text.rank-d{background-image:linear-gradient(180deg,#55e0f0 0%,#35b8e8 55%,#418ff0 100%)!important}
 .score-card-v300 .card-rank.rank-text.rank-e{background-image:linear-gradient(180deg,#c47cf0 0%,#a653db 53%,#6040c2 100%)!important}
+
+/* v3.0.116 — prevent mobile dialog auto-focus from drawing a second blue ring. */
+@media (hover: none) and (pointer: coarse) {
+  dialog .dialog-close:focus, dialog .dialog-back:focus,
+  .menu-modal .dialog-close:focus, .menu-modal .dialog-back:focus {
+    outline: none; box-shadow: none;
+  }
+}
