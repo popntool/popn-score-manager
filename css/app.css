@@ -446,13 +446,27 @@ body.auth-user>.auth-gate{display:none}
   padding:14px;
   box-sizing:border-box;
 }
-#visibilityDialog>.dialog-back,#rivalListDialog>.dialog-back{
-  display:grid;
-  position:sticky;
-  top:0;
-  margin:0 0 8px auto;
+#visibilityDialog .account-dialog-header,#rivalListDialog .account-dialog-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:0 0 12px;
+}
+#visibilityDialog .account-dialog-header>h2,#rivalListDialog .account-dialog-header>h2{
+  flex:1;
+  min-width:0;
+  margin:0;
+  padding:0;
+  color:var(--navy);
+  font-size:1.2rem;
+  line-height:1.4;
+}
+#visibilityDialog .account-dialog-header>.dialog-back,#rivalListDialog .account-dialog-header>.dialog-back{
+  position:static;
+  flex:none;
+  margin:0;
   width:max-content;
-  z-index:3;
 }
 #visibilityDialog>h2,#rivalListDialog>h2,#songDetailDialog>h2{
   margin:0 0 12px;
@@ -481,7 +495,7 @@ body.auth-user>.auth-gate{display:none}
 #songDetailContent .rival-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--page);font-size:.86rem;}
 #songDetailContent .rival-comparison strong{grid-column:1/-1;padding-bottom:7px;border-bottom:1px solid var(--line);}
 #songDetailContent .rival-comparison span{min-width:0;overflow-wrap:anywhere;}
-[data-theme="dark"] #visibilityDialog>h2,[data-theme="dark"] #rivalListDialog>h2,[data-theme="dark"] #songDetailDialog>h2,[data-theme="dark"] #visibilityDialog .mypage-section h3{color:var(--text);}
+[data-theme="dark"] #visibilityDialog .account-dialog-header>h2,[data-theme="dark"] #rivalListDialog .account-dialog-header>h2,[data-theme="dark"] #songDetailDialog>h2,[data-theme="dark"] #visibilityDialog .mypage-section h3{color:var(--text);}
 @media(max-width:760px){
  #visibilityDialog,#rivalListDialog,#songDetailDialog{padding:12px;max-height:calc(100dvh - 12px);}
  #songDetailContent .rival-comparison{grid-template-columns:1fr;}

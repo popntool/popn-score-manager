@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.110">
+<link rel="stylesheet" href="./css/app.css?v=3.0.112">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -207,7 +207,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.110</b>
+<b>3.0.112</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
@@ -272,8 +272,8 @@
 </form>
 </dialog>
   <dialog id="myPageDialog"><form id="usernameForm" method="dialog"><button class="dialog-back" type="button" data-menu-back>戻る</button><h2>マイページ</h2><section class="mypage-section"><h3>ユーザー名変更</h3><label>新しいユーザー名<input id="newUsernameInput" name="username" required maxlength="32" autocomplete="username"></label><button class="main-button" type="submit">ユーザー名を変更</button><p class="error"></p></section></form><form id="passwordForm" method="dialog"><section class="mypage-section"><h3>パスワード変更</h3><label>新しいパスワード<input name="password" type="password" required minlength="6" autocomplete="new-password"></label><label>新しいパスワード（確認）<input name="password_confirm" type="password" required minlength="6" autocomplete="new-password"></label><button class="main-button" type="submit">パスワードを変更</button><p class="error"></p></section></form><section class="mypage-section"><h3>ログアウト</h3><button id="logoutButton" class="main-button" type="button" hidden>ログアウト</button></section></dialog>
-  <dialog id="rivalListDialog" class="menu-dialog"><button class="dialog-back" type="button" data-menu-back>戻る</button><h2>ライバル一覧 <small id="rivalCount">0/10人</small></h2><div id="rivalListContent" class="rival-list"></div></dialog>
-<dialog id="visibilityDialog" class="menu-dialog"><button class="dialog-back" type="button" data-menu-back>戻る</button><h2>公開情報</h2><form id="visibilityForm"><section class="mypage-section"><h3>ポプともID</h3><label>ポプともID（12桁）<input id="poptomoIdInput" name="poptomo_id" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="123456789012"></label><label class="check-row"><input id="poptomoPublicInput" name="poptomo_public" type="checkbox">ポプともIDを公開する</label></section><section class="mypage-section"><h3>公開する項目</h3><label class="check-row"><input type="checkbox" name="highest_clear_public">最高クリア難度</label><label class="check-row"><input type="checkbox" name="popn_class_public">ポップンクラス</label><label class="check-row"><input type="checkbox" name="psr_public">PSR</label><h3>ライバル向け公開</h3><p>自分をライバル登録したユーザーにのみ表示します。</p><label class="check-row"><input type="checkbox" name="rival_scores_public">スコアを公開</label><label class="check-row"><input type="checkbox" name="rival_medals_public">メダルを公開</label></section><button class="main-button" type="submit">公開設定を保存</button><p class="error" aria-live="polite"></p></form></dialog>
+  <dialog id="rivalListDialog" class="menu-dialog"><div class="account-dialog-header"><h2>ライバル一覧 <small id="rivalCount">0/10人</small></h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><div id="rivalListContent" class="rival-list"></div></dialog>
+<dialog id="visibilityDialog" class="menu-dialog"><div class="account-dialog-header"><h2>公開情報</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><form id="visibilityForm"><section class="mypage-section"><h3>ポプともID</h3><label>ポプともID（12桁）<input id="poptomoIdInput" name="poptomo_id" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="123456789012"></label><label class="check-row"><input id="poptomoPublicInput" name="poptomo_public" type="checkbox">ポプともIDを公開する</label></section><section class="mypage-section"><h3>公開する項目</h3><label class="check-row"><input type="checkbox" name="highest_clear_public">最高クリア難度</label><label class="check-row"><input type="checkbox" name="popn_class_public">ポップンクラス</label><label class="check-row"><input type="checkbox" name="psr_public">PSR</label><h3>ライバル向け公開</h3><p>自分をライバル登録したユーザーにのみ表示します。</p><label class="check-row"><input type="checkbox" name="rival_scores_public">スコアを公開</label><label class="check-row"><input type="checkbox" name="rival_medals_public">メダルを公開</label></section><button class="main-button" type="submit">公開設定を保存</button><p class="error" aria-live="polite"></p></form></dialog>
 <dialog id="songDetailDialog" class="menu-dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2 id="songDetailTitle">曲詳細</h2><div id="songDetailContent"></div></dialog>
 <dialog id="songRequestDialog"><form id="songRequestForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2>曲の登録依頼</h2><div class="form-grid"><label>ジャンル名<input name="genre" required maxlength="100"></label><label>曲名<input name="title" required maxlength="200"></label></div><label>アーティスト<input name="artist" required maxlength="200"></label><fieldset class="request-levels"><legend>譜面・レベル（1つ以上入力）</legend><label class="light">LIGHT<input name="light_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="normal">NORMAL<input name="normal_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="hyper">HYPER<input name="hyper_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="ex">EX<input name="ex_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label></fieldset><label>補足<textarea name="note" maxlength="1000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">送信</button></div></form></dialog>
   <dialog id="imageShareDialog" class="image-share-dialog"><div class="image-share-shell">
@@ -314,7 +314,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.110">
+  <script type="module" src="./js/app.js?v=3.0.112">
 </script>
 </body>
 </html>
