@@ -607,3 +607,27 @@ button:not(:disabled){-webkit-tap-highlight-color:transparent}
   .score-card-v300 .card-medal{padding-left:2px}
   .score-card-v300 .score-edit{width:calc(100% - 6px);height:calc(100% - 8px);min-height:26px;border-radius:7px}
 }
+
+
+/* v3.0.115 — typography and rank-color restoration. */
+html{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;font-synthesis:none}
+body,button,input,select,textarea{font-family:inherit}
+body{font-weight:400;letter-spacing:0;line-height:1.55}
+button,input,select,textarea{letter-spacing:inherit}
+.panel-heading{margin-bottom:16px;align-items:center}
+.panel-heading h1{margin:0;font-size:clamp(1.16rem,3.5vw,1.48rem);font-weight:750;line-height:1.35;letter-spacing:-.035em;color:var(--text)}
+.panel-heading small{font-size:.68rem;font-weight:650;letter-spacing:.11em;color:var(--muted)}
+.popclass-group-title{align-items:center;margin:0 0 10px;padding:0 0 10px;border-bottom:1px solid var(--line)}
+.popclass-group-title h2,.popclass-group-title h3{margin:0;font-size:1.02rem;font-weight:750;letter-spacing:-.025em;line-height:1.4;color:var(--text)}
+.popclass-group-title span{font-size:.72rem;font-weight:600;letter-spacing:0;color:var(--muted);font-variant-numeric:tabular-nums}
+.score-card-v300 .card-title{font-weight:750;letter-spacing:-.025em}
+.score-card-v300 .card-score strong,.score-card-v300 .card-popclass strong{font-weight:750;font-variant-numeric:tabular-nums}
+.score-card-v300 .score-edit{font-weight:700}
+/* The previous background: ... !important reset background-image on rank glyphs. */
+.score-card-v300 .card-rank.rank-text{background-color:transparent!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;filter:drop-shadow(0 0 .3px rgba(255,211,72,.7))}
+.score-card-v300 .card-rank.rank-text.rank-s,.score-card-v300 .card-rank.rank-text.rank-splus{background-image:linear-gradient(180deg,#f05070 0%,#f47b72 26%,#f8dc60 43%,#90dc58 60%,#50d8e8 78%,#4198f8 100%)!important}
+.score-card-v300 .card-rank.rank-text.rank-aaa,.score-card-v300 .card-rank.rank-text.rank-aaplus,.score-card-v300 .card-rank.rank-text.rank-aa,.score-card-v300 .card-rank.rank-text.rank-aplus,.score-card-v300 .card-rank.rank-text.rank-a{background-image:linear-gradient(180deg,#f98a86 0%,#f45d76 38%,#ef365f 55%,#c81026 100%)!important}
+.score-card-v300 .card-rank.rank-text.rank-bplus,.score-card-v300 .card-rank.rank-text.rank-b{background-image:linear-gradient(180deg,#ffd02a 0%,#ffc900 27%,#ff9800 55%,#e45f08 100%)!important}
+.score-card-v300 .card-rank.rank-text.rank-c{background-image:linear-gradient(180deg,#a8f050 0%,#78d83f 50%,#28ae38 100%)!important}
+.score-card-v300 .card-rank.rank-text.rank-d{background-image:linear-gradient(180deg,#55e0f0 0%,#35b8e8 55%,#418ff0 100%)!important}
+.score-card-v300 .card-rank.rank-text.rank-e{background-image:linear-gradient(180deg,#c47cf0 0%,#a653db 53%,#6040c2 100%)!important}
