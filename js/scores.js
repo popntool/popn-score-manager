@@ -11,3 +11,6 @@ export async function syncScores(records,onProgress){const allowedStatuses=["unp
 
 // Read-only matching diagnosis; does not send scores to any service other than the configured Supabase project.
 export async function diagnoseSyncMatches(records){const {data,error}=await requireDb().rpc("diagnose_sync_matches",{p_records:records});if(error)throw error;return data?.[0]||{key_match:0,identity_match:0,title_only_match:0,unmatched:0};}
+
+// Metadata only; the RPC does not return score values or user identifiers.
+export async function diagnoseTitleOnlyMatches(records){const {data,error}=await requireDb().rpc("diagnose_title_only_matches",{p_records:records});if(error)throw error;return Array.isArray(data)?data:[];}
