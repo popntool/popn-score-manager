@@ -412,3 +412,14 @@ body.auth-user>.auth-gate{display:none}
   #myPageDialog input,#myPageDialog select,#myPageDialog textarea,
   #feedbackDialog input,#feedbackDialog select,#feedbackDialog textarea{font-size:16px!important}
 }
+
+/* 登録依頼: 内容を一行単位にまとめ、カードの不要な縦余白をなくす */
+.request-card{display:flex;align-items:center;gap:10px;padding:8px 10px}
+.request-card>.request-card-content{display:flex;flex:1;align-items:center;flex-wrap:wrap;gap:4px 10px;min-width:0}
+.request-card .request-card-content>strong{font-size:.95rem;min-width:0;overflow-wrap:anywhere}
+.request-card .request-chart{display:flex;gap:4px;margin:0}
+.request-card .request-chart span{padding:3px 6px;font-size:.76rem;white-space:nowrap}
+.request-card .request-meta{flex-basis:100%;font-size:.73rem;line-height:1.25;overflow-wrap:anywhere}
+.request-card .admin-actions{width:auto;flex:none;margin:0;gap:5px}
+.request-card .admin-actions button{padding:6px 9px}
+@media(max-width:760px){.request-card{flex-direction:row;align-items:center;padding:7px 9px}.request-card .admin-actions{width:auto;margin:0;justify-content:flex-end}.request-card>.request-card-content{gap:4px 7px}}
