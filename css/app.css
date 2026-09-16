@@ -565,3 +565,45 @@ dialog::backdrop{background:rgba(14,25,52,.52);backdrop-filter:blur(5px)}
 button:not(:disabled){-webkit-tap-highlight-color:transparent}
 @media(hover:hover){.main-button:hover{filter:brightness(1.08)}.score-card-v300:hover,#userList .user-row-v3095:hover{box-shadow:0 6px 20px rgba(31,53,112,.09)}}
 @media(prefers-reduced-motion:reduce){.tabs button,.menu-modal .setting-row{transition:none}}
+
+
+/* v3.0.114 — score cards: remove the spreadsheet-like cell borders. */
+.score-card-v300{
+  column-gap:0;row-gap:0;border:1px solid var(--line);
+  border-radius:16px;background:var(--surface);overflow:hidden;
+  box-shadow:0 4px 18px rgba(31,53,112,.045);
+}
+.score-card-v300 .song-banner{
+  border:0!important;border-radius:0;object-fit:contain;
+  background:var(--surface-2)!important;
+}
+.score-card-v300 .card-medal,.score-card-v300 .card-rank,
+.score-card-v300 .card-score,.score-card-v300 .card-popclass{
+  border:0!important;border-bottom:1px solid var(--line)!important;
+  background:var(--surface)!important;
+}
+.score-card-v300 .card-medal{padding-left:5px}
+.score-card-v300 .card-score small,.score-card-v300 .card-popclass small{
+  color:var(--muted);font-weight:500;letter-spacing:.02em;
+}
+.score-card-v300 .card-chart,.score-card-v300 .card-level{
+  border:0!important;
+}
+.score-card-v300 .card-chart{align-self:center;justify-self:center;width:calc(100% - 8px);height:calc(100% - 4px);border-radius:6px;font-weight:800}
+.score-card-v300 .card-level{font-weight:800;color:var(--text)}
+.score-card-v300 .card-genre{
+  border:0!important;padding-top:3px;color:var(--muted);font-weight:500;
+}
+.score-card-v300 .card-title{font-weight:800;letter-spacing:-.02em;color:var(--text)}
+.score-card-v300 .score-edit{
+  align-self:center;justify-self:center;width:calc(100% - 8px);
+  height:calc(100% - 12px);min-height:32px;border:0!important;
+  border-radius:9px;background:var(--surface-2);color:var(--navy);
+  font-weight:800;
+}
+@media(hover:hover){.score-card-v300 .score-edit:hover{background:var(--line)}}
+@media(max-width:760px){
+  .score-card-v300{border-radius:14px}
+  .score-card-v300 .card-medal{padding-left:2px}
+  .score-card-v300 .score-edit{width:calc(100% - 6px);height:calc(100% - 8px);min-height:26px;border-radius:7px}
+}
