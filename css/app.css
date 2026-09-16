@@ -423,3 +423,13 @@ body.auth-user>.auth-gate{display:none}
 .request-card .admin-actions{width:auto;flex:none;margin:0;gap:5px}
 .request-card .admin-actions button{padding:6px 9px}
 @media(max-width:760px){.request-card{flex-direction:row;align-items:center;padding:7px 9px}.request-card .admin-actions{width:auto;margin:0;justify-content:flex-end}.request-card>.request-card-content{gap:4px 7px}}
+
+/* v3.0.107 rival UI */
+.user-row-v3095{position:relative;padding-right:3.4rem}
+.rival-star{position:absolute;right:.6rem;top:.45rem;border:1px solid var(--line);border-radius:.65rem;background:var(--page);color:var(--text);font-size:1.5rem;line-height:1;padding:.3rem .45rem;cursor:pointer}
+.rival-star.is-active{color:#d89b12}
+.rival-entry,.rival-comparison{display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:.75rem .25rem}
+.rival-comparison strong{width:100%}
+.score-card-v300{cursor:pointer}
+#visibilityDialog .check-row{display:flex;align-items:center;gap:.6rem;margin:.6rem 0}
+#visibilityDialog input,#visibilityDialog select{font-size:16px}
