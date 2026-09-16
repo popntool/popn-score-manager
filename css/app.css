@@ -639,3 +639,20 @@ button,input,select,textarea{letter-spacing:inherit}
     outline: none; box-shadow: none;
   }
 }
+
+/* v3.0.118: support guide */
+#guideDialog{width:min(660px,calc(100vw - 20px));max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;padding:18px;scroll-padding-top:16px}
+#guideDialog .account-dialog-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+#guideDialog .account-dialog-header h2{margin:0;font-size:clamp(1.15rem,4vw,1.45rem);line-height:1.35}
+#guideDialog .account-dialog-header .dialog-back{position:static;flex-shrink:0}
+.guide-intro{font-size:.88rem;color:var(--muted);margin:0 0 14px}
+.guide-map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:18px}
+.guide-map a{display:block;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font-weight:700;font-size:.88rem;text-decoration:none}
+.guide-map a:active{transform:scale(.99)}
+.guide-sections{display:grid;gap:12px}
+.guide-sections section{padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);scroll-margin-top:12px}
+.guide-sections h3{margin:0 0 9px;font-size:1rem;letter-spacing:-.02em}
+.guide-sections p,.guide-sections li{font-size:.89rem;line-height:1.75;overflow-wrap:anywhere}
+.guide-sections p{margin:8px 0 0}.guide-sections ol{padding-left:1.4em;margin:8px 0}
+.guide-formula{margin:12px 0;padding:12px;border-radius:10px;background:var(--page);font-size:.88rem;line-height:1.65;font-weight:700;overflow-wrap:anywhere}
+@media(max-width:420px){#guideDialog{padding:14px}.guide-sections section{padding:13px}}

@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.117">
+<link rel="stylesheet" href="./css/app.css?v=3.0.118">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -207,9 +207,10 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.117</b>
+<b>3.0.118</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
+      <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
     </div></dialog>
 
@@ -306,6 +307,21 @@
 <p class="error"></p>
 <div class="dialog-actions"><button class="sub-button" type="button" data-menu-back>戻る</button><button id="bannerRequestSubmit" class="main-button" type="submit">管理者へ送信</button></div>
 </form></dialog>
+  <dialog id="guideDialog" class="menu-dialog guide-dialog" aria-labelledby="guideTitle">
+    <div class="account-dialog-header"><h2 id="guideTitle">使い方・サイトマップ</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
+    <p class="guide-intro">知りたい項目を選ぶと説明へ移動します。</p>
+    <nav class="guide-map" aria-label="使い方の目次">
+      <a href="#guide-start">はじめに</a><a href="#guide-score">スコア</a><a href="#guide-psr">PSR</a><a href="#guide-users">ユーザー・ライバル</a><a href="#guide-settings">設定・共有</a><a href="#guide-help">お問い合わせ</a>
+    </nav>
+    <div class="guide-sections">
+      <section id="guide-start"><h3>はじめに</h3><p>ログイン後、画面上部の「PSR」「スコア」「ユーザー」から各機能に移動できます。右上のメニューからアカウント設定や同期・共有を利用できます。</p></section>
+      <section id="guide-score"><h3>スコアを登録・確認する</h3><ol><li>「スコア」で曲名・レベル・バージョンなどを絞り込みます。</li><li>曲カードの「編集」から歴代スコア、今作スコア、メダル、今作クリア状況を登録します。</li><li>公式サイトのスコアを取り込む場合は「メニュー → スコア同期」の案内に従ってください。</li></ol><p>歴代スコアは自己ベスト、今作スコアは今作の記録です。曲マスターにない曲や譜面は登録依頼の対象となります。</p></section>
+      <section id="guide-psr"><h3>PSR（Popn Score Rating）とは？</h3><p>レベル・今作スコア・今作クリア状況から算出する、このサイト独自の指標です。公式のポップンクラスとは別の値です。</p><div class="guide-formula">曲別PSR ＝（レベル × レベル × 今作スコア ÷ 6000 ＋ クリアボーナス）÷ 200</div><p>クリアボーナスは未クリア：0、イージー：200、ロングオフ：300、クリア：1000、フルコンボ：2000、パーフェクト：3000。未プレーは対象外です。曲別PSRは小数第3位以下を切り捨てます。</p><p>「PSR」タブでは新曲枠と旧曲枠の上位曲を表示します。総合値は対象曲の曲別PSRを合計し、所定の曲数で割って算出します。枠に満たない場合も分母は変わりません。</p><p>例：Lv.40・今作90,000点・クリアの場合、曲別PSRは125.00です。</p></section>
+      <section id="guide-users"><h3>ユーザー・ライバル</h3><p>「ユーザー」で公開されている情報を確認し、☆からライバルを登録できます。登録済みライバルは「メニュー → ライバル一覧」で管理します（最大10人）。公開されていないスコアやメダルは閲覧できません。</p></section>
+      <section id="guide-settings"><h3>公開設定・画像共有</h3><p>「メニュー → 公開情報」でポプともID、最高クリア難度、ポップンクラス、PSR、ライバル向けのスコア・メダル公開を個別に設定できます。公開したい項目だけオンにして保存してください。</p><p>「メニュー → 画像共有」からPSR対象曲やレベル別メダル一覧を画像にできます。「表示テーマ」ではライト／ダークを切り替えられます。</p></section>
+      <section id="guide-help"><h3>困ったときは</h3><p>操作方法や表示の問題は「メニュー → サポート → 要望・不具合」から送信できます。曲情報の追加・訂正は曲の登録依頼を利用してください。</p></section>
+    </div>
+  </dialog>
   <dialog id="feedbackDialog"><form id="feedbackForm" method="dialog"><button class="dialog-back" type="button" data-menu-back>戻る</button><h2>要望・不具合</h2><label>種類<select name="category"><option value="request">要望</option><option value="bug">不具合</option></select></label><div class="form-grid"><label>機種名（任意）<input name="device_name" maxlength="100" placeholder="例：iPhone 16"></label><label>ブラウザ名（任意）<input name="browser_name" maxlength="100" placeholder="例：Safari"></label></div><label>内容<textarea name="message" required maxlength="3000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>閉じる</button><button class="main-button" type="submit">送信</button></div><section class="feedback-history"><h3>送信履歴</h3><div id="feedbackHistory"></div></section></form></dialog>
   <dialog id="adminEditDialog"><form id="adminEditForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2 id="adminEditTitle">編集</h2><div id="adminEditFields"></div><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">保存</button></div></form></dialog>
   <dialog id="noticeDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2>お知らせ</h2><p id="noticeMessage"></p><div class="dialog-actions"><button class="main-button" value="ok">閉じる</button></div></form></dialog>
@@ -314,7 +330,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.117">
+  <script type="module" src="./js/app.js?v=3.0.118">
 </script>
 </body>
 </html>
