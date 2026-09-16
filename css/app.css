@@ -508,3 +508,60 @@ body.auth-user>.auth-gate{display:none}
 #songDetailContent .rival-medal{display:flex;align-items:center;justify-content:center;width:44px;height:38px;}
 #songDetailContent .rival-medal img{display:block;width:36px;height:36px;object-fit:contain;}
 #songDetailContent .rival-medal-private{font-size:.72rem;white-space:nowrap;}
+
+/* v3.0.113 — Pop color, lighter chrome, and consistent surfaces. */
+html[data-theme="light"]{
+  --page:#f5f7ff;--surface:#ffffff;--surface-2:#f3f5ff;
+  --header:#ffffff;--text:#19254a;--muted:#69748e;
+  --navy:#263c83;--line:#dce3f4;--pink:#ff638f;
+  --blue:#6ccaff;--yellow:#ffda5c;--green:#86dba8;
+  --focus:#3574e7;--shadow:0 8px 28px rgba(31,53,112,.055);
+}
+html[data-theme="dark"]{
+  --page:#11182b;--surface:#1b2540;--surface-2:#25304e;
+  --header:#1b2540;--text:#f5f7ff;--muted:#b1bdd8;
+  --navy:#f5f7ff;--line:#39496b;--pink:#ff709c;
+  --blue:#66c5fa;--yellow:#ffda6a;--green:#8cddb0;
+  --focus:#7bbdff;--shadow:0 10px 30px rgba(0,0,0,.16);
+}
+body{background:var(--page);line-height:1.5}
+.topbar{border-bottom:1px solid var(--line);box-shadow:0 3px 18px rgba(31,53,112,.04)}
+.brand-icon{border:0;border-radius:14px;background:linear-gradient(145deg,#ff729e,#ffad62);color:white;box-shadow:0 4px 10px rgba(255,99,143,.2);transform:rotate(-5deg)}
+.brand-icon::first-letter{transform:rotate(5deg)}
+.brand strong{letter-spacing:-.035em}
+.player-bar,.panel,.medal-summary{border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
+.player-bar{background:var(--surface);position:relative;overflow:hidden}
+.player-bar::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(var(--pink),var(--blue))}
+.player-ratings .player-official-class{border-color:var(--line)}
+.player-ratings strong{letter-spacing:-.035em}
+.tabs{border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:var(--shadow)}
+.tabs button{border-radius:10px;transition:background-color .16s,color .16s}
+.tabs button.active,.admin-tabs button.active{background:var(--navy);color:var(--surface)}
+.main-button{border-radius:11px;background:linear-gradient(115deg,#304d9a,#263c83);color:#fff;box-shadow:0 3px 10px rgba(38,60,131,.12)}
+html[data-theme="dark"] .main-button{background:#405fb0;color:#fff}
+.sub-button,.icon-button,.dialog-back{border:1px solid var(--line);background:var(--surface);border-radius:11px}
+.icon-button{border-radius:12px}
+.dialog-close{border:1px solid var(--line);background:var(--surface);box-shadow:0 2px 8px rgba(31,53,112,.06)}
+.search,select,input,textarea,.filter-medal-button,.medal-picker-button{border:1px solid var(--line);border-radius:11px;background:var(--surface);box-shadow:none}
+input:focus,select:focus,textarea:focus,.search:focus-within{border-color:var(--focus)}
+.score-card-v300{border:1px solid var(--line);border-radius:13px;box-shadow:0 3px 12px rgba(31,53,112,.045);background:var(--surface)}
+.score-card-v300 .card-medal,.score-card-v300 .card-rank,.score-card-v300 .card-score,.score-card-v300 .card-popclass{background:var(--surface);border-color:var(--line)}
+.score-card-v300 .score-edit{background:var(--surface-2);color:var(--navy);border-color:var(--line)}
+.score-card-v300 .card-genre{border-color:var(--line)}
+#userList .user-row-v3095{border-color:var(--line)!important;border-radius:13px!important;background:var(--surface)!important;box-shadow:0 3px 12px rgba(31,53,112,.04)}
+.setting-row,.admin-card,.admin-tabs button,.admin-notice-list button,.feedback-history-card{border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:none}
+.menu-modal .setting-row{padding:12px 14px;transition:background-color .16s,transform .16s}
+.menu-modal .setting-row:active{transform:scale(.995)}
+.menu-modal .setting-row:hover,.setting-row:hover{background:var(--surface-2)}
+.menu-section-title{border-color:var(--line);letter-spacing:.07em}
+.mypage-section,#visibilityDialog .mypage-section,#rivalListDialog .rival-entry,#songDetailContent .rival-comparison{border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:0 3px 12px rgba(31,53,112,.035)}
+#songDetailContent .rival-comparison{grid-template-columns:minmax(0,1fr) minmax(88px,auto) 44px;align-items:center}
+#songDetailContent .rival-comparison strong{grid-column:auto;padding:0;border:0}
+dialog{border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:0 24px 70px rgba(12,25,57,.22)}
+dialog::backdrop{background:rgba(14,25,52,.52);backdrop-filter:blur(5px)}
+#visibilityDialog,#rivalListDialog,#songDetailDialog{background:var(--surface);border-color:var(--line)}
+#visibilityDialog .account-dialog-header,#rivalListDialog .account-dialog-header{padding-bottom:9px;border-bottom:1px solid var(--line)}
+#visibilityDialog .account-dialog-header>h2,#rivalListDialog .account-dialog-header>h2,#songDetailDialog>h2{letter-spacing:-.025em}
+button:not(:disabled){-webkit-tap-highlight-color:transparent}
+@media(hover:hover){.main-button:hover{filter:brightness(1.08)}.score-card-v300:hover,#userList .user-row-v3095:hover{box-shadow:0 6px 20px rgba(31,53,112,.09)}}
+@media(prefers-reduced-motion:reduce){.tabs button,.menu-modal .setting-row{transition:none}}
