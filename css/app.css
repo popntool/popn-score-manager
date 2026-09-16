@@ -648,8 +648,35 @@ button,input,select,textarea{letter-spacing:inherit}
 .guide-formula{margin:12px 0;padding:12px;border-radius:10px;background:var(--page);font-size:.88rem;line-height:1.65;font-weight:700;overflow-wrap:anywhere}
 @media(max-width:420px){#guideDialog{padding:14px}.guide-sections section{padding:13px}}
 
-/* PSR snapshots */
-.psr-history-dialog{max-width:680px;width:min(96vw,680px);max-height:90dvh;overflow-y:auto}.psr-history-help{font-size:.85rem;color:var(--muted,#68758e);line-height:1.6}.psr-history-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line,#dce3f4)}.psr-history-item>div:first-child{display:grid;gap:3px}.psr-history-item time,.psr-history-item small{font-size:.76rem;color:var(--muted,#68758e)}.psr-history-actions{display:flex;gap:5px;flex-wrap:wrap}.psr-history-actions button{border:1px solid var(--line,#dce3f4);background:var(--panel,#fff);color:inherit;border-radius:10px;padding:8px 10px;font:inherit;cursor:pointer}.psr-history-actions [data-psr-delete]{color:#d63c5b}.psr-compare-total{font-weight:800;font-size:1.1rem}.psr-compare-row{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line,#dce3f4);font-size:.84rem}.psr-compare-rank b{color:#e64477}.psr-compare-name{min-width:0;overflow-wrap:anywhere;font-weight:700}.psr-compare-name small,.psr-compare-score small{display:block;font-size:.7rem;color:var(--muted,#68758e)}.psr-compare-score{text-align:right;font-variant-numeric:tabular-nums}@media(max-width:430px){.psr-history-item{align-items:flex-start;flex-direction:column}.psr-compare-row{grid-template-columns:60px minmax(0,1fr) auto;gap:5px;font-size:.76rem}}
+/* PSR history: same modal shell, header, and card language as other menu pages. */
+#psrHistoryDialog,#psrCompareDialog{
+  width:min(520px,calc(100% - 18px));max-width:calc(100% - 18px);
+  max-height:calc(100dvh - 18px);box-sizing:border-box;
+  padding:14px;overflow-x:hidden;overflow-y:auto;
+  overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  background:var(--surface);color:var(--text);border:1px solid var(--line);
+}
+#psrHistoryDialog .psr-history-help,#psrCompareDialog .psr-history-help{
+  margin:0 0 14px;color:var(--muted);font-size:.86rem;line-height:1.65;
+}
+#psrHistoryDialog #savePsrSnapshotButton{display:block;width:100%;min-height:46px;margin:0 0 12px;border-radius:12px;}
+#psrHistoryDialog #psrHistoryStatus:empty{display:none;}
+#psrHistoryDialog #psrHistoryStatus{margin:0 0 10px;overflow-wrap:anywhere;}
+#psrHistoryList{display:grid;gap:10px;min-width:0;}
+#psrHistoryList>.empty{margin:10px 0;padding:22px 12px;border:1px dashed var(--line);border-radius:14px;text-align:center;color:var(--muted);}
+.psr-history-item{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;min-width:0;padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--page);}
+.psr-history-item>div:first-child{display:grid;gap:3px;min-width:0;}
+.psr-history-item time,.psr-history-item small{font-size:.76rem;color:var(--muted);}
+.psr-history-item strong{font-size:1.06rem;font-variant-numeric:tabular-nums;}
+.psr-history-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.psr-history-actions button{min-height:38px;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;}
+.psr-history-actions [data-psr-delete]{color:#cf365a;}
+.psr-compare-total{margin:0 0 12px;padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--page);font-size:1rem;font-weight:800;font-variant-numeric:tabular-nums;}
+.psr-compare-row{display:grid;grid-template-columns:65px minmax(0,1fr) auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:.82rem;}
+.psr-compare-rank b{color:#e64477;}.psr-compare-name{min-width:0;overflow-wrap:anywhere;font-weight:700;}
+.psr-compare-name small,.psr-compare-score small{display:block;font-size:.7rem;color:var(--muted);}
+.psr-compare-score{text-align:right;font-variant-numeric:tabular-nums;}
+@media(max-width:430px){.psr-history-item{grid-template-columns:minmax(0,1fr);gap:10px}.psr-history-actions{justify-content:stretch}.psr-history-actions button{flex:1}.psr-compare-row{grid-template-columns:55px minmax(0,1fr) auto;gap:5px;font-size:.75rem}}
 
 /* v3.0.121: one consistent, non-sticky menu-dialog heading row. */
 #myPageDialog>.account-dialog-header,
