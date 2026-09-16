@@ -433,3 +433,56 @@ body.auth-user>.auth-gate{display:none}
 .score-card-v300{cursor:pointer}
 #visibilityDialog .check-row{display:flex;align-items:center;gap:.6rem;margin:.6rem 0}
 #visibilityDialog input,#visibilityDialog select{font-size:16px}
+
+/* v3.0.109: account subdialogs share the menu's framed, scrollable layout. */
+#visibilityDialog,#rivalListDialog,#songDetailDialog{
+  width:min(520px,calc(100% - 18px));
+  max-width:calc(100% - 18px);
+  max-height:calc(100dvh - 18px);
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  padding:14px;
+  box-sizing:border-box;
+}
+#visibilityDialog>.dialog-back,#rivalListDialog>.dialog-back{
+  display:grid;
+  position:sticky;
+  top:0;
+  margin:0 0 8px auto;
+  width:max-content;
+  z-index:3;
+}
+#visibilityDialog>h2,#rivalListDialog>h2,#songDetailDialog>h2{
+  margin:0 0 12px;
+  padding-right:44px;
+  color:var(--navy);
+  font-size:1.2rem;
+  line-height:1.4;
+  overflow-wrap:anywhere;
+}
+#visibilityDialog form{padding:0;gap:12px;min-width:0;}
+#visibilityDialog .mypage-section{margin:0;padding:12px;gap:9px;min-width:0;}
+#visibilityDialog .mypage-section h3{margin:0;color:var(--navy);font-size:1rem;}
+#visibilityDialog .mypage-section label:not(.check-row){font-size:.82rem;}
+#visibilityDialog .mypage-section input[type=text]{width:100%;min-width:0;}
+#visibilityDialog .check-row{display:flex;align-items:center;gap:10px;margin:0;min-height:38px;font-size:.9rem;}
+#visibilityDialog .check-row input{flex:none;width:20px;height:20px;}
+#visibilityDialog .main-button{width:100%;}
+#rivalListDialog .rival-list{display:grid;gap:8px;min-width:0;}
+#rivalListDialog .rival-entry{display:flex;flex-wrap:nowrap;gap:12px;min-width:0;padding:11px 12px;border:2px solid var(--line);border-radius:12px;background:var(--page);}
+#rivalListDialog .rival-entry strong{min-width:0;overflow-wrap:anywhere;}
+#rivalListDialog .rival-entry button{flex:none;min-height:40px;}
+#songDetailDialog{position:relative;}
+#songDetailDialog>.dialog-close{position:sticky;top:0;float:right;margin:0 0 4px 8px;z-index:3;}
+#songDetailDialog>h2{padding-right:0;}
+#songDetailContent{display:grid;gap:9px;clear:both;min-width:0;}
+#songDetailContent .rival-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;padding:12px;border:2px solid var(--line);border-radius:12px;background:var(--page);font-size:.86rem;}
+#songDetailContent .rival-comparison strong{grid-column:1/-1;padding-bottom:7px;border-bottom:1px solid var(--line);}
+#songDetailContent .rival-comparison span{min-width:0;overflow-wrap:anywhere;}
+[data-theme="dark"] #visibilityDialog>h2,[data-theme="dark"] #rivalListDialog>h2,[data-theme="dark"] #songDetailDialog>h2,[data-theme="dark"] #visibilityDialog .mypage-section h3{color:var(--text);}
+@media(max-width:760px){
+ #visibilityDialog,#rivalListDialog,#songDetailDialog{padding:12px;max-height:calc(100dvh - 12px);}
+ #songDetailContent .rival-comparison{grid-template-columns:1fr;}
+}
