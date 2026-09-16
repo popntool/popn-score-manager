@@ -8,7 +8,7 @@
   "theme_color": "#ffd64f",
   "icons": [
     {
-      "src": "./assets/popn-score-icon.png",
+      "src": "./assets/popn-score-icon.png?v=3.0.129",
       "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "any maskable"
