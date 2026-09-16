@@ -10,10 +10,10 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <title>pop'n Score Manager</title>
   <link rel="stylesheet" href="./css/base.css">
-  <link rel="stylesheet" href="./css/components.css?v=3.0.122">
+  <link rel="stylesheet" href="./css/components.css?v=3.0.123">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
-<link rel="stylesheet" href="./css/app.css?v=3.0.122">
+<link rel="stylesheet" href="./css/app.css?v=3.0.123">
 </head>
 <body class="auth-pending">
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
@@ -208,7 +208,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.122</b>
+<b>3.0.123</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -320,7 +320,7 @@
       <section id="guide-psr-history"><h3>PSR保存履歴の使い方</h3><ol><li>「メニュー → PSR保存履歴」を開き、「現在のPSRを保存」を押すと、その時点のPSR対象曲とスコア・メダルを記録できます。</li><li>保存履歴の「画像」から、保存時点の対象曲をPSR共有画像と同じ形式で出力できます。</li><li>「比較」では保存時点と現在の対象曲・スコアを比較できます。順位の変化は「↑」「↓」「new」で表示され、対象外になった曲も確認できます。</li><li>不要な履歴は「削除」で消せます。削除した履歴は元に戻せません。</li></ol><p>スコア同期が正常に完了したときにも自動保存します。過去の履歴は保存時点の記録であり、現在のスコアを変更しても書き換わりません。</p></section>
       <section id="guide-users"><h3>ユーザー・ライバル</h3><p>「ユーザー」で公開されている情報を確認し、☆からライバルを登録できます。登録済みライバルは「メニュー → ライバル一覧」で管理します（最大10人）。公開されていないスコアやメダルは閲覧できません。</p></section>
       <section id="guide-settings"><h3>公開設定・画像共有</h3><p>「メニュー → 公開情報」でポプともID、最高クリア難度、ポップンクラス、PSR、ライバル向けのスコア・メダル公開を個別に設定できます。公開したい項目だけオンにして保存してください。</p><p>PSRの保存・比較・画像出力の詳しい手順は「PSR保存履歴の使い方」を参照してください。「メニュー → 画像共有」からPSR対象曲やレベル別メダル一覧を画像にできます。「表示テーマ」ではライト／ダークを切り替えられます。</p></section>
-      <section id="guide-help"><h3>困ったときは</h3><p>操作方法や表示の問題は「メニュー → サポート → 要望・不具合」から送信できます。曲情報の追加・訂正は曲の登録依頼を利用してください。</p></section>
+      <section id="guide-help"><h3>困ったときは</h3><p>操作方法や表示の問題は「メニュー → サポート → 要望・不具合」から送信できます。曲情報の追加・訂正は曲の登録依頼を利用してください。バナー登録依頼の画像は承認前には公開されず、承認後に公開用バナーへ反映されます。</p></section>
     </div>
   </dialog>
   <dialog id="feedbackDialog"><form id="feedbackForm" method="dialog"><div class="account-dialog-header"><h2>要望・不具合</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><label>種類<select name="category"><option value="request">要望</option><option value="bug">不具合</option></select></label><div class="form-grid"><label>機種名（任意）<input name="device_name" maxlength="100" placeholder="例：iPhone 16"></label><label>ブラウザ名（任意）<input name="browser_name" maxlength="100" placeholder="例：Safari"></label></div><label>内容<textarea name="message" required maxlength="3000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>閉じる</button><button class="main-button" type="submit">送信</button></div><section class="feedback-history"><h3>送信履歴</h3><div id="feedbackHistory"></div></section></form></dialog>
@@ -331,7 +331,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.122">
+  <script type="module" src="./js/app.js?v=3.0.123">
 </script>
 </body>
 </html>
