@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="./css/responsive.css">
 <link rel="stylesheet" href="./css/app.css?v=3.0.127">
   <link rel="stylesheet" href="./css/loading-screen.css?v=3.0.137">
+  <link rel="stylesheet" href="./css/average-scores.css?v=3.0.138">
 </head>
 <body class="auth-pending">
   <div id="psmStartupLoading" role="status" aria-live="polite" aria-label="読み込み中">
@@ -257,6 +258,7 @@
 </label>
       <button id="syncHelpButton" class="setting-row" type="button"><span><strong>スコア同期</strong><small>公式サイトで実行する同期用ブックマークを設定します</small></span><b>›</b></button>
       <button id="bannerRequestButton" class="setting-row" type="button"><span><strong>バナー送信</strong><small>バナー未登録の曲へ画像を送信します</small></span><b>＋</b></button>
+      <button id="averageScoreButton" class="setting-row" type="button"><span><strong>レベル別平均スコア</strong><small>歴代・今作の平均スコアをレベル別に確認します</small></span><b>›</b></button>
       <button id="psrHistoryButton" class="setting-row" type="button"><span><strong>PSR保存履歴</strong><small>現在のPSRを保存・画像共有・過去と比較します</small></span><b>›</b></button>
       <button id="imageShareButton" class="setting-row" type="button"><span><strong>画像共有</strong><small>Popn Score Rating 対象曲・レベル別メダル一覧を画像で共有します</small></span><b>›</b></button>
       <h2 class="menu-section-title admin-only" hidden>管理者ツール</h2>
@@ -294,7 +296,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.137</b>
+<b>3.0.138</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -363,6 +365,20 @@
 <dialog id="visibilityDialog" class="menu-dialog"><div class="account-dialog-header"><h2>公開情報</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><form id="visibilityForm"><section class="mypage-section"><h3>ポプともID</h3><label>ポプともID（12桁）<input id="poptomoIdInput" name="poptomo_id" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="123456789012"></label><label class="check-row"><input id="poptomoPublicInput" name="poptomo_public" type="checkbox">ポプともIDを公開する</label></section><section class="mypage-section"><h3>公開する項目</h3><label class="check-row"><input type="checkbox" name="highest_clear_public">最高クリア難度</label><label class="check-row"><input type="checkbox" name="popn_class_public">ポップンクラス</label><label class="check-row"><input type="checkbox" name="psr_public">PSR</label><h3>ライバル向け公開</h3><p>自分をライバル登録したユーザーにのみ表示します。</p><label class="check-row"><input type="checkbox" name="rival_scores_public">スコアを公開</label><label class="check-row"><input type="checkbox" name="rival_medals_public">メダルを公開</label></section><button class="main-button" type="submit">公開設定を保存</button><p class="error" aria-live="polite"></p></form></dialog>
 <dialog id="songDetailDialog" class="menu-dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2 id="songDetailTitle">曲詳細</h2><div id="songDetailContent"></div></dialog>
 <dialog id="songRequestDialog"><form id="songRequestForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2>曲の登録依頼</h2><div class="form-grid"><label>ジャンル名<input name="genre" required maxlength="100"></label><label>曲名<input name="title" required maxlength="200"></label></div><label>アーティスト<input name="artist" required maxlength="200"></label><fieldset class="request-levels"><legend>譜面・レベル（1つ以上入力）</legend><label class="light">LIGHT<input name="light_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="normal">NORMAL<input name="normal_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="hyper">HYPER<input name="hyper_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="ex">EX<input name="ex_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label></fieldset><label>補足<textarea name="note" maxlength="1000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">送信</button></div></form></dialog>
+  <dialog id="averageScoreDialog" class="menu-dialog average-score-dialog" aria-labelledby="averageScoreTitle">
+    <div class="account-dialog-header"><h2 id="averageScoreTitle">レベル別平均スコア</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
+    <div class="average-score-body">
+      <div class="average-score-filters">
+        <span class="average-score-label">表示レベル</span>
+        <select id="averageLevelFrom" aria-label="開始レベル"><option value="">選択</option></select>
+        <span aria-hidden="true">～</span>
+        <select id="averageLevelTo" aria-label="終了レベル"><option value="">選択</option></select>
+        <button id="averageScoreShowButton" class="sub-button" type="button">表示する</button>
+      </div>
+      <p class="average-score-note">各譜面のスコアが1点以上の場合のみ平均に含めます。歴代・今作はそれぞれ別に集計します。</p>
+      <div id="averageScoreResult" class="average-score-result" aria-live="polite">表示レベルを選択して「表示する」を押してください。</div>
+    </div>
+  </dialog>
   <dialog id="psrHistoryDialog" class="menu-dialog psr-history-dialog"><div class="account-dialog-header"><h2>PSR保存履歴</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><p class="psr-history-help">同期完了時に自動保存します。現在のPSRも手動で保存できます。</p><button id="savePsrSnapshotButton" class="main-button" type="button">現在のPSRを保存</button><p id="psrHistoryStatus" class="image-share-status" aria-live="polite"></p><div id="psrHistoryList"></div></dialog>
   <dialog id="psrCompareDialog" class="menu-dialog psr-history-dialog"><div class="account-dialog-header"><h2 id="psrCompareTitle">PSR比較</h2><button class="dialog-back" type="button" id="psrCompareBack">戻る</button></div><div id="psrCompareContent"></div></dialog>
   <dialog id="imageShareDialog" class="image-share-dialog"><div class="image-share-shell">
@@ -397,12 +413,13 @@
     <div class="account-dialog-header"><h2 id="guideTitle">使い方・サイトマップ</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
     <p class="guide-intro">知りたい項目を選ぶと説明へ移動します。</p>
     <nav class="guide-map" aria-label="使い方の目次">
-      <a href="#guide-start">はじめに</a><a href="#guide-score">スコア</a><a href="#guide-psr">PSR</a><a href="#guide-psr-history">PSR保存履歴</a><a href="#guide-users">ユーザー・ライバル</a><a href="#guide-settings">設定・共有</a><a href="#guide-help">お問い合わせ</a>
+      <a href="#guide-start">はじめに</a><a href="#guide-score">スコア</a><a href="#guide-psr">PSR</a><a href="#guide-average-scores">平均スコア</a><a href="#guide-psr-history">PSR保存履歴</a><a href="#guide-users">ユーザー・ライバル</a><a href="#guide-settings">設定・共有</a><a href="#guide-help">お問い合わせ</a>
     </nav>
     <div class="guide-sections">
       <section id="guide-start"><h3>はじめに</h3><p>起動時は曲データの読み込み画面が表示されます。読み込みが終わると自動的に閉じます。長時間表示される場合は「再読み込み」をお試しください。iPhoneの「視差効果を減らす」がオンでも、読み込み表示の音符とバーは控えめに動きます。</p><p>ログイン後、画面上部の「PSR」「スコア」「ユーザー」から各機能に移動できます。右上のメニューからアカウント設定や同期・共有を利用できます。</p></section>
       <section id="guide-score"><h3>スコアを登録・確認する</h3><ol><li>「スコア」で曲名・レベル・バージョンなどを絞り込みます。</li><li>曲カードの「編集」から歴代スコア、今作スコア、メダル、今作クリア状況を登録します。</li><li>公式サイトのスコアを取り込む場合は「メニュー → スコア同期」の案内に従ってください。</li></ol><p>歴代スコアは自己ベスト、今作スコアは今作の記録です。曲マスターにない曲や譜面は登録依頼の対象となります。登録依頼の補足と送信者名は管理者の承認画面に表示されます。同期時は照合件数を確認し、曲名だけでの照合がある場合は誤登録防止のため保存を中止します。</p></section>
       <section id="guide-psr"><h3>PSR（Popn Score Rating）とは？</h3><p>レベル・今作スコア・今作クリア状況から算出する、このサイト独自の指標です。公式のポップンクラスとは別の値です。</p><div class="guide-formula">曲別PSR ＝（レベル × レベル × 今作スコア ÷ 6000 ＋ クリアボーナス）÷ 200</div><p>クリアボーナスは未クリア：0、イージー：200、ロングオフ：300、クリア：1000、フルコンボ：2000、パーフェクト：3000。未プレーは対象外です。曲別PSRは小数第3位以下を切り捨てます。</p><p>「PSR」タブでは新曲枠と旧曲枠の上位曲を表示します。総合値は対象曲の曲別PSRを合計し、所定の曲数で割って算出します。枠に満たない場合も分母は変わりません。</p><p>例：Lv.40・今作90,000点・クリアの場合、曲別PSRは125.00です。</p></section>
+      <section id="guide-average-scores"><h3>レベル別平均スコア</h3><p>「メニュー → レベル別平均スコア」で表示レベルの開始・終了を選び、「表示する」を押すと、レベルごとの歴代スコアと今作スコアの平均を表示します。各譜面のスコアが1点以上の場合だけそれぞれの平均に含め、0点は分母に含めません。登録がないレベルは「－」と表示します。</p></section>
       <section id="guide-psr-history"><h3>PSR保存履歴の使い方</h3><ol><li>「メニュー → PSR保存履歴」を開き、「現在のPSRを保存」を押すと、その時点のPSR対象曲とスコア・メダルを記録できます。</li><li>保存履歴の「画像」から、保存時点の対象曲をPSR共有画像と同じ形式で出力できます。</li><li>「比較」では保存時点と現在の対象曲・スコアを比較できます。順位の変化は「↑」「↓」「new」で表示され、対象外になった曲も確認できます。</li><li>不要な履歴は「削除」で消せます。削除した履歴は元に戻せません。</li></ol><p>スコア同期が完了すると保存件数を通知し、正常に完了したときはPSR履歴も自動保存します。過去の履歴は保存時点の記録であり、現在のスコアを変更しても書き換わりません。</p></section>
       <section id="guide-users"><h3>ユーザー・ライバル</h3><p>「ユーザー」で公開されている情報を確認し、☆からライバルを登録できます。登録済みライバルは「メニュー → ライバル一覧」で管理します（最大10人）。公開されていないスコアやメダルは閲覧できません。</p></section>
       <section id="guide-settings"><h3>公開設定・画像共有</h3><p>「メニュー → 公開情報」でポプともID、最高クリア難度、ポップンクラス、PSR、ライバル向けのスコア・メダル公開を個別に設定できます。公開したい項目だけオンにして保存してください。</p><p>PSRの保存・比較・画像出力の詳しい手順は「PSR保存履歴の使い方」を参照してください。「メニュー → 画像共有」からPSR対象曲やレベル別メダル一覧を画像にできます。「表示テーマ」ではライト／ダークを切り替えられます。</p></section>
@@ -417,7 +434,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.135">
+  <script type="module" src="./js/app.js?v=3.0.138">
 </script>
 </body>
 </html>

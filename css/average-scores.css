@@ -1,0 +1,19 @@
+/* v3.0.138: level-by-level average scores. Scoped to avoid overriding existing dialogs. */
+#averageScoreDialog{width:min(640px,calc(100% - 20px));max-height:calc(100dvh - 20px);overflow:auto}
+#averageScoreDialog>.account-dialog-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 12px;border-bottom:1px solid var(--line)}
+#averageScoreDialog>.account-dialog-header h2{margin:0;font-size:clamp(1.05rem,4vw,1.35rem);line-height:1.35}
+#averageScoreDialog>.account-dialog-header .dialog-back{position:static;flex:none}
+#averageScoreDialog .average-score-body{padding:18px;display:grid;gap:14px}
+#averageScoreDialog .average-score-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#averageScoreDialog .average-score-label{margin-right:2px;white-space:nowrap;font-weight:800}
+#averageScoreDialog .average-score-filters select{width:83px;min-width:0;height:40px;padding:5px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px;font-size:16px;text-align:center}
+#averageScoreDialog .average-score-filters button{min-height:40px;padding:7px 11px;margin-left:auto;white-space:nowrap}
+#averageScoreDialog .average-score-note{margin:0;color:var(--muted);font-size:.8rem;line-height:1.6}
+#averageScoreDialog .average-score-result{min-height:130px;overflow-x:auto;color:var(--text);font-variant-numeric:tabular-nums;line-height:1.5}
+#averageScoreDialog .average-score-table{width:100%;border-collapse:collapse;text-align:right;font-size:clamp(.85rem,3.6vw,1rem)}
+#averageScoreDialog .average-score-table th,#averageScoreDialog .average-score-table td{padding:9px 5px;white-space:nowrap;border-bottom:1px solid var(--line)}
+#averageScoreDialog .average-score-table thead th{color:var(--muted);font-weight:800}
+#averageScoreDialog .average-score-table th:first-child{text-align:center}
+#averageScoreDialog .average-score-table tbody th{font-weight:800}
+#averageScoreDialog .average-score-table tbody tr:last-child th,#averageScoreDialog .average-score-table tbody tr:last-child td{border-bottom:0}
+@media(max-width:390px){#averageScoreDialog .average-score-body{padding:14px}#averageScoreDialog .average-score-filters{gap:6px}#averageScoreDialog .average-score-label{width:100%}#averageScoreDialog .average-score-filters select{flex:1;width:0}#averageScoreDialog .average-score-filters button{margin-left:0}#averageScoreDialog .average-score-table th,#averageScoreDialog .average-score-table td{padding:8px 3px}}
