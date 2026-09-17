@@ -15,8 +15,50 @@
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
 <link rel="stylesheet" href="./css/app.css?v=3.0.127">
+  <link rel="stylesheet" href="./css/loading-screen.css?v=3.0.132">
 </head>
 <body class="auth-pending">
+  <div id="psmStartupLoading" role="status" aria-live="polite" aria-label="読み込み中">
+    <div class="psm-loading-preview" aria-hidden="true">
+      <div class="psm-preview-heading"></div>
+      <div class="psm-preview-tabs"><i></i><i></i><i></i></div>
+      <div class="psm-preview-row"><i></i><span></span><b></b></div>
+      <div class="psm-preview-row"><i></i><span></span><b></b></div>
+      <div class="psm-preview-row"><i></i><span></span><b></b></div>
+      <div class="psm-preview-row"><i></i><span></span><b></b></div>
+    </div>
+    <div class="psm-loading-card">
+      <h2 class="psm-loading-title">読み込み中</h2>
+      <p class="psm-loading-subtitle">曲データを準備しています</p>
+      <div class="psm-loading-notes" aria-hidden="true">
+        <span class="psm-note">♪<span class="psm-smile"></span></span>
+        <span class="psm-note">♪<span class="psm-smile"></span></span>
+        <span class="psm-note">♪<span class="psm-smile"></span></span>
+      </div>
+      <svg class="psm-loading-wave" viewBox="0 0 290 21" preserveAspectRatio="none" aria-hidden="true"><path d="M5 12 Q40 0 75 12 T145 12 T215 12 T285 12" /></svg>
+      <div class="psm-loading-track" aria-hidden="true"></div>
+      <p class="psm-loading-status" id="psmLoadingStatus">しばらくお待ちください</p>
+      <button type="button" class="psm-loading-retry" id="psmLoadingRetry">再読み込み</button>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const screen = document.getElementById('psmStartupLoading');
+      const status = document.getElementById('psmLoadingStatus');
+      let finished = false;
+      const timeout = window.setTimeout(() => {
+        if (finished) return;
+        screen.classList.add('is-stalled');
+        status.textContent = '読み込みに時間がかかっています。通信状況をご確認ください。';
+      }, 20000);
+      document.getElementById('psmLoadingRetry').addEventListener('click', () => window.location.reload());
+      window.psmLoading = {
+        status(message) { if (!finished) status.textContent = message; },
+        finish() { if (finished) return; finished = true; clearTimeout(timeout); screen.hidden = true; },
+        error() { if (finished) return; clearTimeout(timeout); screen.classList.add('is-stalled'); status.textContent = '読み込みに失敗しました。再読み込みしてください。'; }
+      };
+    })();
+  </script>
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
     <div class="auth-gate-card">
       <div class="auth-gate-brand">
@@ -209,7 +251,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.131</b>
+<b>3.0.133</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -315,7 +357,7 @@
       <a href="#guide-start">はじめに</a><a href="#guide-score">スコア</a><a href="#guide-psr">PSR</a><a href="#guide-psr-history">PSR保存履歴</a><a href="#guide-users">ユーザー・ライバル</a><a href="#guide-settings">設定・共有</a><a href="#guide-help">お問い合わせ</a>
     </nav>
     <div class="guide-sections">
-      <section id="guide-start"><h3>はじめに</h3><p>ログイン後、画面上部の「PSR」「スコア」「ユーザー」から各機能に移動できます。右上のメニューからアカウント設定や同期・共有を利用できます。</p></section>
+      <section id="guide-start"><h3>はじめに</h3><p>起動時は曲データの読み込み画面が表示されます。読み込みが終わると自動的に閉じます。長時間表示される場合は「再読み込み」をお試しください。iPhoneの「視差効果を減らす」がオンでも、読み込み表示の音符とバーは控えめに動きます。</p><p>ログイン後、画面上部の「PSR」「スコア」「ユーザー」から各機能に移動できます。右上のメニューからアカウント設定や同期・共有を利用できます。</p></section>
       <section id="guide-score"><h3>スコアを登録・確認する</h3><ol><li>「スコア」で曲名・レベル・バージョンなどを絞り込みます。</li><li>曲カードの「編集」から歴代スコア、今作スコア、メダル、今作クリア状況を登録します。</li><li>公式サイトのスコアを取り込む場合は「メニュー → スコア同期」の案内に従ってください。</li></ol><p>歴代スコアは自己ベスト、今作スコアは今作の記録です。曲マスターにない曲や譜面は登録依頼の対象となります。登録依頼の補足と送信者名は管理者の承認画面に表示されます。同期時は照合件数を確認し、曲名だけでの照合がある場合は誤登録防止のため保存を中止します。</p></section>
       <section id="guide-psr"><h3>PSR（Popn Score Rating）とは？</h3><p>レベル・今作スコア・今作クリア状況から算出する、このサイト独自の指標です。公式のポップンクラスとは別の値です。</p><div class="guide-formula">曲別PSR ＝（レベル × レベル × 今作スコア ÷ 6000 ＋ クリアボーナス）÷ 200</div><p>クリアボーナスは未クリア：0、イージー：200、ロングオフ：300、クリア：1000、フルコンボ：2000、パーフェクト：3000。未プレーは対象外です。曲別PSRは小数第3位以下を切り捨てます。</p><p>「PSR」タブでは新曲枠と旧曲枠の上位曲を表示します。総合値は対象曲の曲別PSRを合計し、所定の曲数で割って算出します。枠に満たない場合も分母は変わりません。</p><p>例：Lv.40・今作90,000点・クリアの場合、曲別PSRは125.00です。</p></section>
       <section id="guide-psr-history"><h3>PSR保存履歴の使い方</h3><ol><li>「メニュー → PSR保存履歴」を開き、「現在のPSRを保存」を押すと、その時点のPSR対象曲とスコア・メダルを記録できます。</li><li>保存履歴の「画像」から、保存時点の対象曲をPSR共有画像と同じ形式で出力できます。</li><li>「比較」では保存時点と現在の対象曲・スコアを比較できます。順位の変化は「↑」「↓」「new」で表示され、対象外になった曲も確認できます。</li><li>不要な履歴は「削除」で消せます。削除した履歴は元に戻せません。</li></ol><p>スコア同期が完了すると保存件数を通知し、正常に完了したときはPSR履歴も自動保存します。過去の履歴は保存時点の記録であり、現在のスコアを変更しても書き換わりません。</p></section>
@@ -332,7 +374,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.130">
+  <script type="module" src="./js/app.js?v=3.0.132">
 </script>
 </body>
 </html>
