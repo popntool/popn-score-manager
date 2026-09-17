@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
 <link rel="stylesheet" href="./css/app.css?v=3.0.127">
-  <link rel="stylesheet" href="./css/loading-screen.css?v=3.0.132">
+  <link rel="stylesheet" href="./css/loading-screen.css?v=3.0.135">
 </head>
 <body class="auth-pending">
   <div id="psmStartupLoading" role="status" aria-live="polite" aria-label="読み込み中">
@@ -28,16 +28,34 @@
       <div class="psm-preview-row"><i></i><span></span><b></b></div>
     </div>
     <div class="psm-loading-card">
+      <div class="psm-loading-title-row" aria-hidden="true"><span></span><span></span></div>
       <h2 class="psm-loading-title">読み込み中</h2>
-      <p class="psm-loading-subtitle">曲データを準備しています</p>
-      <div class="psm-loading-notes" aria-hidden="true">
-        <span class="psm-note">♪<span class="psm-smile"></span></span>
-        <span class="psm-note">♪<span class="psm-smile"></span></span>
-        <span class="psm-note">♪<span class="psm-smile"></span></span>
+      <p class="psm-loading-subtitle">曲データを読み込んでいます</p>
+      <div class="psm-loading-hero" aria-hidden="true">
+        <i class="psm-loading-confetti is-blue"></i>
+        <i class="psm-loading-confetti is-pink"></i>
+        <i class="psm-loading-confetti is-yellow"></i>
+        <i class="psm-loading-confetti is-mini-blue"></i>
+        <i class="psm-loading-confetti is-mini-pink"></i>
+        <div class="psm-loading-crew">
+          <span class="psm-mascot psm-mascot-blue">
+            <span class="psm-face is-cheer"><i></i><i></i><b></b></span>
+          </span>
+          <span class="psm-mascot psm-mascot-pink">
+            <span class="psm-face is-happy"><i></i><i></i><b></b></span>
+          </span>
+          <span class="psm-mascot psm-mascot-yellow">
+            <span class="psm-face is-sleepy"><i></i><i></i><b></b></span>
+          </span>
+        </div>
+        <svg class="psm-loading-wave" viewBox="0 0 320 28" preserveAspectRatio="none"><path d="M6 17 C36 3, 66 3, 96 17 S156 31, 186 17 S246 3, 276 17 S306 29, 314 17" /></svg>
       </div>
-      <svg class="psm-loading-wave" viewBox="0 0 290 21" preserveAspectRatio="none" aria-hidden="true"><path d="M5 12 Q40 0 75 12 T145 12 T215 12 T285 12" /></svg>
-      <div class="psm-loading-track" aria-hidden="true"></div>
-      <p class="psm-loading-status" id="psmLoadingStatus">しばらくお待ちください</p>
+      <div class="psm-loading-progress" aria-label="読み込み進捗">
+        <div class="psm-loading-track" aria-hidden="true"><span class="psm-loading-fill" id="psmLoadingFill"></span></div>
+        <strong class="psm-loading-percent" id="psmLoadingPercent">0%</strong>
+      </div>
+      <p class="psm-loading-status" id="psmLoadingStatus">起動準備中です</p>
+      <div class="psm-loading-tip"><span class="psm-loading-tip-icon" aria-hidden="true">💡</span><p id="psmLoadingTipText">お気に入りの曲を見つけて、あなただけのスコアリストを作りましょう！</p></div>
       <button type="button" class="psm-loading-retry" id="psmLoadingRetry">再読み込み</button>
     </div>
   </div>
@@ -45,17 +63,58 @@
     (() => {
       const screen = document.getElementById('psmStartupLoading');
       const status = document.getElementById('psmLoadingStatus');
+      const fill = document.getElementById('psmLoadingFill');
+      const percent = document.getElementById('psmLoadingPercent');
+      const tip = document.getElementById('psmLoadingTipText');
+      const tips = [
+        'お気に入りの曲を見つけて、あなただけのスコアリストを作りましょう！',
+        '同期後はPSR保存履歴から、過去の数値や順位変化をいつでも見返せます。',
+        '曲カードをタップすると、ライバルとの比較をすばやく確認できます。'
+      ];
       let finished = false;
+      let progressValue = 0;
+      let tipIndex = 0;
+      const setProgress = nextValue => {
+        const normalized = Math.max(progressValue, Math.min(100, Number(nextValue) || 0));
+        progressValue = normalized;
+        fill.style.width = `${normalized}%`;
+        percent.textContent = `${Math.round(normalized)}%`;
+      };
+      setProgress(6);
+      const tipTimer = window.setInterval(() => {
+        if (finished) return;
+        tipIndex = (tipIndex + 1) % tips.length;
+        tip.textContent = tips[tipIndex];
+      }, 4600);
       const timeout = window.setTimeout(() => {
         if (finished) return;
         screen.classList.add('is-stalled');
+        setProgress(92);
         status.textContent = '読み込みに時間がかかっています。通信状況をご確認ください。';
       }, 20000);
       document.getElementById('psmLoadingRetry').addEventListener('click', () => window.location.reload());
       window.psmLoading = {
-        status(message) { if (!finished) status.textContent = message; },
-        finish() { if (finished) return; finished = true; clearTimeout(timeout); screen.hidden = true; },
-        error() { if (finished) return; clearTimeout(timeout); screen.classList.add('is-stalled'); status.textContent = '読み込みに失敗しました。再読み込みしてください。'; }
+        status(message, nextProgress) {
+          if (finished) return;
+          if (message) status.textContent = message;
+          if (nextProgress != null) setProgress(nextProgress);
+        },
+        finish() {
+          if (finished) return;
+          finished = true;
+          clearTimeout(timeout);
+          clearInterval(tipTimer);
+          status.textContent = '準備ができました';
+          setProgress(100);
+          window.setTimeout(() => { screen.hidden = true; }, 180);
+        },
+        error() {
+          if (finished) return;
+          clearTimeout(timeout);
+          clearInterval(tipTimer);
+          screen.classList.add('is-stalled');
+          status.textContent = '読み込みに失敗しました。再読み込みしてください。';
+        }
       };
     })();
   </script>
@@ -251,7 +310,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.133</b>
+<b>3.0.135</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -374,7 +433,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.0.132">
+  <script type="module" src="./js/app.js?v=3.0.135">
 </script>
 </body>
 </html>
