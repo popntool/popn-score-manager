@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
 <link rel="stylesheet" href="./css/app.css?v=3.0.127">
-  <link rel="stylesheet" href="./css/loading-screen.css?v=3.0.136">
+  <link rel="stylesheet" href="./css/loading-screen.css?v=3.0.137">
 </head>
 <body class="auth-pending">
   <div id="psmStartupLoading" role="status" aria-live="polite" aria-label="読み込み中">
@@ -32,30 +32,14 @@
       <h2 class="psm-loading-title">読み込み中</h2>
       <p class="psm-loading-subtitle">曲データを読み込んでいます</p>
       <div class="psm-loading-hero" aria-hidden="true">
-        <i class="psm-loading-confetti is-blue"></i>
-        <i class="psm-loading-confetti is-pink"></i>
-        <i class="psm-loading-confetti is-yellow"></i>
-        <i class="psm-loading-confetti is-mini-blue"></i>
-        <i class="psm-loading-confetti is-mini-pink"></i>
-        <div class="psm-loading-crew">
-          <span class="psm-mascot psm-mascot-blue">
-            <span class="psm-face is-cheer"><i></i><i></i><b></b></span>
-          </span>
-          <span class="psm-mascot psm-mascot-pink">
-            <span class="psm-face is-happy"><i></i><i></i><b></b></span>
-          </span>
-          <span class="psm-mascot psm-mascot-yellow">
-            <span class="psm-face is-sleepy"><i></i><i></i><b></b></span>
-          </span>
-        </div>
-        <svg class="psm-loading-wave" viewBox="0 0 320 28" preserveAspectRatio="none"><path d="M6 17 C36 3, 66 3, 96 17 S156 31, 186 17 S246 3, 276 17 S306 29, 314 17" /></svg>
+        <img class="psm-loading-mascot-art" src="./assets/loading-mascots-137.png" alt="" width="826" height="315" decoding="async">
       </div>
-      <div class="psm-loading-progress" aria-label="読み込み進捗">
+      <div class="psm-loading-progress" aria-label="読み込み段階の目安">
         <div class="psm-loading-track" aria-hidden="true"><span class="psm-loading-fill" id="psmLoadingFill"></span></div>
         <strong class="psm-loading-percent" id="psmLoadingPercent">0%</strong>
       </div>
       <p class="psm-loading-status" id="psmLoadingStatus">起動準備中です</p>
-      <div class="psm-loading-tip"><span class="psm-loading-tip-icon" aria-hidden="true">💡</span><p id="psmLoadingTipText">お気に入りの曲を見つけて、あなただけのスコアリストを作りましょう！</p></div>
+      <div class="psm-loading-tip"><span class="psm-loading-tip-icon" aria-hidden="true"><img src="./assets/loading-lightbulb-137.png" alt="" width="138" height="144"></span><p id="psmLoadingTipText">お気に入りの曲を見つけて、あなただけのスコアリストを作りましょう！</p></div>
       <button type="button" class="psm-loading-retry" id="psmLoadingRetry">再読み込み</button>
     </div>
   </div>
@@ -310,7 +294,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.0.136</b>
+<b>3.0.137</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
