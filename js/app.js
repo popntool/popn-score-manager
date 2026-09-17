@@ -27,7 +27,7 @@ async function toggleTheme(){const theme=document.documentElement.dataset.theme=
 function populateAverageLevelOptions(){
   for(const id of ["#averageLevelFrom","#averageLevelTo"]){
     const select=$(id);
-    for(let level=1;level<=50;level++)select.add(new Option(String(level),String(level)));
+    for(let level=50;level>=1;level--)select.add(new Option(String(level),String(level)));
   }
 }
 function populateLevels(){const selects=[$("#levelFilter"),$("#defaultLevelFilter"),$("#adminLevelFilter")];for(let level=50;level>=1;level--){for(const select of selects){const option=document.createElement("option");option.value=String(level);option.textContent=`Lv.${level}`;select.append(option);}}const saved=localStorage.getItem("popn-default-level")||"ALL";for(const select of selects.slice(0,2))select.value=[...select.options].some(x=>x.value===saved)?saved:"ALL";}
