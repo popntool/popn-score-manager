@@ -1,4 +1,4 @@
-/* v3.0.139: level-by-level average scores. Centered results and descending level selectors. */
+/* v3.0.140: level-by-level average scores. Centered results, descending level selectors, matching score text colors. */
 #averageScoreDialog{width:min(640px,calc(100% - 20px));max-height:calc(100dvh - 20px);overflow:auto}
 #averageScoreDialog>.account-dialog-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 12px;border-bottom:1px solid var(--line)}
 #averageScoreDialog>.account-dialog-header h2{margin:0;font-size:clamp(1.05rem,4vw,1.35rem);line-height:1.35}
@@ -17,5 +17,6 @@
 #averageScoreDialog .average-score-table th,#averageScoreDialog .average-score-table td{text-align:center}
 #averageScoreDialog .average-score-table th:first-child{text-align:center}
 #averageScoreDialog .average-score-table tbody th{font-weight:800}
+#averageScoreDialog .average-score-table tbody th,#averageScoreDialog .average-score-table tbody td{color:var(--text)}
 #averageScoreDialog .average-score-table tbody tr:last-child th,#averageScoreDialog .average-score-table tbody tr:last-child td{border-bottom:0}
 @media(max-width:390px){#averageScoreDialog .average-score-body{padding:14px}#averageScoreDialog .average-score-filters{gap:6px}#averageScoreDialog .average-score-label{width:100%}#averageScoreDialog .average-score-filters select{flex:1;width:0}#averageScoreDialog .average-score-filters button{margin-left:0}#averageScoreDialog .average-score-table th,#averageScoreDialog .average-score-table td{padding:8px 3px}}
