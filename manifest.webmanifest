@@ -8,13 +8,13 @@
   "theme_color": "#ffd64f",
   "icons": [
     {
-      "src": "./assets/psm-icon-192-131.png",
+      "src": "./assets/psm-icon-192-315.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "./assets/psm-icon-512-131.png",
+      "src": "./assets/psm-icon-512-315.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
