@@ -179,5 +179,5 @@ try {
   window.psmLoading?.finish();
 } catch (error) {
   console.error("Initial loading failed:", error);
-  window.psmLoading?.error();
+  window.psmLoading?.error(error);
 }
