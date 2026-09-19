@@ -2,7 +2,7 @@ import{isConfigured}from"./supabase.js";
 import{levelScoreAverages}from"./average-scores.js?v=3.0.138";
 import{changePassword,changeUsername,currentUser,currentUsername,loadMyProfile,login,logout,onAuthChange,register,saveDisplayPreferences,saveOfficialPopnClass,savePoptomo}from"./auth.js?v=3.0.82";
 import{downloadSongMaster,importSongMaster}from"./songs.js?v=3.0.92";
-import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.1.0";
+import{loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.1.2";
 import{loadUsers}from"./users.js?v=3.1.0";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.0.107";
 import{medalInfo as rivalMedalInfo}from"./ui.js?v=3.0.107";
