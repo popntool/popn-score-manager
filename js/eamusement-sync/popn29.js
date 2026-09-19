@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v3.0.91
+/* pop'n music スコア同期 v3.1.0
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -9,7 +9,12 @@
   const VERSION_OPTIONS=[
     ['ALL','-1'],["pop'n 家庭用",'0'],["pop'n music",'1'],["pop'n music 2",'2'],["pop'n music 3",'3'],["pop'n music 4",'4'],["pop'n music 5",'5'],["pop'n music 6",'6'],["pop'n music 7",'7'],["pop'n music 8",'8'],["pop'n music 9",'9'],["pop'n music 10",'10'],["pop'n music 11",'11'],["pop'n music 12 いろは",'12'],["pop'n music 13 カーニバル",'13'],["pop'n music 14 FEVER！",'14'],["pop'n music 15 ADVENTURE",'15'],["pop'n music 16 PARTY♪",'16'],["pop'n music 17 THE MOVIE",'17'],["pop'n music 18 せんごく列伝",'18'],["pop'n music 19 TUNE STREET",'19'],["pop'n music 20 fantasia",'20'],["pop'n music Sunny Park",'21'],["pop'n music ラピストリア",'22'],["pop'n music éclale",'23'],["pop'n music うさぎと猫と少年の夢",'24'],["pop'n music peace",'25'],["pop'n music 解明リドルズ",'26'],["pop'n music UniLab",'27'],["pop'n music Jam&Fizz",'28'],["pop'n music High☆Cheers!!",'29'],['BEMANI','BEMANI']
   ];
-  if(location.hostname!=='p.eagate.573.jp'){alert('e-amusementの曲データページで実行してください。');return;}
+  const sourceMatch=location.pathname.match(/^\/game\/popn\/(popn[0-9]+)\/playdata\/[^/]+\.html$/);
+  if(location.hostname!=='p.eagate.573.jp'||!sourceMatch){alert('対応するe-amusementの曲データページで実行してください。');return;}
+  const SOURCE_PATH=`/game/popn/${sourceMatch[1]}/`;
+
+  const sourceNumber=sourceMatch[1].slice(4);
+  if(!VERSION_OPTIONS.some(([,value])=>value===sourceNumber))VERSION_OPTIONS.splice(-1,0,[`現行作品 (${sourceMatch[1]})`,sourceNumber]);
   if(window.__POPN_SCORE_SYNC_RUNNING__){alert('同期処理は実行中です。');return;}
   window.__POPN_SCORE_SYNC_RUNNING__=true;
 
@@ -31,7 +36,7 @@
   async function getDoc(url,label,retry=2){for(let attempt=0;;attempt++){const r=await fetch(url,{credentials:'include',cache:'no-store'});if(r.ok){const text=await r.text();if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');return new DOMParser().parseFromString(text,'text/html');}if(attempt>=retry||![429,500,502,503,504].includes(r.status))throw new Error(`${label}: HTTP ${r.status}`);await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));}}
 
   async function fetchPopnClass(){
-    const doc=await getDoc(new URL('/game/popn/popn29/playdata/index.html',location.origin),'ポップンクラス');
+    const doc=await getDoc(new URL(`${SOURCE_PATH}playdata/index.html`,location.origin),'ポップンクラス');
     const node=doc.querySelector('#popnclass');
     const match=clean(node?.textContent).replace(/,/g,'').match(/\d+(?:\.\d+)?/);
     if(!match)throw new Error('公式ポップンクラスを取得できませんでした。');
@@ -67,7 +72,7 @@
   function listUrl(target,page){
     const isLevel=target.kind==='level';
     // レベル指定は mu_lv.html、バージョン/BEMANI指定は公式画面と同じ mu_top.html を使う。
-    const u=new URL(`/game/popn/popn29/playdata/${isLevel?'mu_lv':'mu_top'}.html`,location.origin);
+    const u=new URL(`${SOURCE_PATH}playdata/${isLevel?'mu_lv':'mu_top'}.html`,location.origin);
     const params={
       page:String(page),
       version:String(target.version??-1),
@@ -136,7 +141,8 @@
   try{
     const scope=await chooseScope();if(!scope)return;
     // レベル帯・バージョンのどちらで同期しても、公式ステータス画面からポップンクラスを同時取得する。
-    const popn_class=await fetchPopnClass();
+    let popn_class=null;
+    try{popn_class=await fetchPopnClass();}catch(error){console.warn('公式ポップンクラスの取得を省略しました',error);}
     let targets;
     if(scope.mode==='level')targets=Array.from({length:scope.max-scope.min+1},(_,i)=>({kind:'level',lv:scope.min+i,version:-1,bemani:0,label:`Lv.${scope.min+i}`}));
     else if(scope.value==='BEMANI')targets=Array.from({length:10},(_,i)=>({kind:'filter',version:-1,bemani:i+1,label:`BEMANI ${i+1}`}));
@@ -165,8 +171,8 @@
       .filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none'||Number(row.version_score)>0||row.current_clear_status!=='failed')
       .map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面・ポップンクラスを確認中…`;
-    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:4,popn_class,records:rows})),compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
-    status.textContent=`取得完了：${rows.length}譜面・ポップンクラス ${popn_class.toFixed(2)}。サイトへ戻ります…`;
+    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:5,source_url:location.origin+SOURCE_PATH,popn_class,records:rows})),compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+    status.textContent=`取得完了：${rows.length}譜面${popn_class===null?"":"・ポップンクラス "+popn_class.toFixed(2)}。サイトへ戻ります…`;
     location.href=RETURN_URL+'#popn-sync-gzip='+encodeURIComponent(toBase64(compressed));
   }catch(e){const status=box.querySelector('[data-status]');if(status)status.textContent=`エラー：${e?.message||e}`;const cancel=box.querySelector('[data-cancel]');if(cancel){cancel.textContent='閉じる';cancel.disabled=false;cancel.onclick=()=>box.remove();}console.error(e);window.__POPN_SCORE_SYNC_RUNNING__=false;}
 })();

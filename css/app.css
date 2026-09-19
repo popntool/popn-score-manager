@@ -721,3 +721,8 @@ button,input,select,textarea{letter-spacing:inherit}
 #myPageDialog>.account-dialog-header{margin:12px 14px 0}
 #myPageDialog>form:first-of-type{padding-top:12px}
 @media(max-width:760px){#myPageDialog>.account-dialog-header{margin:10px 12px 0}}
+
+/* v3.1.0: game version selection */
+.game-version-row{gap:10px;align-items:center}
+.game-version-row>span{min-width:0;flex:1}
+.game-version-row select{min-width:0;max-width:52%;font-size:16px;color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 5px}
