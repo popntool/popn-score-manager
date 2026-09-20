@@ -135,7 +135,7 @@ async function loadGuideDialog(){
   if($("#guideDialog"))return $("#guideDialog");
   if(!guideLoadPromise){
     guideLoadPromise=(async()=>{
-      const response=await fetch("./partials/guide.html?v=3.1.18");
+      const response=await fetch("./partials/guide.html?v=3.1.19");
       if(!response.ok)throw new Error(`HTTP ${response.status}`);
       const template=document.createElement("template");
       template.innerHTML=await response.text();

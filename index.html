@@ -40,7 +40,56 @@
       <button type="button" class="psm-loading-retry" id="psmLoadingRetry">再読み込み</button>
     </div>
   </div>
-  <script src="./js/loading-startup.js?v=3.1.18"></script>
+  <script>
+    (() => {
+      const screen = document.getElementById('psmStartupLoading');
+      const status = document.getElementById('psmLoadingStatus');
+      const tip = document.getElementById('psmLoadingTipText');
+      const tips = [
+        'お気に入りの曲を見つけて、あなただけのスコアリストを作りましょう！',
+        '同期後はPSR保存履歴から、過去の数値や順位変化をいつでも見返せます。',
+        '曲カードをタップすると、ライバルとの比較をすばやく確認できます。'
+      ];
+      let finished = false;
+      let tipIndex = 0;
+      const tipTimer = window.setInterval(() => {
+        if (finished) return;
+        tipIndex = (tipIndex + 1) % tips.length;
+        tip.textContent = tips[tipIndex];
+      }, 4600);
+      const timeout = window.setTimeout(() => {
+        if (finished) return;
+        screen.classList.add('is-stalled');
+        status.textContent = '読み込みに時間がかかっています。通信状況をご確認ください。';
+      }, 20000);
+      document.getElementById('psmLoadingRetry').addEventListener('click', () => window.location.reload());
+      // External module failures happen before app.js can show an error.
+      window.addEventListener('unhandledrejection', event => {
+        window.psmLoading?.error(event.reason);
+      });
+      window.psmLoading = {
+        status(message) {
+          if (finished) return;
+          if (message) status.textContent = message;
+        },
+        finish() {
+          if (finished) return;
+          finished = true;
+          clearTimeout(timeout);
+          clearInterval(tipTimer);
+          status.textContent = '準備ができました';
+          window.setTimeout(() => { screen.hidden = true; }, 180);
+        },
+        error(error) {
+          if (finished) return;
+          clearTimeout(timeout);
+          clearInterval(tipTimer);
+          screen.classList.add('is-stalled');
+          status.textContent = '読み込みに失敗しました：' + (error?.message || String(error || '原因不明')) + '。再読み込みしてください。';
+        }
+      };
+    })();
+  </script>
   <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
     <div class="auth-gate-card">
       <div class="auth-gate-brand">
@@ -230,7 +279,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.1.18</b>
+<b>3.1.19</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -361,6 +410,12 @@
   <dialog id="promptDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2 id="promptTitle">入力</h2><label><span id="promptLabel"></span><input id="promptInput" type="text"></label><div class="dialog-actions"><button class="sub-button" value="cancel">キャンセル</button><button class="main-button" value="ok">決定</button></div></form></dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="./js/app.js?v=3.1.18"></script>
+  <script type="module">
+    // Catch module fetch/import failures too; they occur before app.js can report an error.
+    import("./js/app.js?v=3.1.19").catch(error => {
+      console.error("Application module failed to load:", error);
+      window.psmLoading?.error(error);
+    });
+  </script>
 </body>
 </html>
