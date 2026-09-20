@@ -228,7 +228,8 @@ async function openSongDetail(row){
       return a.originalIndex-b.originalIndex;
     });
     let previousScore=null,rank=0;
-    box.innerHTML=comparison.map((r,index)=>{
+    const header=`<div class="rival-comparison-labels" aria-hidden="true" style="display:grid;grid-template-columns:minmax(42px,auto) minmax(0,1fr) minmax(88px,auto) 44px;align-items:center;gap:10px;padding:0 12px 2px;color:var(--muted);font-size:.76rem;font-weight:700;"><span>順位</span><span>ユーザー</span><span style="text-align:right;">スコア</span><span style="text-align:center;">メダル</span></div>`;
+    const items=comparison.map((r,index)=>{
       const ranked=validScore(r);
       if(ranked&&Number(r.score)!==previousScore){rank=index+1;previousScore=Number(r.score);}
       const score=r.score==null?"非公開":ranked?Number(r.score).toLocaleString("ja-JP"):"－";
@@ -236,6 +237,7 @@ async function openSongDetail(row){
       const medal=info==null?'<span class="rival-medal-private">非公開</span>':r.medal_code==="none"?'<span class="rival-medal-private">－</span>':Number(r.score)===100000?'<img src="./assets/cool-perfect.png" alt="COOL PERFECT" title="COOL PERFECT">':info.url?`<img src="${attr(info.url)}" alt="${attr(info.label)}" title="${attr(info.label)}">`:`<span class="rival-medal-private">${attr(info.label)}</span>`;
       return `<div class="rival-comparison"><span class="rival-position" aria-label="${ranked?`${rank}位`:"順位なし"}">${ranked?`${rank}.`:"－"}</span><strong>${attr(r.username)}</strong><span class="rival-history-score" aria-label="歴代スコア ${attr(score)}">${score}</span><span class="rival-medal">${medal}</span></div>`;
     }).join("");
+    box.innerHTML=header+items;
   }catch(e){box.textContent=e.message||String(e);}
 }
 for(const id of ["#scoreList","#popclassContent"])$(id).addEventListener("click",event=>{if(event.target.closest("button,a,select,input"))return;const card=event.target.closest(".score-card-v300");if(!card)return;const edit=card.querySelector("[data-edit-score]");const row=scores.find(x=>String(x.id)===edit?.dataset.editScore);if(row)openSongDetail(row);});
