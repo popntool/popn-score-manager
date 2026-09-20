@@ -532,8 +532,8 @@ body{background:var(--page);line-height:1.5}
 .topbar .brand-wordmark{min-width:0;flex:none}
 .psm-wordmark{display:block;object-fit:contain;object-position:left center;max-width:100%;height:auto}
 .psm-wordmark-header{width:200px}
-.auth-gate-brand h1{width:min(331px,100%);margin:0}
-.psm-wordmark-login{width:331px;margin-inline:auto}
+.auth-gate-brand h1{width:min(320px,100%);margin:0}
+.psm-wordmark-login{width:320px;margin-inline:auto}
 .player-bar,.panel,.medal-summary{border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
 .player-bar{background:var(--surface);position:relative;overflow:hidden}
 .player-bar::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(var(--pink),var(--blue))}
