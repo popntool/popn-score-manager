@@ -228,7 +228,7 @@ async function openSongDetail(row){
       return a.originalIndex-b.originalIndex;
     });
     let previousScore=null,rank=0;
-    const header=`<div class="rival-comparison-labels" aria-hidden="true" style="display:grid;grid-template-columns:minmax(42px,auto) minmax(0,1fr) minmax(88px,auto) 44px;align-items:center;gap:10px;padding:0 12px 2px;color:var(--muted);font-size:.76rem;font-weight:700;"><span>順位</span><span>ユーザー</span><span style="text-align:right;">スコア</span><span style="text-align:center;">メダル</span></div>`;
+    const header=`<div class="rival-comparison-labels" aria-hidden="true" style="display:grid;grid-template-columns:minmax(42px,auto) minmax(0,1fr) minmax(88px,auto) 44px;align-items:center;gap:10px;padding:0 12px 2px;color:var(--muted);font-size:.76rem;font-weight:700;"><span>順位</span><span>ユーザー</span><span style="text-align:right;">歴代スコア</span><span style="text-align:center;line-height:1.2;">歴代<br>メダル</span></div>`;
     const items=comparison.map((r,index)=>{
       const ranked=validScore(r);
       if(ranked&&Number(r.score)!==previousScore){rank=index+1;previousScore=Number(r.score);}
