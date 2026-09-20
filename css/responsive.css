@@ -16,3 +16,15 @@
 @media(max-width:760px){.page-shell{padding-top:6px;padding-bottom:18px}.player-bar{padding:7px 10px;margin-bottom:7px}.tabs{margin-bottom:7px}.panel{padding:8px}.panel-heading{margin-bottom:7px}.filters{margin-bottom:7px}.score-list{gap:6px}.empty{padding:20px 8px}footer{padding:18px 10px 26px}.menu-dialog{max-height:calc(100dvh - 12px)}.menu-modal{max-height:calc(100dvh - 18px)}}
 
 @media(max-width:760px){.score-overview{grid-template-columns:104px minmax(0,1fr);gap:5px;margin-bottom:7px}.medal-summary{grid-template-columns:repeat(7,1fr);border-radius:11px}.medal-stat{min-height:46px;padding:2px}.medal-stat:nth-child(7){border-right:0}.medal-stat:nth-child(-n/**/+7){border-bottom:1px solid var(--surface-2)}.medal-stat img,.medal-stat>span{width:24px;height:24px}.medal-stat strong{font-size:.67rem}.user-list{gap:6px}.user-name{font-size:.95rem}}
+
+@media(max-width:760px){
+  .topbar .brand-wordmark-text{line-height:.82}
+  .topbar .brand-popn{font-size:1.05rem}
+  .topbar .brand-score-manager{font-size:.95rem}
+  .topbar .brand-rainbow{height:5px;max-width:160px;margin-top:4px}
+}
+@media(max-width:380px){
+  .topbar .brand-popn{font-size:.96rem}
+  .topbar .brand-score-manager{font-size:.86rem}
+  .topbar .brand-rainbow{max-width:138px}
+}
