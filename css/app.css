@@ -743,3 +743,8 @@ button,input,select,textarea{letter-spacing:inherit}
 .support-ofuse-link:hover{background:#2669d7}
 .support-ofuse-link:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
 @media(max-width:760px){#supportDialog{padding:14px 12px 16px}.support-dialog-content{gap:14px}}
+
+/* v3.1.24: song detail score ranking. */
+#songDetailContent .rival-comparison{grid-template-columns:2.3rem minmax(0,1fr) minmax(88px,auto) 44px;}
+#songDetailContent .rival-position{display:block;min-width:0;text-align:center;font-weight:900;font-variant-numeric:tabular-nums;color:var(--navy);white-space:nowrap;}
+@media(max-width:380px){#songDetailContent .rival-comparison{grid-template-columns:1.8rem minmax(0,1fr) minmax(72px,auto) 36px;gap:6px;padding:9px 7px}#songDetailContent .rival-medal{width:36px}#songDetailContent .rival-medal img{width:32px;height:32px}}

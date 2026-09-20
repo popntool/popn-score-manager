@@ -202,7 +202,34 @@ $("#rivalListButton").addEventListener("click",async()=>{try{rivals=await loadRi
 $("#rivalListContent").addEventListener("click",async event=>{const b=event.target.closest("[data-remove-rival]");if(!b)return;try{await toggleRival(b.dataset.removeRival);rivals=await loadRivals();showRivals();renderUsers(userRows,userPage,new Set(rivals.map(x=>x.user_id)),myUserId);}catch(e){alert(e.message||e);}});
 $("#visibilityButton").addEventListener("click",async()=>{try{const p=await loadMyProfile(),f=$("#visibilityForm");$("#poptomoIdInput").value=p.poptomo_id||"";$("#poptomoPublicInput").checked=Boolean(p.poptomo_public);for(const key of ["highest_clear_public","popn_class_public","psr_public","rival_scores_public","rival_medals_public"])f.elements[key].checked=Boolean(p[key]);openMenuChild("#visibilityDialog");}catch(e){alert(e.message||e);}});
 $("#visibilityForm").addEventListener("submit",async event=>{event.preventDefault();const f=event.currentTarget;try{await saveVisibility({poptomo_id:$("#poptomoIdInput").value,poptomo_public:$("#poptomoPublicInput").checked,...Object.fromEntries(["highest_clear_public","popn_class_public","psr_public","rival_scores_public","rival_medals_public"].map(k=>[k,f.elements[k].checked]))});f.querySelector(".error").textContent="";await refreshUsers();alert("公開設定を保存しました。");}catch(e){f.querySelector(".error").textContent=e.message||e;}});
-async function openSongDetail(row){$("#songDetailTitle").textContent=`${row.title} / ${row.chart} Lv.${row.level}`;const box=$("#songDetailContent");box.textContent="ライバルのデータを取得中…";$("#songDetailDialog").showModal();try{const entries=await rivalSongScores(row.song_id,row.chart);const mine={username:"自分",score:row.score,medal_code:row.medal_code};box.innerHTML=[mine,...entries].map(r=>{const score=r.score==null?"非公開":Number(r.score)>0?Number(r.score).toLocaleString("ja-JP"):"－",info=r.medal_code==null?null:rivalMedalInfo(r.medal_code),medal=info==null?'<span class="rival-medal-private">非公開</span>':r.medal_code==="none"?'<span class="rival-medal-private">－</span>':Number(r.score)===100000?'<img src="./assets/cool-perfect.png" alt="COOL PERFECT" title="COOL PERFECT">':info.url?`<img src="${attr(info.url)}" alt="${attr(info.label)}" title="${attr(info.label)}">`:`<span class="rival-medal-private">${attr(info.label)}</span>`;return `<div class="rival-comparison"><strong>${attr(r.username)}</strong><span class="rival-history-score" aria-label="歴代スコア ${attr(score)}">${score}</span><span class="rival-medal">${medal}</span></div>`;}).join("")||"ライバルはいません。";}catch(e){box.textContent=e.message||String(e);}}
+async function openSongDetail(row){
+  $("#songDetailTitle").textContent=`${row.title} / ${row.chart} Lv.${row.level}`;
+  const box=$("#songDetailContent");
+  box.textContent="ライバルのデータを取得中…";
+  $("#songDetailDialog").showModal();
+  try{
+    const entries=await rivalSongScores(row.song_id,row.chart);
+    const mine={username:"自分",score:row.score,medal_code:row.medal_code};
+    // Non-public scores and unplayed scores have no rank and appear after ranked entries.
+    const comparison=[mine,...entries].map((entry,index)=>({...entry,originalIndex:index}));
+    const validScore=entry=>entry.score!==null&&entry.score!==undefined&&entry.score!==""&&Number.isFinite(Number(entry.score))&&Number(entry.score)>0;
+    comparison.sort((a,b)=>{
+      const aValid=validScore(a),bValid=validScore(b);
+      if(aValid!==bValid)return aValid?-1:1;
+      if(aValid&&bValid){const difference=Number(b.score)-Number(a.score);if(difference)return difference;}
+      return a.originalIndex-b.originalIndex;
+    });
+    let previousScore=null,rank=0;
+    box.innerHTML=comparison.map((r,index)=>{
+      const ranked=validScore(r);
+      if(ranked&&Number(r.score)!==previousScore){rank=index+1;previousScore=Number(r.score);}
+      const score=r.score==null?"非公開":ranked?Number(r.score).toLocaleString("ja-JP"):"－";
+      const info=r.medal_code==null?null:rivalMedalInfo(r.medal_code);
+      const medal=info==null?'<span class="rival-medal-private">非公開</span>':r.medal_code==="none"?'<span class="rival-medal-private">－</span>':Number(r.score)===100000?'<img src="./assets/cool-perfect.png" alt="COOL PERFECT" title="COOL PERFECT">':info.url?`<img src="${attr(info.url)}" alt="${attr(info.label)}" title="${attr(info.label)}">`:`<span class="rival-medal-private">${attr(info.label)}</span>`;
+      return `<div class="rival-comparison"><span class="rival-position" aria-label="${ranked?`${rank}位`:"順位なし"}">${ranked?`${rank}.`:"－"}</span><strong>${attr(r.username)}</strong><span class="rival-history-score" aria-label="歴代スコア ${attr(score)}">${score}</span><span class="rival-medal">${medal}</span></div>`;
+    }).join("");
+  }catch(e){box.textContent=e.message||String(e);}
+}
 for(const id of ["#scoreList","#popclassContent"])$(id).addEventListener("click",event=>{if(event.target.closest("button,a,select,input"))return;const card=event.target.closest(".score-card-v300");if(!card)return;const edit=card.querySelector("[data-edit-score]");const row=scores.find(x=>String(x.id)===edit?.dataset.editScore);if(row)openSongDetail(row);});
 
 onAuthChange(()=>refreshAuth(false));
