@@ -731,3 +731,15 @@ button,input,select,textarea{letter-spacing:inherit}
 .game-version-row{gap:10px;align-items:center}
 .game-version-row>span{min-width:0;flex:1}
 .game-version-row select{min-width:0;max-width:52%;font-size:16px;color:var(--text);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 5px}
+
+/* Optional support page: use the app's existing light/dark theme colors. */
+#supportDialog{padding:16px 18px 20px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);width:min(520px,calc(100% - 18px));max-height:calc(100dvh - 18px);overflow-y:auto}
+#supportDialog>.account-dialog-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 20px;padding:0 0 12px;border-bottom:1px solid var(--line)}
+#supportDialog>.account-dialog-header>h2{flex:1;min-width:0;margin:0;font-size:1.2rem;font-weight:800;line-height:1.4;color:var(--text)}
+#supportDialog>.account-dialog-header>.dialog-back{position:static;flex:none;width:auto;margin:0;align-self:center}
+.support-dialog-content{display:grid;gap:16px;line-height:1.65}
+.support-dialog-content p{margin:0;color:var(--text);font-size:.92rem;overflow-wrap:anywhere}
+.support-ofuse-link{display:grid;place-items:center;min-height:52px;padding:10px 16px;margin-top:4px;background:#3478e9;color:#fff;border-radius:12px;font-weight:800;text-align:center}
+.support-ofuse-link:hover{background:#2669d7}
+.support-ofuse-link:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media(max-width:760px){#supportDialog{padding:14px 12px 16px}.support-dialog-content{gap:14px}}

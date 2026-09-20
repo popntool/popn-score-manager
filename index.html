@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="./css/components.css?v=3.0.127">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css?v=3.1.9">
-<link rel="stylesheet" href="./css/app.css?v=3.1.9">
+<link rel="stylesheet" href="./css/app.css?v=3.1.15">
   <link rel="stylesheet" href="./css/loading-screen.css?v=3.1.6">
   <link rel="stylesheet" href="./css/average-scores.css?v=3.0.141">
 </head>
@@ -275,12 +275,23 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.1.14</b>
+<b>3.1.15</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
       <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>＋</b></button>
+      <button id="supportButton" class="setting-row" type="button"><span><strong>運営を支援する</strong><small>OFUSEから任意で運営費をご支援いただけます</small></span><b>›</b></button>
     </div></dialog>
+
+    <dialog id="supportDialog" class="menu-dialog support-dialog" aria-labelledby="supportTitle">
+      <div class="account-dialog-header"><h2 id="supportTitle">運営を支援する</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
+      <div class="support-dialog-content">
+        <p>Pop'n Score Managerは無料で公開・運営しています。</p>
+        <p>サイトの維持・運営費として、任意でご支援いただけると助かります。</p>
+        <p>支援の有無によって利用できる機能が変わることはありません。</p>
+        <a class="support-ofuse-link" href="https://ofuse.me/gitadorafc" target="_blank" rel="noopener noreferrer">OFUSEで支援する</a>
+      </div>
+    </dialog>
 
     <section id="adminPanel" class="panel tab-panel" hidden>
       <div class="panel-heading"><div><small>ADMINISTRATION</small><h1>管理者画面</h1></div></div>
@@ -392,7 +403,7 @@
     <div class="account-dialog-header"><h2 id="guideTitle">使い方・サイトマップ</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
     <p class="guide-intro">知りたい項目を選ぶと説明へ移動します。</p>
     <nav class="guide-map" aria-label="使い方の目次">
-      <a href="#guide-start">はじめに</a><a href="#guide-score">スコア</a><a href="#guide-psr">PSR</a><a href="#guide-average-scores">平均スコア</a><a href="#guide-psr-history">PSR保存履歴</a><a href="#guide-users">ユーザー・ライバル</a><a href="#guide-settings">設定・共有</a><a href="#guide-help">お問い合わせ</a>
+      <a href="#guide-start">はじめに</a><a href="#guide-score">スコア</a><a href="#guide-psr">PSR</a><a href="#guide-average-scores">平均スコア</a><a href="#guide-psr-history">PSR保存履歴</a><a href="#guide-users">ユーザー・ライバル</a><a href="#guide-settings">設定・共有</a><a href="#guide-support">運営を支援する</a><a href="#guide-help">お問い合わせ</a>
     </nav>
     <div class="guide-sections">
       <section id="guide-start"><h3>はじめに</h3><p>起動時は曲データの読み込み画面が表示されます。読み込みが終わると自動的に閉じます。長時間表示される場合は「再読み込み」をお試しください。</p><p>ログイン画面と画面上部には「Pop'n Score Manager」のロゴが表示されます。ログイン後、画面上部の「PSR」「スコア」「ユーザー」から各機能に移動できます。右上のメニューからアカウント設定や同期・共有を利用できます。</p></section>
@@ -402,6 +413,7 @@
       <section id="guide-psr-history"><h3>PSR保存履歴の使い方</h3><ol><li>「メニュー → PSR保存履歴」を開き、「現在のPSRを保存」を押すと、その時点のPSR対象曲とスコア・メダルを記録できます。</li><li>保存履歴の「画像」から、保存時点の対象曲をPSR共有画像と同じ形式で出力できます。</li><li>「比較」では保存時点と現在の対象曲・スコアを比較できます。順位の変化は「↑」「↓」「new」で表示され、対象外になった曲も確認できます。</li><li>不要な履歴は「削除」で消せます。削除した履歴は元に戻せません。</li></ol><p>スコア同期が完了すると保存件数を通知し、正常に完了したときはPSR履歴も自動保存します。過去の履歴は保存時点の記録であり、現在のスコアを変更しても書き換わりません。</p></section>
       <section id="guide-users"><h3>ユーザー・ライバル</h3><p>「ユーザー」で公開されている情報を確認し、☆からライバルを登録できます。登録済みライバルは「メニュー → ライバル一覧」で管理します（最大10人）。公開されていないスコアやメダルは閲覧できません。</p></section>
       <section id="guide-settings"><h3>公開設定・画像共有</h3><p>「メニュー → 公開情報」でポプともID、最高クリア難度、ポップンクラス、PSR、ライバル向けのスコア・メダル公開を個別に設定できます。公開したい項目だけオンにして保存してください。</p><p>PSRの保存・比較・画像出力の詳しい手順は「PSR保存履歴の使い方」を参照してください。「メニュー → 画像共有」からPSR対象曲やレベル別メダル一覧を画像にできます。「表示テーマ」ではライト／ダークを切り替えられます。</p></section>
+      <section id="guide-support"><h3>運営を支援する</h3><p>「メニュー → サポート → 運営を支援する」から、OFUSEで任意のご支援ができます。支援の有無によって利用できる機能は変わりません。</p></section>
       <section id="guide-help"><h3>困ったときは</h3><p>操作方法や表示の問題は「メニュー → サポート → 要望・不具合」から送信できます。曲情報の追加・訂正は曲の登録依頼を利用してください。バナー登録依頼の画像は承認前には公開されず、承認後に公開用バナーへ反映されます。</p></section>
     </div>
   </dialog>
@@ -413,7 +425,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.1.5">
+  <script type="module" src="./js/app.js?v=3.1.15">
 </script>
 </body>
 </html>
