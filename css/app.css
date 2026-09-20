@@ -529,13 +529,11 @@ body{background:var(--page);line-height:1.5}
 .brand-icon{border:0;border-radius:14px;background:linear-gradient(145deg,#ff729e,#ffad62);color:white;box-shadow:0 4px 10px rgba(255,99,143,.2);transform:rotate(-5deg)}
 .brand-icon::first-letter{transform:rotate(5deg)}
 .brand strong{letter-spacing:-.035em}
-.topbar .brand-wordmark{display:flex;align-items:center;gap:0;min-width:0}
-.topbar .brand-wordmark-text{display:grid;grid-template-columns:1fr;align-items:end;line-height:.84;white-space:nowrap}
-.topbar .brand-popn,.topbar .brand-score-manager{display:block;font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",system-ui,sans-serif;font-weight:900;color:var(--navy);letter-spacing:-.055em;text-shadow:0 2px 0 rgba(255,255,255,.4)}
-.topbar .brand-popn{font-size:clamp(1.18rem,2.2vw,1.55rem)}
-.topbar .brand-score-manager{margin-top:-1px;font-size:clamp(1.06rem,2vw,1.38rem)}
-.topbar .brand-rainbow{display:block;width:100%;max-width:220px;height:6px;margin-top:5px;border-radius:999px;background:linear-gradient(90deg,#ff73ad 0 18%,#ffd554 18% 46%,#8de06b 46% 70%,#59bbff 70% 100%)}
-html[data-theme="dark"] .topbar .brand-popn,html[data-theme="dark"] .topbar .brand-score-manager{text-shadow:none}
+.topbar .brand-wordmark{min-width:0;flex:none}
+.psm-wordmark{display:block;object-fit:contain;object-position:left center;max-width:100%;height:auto}
+.psm-wordmark-header{width:200px}
+.auth-gate-brand h1{width:min(331px,100%);margin:0}
+.psm-wordmark-login{width:331px;margin-inline:auto}
 .player-bar,.panel,.medal-summary{border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}
 .player-bar{background:var(--surface);position:relative;overflow:hidden}
 .player-bar::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(var(--pink),var(--blue))}
