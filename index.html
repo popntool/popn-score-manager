@@ -8,14 +8,14 @@
   <link rel="icon" type="image/x-icon" sizes="any" href="./assets/psm-favicon-315.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/psm-icon-192-315.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/psm-touch-315.png">
-  <link rel="manifest" href="./manifest.webmanifest?v=3.1.6">
+  <link rel="manifest" href="./manifest.webmanifest?v=3.1.5">
   <title>pop'n Score Manager</title>
   <link rel="stylesheet" href="./css/base.css?v=3.0.142">
   <link rel="stylesheet" href="./css/components.css?v=3.0.127">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css">
 <link rel="stylesheet" href="./css/app.css?v=3.1.4">
-  <link rel="stylesheet" href="./css/loading-screen.css?v=3.0.137">
+  <link rel="stylesheet" href="./css/loading-screen.css?v=3.1.6">
   <link rel="stylesheet" href="./css/average-scores.css?v=3.0.141">
 </head>
 <body class="auth-pending">
@@ -35,10 +35,6 @@
       <div class="psm-loading-hero" aria-hidden="true">
         <img class="psm-loading-mascot-art" src="./assets/loading-mascots-137.png" alt="" width="826" height="315" decoding="async">
       </div>
-      <div class="psm-loading-progress" aria-label="読み込み段階の目安">
-        <div class="psm-loading-track" aria-hidden="true"><span class="psm-loading-fill" id="psmLoadingFill"></span></div>
-        <strong class="psm-loading-percent" id="psmLoadingPercent">0%</strong>
-      </div>
       <p class="psm-loading-status" id="psmLoadingStatus">起動準備中です</p>
       <div class="psm-loading-tip"><span class="psm-loading-tip-icon" aria-hidden="true"><img src="./assets/loading-lightbulb-137.png" alt="" width="138" height="144"></span><p id="psmLoadingTipText">お気に入りの曲を見つけて、あなただけのスコアリストを作りましょう！</p></div>
       <button type="button" class="psm-loading-retry" id="psmLoadingRetry">再読み込み</button>
@@ -48,8 +44,6 @@
     (() => {
       const screen = document.getElementById('psmStartupLoading');
       const status = document.getElementById('psmLoadingStatus');
-      const fill = document.getElementById('psmLoadingFill');
-      const percent = document.getElementById('psmLoadingPercent');
       const tip = document.getElementById('psmLoadingTipText');
       const tips = [
         'お気に入りの曲を見つけて、あなただけのスコアリストを作りましょう！',
@@ -57,15 +51,7 @@
         '曲カードをタップすると、ライバルとの比較をすばやく確認できます。'
       ];
       let finished = false;
-      let progressValue = 0;
       let tipIndex = 0;
-      const setProgress = nextValue => {
-        const normalized = Math.max(progressValue, Math.min(100, Number(nextValue) || 0));
-        progressValue = normalized;
-        fill.style.width = `${normalized}%`;
-        percent.textContent = `${Math.round(normalized)}%`;
-      };
-      setProgress(6);
       const tipTimer = window.setInterval(() => {
         if (finished) return;
         tipIndex = (tipIndex + 1) % tips.length;
@@ -74,15 +60,13 @@
       const timeout = window.setTimeout(() => {
         if (finished) return;
         screen.classList.add('is-stalled');
-        setProgress(92);
         status.textContent = '読み込みに時間がかかっています。通信状況をご確認ください。';
       }, 20000);
       document.getElementById('psmLoadingRetry').addEventListener('click', () => window.location.reload());
       window.psmLoading = {
-        status(message, nextProgress) {
+        status(message) {
           if (finished) return;
           if (message) status.textContent = message;
-          if (nextProgress != null) setProgress(nextProgress);
         },
         finish() {
           if (finished) return;
@@ -90,7 +74,6 @@
           clearTimeout(timeout);
           clearInterval(tipTimer);
           status.textContent = '準備ができました';
-          setProgress(100);
           window.setTimeout(() => { screen.hidden = true; }, 180);
         },
         error(error) {
@@ -121,7 +104,7 @@
         <label id="authGatePasswordConfirmRow" hidden>パスワード（確認）<input name="password_confirm" type="password" minlength="8" autocomplete="new-password" placeholder="もう一度入力"></label>
         <aside id="authGatePasswordNotice" class="auth-password-notice" hidden>
           <strong>パスワードについての重要なお知らせ</strong>
-          <p>このサイトではメールアドレスなどの個人情報を取得していないため、通常のパスワード再発行はできません。<br>パスワードは忘れないように保管してください。原則、パスワードを忘れた場合は再登録が必要です。<br>どうしてもパスワードの再発行が必要な場合は、管理者の <a href="https://x.com/popn_psm" target="_blank" rel="noopener noreferrer">X（旧Twitter）</a> へ直接ご連絡ください。</p>
+          <p>このサイトではメールアドレスなどの個人情報を取得していないため、通常のパスワード再発行はできません。<br>パスワードは忘れないように保管してください。原則、パスワードを忘れた場合は再登録が必要です。<br>どうしてもパスワードの再発行が必要な場合は、管理者の <a href="https://x.com/fizz_rky" target="_blank" rel="noopener noreferrer">X（旧Twitter）</a> へ直接ご連絡ください。</p>
         </aside>
         <p id="authGateError" class="error" aria-live="polite"></p>
         <button class="main-button auth-gate-submit" type="submit">ログイン</button>
@@ -435,7 +418,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
 </script>
-  <script type="module" src="./js/app.js?v=3.1.6">
+  <script type="module" src="./js/app.js?v=3.1.5">
 </script>
 </body>
 </html>

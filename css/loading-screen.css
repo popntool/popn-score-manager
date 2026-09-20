@@ -1,4 +1,4 @@
-/* v3.0.137 — reference-artwork version. No duplicate CSS-rendered mascots. */
+/* Loading illustration and text status; no estimated percentage indicator. */
 #psmStartupLoading{
   position:fixed;inset:0;z-index:2147483646;display:grid;place-items:center;
   padding:calc(22px + env(safe-area-inset-top,0px)) 14px calc(22px + env(safe-area-inset-bottom,0px));
@@ -44,13 +44,6 @@
   display:block;width:100%;height:auto;object-fit:contain;
   animation:psm-art-float 3.1s ease-in-out infinite;
 }
-#psmStartupLoading .psm-loading-progress{display:flex;align-items:center;gap:14px;margin:0 0 20px}
-#psmStartupLoading .psm-loading-track{height:17px;flex:1;position:relative;background:#e9eef8;border-radius:99px;overflow:hidden}
-#psmStartupLoading .psm-loading-fill{
-  display:block;position:absolute;inset:0 auto 0 0;width:0;border-radius:inherit;
-  background:linear-gradient(90deg,#86c0ff,#6faffd);transition:width .35s ease;
-}
-#psmStartupLoading .psm-loading-percent{min-width:48px;text-align:right;font-weight:900;color:#294474;font-size:1.3rem;white-space:nowrap}
 #psmStartupLoading .psm-loading-status{font-size:1rem;line-height:1.55;color:#687fa4;min-height:1.55em;margin:0 0 20px}
 #psmStartupLoading .psm-loading-tip{
   display:flex;align-items:center;gap:17px;padding:20px 20px;
@@ -77,12 +70,10 @@
   #psmStartupLoading .psm-loading-title{font-size:1.9rem}
   #psmStartupLoading .psm-loading-subtitle{font-size:.96rem;margin-bottom:16px}
   #psmStartupLoading .psm-loading-hero{margin-bottom:17px}
-  #psmStartupLoading .psm-loading-progress{margin-bottom:14px}
   #psmStartupLoading .psm-loading-status{margin-bottom:14px;font-size:.92rem}
   #psmStartupLoading .psm-loading-tip{padding:15px 14px;gap:13px;font-size:.9rem}
   #psmStartupLoading .psm-loading-tip-icon{width:38px;height:40px;padding-right:10px}
   #psmStartupLoading .psm-loading-tip-icon img{width:38px;height:40px}
-  #psmStartupLoading .psm-loading-percent{font-size:1.1rem;min-width:40px}
 }
 @media(max-width:355px){
   #psmStartupLoading .psm-loading-card{padding-inline:14px}
