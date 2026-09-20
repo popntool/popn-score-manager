@@ -284,7 +284,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.1.24</b>
+<b>3.1.25</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -421,7 +421,7 @@
     import("./js/version-check.js?v=3.1.23").then(async ({checkOnLaunch, watchForUpdates}) => {
       if (await checkOnLaunch()) return; // Navigating to the fresh HTML; skip loading this copy.
       watchForUpdates();
-      await import("./js/app.js?v=3.1.24");
+      await import("./js/app.js?v=3.1.25");
     }).catch(error => {
       console.error("Application module failed to load:", error);
       window.psmLoading?.error(error);
