@@ -1,12 +1,28 @@
-// Only user-driven navigation checks for updates; never poll or reload an open page.
-const CURRENT_VERSION = "3.1.23";
+// Release metadata is checked only on launch and after intentional app navigation.
+// Keep the running version in index.html; this module is cached independently.
+const CURRENT_VERSION = document.querySelector('meta[name="psm-app-version"]')?.content;
 const RELEASE_FILE = "./version.json";
 const URL_MARKER = "psm_version";
-const MIN_CHECK_GAP_MS = 60_000; // Network throttling, NOT a periodic timer.
+const MIN_CHECK_GAP_MS = 60_000; // Rate-limit navigation checks; this is not a timer.
+const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
 let lastCheck = 0;
 let checking = null;
 let availableVersion = null;
 let dismissedVersion = null;
+
+function compareVersions(a, b) {
+  if (!VERSION_PATTERN.test(a || "") || !VERSION_PATTERN.test(b || "")) return null;
+  const left = a.split(".").map(Number);
+  const right = b.split(".").map(Number);
+  for (let i = 0; i < 3; i++) {
+    if (left[i] !== right[i]) return left[i] > right[i] ? 1 : -1;
+  }
+  return 0;
+}
+
+function isNewer(version) {
+  return compareVersions(version, CURRENT_VERSION) === 1;
+}
 
 async function fetchLatest() {
   const url = new URL(RELEASE_FILE, document.baseURI);
@@ -17,26 +33,24 @@ async function fetchLatest() {
     const response = await fetch(url, {cache: "no-store", signal: controller.signal});
     if (!response.ok) throw new Error(`Version check HTTP ${response.status}`);
     const metadata = await response.json();
-    return typeof metadata?.version === "string" && /^\d+\.\d+\.\d+$/.test(metadata.version) ? metadata.version : null;
+    return typeof metadata?.version === "string" && VERSION_PATTERN.test(metadata.version) ? metadata.version : null;
   } finally {
     clearTimeout(timeout);
   }
 }
 
 function reloadTo(version) {
-  // A unique URL obtains the new index.html without losing its original query parameters.
   const url = new URL(location.href);
   url.searchParams.set(URL_MARKER, version);
   location.replace(url.href);
 }
 
-// Return true only when navigation to a fresh copy was initiated.
 export async function checkOnLaunch() {
   try {
     const latest = await fetchLatest();
-    if (!latest || latest === CURRENT_VERSION) return false;
-    // This same target has already been tried. Prevent an infinite reload loop when
-    // GitHub Pages serves stale HTML during a deployment or through an upstream cache.
+    // A stale version.json must never make a newer page reload or show an update notice.
+    if (!isNewer(latest)) return false;
+    // Avoid a reload loop while the new index.html is still propagating on the host.
     if (new URL(location.href).searchParams.get(URL_MARKER) === latest) return false;
     reloadTo(latest);
     return true;
@@ -47,6 +61,7 @@ export async function checkOnLaunch() {
 }
 
 function displayUpdate(version) {
+  if (!isNewer(version)) return;
   availableVersion = version;
   const notice = document.getElementById("appUpdateNotice");
   const menu = document.getElementById("appUpdateMenu");
@@ -67,7 +82,7 @@ async function checkWhileOpen() {
   checking = fetchLatest();
   try {
     const latest = await checking;
-    if (latest && latest !== CURRENT_VERSION) displayUpdate(latest);
+    if (isNewer(latest)) displayUpdate(latest);
   } catch (error) {
     console.warn("Update notification check skipped:", error);
   } finally {
@@ -81,8 +96,7 @@ export function watchForUpdates() {
     document.getElementById("appUpdateNotice").hidden = true;
   });
   const applyUpdate = () => {
-    if (!availableVersion) return;
-    // Only a deliberate click updates a page that is already open.
+    if (!isNewer(availableVersion)) return;
     reloadTo(availableVersion);
   };
   document.getElementById("appUpdateNow")?.addEventListener("click", applyUpdate);
