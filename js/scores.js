@@ -1,4 +1,13 @@
 import{requireDb}from"./supabase.js";
+const NEW_SONG_MEDAL_ALIASES={a:"perfect",b:"fc_1_5",c:"fc_6_20",d:"fc_21_plus",e:"clear_bad_1_5",f:"clear_bad_6_20",g:"clear_bad_21_plus",k:"easy",h:"failed_15_16",l:"failed_15_16",i:"failed_12_14",m:"failed_12_14",j:"failed_0_11",n:"failed_0_11"};
+export function currentMedalForNewSong(row){
+ if(!row?.version_is_current||row.release_is_current===false)return row;
+ const raw=String(row.medal_code||"none").toLowerCase(),code=NEW_SONG_MEDAL_ALIASES[raw]||raw;
+ // Do not replace a separately recorded current medal with an unknown/empty legacy medal.
+ if(code==="none"||!(/^(perfect|fc_(1_5|6_20|21_plus)|clear_bad_(1_5|6_20|21_plus)|failed_(0_11|12_14|15_16)|easy|long_off)$/.test(code)))return row;
+ const status=code==="perfect"?"perfect":code.startsWith("fc_")?"full_combo":code.startsWith("clear_bad_")?"clear":code==="easy"||code==="long_off"?code:"failed";
+ return {...row,current_medal_code:code,current_clear_status:status};
+}
 async function loadVersionMetadata(db){const {data,error}=await db.from("game_versions").select("id,name,sort_order,is_current");if(error)throw error;return new Map((data||[]).map(version=>[version.id,version]));}
 export async function loadMyScores(userId,selectedVersion=null,versionMetadata=null){if(!userId)return[];const db=requireDb(),versions=versionMetadata||await loadVersionMetadata(db),all=[];for(let from=0;;from+=1000){const{data,error}=await db.from("user_scores").select("id,chart,score,official_score,manual_history_score,version_score,current_clear_status,current_medal_code,medal_code,rank_code,source,updated_at,songs!inner(id,master_key,genre,title,artist,banner_url,light_level,normal_level,hyper_level,ex_level,version_id)").eq("user_id",userId).or("score.gt.0,version_score.gt.0,medal_code.neq.none,current_clear_status.neq.failed").order("updated_at",{ascending:false}).range(from,from+999);if(error)throw error;all.push(...(data||[]));if(!data||data.length<1000)break;}const high=selectedVersion?.slug==="master_cdbb557d24080162a681ae5c";
  const slotMap=new Map();
@@ -8,14 +17,15 @@ export async function loadMyScores(userId,selectedVersion=null,versionMetadata=n
   if(error)throw error;for(const x of data||[])slotMap.set(`${x.song_id}|${x.chart}`,x);
   if(!data||data.length<1000)break;}}
  return all.map(row=>{const slot=selectedVersion&&!high?slotMap.get(`${row.songs.id}|${row.chart}`):null;
- return {...row,...row.songs,song_id:row.songs.id,id:row.id,
+ return currentMedalForNewSong({...row,...row.songs,song_id:row.songs.id,id:row.id,
   version_name:versions.get(row.songs.version_id)?.name||"未設定",
   version_order:versions.get(row.songs.version_id)?.sort_order??9999,
   version_is_current:selectedVersion?row.songs.version_id===selectedVersion.id:Boolean(versions.get(row.songs.version_id)?.is_current),
+  release_is_current:selectedVersion?Boolean(selectedVersion.is_current):Boolean(versions.get(row.songs.version_id)?.is_current),
   version_score:selectedVersion&&!high?slot?.version_score||0:row.version_score,
   current_clear_status:selectedVersion&&!high?slot?.current_clear_status||"failed":row.current_clear_status,
   current_medal_code:selectedVersion&&!high?slot?.current_medal_code||"none":row.current_medal_code||"none",
-  level:row.songs[`${row.chart.toLowerCase()}_level`]};});}
+  level:row.songs[`${row.chart.toLowerCase()}_level`]});});}
 export async function loadScoreCatalog(userId,selectedVersion=null){const db=requireDb(),versions=await loadVersionMetadata(db),songs=[];for(let from=0;;from+=1000){const{data,error}=await db.from("songs").select("id,master_key,genre,title,artist,banner_url,light_level,normal_level,hyper_level,ex_level,version_id").order("title").range(from,from+999);if(error)throw error;songs.push(...(data||[]));if(!data||data.length<1000)break;}const registered=userId?await loadMyScores(userId,selectedVersion,versions):[],scoreMap=new Map(registered.map(row=>[`${row.song_id}|${row.chart}`,row]));return songs.flatMap(song=>[["LIGHT","light_level"],["NORMAL","normal_level"],["HYPER","hyper_level"],["EX","ex_level"]].filter(([,key])=>Number(song[key])>0).map(([chart,key])=>{const saved=scoreMap.get(`${song.id}|${chart}`);return saved||{...song,id:`catalog:${song.id}:${chart}`,song_id:song.id,chart,level:song[key],version_name:versions.get(song.version_id)?.name||"未設定",version_order:versions.get(song.version_id)?.sort_order??9999,version_is_current:selectedVersion?song.version_id===selectedVersion.id:Boolean(versions.get(song.version_id)?.is_current),score:0,official_score:0,manual_history_score:0,version_score:0,current_clear_status:"unplayed",current_medal_code:"none",medal_code:"none",rank_code:"none",source:"catalog"};}));}
 const FAILED_MEDALS=new Set(["h","i","j","l","m","n","failed_15_16","failed_12_14","failed_0_11"]);
 const truncate2=value=>Math.floor((Number(value)||0)*100+Number.EPSILON)/100;

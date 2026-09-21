@@ -68,7 +68,7 @@
 .request-levels label{gap:5px;text-align:center;font-size:.76rem}
 .request-levels input{text-align:center;font-variant-numeric:tabular-nums}
 .request-levels .light{color:#1762b8}.request-levels .normal{color:#1b8b38}.request-levels .hyper{color:#8a7100}.request-levels .ex{color:#b50064}
-.score-entry-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-areas:"psr psr psr rank rank rank" "medal medal history history current current" "clear clear clear clear clear clear";align-items:stretch;gap:8px}
+.score-entry-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"psr psr rank rank" "medal medal history history" "clear clear current current";align-items:stretch;gap:8px}
 .score-entry-grid>label{display:grid;grid-template-rows:1.35em 48px;align-content:start;gap:5px;min-width:0;margin:0;padding:0}
 .score-row-popclass{grid-area:psr}.score-row-rank{grid-area:rank}.score-row-medal{grid-area:medal}.score-row-history{grid-area:history}.score-row-current{grid-area:current}.score-row-clear{grid-area:clear}
 .score-entry-grid .history-score-input{border:0;border-radius:0;background:transparent}
