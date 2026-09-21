@@ -347,63 +347,26 @@ body.auth-user>.auth-gate{display:none}
   .menu-modal .setting-row>span>small{font-size:.74rem}
 }
 
-/* v3.0.104: rank colors matched to the official artwork.
-   The gradient is sized to 1em (the glyph height), not the whole fixed-height cell.
-   This keeps every color band visible in both score cards and the edit dialog. */
-.rank-text{
-  display:inline-block;
-  background-repeat:no-repeat!important;
-  background-size:100% 1em!important;
-  background-position:center!important;
-  background-clip:text!important;
-  -webkit-background-clip:text!important;
-  color:transparent!important;
-  -webkit-text-fill-color:transparent!important;
-  -webkit-text-stroke:.32px #263b59!important;
-  filter:drop-shadow(0 0 .35px rgba(255,211,72,.9));
+/* Rank artwork: the approved 12 separate transparent PNGs. */
+.score-card-v300 .card-rank.rank-badge{
+  display:grid;place-items:center;padding:2px;background:var(--surface);
+  border-left:1px solid var(--line);border-bottom:1px solid var(--line);
 }
-/* S / S+: red-pink -> yellow -> green -> cyan -> blue, as in the official rainbow S. */
-.rank-text.rank-splus,.rank-text.rank-s{background-image:linear-gradient(180deg,
-  #f05070 0%,#f05070 23%,
-  #f47b72 30%,
-  #f8dc60 42%,#f5ec68 49%,
-  #90dc58 59%,#47c86b 67%,
-  #50d8e8 77%,
-  #4198f8 88%,#3f8fe8 100%)!important}
-/* AAA through A: pale pink at the top into vivid/deep red at the bottom. */
-.rank-text.rank-aaa,.rank-text.rank-aaplus,.rank-text.rank-aa,.rank-text.rank-aplus,.rank-text.rank-a{background-image:linear-gradient(180deg,
-  #f98a86 0%,#f98a86 20%,
-  #f45d76 38%,
-  #ef365f 55%,
-  #d7193f 76%,
-  #c81026 100%)!important}
-/* B family: yellow -> orange -> deep orange. */
-.rank-text.rank-bplus,.rank-text.rank-b{background-image:linear-gradient(180deg,
-  #ffd02a 0%,#ffc900 27%,
-  #ff9800 55%,
-  #ed7000 76%,
-  #e45f08 100%)!important}
-/* C: lime -> green. */
-.rank-text.rank-c{background-image:linear-gradient(180deg,
-  #a8f050 0%,#a0e84b 28%,
-  #78d83f 50%,
-  #36bd3b 72%,
-  #28ae38 100%)!important}
-/* D: cyan -> sky blue -> blue. */
-.rank-text.rank-d{background-image:linear-gradient(180deg,
-  #55e0f0 0%,#50d9ef 30%,
-  #35b8e8 55%,
-  #419cf3 78%,
-  #418ff0 100%)!important}
-/* E: light violet -> purple. */
-.rank-text.rank-e{background-image:linear-gradient(180deg,
-  #c47cf0 0%,#bd70e8 28%,
-  #a653db 53%,
-  #8244cc 76%,
-  #6040c2 100%)!important}
-/* The compact card and edit dialog use the exact same fill; only font weight is contextual. */
-.score-card-v300 .card-rank.rank-text{font-weight:1000}
-#manualDialog .auto-field>.rank-text{filter:drop-shadow(0 0 .45px rgba(255,211,72,.95));text-shadow:none!important}
+.score-card-v300 .card-rank.rank-badge img{
+  display:block;max-width:100%;max-height:100%;width:38px;height:36px;object-fit:contain;
+}
+#manualDialog .score-entry-grid .rank-badge{
+  display:grid;place-items:center;width:100%;height:48px;min-height:48px;
+  padding:3px;margin:0;background:var(--page);border-radius:10px;
+}
+#manualDialog .score-entry-grid .rank-badge img{
+  display:block;max-width:100%;max-height:100%;width:auto;height:40px;object-fit:contain;
+}
+@media(max-width:760px){
+  .score-card-v300 .card-rank.rank-badge img{width:32px;height:30px;}
+  #manualDialog .score-entry-grid .rank-badge{height:46px;min-height:46px;}
+  #manualDialog .score-entry-grid .rank-badge img{height:38px;}
+}
 
 /* iPhone Safari: form controls below 16px trigger focus zoom and can leave the page enlarged.
    Keep all editable controls in the score editor, My Page and feedback dialogs at 16px or above. */
@@ -748,3 +711,8 @@ button,input,select,textarea{letter-spacing:inherit}
 #songDetailContent .rival-comparison{grid-template-columns:2.3rem minmax(0,1fr) minmax(88px,auto) 44px;}
 #songDetailContent .rival-position{display:block;min-width:0;text-align:center;font-weight:900;font-variant-numeric:tabular-nums;color:var(--navy);white-space:nowrap;}
 @media(max-width:380px){#songDetailContent .rival-comparison{grid-template-columns:1.8rem minmax(0,1fr) minmax(72px,auto) 36px;gap:6px;padding:9px 7px}#songDetailContent .rival-medal{width:36px}#songDetailContent .rival-medal img{width:32px;height:32px}}
+
+/* The current medal picker reuses the history medal picker design. */
+#manualDialog #currentMedalPickerButton img{width:34px;height:34px;object-fit:contain}
+#manualDialog #currentMedalPickerButton[aria-expanded="true"]{outline:2px solid var(--focus);outline-offset:1px}
+#manualDialog #currentMedalPicker{margin-top:6px}

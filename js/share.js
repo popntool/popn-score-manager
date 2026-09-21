@@ -1,5 +1,5 @@
-import{popClassSelection,songPopClass}from"./scores.js?v=3.0.88";
-import{medalInfo}from"./ui.js?v=3.0.97";
+import{popClassSelection,songPopClass}from"./scores.js?v=3.2.0";
+import{medalInfo}from"./ui.js?v=3.2.0";
 
 const HASHTAG="#popn_score_manager",SHARE_TEXT=`${HASHTAG}\n`,BG="#fffaf0",PANEL="#fffdf6",INK="#142b67",MUTED="#69789d",LINE="#3153a0",ACCENT="#ffd851",PINK="#ff789a";
 const TARGET_BYTES=1024*1024;
@@ -21,9 +21,13 @@ function trimBounds(img){
  const bounds=maxX>=minX&&maxY>=minY?{x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1}:{x:0,y:0,w,h};trimCache.set(img,bounds);return bounds;
 }
 function containTrimmed(ctx,img,x,y,w,h){if(!img)return false;const b=trimBounds(img),scale=Math.min(w/b.w,h/b.h),dw=b.w*scale,dh=b.h*scale;ctx.drawImage(img,b.x,b.y,b.w,b.h,x+(w-dw)/2,y+(h-dh)/2,dw,dh);return true;}
-function effectiveMedal(row){return Number(row.score)===100000?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(row.medal_code);}
+function currentMedalCode(row){
+ if(row.current_medal_code!=null)return row.current_medal_code;
+ return {perfect:"perfect",full_combo:"fc_21_plus",clear:"clear_bad_21_plus",easy:"easy",long_off:"long_off",failed:Number(row.version_score)>0?"failed_0_11":"none"}[row.current_clear_status]||"none";
+}
+function effectiveMedal(row,useCurrent=false){const code=useCurrent?currentMedalCode(row):row.medal_code;const score=useCurrent?row.version_score:row.score;return Number(score)===100000?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(code);}
 function medalFallback(ctx,label,x,y,size){ctx.save();ctx.translate(x+size/2,y+size/2);ctx.rotate(Math.PI/4);rounded(ctx,-size*.31,-size*.31,size*.62,size*.62,8,"#f5e8ad",LINE,3);ctx.restore();text(ctx,label==="－　未プレー"?"－":label.slice(0,2),x+size/2,y+size/2,15,900,INK,"center");}
-async function drawMedal(ctx,row,x,y,size){const info=effectiveMedal(row);if(String(row.medal_code||"none").toLowerCase()==="none"&&Number(row.score)!==100000){text(ctx,"－",x+size/2,y+size/2,26,700,MUTED,"center");return;}const img=await loadImage(info.url);if(!containTrimmed(ctx,img,x,y,size,size))medalFallback(ctx,info.label,x,y,size);}
+async function drawMedal(ctx,row,x,y,size,useCurrent=false){const info=effectiveMedal(row,useCurrent),code=useCurrent?currentMedalCode(row):row.medal_code,score=useCurrent?row.version_score:row.score;if(String(code||"none").toLowerCase()==="none"&&Number(score)!==100000){text(ctx,"－",x+size/2,y+size/2,26,700,MUTED,"center");return;}const img=await loadImage(info.url);if(!containTrimmed(ctx,img,x,y,size,size))medalFallback(ctx,info.label,x,y,size);}
 function fitLine(ctx,value,x,y,maxWidth,maxSize=13,minSize=8,weight=800,color=INK){
  const raw=String(value||"").trim()||"NO IMAGE";let size=maxSize;ctx.textAlign="center";ctx.textBaseline="middle";
  while(size>minSize){ctx.font=`${weight} ${size}px ${FONT}`;if(ctx.measureText(raw).width<=maxWidth)break;size--;}
@@ -39,7 +43,7 @@ function header(ctx,title,subtitle,username,width){
  text(ctx,"pop'n Score Manager",62,33,22,900,INK);text(ctx,username||"PLAYER",62,59,14,700,MUTED);text(ctx,title,width-28,32,25,900,INK,"right");text(ctx,subtitle,width-28,59,14,700,MUTED,"right");
 }
 function footer(ctx,width,height){text(ctx,HASHTAG,width-36,height-25,16,800,MUTED,"right");}
-async function preload(rows,extraUrls=[]){const urls=new Set(["./assets/cool-perfect.png",...extraUrls]);for(const row of rows){if(row.banner_url)urls.add(row.banner_url);const m=effectiveMedal(row);if(m.url)urls.add(m.url);}const list=[...urls];let i=0;await Promise.all(Array.from({length:Math.min(12,list.length)},async()=>{while(i<list.length)await loadImage(list[i++]);}));}
+async function preload(rows,extraUrls=[],useCurrent=false){const urls=new Set(["./assets/cool-perfect.png",...extraUrls]);for(const row of rows){if(row.banner_url)urls.add(row.banner_url);const m=effectiveMedal(row,useCurrent);if(m.url)urls.add(m.url);}const list=[...urls];let i=0;await Promise.all(Array.from({length:Math.min(12,list.length)},async()=>{while(i<list.length)await loadImage(list[i++]);}));}
 function canvas(width,height){const c=document.createElement("canvas");c.width=width;c.height=height;const ctx=c.getContext("2d");ctx.fillStyle=BG;ctx.fillRect(0,0,width,height);return[c,ctx];}
 async function blobFromCanvas(c){let quality=.86,blob=null;for(let i=0;i<5;i++){blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/jpeg",quality));if(blob.size<=TARGET_BYTES||quality<=.58)break;quality-=.07;}return blob;}
 async function shareBlob(blob,filename,title){const file=new File([blob],filename,{type:"image/jpeg"}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
@@ -69,7 +73,7 @@ async function drawScoreTile(ctx,row,x,y,w,h){
  const cell=scoreTileLayout(row,x,y,w,h);
  await drawBanner(ctx,row,cell.banner.x,cell.banner.y,cell.banner.w,cell.banner.h,false);
  const medalSize=Math.min(24,cell.medal.h);
- await drawMedal(ctx,row,cell.medal.x+(cell.medal.w-medalSize)/2,cell.medal.y+(cell.medal.h-medalSize)/2,medalSize);
+ await drawMedal(ctx,row,cell.medal.x+(cell.medal.w-medalSize)/2,cell.medal.y+(cell.medal.h-medalSize)/2,medalSize,true);
  chartLevelStack(ctx,row.chart,row.level,cell.stack.x,cell.stack.y,cell.stack.w,cell.stack.h);
  drawMetricColumn(ctx,"スコア",cell.score,cell.scoreCell);
  drawMetricColumn(ctx,"PSR",cell.psr,cell.psrCell);
@@ -77,7 +81,7 @@ async function drawScoreTile(ctx,row,x,y,w,h){
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username,officialPopnClass=null){
  const{current,other,total}=popClassSelection(rows),all=[...current,...other];if(!all.length)throw new Error("PSR対象曲がありません。");
- await preload(all);
+ await preload(all,[],true);
  const width=900,pad=15,gapX=7,gapY=5,cols=3,rowsPerCol=20,tileW=(width-pad*2-gapX*(cols-1))/cols,tileH=45,gridY=123;
  const height=gridY+rowsPerCol*(tileH+gapY)+29;
  const[c,ctx]=canvas(width,height),hasOfficial=officialPopnClass!==null&&officialPopnClass!==""&&Number.isFinite(Number(officialPopnClass)),official=hasOfficial?Number(officialPopnClass):null;header(ctx,"Popn Score Rating 対象曲一覧",`${hasOfficial?`ポップンクラス ${official.toFixed(2)}　`:""}PSR ${total.toFixed(2)}`,username,width);
