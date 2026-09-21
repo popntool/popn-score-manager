@@ -52,8 +52,8 @@ function header(ctx,title,subtitle,username,width){
 function footer(ctx,width,height){text(ctx,HASHTAG,width-36,height-25,16,800,MUTED,"right");}
 async function preload(rows,extraUrls=[],useCurrent=false){const urls=new Set(["./assets/cool-perfect.png",...extraUrls]);for(const row of rows){if(row.banner_url)urls.add(row.banner_url);const m=effectiveMedal(row,useCurrent);if(m.url)urls.add(m.url);}const list=[...urls];let i=0;await Promise.all(Array.from({length:Math.min(12,list.length)},async()=>{while(i<list.length)await loadImage(list[i++]);}));}
 function canvas(width,height){const c=document.createElement("canvas");c.width=width;c.height=height;const ctx=c.getContext("2d");ctx.fillStyle=BG;ctx.fillRect(0,0,width,height);return[c,ctx];}
-async function blobFromCanvas(c){let quality=.86,blob=null;for(let i=0;i<5;i++){blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/jpeg",quality));if(blob.size<=TARGET_BYTES||quality<=.58)break;quality-=.07;}return blob;}
-async function shareBlob(blob,filename,title){const file=new File([blob],filename,{type:"image/jpeg"}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
+async function blobFromCanvas(c,type="image/jpeg"){if(type==="image/png")return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/png"));let quality=.86,blob=null;for(let i=0;i<5;i++){blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/jpeg",quality));if(blob.size<=TARGET_BYTES||quality<=.58)break;quality-=.07;}return blob;}
+async function shareBlob(blob,filename,title){const type=blob.type||(/\.png$/i.test(filename)?"image/png":"image/jpeg"),file=new File([blob],filename,{type}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
 
 const CHART_STYLE={EX:["#ef426f","#fff"],HYPER:["#fff2a6","#7b6500"],NORMAL:["#bdf39a","#17652b"],LIGHT:["#c8e3ff","#24558d"]};
 function chartLevelStack(ctx,chart,level,x,y,w,h){
@@ -153,35 +153,34 @@ function distributionItems(rowsByLevel,levels){
  ];
  return itemDefs.map(item=>({...item,counts:levels.map(level=>item.countFor(rowsByLevel.get(level)||[],row=>String(row.medal_code||"none").toLowerCase()))}));
 }
+function hiResMedalUrl(url){if(!url)return url;try{const parsed=new URL(url,location.href);if(parsed.origin===location.origin)return parsed.href;return `https://wsrv.nl/?url=${encodeURIComponent(parsed.href)}&output=png&w=160&h=160&fit=contain`; }catch{return url;}}
 async function drawDistributionIcon(ctx,item,x,y,w,h){
  if(item.type==="dash"){text(ctx,"－",x+w/2,y+h/2,18,800,MUTED,"center");return;}
  if(item.type==="no-play"){text(ctx,"NO",x+w/2,y+h/2-7,8,800,MUTED,"center");text(ctx,"PLAY",x+w/2,y+h/2+6,8,800,MUTED,"center");return;}
- const img=await loadImage(item.url);if(img){containTrimmed(ctx,img,x+4,y+3,w-8,h-6);return;}
- medalFallback(ctx,item.label,x+(w-28)/2,y+(h-28)/2,28);
+ const img=await loadImage(hiResMedalUrl(item.url));if(img){ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";containTrimmed(ctx,img,x+2,y+2,w-4,h-4);return;}
+ medalFallback(ctx,item.label,x+(w-30)/2,y+(h-30)/2,30);
 }
 export async function shareMedalDistributionImage(rows,startLevel,endLevel,username){
  let start=Number(startLevel),end=Number(endLevel);if(!Number.isFinite(start)||!Number.isFinite(end))throw new Error("開始レベルと終了レベルを選択してください。");if(start>end)[start,end]=[end,start];
- const levels=[];for(let level=start;level<=end;level++)levels.push(level);
+ const levels=[];for(let level=end;level>=start;level--)levels.push(level);
  const target=rows.filter(row=>Number(row.level)>=start&&Number(row.level)<=end);
  if(!target.length)throw new Error(`Lv.${start}〜${end} の譜面がありません。`);
  const rowsByLevel=new Map(levels.map(level=>[level,target.filter(row=>Number(row.level)===level)]));
- const items=distributionItems(rowsByLevel,levels),legendUrls=[...new Set(items.filter(item=>item.url).map(item=>item.url))];
- // This image only renders medal icons. Never load thousands of song banners here.
- // Every request is time-limited so one unavailable image cannot keep the UI busy indefinitely.
+ const items=distributionItems(rowsByLevel,levels),legendUrls=[...new Set(items.filter(item=>item.url).map(item=>hiResMedalUrl(item.url)))];
  await Promise.all(legendUrls.map(url=>loadImage(url)));
- const leftW=60,colW=64,rowH=34,headerH=42,pad=18,tableW=leftW+levels.length*colW,width=Math.max(720,pad*2+tableW),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+items.length*rowH+34;
+ const pad=18,leftW=78,colW=52,rowH=40,headerH=56,tableW=leftW+items.length*colW,width=Math.max(940,pad*2+tableW),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+levels.length*rowH+34;
  const[c,ctx]=canvas(width,height);header(ctx,`Lv.${start}〜${end} 歴代メダル分布`,`対象 ${target.length.toLocaleString("ja-JP")}譜面`,username,width);
- rounded(ctx,tableX,tableY,tableW,headerH+items.length*rowH,10,PANEL,LINE,2);
+ rounded(ctx,tableX,tableY,tableW,headerH+levels.length*rowH,10,PANEL,LINE,2);
  ctx.strokeStyle="#e6dfc7";ctx.lineWidth=1;
- for(let i=0;i<=levels.length;i++){const x=tableX+leftW+i*colW;ctx.beginPath();ctx.moveTo(x,tableY);ctx.lineTo(x,tableY+headerH+items.length*rowH);ctx.stroke();}
+ for(let i=0;i<=items.length;i++){const x=tableX+leftW+i*colW;ctx.beginPath();ctx.moveTo(x,tableY);ctx.lineTo(x,tableY+headerH+levels.length*rowH);ctx.stroke();}
+ ctx.beginPath();ctx.moveTo(tableX+leftW,tableY);ctx.lineTo(tableX+leftW,tableY+headerH+levels.length*rowH);ctx.stroke();
  ctx.beginPath();ctx.moveTo(tableX,tableY+headerH);ctx.lineTo(tableX+tableW,tableY+headerH);ctx.stroke();
- for(let i=1;i<items.length;i++){const y=tableY+headerH+i*rowH;ctx.beginPath();ctx.moveTo(tableX,y);ctx.lineTo(tableX+tableW,y);ctx.stroke();}
- text(ctx,"メダル",tableX+leftW/2,tableY+headerH/2,12,900,INK,"center");
- levels.forEach((level,index)=>text(ctx,`Lv.${level}`,tableX+leftW+colW*index+colW/2,tableY+headerH/2,12,900,INK,"center"));
- for(let r=0;r<items.length;r++){
-   const item=items[r],rowY=tableY+headerH+r*rowH;
-   await drawDistributionIcon(ctx,item,tableX+8,rowY+3,leftW-16,rowH-6);
-   item.counts.forEach((count,index)=>{const color=count===0?MUTED:INK;text(ctx,count.toLocaleString("ja-JP"),tableX+leftW+colW*index+colW/2,rowY+rowH/2,12,800,color,"center");});
+ for(let i=1;i<levels.length;i++){const y=tableY+headerH+i*rowH;ctx.beginPath();ctx.moveTo(tableX,y);ctx.lineTo(tableX+tableW,y);ctx.stroke();}
+ text(ctx,"レベル",tableX+leftW/2,tableY+headerH/2,12,900,INK,"center");
+ for(let cIndex=0;cIndex<items.length;cIndex++)await drawDistributionIcon(ctx,items[cIndex],tableX+leftW+cIndex*colW+8,tableY+8,colW-16,headerH-16);
+ for(let r=0;r<levels.length;r++){
+   const level=levels[r],rowY=tableY+headerH+r*rowH; text(ctx,`Lv.${level}`,tableX+leftW/2,rowY+rowH/2,13,900,INK,"center");
+   items.forEach((item,cIndex)=>{const count=item.counts[r],color=count===0?MUTED:INK;text(ctx,count.toLocaleString("ja-JP"),tableX+leftW+cIndex*colW+colW/2,rowY+rowH/2,12,800,color,"center");});
  }
- footer(ctx,width,height);return shareBlob(await blobFromCanvas(c),`popn_medal_distribution_lv${start}-${end}_${escFile(username)}.jpg`,`pop'n Score Manager Lv.${start}〜${end} 歴代メダル分布`);
+ footer(ctx,width,height);return shareBlob(await blobFromCanvas(c,"image/png"),`popn_medal_distribution_lv${start}-${end}_${escFile(username)}.png`,`pop'n Score Manager Lv.${start}〜${end} 歴代メダル分布`);
 }
