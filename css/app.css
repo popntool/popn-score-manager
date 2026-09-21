@@ -716,3 +716,77 @@ button,input,select,textarea{letter-spacing:inherit}
 #manualDialog #currentMedalPickerButton img{width:34px;height:34px;object-fit:contain}
 #manualDialog #currentMedalPickerButton[aria-expanded="true"]{outline:2px solid var(--focus);outline-offset:1px}
 #manualDialog #currentMedalPicker{margin-top:6px}
+
+
+/* v3.2.3: current-rank display and compact medal pickers. */
+#manualDialog #songGenreInput:disabled,
+#manualDialog #songTitleInput:disabled{
+  border-color:transparent;
+  background:transparent;
+  box-shadow:none;
+  padding-left:0;
+  padding-right:0;
+}
+#manualDialog .manual-popclass{
+  border-color:transparent;
+  background:transparent;
+  box-shadow:none;
+}
+#manualDialog .medal-picker{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+  margin-top:6px;
+}
+#manualDialog .medal-picker button{
+  display:grid;
+  place-items:center;
+  min-height:54px;
+  padding:6px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:var(--surface);
+}
+#manualDialog .medal-picker button img{
+  width:28px;
+  height:28px;
+  object-fit:contain;
+}
+#manualDialog .compact-medal-empty{
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  font-weight:900;
+  color:var(--muted);
+}
+#manualDialog .medal-picker button:hover{background:var(--surface-2)}
+#manualDialog .medal-picker button:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+#manualDialog #currentMedalPickerButton img{width:34px;height:34px;object-fit:contain}
+#manualDialog #currentMedalPickerButton[aria-expanded="true"],
+#manualDialog #medalPickerButton[aria-expanded="true"]{outline:2px solid var(--focus);outline-offset:1px}
+@media(max-width:480px){
+  #manualDialog .medal-picker{gap:6px}
+  #manualDialog .medal-picker button{min-height:48px;padding:5px}
+  #manualDialog .medal-picker button img,
+  #manualDialog .compact-medal-empty{width:24px;height:24px}
+}
+
+
+/* v3.2.4 */
+.score-card-v300{grid-template-rows:46px 24px 28px}
+.score-card-v300 .card-title{
+  padding-top:0;
+  padding-bottom:0;
+  line-height:1.2;
+}
+.score-card-v300 .score-edit{
+  height:calc(100% - 6px);
+  min-height:0;
+}
+@media(max-width:760px){
+  .score-card-v300{grid-template-rows:40px 21px 24px}
+  .score-card-v300 .score-edit{height:calc(100% - 4px);min-height:22px;}
+}
+.image-share-range{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+@media(max-width:760px){.image-share-range{grid-template-columns:1fr;gap:6px;}}
