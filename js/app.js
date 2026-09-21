@@ -111,7 +111,7 @@ function setAuthMode(mode){authMode=mode==="register"?"register":"login";const l
 $("#gateLoginTab").addEventListener("click",()=>setAuthMode("login"));$("#gateRegisterTab").addEventListener("click",()=>setAuthMode("register"));
 $("#authGateForm").addEventListener("submit",async event=>{event.preventDefault();const formElement=event.currentTarget,form=new FormData(formElement),submit=formElement.querySelector("button[type=submit]"),password=String(form.get("password")||"");$("#authGateError").textContent="";submit.disabled=true;try{if(authMode==="login")await login(form.get("username"),password);else{if(password.length<8)throw new Error("パスワードは8文字以上で入力してください。");if(password!==String(form.get("password_confirm")||""))throw new Error("確認用パスワードが一致しません。");await register(form.get("username"),password);}formElement.reset();setAuthMode("login");await refreshAuth();}catch(error){$("#authGateError").textContent=error.message||error;}finally{submit.disabled=false;}});
 $("#logoutButton").addEventListener("click",async()=>{$("#myPageDialog").close();await logout();invalidateUserCache();await refreshAuth();});
-$("#manualButton").addEventListener("click",async()=>{if(!await currentUser()){alert("追加依頼を送るにはログインしてください。");return;}$("#songRequestForm").reset();$("#songRequestDialog .error").textContent="";$("#songRequestDialog").showModal();});$("#syncHelpButton").addEventListener("click",()=>{$("#menuDialog").close();$("#syncDialog").showModal();});
+$("#manualButton").addEventListener("click",async()=>{if(!await currentUser()){alert("追加依頼を送るにはログインしてください。");return;}$("#songRequestForm").reset();$("#songRequestDialog .error").textContent="";$("#songRequestDialog").showModal();});$("#syncHelpButton").addEventListener("click",()=>{$("#menuDialog").close();$("#syncDialog").showModal();$("#syncManualCopy").hidden=true;syncCodeReady();});
 function updateCoolPerfectPreview(){const button=$("#medalPickerButton"),image=button.querySelector("img"),label=button.querySelector("span"),history=Math.max(0,Number($("#manualHistoryScore").value)||0),current=Math.max(0,Number($("#manualScoreInput").value)||0),cool=Math.max(history,current)===100000,info=medalInfo($("#manualForm [name=medal_code]").value);button.classList.toggle("cool-perfect-active",cool);button.disabled=cool;if(cool){image.src="./assets/cool-perfect.png";image.alt="COOL PERFECT";image.hidden=false;label.hidden=true;}else{image.src=info.url;image.alt=info.label;image.hidden=!info.url;label.textContent=info.url?"":info.label==="－　未プレー"?"－":info.label;label.hidden=Boolean(info.url);}button.setAttribute("aria-label",cool?"COOL PERFECT（100000点で自動）":info.label);button.title=cool?"COOL PERFECT（100000点で自動）":info.label;}
 function updateRankPreview(){const medal=$("#manualForm [name=medal_code]").value,current=Math.max(0,Number($("#manualScoreInput").value)||0),history=Math.max(0,Number($("#manualHistoryScore").value)||0,current),value=rankFromScore(history,medal),slug=value.replace("+","plus").toLowerCase(),el=$("#manualRank");el.className=`rank-text rank-${slug}`;el.textContent=value;el.setAttribute("aria-label",value);el.title=value;$("#manualPopClass").textContent=songPopClass(selectedSong,current,$("#manualCurrentClearStatus").value).toFixed(2);updateCoolPerfectPreview();}$("#manualScoreInput").addEventListener("input",updateRankPreview);$("#manualHistoryScore").addEventListener("input",updateRankPreview);$("#manualCurrentClearStatus").addEventListener("change",updateRankPreview);
 $("#manualForm").addEventListener("submit",async event=>{event.preventDefault();if(!selectedSong){$("#manualError").textContent="曲マスターから譜面を選択してください。";return;}const formElement=event.currentTarget,form=new FormData(formElement),historyScore=historyValueForSave(),versionScore=Math.max(0,Math.min(100000,Number(form.get("version_score"))||0)),medalCode=String(form.get("medal_code")||"none"),currentClearStatus=String(form.get("current_clear_status")||"failed"),row=selectedSong;try{await saveScore(row.song_id||row.id,row.chart,historyScore,versionScore,medalCode,currentClearStatus,selectedGameVersion);invalidateUserCache();Object.assign(row,{manual_history_score:historyScore,version_score:versionScore,score:Math.max(Number(row.official_score)||0,historyScore,versionScore),medal_code:medalCode,rank_code:rankFromScore(Math.max(Number(row.official_score)||0,historyScore,versionScore),medalCode),current_clear_status:currentClearStatus,source:"manual"});$("#manualDialog").close();formElement.reset();updateRankPreview();selectedSong=null;editingScoreId=null;applyFilters(false);}catch(error){$("#manualError").textContent=error.message||error;}});
@@ -181,7 +181,73 @@ $("#medalPicker").addEventListener("click",event=>{const button=event.target.clo
 const filterMedals=[["ALL","全メダル",""],["cool_perfect","COOL PERFECT","./assets/cool-perfect.png"],...MEDALS.filter(([code])=>code!=="none"),...MEDALS.filter(([code])=>code==="none")];$("#filterMedalPicker").innerHTML=filterMedals.map(([code,label,file])=>`<button type="button" data-filter-medal="${code}">${code==="ALL"?`<span class="filter-medal-all">全メダル</span>`:file?`<img src="${code==="cool_perfect"?file:`https://eacache.s.konaminet.jp/game/popn/popn29/images/p/howto/more/${file}`}" alt=""><span>${label}</span>`:`<span class="filter-medal-empty">－</span><span>${label.replace(/^－\s*/,"")}</span>`}</button>`).join("");function chooseFilterMedal(code){const button=$("#filterMedalButton"),image=button.querySelector("img"),label=button.querySelector("span"),info=code==="ALL"?{label:"全メダル",url:""}:code==="cool_perfect"?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(code);$("#medalFilter").value=code;image.src=info.url;image.hidden=!info.url;label.textContent=code==="none"?"－":info.label;label.hidden=Boolean(info.url);button.title=info.label;button.setAttribute("aria-label",`メダル：${info.label}`);}$("#filterMedalButton").addEventListener("click",()=>{$("#filterMedalPicker").hidden=!$("#filterMedalPicker").hidden;});$("#filterMedalPicker").addEventListener("click",event=>{const button=event.target.closest("[data-filter-medal]");if(!button)return;chooseFilterMedal(button.dataset.filterMedal);$("#filterMedalPicker").hidden=true;$("#medalFilter").dispatchEvent(new Event("change"));});chooseFilterMedal("ALL");
 async function writeClipboard(text){try{await navigator.clipboard.writeText(text);}catch{const area=document.createElement("textarea");area.value=text;area.style.position="fixed";area.style.opacity="0";document.body.append(area);area.select();const copied=document.execCommand("copy");area.remove();if(!copied)throw new Error("クリップボードへ書き込めませんでした。");}}
 async function copyTool(file){const response=await fetch(`./tools/${file}`,{cache:"no-store"});if(!response.ok)throw new Error("コードを読み込めませんでした。");const text=await response.text();await writeClipboard(text);return file.includes("score-sync")?"同期用コードをコピーしました。ブックマークのURL欄へ貼り付けてください。":"抽出コードをコピーしました。公式サイトのConsoleへ貼り付けてください。";}
-$("#copySyncButton").addEventListener("click",async()=>{const status=$(".sync-status");try{await copyTool("popn-score-sync.txt");status.textContent="コードをコピーしました";}catch(error){status.textContent=`コピー失敗：${error.message||error}`;}});
+// The code must already be loaded when the user taps Copy: awaiting fetch may lose
+// the browser's transient clipboard permission, particularly on mobile Safari.
+let syncBookmarklet="",syncBookmarkletRequest=null;
+function prepareSyncBookmarklet(){
+  if(syncBookmarklet)return Promise.resolve(syncBookmarklet);
+  if(!syncBookmarkletRequest){
+    syncBookmarkletRequest=fetch("./tools/popn-score-sync.txt",{cache:"no-store"}).then(async response=>{
+      if(!response.ok)throw new Error("同期用コードを読み込めませんでした。");
+      const text=(await response.text()).trim();
+      if(!text.startsWith("javascript:"))throw new Error("同期用コードが不正です。");
+      syncBookmarklet=text;
+      return text;
+    }).catch(error=>{syncBookmarkletRequest=null;throw error;});
+  }
+  return syncBookmarkletRequest;
+}
+function selectAndCopySyncCode(text){
+  // A modal dialog makes elements appended to document.body unselectable on some browsers.
+  const dialog=$("#syncDialog"),area=document.createElement("textarea");
+  area.value=text;area.readOnly=true;area.setAttribute("aria-label","同期用コード");
+  Object.assign(area.style,{position:"absolute",top:"0",left:"0",width:"2px",height:"2px",opacity:"0.01",fontSize:"16px"});
+  dialog.querySelector("form").append(area);
+  let copied=false;
+  try{area.focus();area.select();area.setSelectionRange(0,text.length);copied=document.execCommand("copy");}
+  catch(error){console.debug("Legacy clipboard copy unavailable",error);}
+  finally{area.remove();}
+  return copied;
+}
+function showSyncManualCopy(text){
+  const fallback=$("#syncManualCopy"),area=$("#syncManualCode"),status=$("#syncDialog .sync-status");
+  area.value=text;fallback.hidden=false;
+  status.textContent="自動コピーができませんでした。下のコードを選択してコピーしてください。";
+}
+const syncCopyButton=$("#copySyncButton");
+function syncCodeReady(){
+  const status=$("#syncDialog .sync-status");
+  syncCopyButton.disabled=true;
+  status.textContent="同期用コードを準備しています…";
+  return prepareSyncBookmarklet().then(()=>{
+    syncCopyButton.disabled=false;
+    status.textContent="コードをコピーできます。";
+  }).catch(error=>{
+    syncCopyButton.disabled=false;
+    status.textContent=`コードの準備に失敗しました：${error.message||error}。もう一度お試しください。`;
+  });
+}
+// Preload once; do not fetch between the user's tap and the clipboard operation.
+prepareSyncBookmarklet().catch(()=>{});
+syncCopyButton.addEventListener("click",()=>{
+  if(!syncBookmarklet){syncCodeReady();return;}
+  const status=$("#syncDialog .sync-status");
+  $("#syncManualCopy").hidden=true;
+  if(selectAndCopySyncCode(syncBookmarklet)){
+    status.textContent="コードをコピーしました。ブックマークのURL欄へ貼り付けてください。";
+    return;
+  }
+  if(navigator.clipboard?.writeText){
+    // Call writeText in the same tap handler, before any await.
+    try{navigator.clipboard.writeText(syncBookmarklet).then(()=>{
+      status.textContent="コードをコピーしました。ブックマークのURL欄へ貼り付けてください。";
+    }).catch(()=>showSyncManualCopy(syncBookmarklet));}
+    catch{showSyncManualCopy(syncBookmarklet);}
+  }else showSyncManualCopy(syncBookmarklet);
+});
+$("#selectSyncCodeButton").addEventListener("click",()=>{
+  const area=$("#syncManualCode");area.focus();area.select();area.setSelectionRange(0,area.value.length);
+});
 $("#myPageButton").addEventListener("click",async()=>{const user=await currentUser();if(!user){alert("マイページを利用するにはログインしてください。");return;}const profile=await loadMyProfile();$("#newUsernameInput").value=profile.username;$("#poptomoIdInput").value=profile.poptomo_id||"";$("#poptomoPublicInput").checked=Boolean(profile.poptomo_public);$("#menuDialog").close();$("#myPageDialog").showModal();});
 $("#usernameForm").addEventListener("submit",async event=>{event.preventDefault();const errorBox=event.currentTarget.querySelector(".error");try{const name=await changeUsername(new FormData(event.currentTarget).get("username"));invalidateUserCache();$("#playerName").textContent=name;errorBox.textContent="";alert("ユーザー名を変更しました。次回から新しいユーザー名でログインしてください。");}catch(error){errorBox.textContent=error.message||error;}});
 $("#passwordForm").addEventListener("submit",async event=>{event.preventDefault();const form=new FormData(event.currentTarget),password=String(form.get("password")||""),confirm=String(form.get("password_confirm")||""),errorBox=event.currentTarget.querySelector(".error");if(password!==confirm){errorBox.textContent="確認用パスワードが一致しません。";return;}try{await changePassword(password);event.currentTarget.reset();errorBox.textContent="";alert("パスワードを変更しました。");}catch(error){errorBox.textContent=error.message||error;}});
