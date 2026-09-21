@@ -3,6 +3,20 @@ import{medalInfo}from"./ui.js?v=3.2.3";
 
 const HASHTAG="#popn_score_manager",SHARE_TEXT=`${HASHTAG}\n`,BG="#fffaf0",PANEL="#fffdf6",INK="#142b67",MUTED="#69789d",LINE="#3153a0",ACCENT="#ffd851",PINK="#ff789a";
 const TARGET_BYTES=1024*1024;
+const LOCAL_SHARE_MEDALS={
+ perfect:"./assets/share-medals/perfect.png",
+ fc_1_5:"./assets/share-medals/fc_1_5.png",
+ fc_6_20:"./assets/share-medals/fc_6_20.png",
+ fc_21_plus:"./assets/share-medals/fc_21_plus.png",
+ clear_bad_1_5:"./assets/share-medals/clear_bad_1_5.png",
+ clear_bad_6_20:"./assets/share-medals/clear_bad_6_20.png",
+ clear_bad_21_plus:"./assets/share-medals/clear_bad_21_plus.png",
+ long_off:"./assets/share-medals/long_off.png",
+ easy:"./assets/share-medals/easy.png",
+ failed_15_16:"./assets/share-medals/failed_15_16.png",
+ failed_12_14:"./assets/share-medals/failed_12_14.png",
+ failed_0_11:"./assets/share-medals/failed_0_11.png"
+};
 const FONT='system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif';
 const imgCache=new Map();
 const trimCache=new WeakMap();
@@ -28,11 +42,13 @@ function trimBounds(img){
  const bounds=maxX>=minX&&maxY>=minY?{x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1}:{x:0,y:0,w,h};trimCache.set(img,bounds);return bounds;
 }
 function containTrimmed(ctx,img,x,y,w,h){if(!img)return false;const b=trimBounds(img),scale=Math.min(w/b.w,h/b.h),dw=b.w*scale,dh=b.h*scale;ctx.drawImage(img,b.x,b.y,b.w,b.h,x+(w-dw)/2,y+(h-dh)/2,dw,dh);return true;}
+function canonicalMedalCode(code){const normalized=String(code||"none").toLowerCase();for(const[key,codes]of MEDAL_GROUPS)if(codes.includes(normalized))return key;return normalized;}
+function shareMedalUrl(code,score=0){if(Number(score)===100000)return "./assets/cool-perfect.png";const canonical=canonicalMedalCode(code);return LOCAL_SHARE_MEDALS[canonical]||medalInfo(canonical).url||medalInfo(code).url;}
 function currentMedalCode(row){
  if(row.current_medal_code!=null)return row.current_medal_code;
  return {perfect:"perfect",full_combo:"fc_21_plus",clear:"clear_bad_21_plus",easy:"easy",long_off:"long_off",failed:Number(row.version_score)>0?"failed_0_11":"none"}[row.current_clear_status]||"none";
 }
-function effectiveMedal(row,useCurrent=false){const code=useCurrent?currentMedalCode(row):row.medal_code;const score=useCurrent?row.version_score:row.score;return Number(score)===100000?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(code);}
+function effectiveMedal(row,useCurrent=false){const code=useCurrent?currentMedalCode(row):row.medal_code;const score=useCurrent?row.version_score:row.score;const info=Number(score)===100000?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(canonicalMedalCode(code));return {...info,url:shareMedalUrl(code,score)};}
 function medalFallback(ctx,label,x,y,size){ctx.save();ctx.translate(x+size/2,y+size/2);ctx.rotate(Math.PI/4);rounded(ctx,-size*.31,-size*.31,size*.62,size*.62,8,"#f5e8ad",LINE,3);ctx.restore();text(ctx,label==="－　未プレー"?"－":label.slice(0,2),x+size/2,y+size/2,15,900,INK,"center");}
 async function drawMedal(ctx,row,x,y,size,useCurrent=false){const info=effectiveMedal(row,useCurrent),code=useCurrent?currentMedalCode(row):row.medal_code,score=useCurrent?row.version_score:row.score;if(String(code||"none").toLowerCase()==="none"&&Number(score)!==100000){text(ctx,"－",x+size/2,y+size/2,26,700,MUTED,"center");return;}const img=await loadImage(info.url);if(!containTrimmed(ctx,img,x,y,size,size))medalFallback(ctx,info.label,x,y,size);}
 function fitLine(ctx,value,x,y,maxWidth,maxSize=13,minSize=8,weight=800,color=INK){
@@ -147,17 +163,16 @@ export async function shareLevelMedalImage(rows,level,username){
 function distributionItems(rowsByLevel,levels){
  const itemDefs=[
   {type:"cool",key:"cool",url:"./assets/cool-perfect.png",label:"COOL PERFECT",countFor:(rows,code)=>rows.filter(row=>Number(row.score)===100000).length},
-  ...MEDAL_GROUPS.filter(([key])=>key!=="none").map(([key,codes])=>{const info=medalInfo(key);return{type:"image",key,url:info.url,label:info.label,countFor:(rows,code)=>rows.filter(row=>codes.includes(code(row))&&(key!=="perfect"||Number(row.score)!==100000)).length};}),
+  ...MEDAL_GROUPS.filter(([key])=>key!=="none").map(([key,codes])=>{const info=medalInfo(key);return{type:"image",key,url:LOCAL_SHARE_MEDALS[key]||info.url,label:info.label,countFor:(rows,code)=>rows.filter(row=>codes.includes(code(row))&&(key!=="perfect"||Number(row.score)!==100000)).length};}),
   {type:"dash",key:"dash",label:"－",countFor:(rows,code)=>rows.filter(row=>!noPlay(row)&&code(row)==="none").length},
   {type:"no-play",key:"no_play",label:"NO PLAY",countFor:rows=>rows.filter(noPlay).length}
  ];
  return itemDefs.map(item=>({...item,counts:levels.map(level=>item.countFor(rowsByLevel.get(level)||[],row=>String(row.medal_code||"none").toLowerCase()))}));
 }
-function hiResMedalUrl(url){if(!url)return url;try{const parsed=new URL(url,location.href);if(parsed.origin===location.origin)return parsed.href;return `https://wsrv.nl/?url=${encodeURIComponent(parsed.href)}&output=png&w=160&h=160&fit=contain`; }catch{return url;}}
 async function drawDistributionIcon(ctx,item,x,y,w,h){
  if(item.type==="dash"){text(ctx,"－",x+w/2,y+h/2,18,800,MUTED,"center");return;}
  if(item.type==="no-play"){text(ctx,"NO",x+w/2,y+h/2-7,8,800,MUTED,"center");text(ctx,"PLAY",x+w/2,y+h/2+6,8,800,MUTED,"center");return;}
- const img=await loadImage(hiResMedalUrl(item.url));if(img){ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";containTrimmed(ctx,img,x+2,y+2,w-4,h-4);return;}
+ const img=await loadImage(item.url);if(img){ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";containTrimmed(ctx,img,x+2,y+2,w-4,h-4);return;}
  medalFallback(ctx,item.label,x+(w-30)/2,y+(h-30)/2,30);
 }
 export async function shareMedalDistributionImage(rows,startLevel,endLevel,username){
@@ -166,7 +181,7 @@ export async function shareMedalDistributionImage(rows,startLevel,endLevel,usern
  const target=rows.filter(row=>Number(row.level)>=start&&Number(row.level)<=end);
  if(!target.length)throw new Error(`Lv.${start}〜${end} の譜面がありません。`);
  const rowsByLevel=new Map(levels.map(level=>[level,target.filter(row=>Number(row.level)===level)]));
- const items=distributionItems(rowsByLevel,levels),legendUrls=[...new Set(items.filter(item=>item.url).map(item=>hiResMedalUrl(item.url)))];
+ const items=distributionItems(rowsByLevel,levels),legendUrls=[...new Set(items.filter(item=>item.url).map(item=>item.url))];
  await Promise.all(legendUrls.map(url=>loadImage(url)));
  const pad=18,leftW=78,colW=52,rowH=40,headerH=56,tableW=leftW+items.length*colW,width=Math.max(940,pad*2+tableW),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+levels.length*rowH+34;
  const[c,ctx]=canvas(width,height);header(ctx,`Lv.${start}〜${end} 歴代メダル分布`,`対象 ${target.length.toLocaleString("ja-JP")}譜面`,username,width);
