@@ -951,3 +951,92 @@ textarea,
 #manualDialog .song-search-fields>label{min-width:0;}
 #manualDialog .song-search-fields input{box-sizing:border-box;min-width:0;width:100%;}
 @media(max-width:760px){#manualDialog .song-search-fields{grid-template-columns:minmax(0,1fr);}}
+
+
+/* v3.2.13: compact historical/current records; use reclaimed width for banner. */
+.score-card-v300.score-card-v312 .score-card-upper{
+  grid-template-columns:minmax(0,1fr) clamp(166px,48%,214px);
+  min-height:56px;
+}
+.score-card-v312 .score-records{
+  grid-template-rows:repeat(2,28px);
+  min-height:56px;
+}
+.score-card-v312 .score-record{
+  grid-template-columns:32px 30px 34px minmax(0,1fr);
+  min-width:0;
+  min-height:28px;
+  height:28px;
+}
+.score-card-v312 .score-record>*{padding:0 1px;min-width:0;}
+.score-card-v312 .score-record-label{font-size:.59rem;letter-spacing:-.035em;}
+.score-card-v312 .score-record-medal img,
+.score-card-v312 .score-record-medal .cool-perfect-medal{
+  width:23px!important;
+  height:23px!important;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+.score-card-v312 .score-record-rank img{
+  width:29px;
+  height:23px;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+.score-card-v312 .score-record-score{
+  font-size:.7rem;
+  letter-spacing:-.035em;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:430px){
+  .score-card-v300.score-card-v312 .score-card-upper{
+    grid-template-columns:minmax(0,1fr) clamp(166px,48%,214px);
+  }
+  .score-card-v312 .score-record{
+    grid-template-columns:32px 30px 34px minmax(0,1fr);
+    min-height:28px;
+  }
+  .score-card-v312 .score-record-label{font-size:.59rem;}
+  .score-card-v312 .score-record-score{font-size:.68rem;}
+  .score-card-v312 .score-record-medal img{width:23px;height:23px;}
+  .score-card-v312 .score-record-rank img{width:29px;height:23px;}
+}
+
+
+/* v3.2.14: compact score editor; keep all three record columns explicit. */
+#manualDialog #manualForm{gap:7px;}
+#manualDialog #manualForm>h2{margin:0 36px 5px 0;line-height:1.25;}
+#manualDialog .song-search-fields{gap:8px;}
+#manualDialog .song-search-fields>label{gap:3px;line-height:1.25;}
+#manualDialog .song-search-fields input{height:40px;min-height:40px;padding:6px 10px;}
+#manualDialog .manual-meta{display:grid;gap:5px;min-width:0;margin:3px 0 1px;}
+#manualDialog .manual-meta-row{display:grid;grid-template-columns:108px minmax(0,1fr);align-items:center;min-height:30px;min-width:0;gap:8px;}
+#manualDialog .manual-meta-row>strong{font-size:.78rem;font-weight:850;line-height:1.25;white-space:nowrap;color:var(--text);}
+#manualDialog .manual-meta-value{display:block;min-width:0;margin:0;padding:5px 9px;border-radius:9px;background:var(--field-fill);color:var(--muted);font-size:.78rem;line-height:1.3;overflow-wrap:anywhere;}
+#manualDialog .manual-meta-value[hidden]{display:none;}
+#manualDialog .manual-meta-row:has(.manual-meta-value[hidden]){display:none;}
+#manualDialog .manual-score-sections{gap:8px;margin-top:4px;}
+#manualDialog .manual-score-section h3{margin:0 0 3px;font-size:.93rem;line-height:1.25;}
+#manualDialog .manual-score-grid{grid-template-areas:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
+#manualDialog .manual-score-grid>label,#manualDialog .manual-score-grid>.history-score-input{gap:3px;}
+#manualDialog .manual-score-grid .field-label{font-size:.68rem;line-height:1.2;}
+#manualDialog .manual-score-grid .medal-picker-button,#manualDialog .manual-score-grid .rank-badge,#manualDialog .manual-score-grid input:not([type=hidden]){height:40px;min-height:40px;padding:2px 4px;border-radius:9px;}
+#manualDialog .manual-score-grid .medal-picker-button img,#manualDialog #medalPickerButton img,#manualDialog #medalPickerButton.cool-perfect-active>img{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;max-width:30px!important;max-height:30px!important;}
+#manualDialog .manual-score-grid #currentMedalPickerButton img{width:30px;height:30px;}
+#manualDialog .manual-score-grid .rank-badge img{height:30px;}
+#manualDialog .manual-summary-grid{margin-top:3px;}
+#manualDialog .manual-summary-grid>label{gap:3px;line-height:1.25;}
+#manualDialog .manual-summary-grid .manual-popclass{height:40px;min-height:40px;font-size:1.1rem;}
+#manualDialog .dialog-actions{margin-top:4px;}
+#manualDialog .dialog-actions button{min-height:40px;padding-top:7px;padding-bottom:7px;}
+@media(max-width:760px){
+  #manualDialog .song-search-fields{gap:6px;}
+  #manualDialog .song-search-fields input{height:38px;min-height:38px;}
+  #manualDialog .manual-score-grid{gap:6px;}
+  #manualDialog .manual-score-grid .medal-picker-button,#manualDialog .manual-score-grid .rank-badge,#manualDialog .manual-score-grid input:not([type=hidden]){height:38px;min-height:38px;}
+  #manualDialog .manual-score-grid .rank-badge img{height:28px;}
+  #manualDialog .manual-meta-row{grid-template-columns:100px minmax(0,1fr);min-height:28px;gap:5px;}
+}

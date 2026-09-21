@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffd34e">
-  <meta name="psm-app-version" content="3.2.12">
+  <meta name="psm-app-version" content="3.2.14">
   <meta name="description" content="pop'n musicのスコアとメダルを管理する非公式ツール">
   <link rel="icon" type="image/x-icon" sizes="any" href="./assets/psm-favicon-315.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/psm-icon-192-315.png">
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./css/components.css?v=3.0.127">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css?v=3.1.9">
-<link rel="stylesheet" href="./css/app.css?v=3.2.12">
+<link rel="stylesheet" href="./css/app.css?v=3.2.14">
   <link rel="stylesheet" href="./css/loading-screen.css?v=3.1.6">
   <link rel="stylesheet" href="./css/average-scores.css?v=3.0.141">
   <link rel="stylesheet" href="./css/version-check.css?v=3.1.23">
@@ -285,7 +285,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.2.12</b>
+<b>3.2.14</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -330,12 +330,11 @@
 <div class="form-grid song-search-fields"><label class="auto-field">ジャンル名<input id="songGenreInput" type="search" placeholder="ジャンル名で検索" autocomplete="off"></label><label class="auto-field">曲名<input id="songTitleInput" type="search" placeholder="曲名で検索" autocomplete="off"></label></div>
 <div id="songSuggestions" class="suggestions">
 </div>
-<p id="manualArtist" class="manual-artist" hidden></p>
-<p id="manualVersion" class="manual-artist" hidden></p>
-<input name="song_id" type="hidden">
-<div class="manual-summary-grid">
-<label class="auto-field score-row-popclass">PSR<output id="manualPopClass" class="manual-popclass">0.00</output></label>
+<div class="manual-meta" aria-label="曲情報">
+  <div class="manual-meta-row"><strong>アーティスト</strong><span id="manualArtist" class="manual-meta-value" hidden></span></div>
+  <div class="manual-meta-row"><strong>登場バージョン</strong><span id="manualVersion" class="manual-meta-value" hidden></span></div>
 </div>
+<input name="song_id" type="hidden">
 <div class="manual-score-sections">
 <section class="manual-score-section">
 <h3>歴代</h3>
@@ -353,6 +352,9 @@
 <label class="score-row-current"><span class="field-label">スコア</span><input id="manualScoreInput" name="version_score" type="number" min="0" max="100000" required></label>
 </div>
 </section>
+</div>
+<div class="manual-summary-grid">
+<label class="auto-field score-row-popclass">PSR<output id="manualPopClass" class="manual-popclass">0.00</output></label>
 </div>
 <div id="medalPicker" class="medal-picker" hidden></div>
 <div id="currentMedalPicker" class="medal-picker" hidden></div>
@@ -448,10 +450,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module">
     // Check release metadata before loading the application. Network errors must not block startup.
-    import("./js/version-check.js?v=3.2.12").then(async ({checkOnLaunch, watchForUpdates}) => {
+    import("./js/version-check.js?v=3.2.14").then(async ({checkOnLaunch, watchForUpdates}) => {
       if (await checkOnLaunch()) return; // Navigating to the fresh HTML; skip loading this copy.
       watchForUpdates();
-      await import("./js/app.js?v=3.2.12");
+      await import("./js/app.js?v=3.2.14");
     }).catch(error => {
       console.error("Application module failed to load:", error);
       window.psmLoading?.error(error);
