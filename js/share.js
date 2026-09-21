@@ -11,7 +11,14 @@ const chartOrder={EX:0,HYPER:1,NORMAL:2,LIGHT:3};
 
 function rounded(ctx,x,y,w,h,r=18,fill=PANEL,stroke=LINE,lw=3){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.lineWidth=lw;ctx.strokeStyle=stroke;ctx.stroke();}}
 function text(ctx,value,x,y,size=28,weight=700,color=INK,align="left",baseline="middle"){ctx.font=`${weight} ${size}px ${FONT}`;ctx.fillStyle=color;ctx.textAlign=align;ctx.textBaseline=baseline;ctx.fillText(String(value??""),x,y);}
-async function fetchBitmap(url){const response=await fetch(url,{mode:"cors",cache:"force-cache"});if(!response.ok)throw new Error(String(response.status));return createImageBitmap(await response.blob());}
+async function fetchBitmap(url){
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),6500);
+ try{
+  const response=await fetch(url,{mode:"cors",cache:"force-cache",signal:controller.signal});
+  if(!response.ok)throw new Error(String(response.status));
+  return await createImageBitmap(await response.blob());
+ }finally{clearTimeout(timeout);}
+}
 async function loadImage(url){if(!url)return null;if(imgCache.has(url))return imgCache.get(url);const promise=(async()=>{try{return await fetchBitmap(url);}catch{try{const parsed=new URL(url,location.href);if(parsed.origin===location.origin)return null;return await fetchBitmap(`https://wsrv.nl/?url=${encodeURIComponent(parsed.href)}&output=png`);}catch{return null;}}})();imgCache.set(url,promise);return promise;}
 function contain(ctx,img,x,y,w,h){if(!img)return false;const scale=Math.min(w/img.width,h/img.height),dw=img.width*scale,dh=img.height*scale;ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);return true;}
 function trimBounds(img){
@@ -158,9 +165,11 @@ export async function shareMedalDistributionImage(rows,startLevel,endLevel,usern
  const target=rows.filter(row=>Number(row.level)>=start&&Number(row.level)<=end);
  if(!target.length)throw new Error(`Lv.${start}〜${end} の譜面がありません。`);
  const rowsByLevel=new Map(levels.map(level=>[level,target.filter(row=>Number(row.level)===level)]));
- const items=distributionItems(rowsByLevel,levels),legendUrls=items.filter(item=>item.url).map(item=>item.url);
- await preload(target,legendUrls,false);
- const leftW=60,colW=64,rowH=34,headerH=42,pad=18,tableW=leftW+levels.length*colW,width=Math.max(720,Math.min(980,pad*2+tableW)),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+items.length*rowH+34;
+ const items=distributionItems(rowsByLevel,levels),legendUrls=[...new Set(items.filter(item=>item.url).map(item=>item.url))];
+ // This image only renders medal icons. Never load thousands of song banners here.
+ // Every request is time-limited so one unavailable image cannot keep the UI busy indefinitely.
+ await Promise.all(legendUrls.map(url=>loadImage(url)));
+ const leftW=60,colW=64,rowH=34,headerH=42,pad=18,tableW=leftW+levels.length*colW,width=Math.max(720,pad*2+tableW),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+items.length*rowH+34;
  const[c,ctx]=canvas(width,height);header(ctx,`Lv.${start}〜${end} 歴代メダル分布`,`対象 ${target.length.toLocaleString("ja-JP")}譜面`,username,width);
  rounded(ctx,tableX,tableY,tableW,headerH+items.length*rowH,10,PANEL,LINE,2);
  ctx.strokeStyle="#e6dfc7";ctx.lineWidth=1;
