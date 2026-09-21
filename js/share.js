@@ -1,22 +1,9 @@
 import{popClassSelection,songPopClass}from"./scores.js?v=3.2.3";
-import{medalInfo}from"./ui.js?v=3.2.3";
+import{medalInfo}from"./ui.js?v=3.2.10";
 
 const HASHTAG="#popn_score_manager",SHARE_TEXT=`${HASHTAG}\n`,BG="#fffaf0",PANEL="#fffdf6",INK="#142b67",MUTED="#69789d",LINE="#3153a0",ACCENT="#ffd851",PINK="#ff789a";
 const TARGET_BYTES=1024*1024;
-const LOCAL_SHARE_MEDALS={
- perfect:"./assets/share-medals/perfect.png",
- fc_1_5:"./assets/share-medals/fc_1_5.png",
- fc_6_20:"./assets/share-medals/fc_6_20.png",
- fc_21_plus:"./assets/share-medals/fc_21_plus.png",
- clear_bad_1_5:"./assets/share-medals/clear_bad_1_5.png",
- clear_bad_6_20:"./assets/share-medals/clear_bad_6_20.png",
- clear_bad_21_plus:"./assets/share-medals/clear_bad_21_plus.png",
- long_off:"./assets/share-medals/long_off.png",
- easy:"./assets/share-medals/easy.png",
- failed_15_16:"./assets/share-medals/failed_15_16.png",
- failed_12_14:"./assets/share-medals/failed_12_14.png",
- failed_0_11:"./assets/share-medals/failed_0_11.png"
-};
+
 const FONT='system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif';
 const imgCache=new Map();
 const trimCache=new WeakMap();
@@ -42,15 +29,16 @@ function trimBounds(img){
  const bounds=maxX>=minX&&maxY>=minY?{x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1}:{x:0,y:0,w,h};trimCache.set(img,bounds);return bounds;
 }
 function containTrimmed(ctx,img,x,y,w,h){if(!img)return false;const b=trimBounds(img),scale=Math.min(w/b.w,h/b.h),dw=b.w*scale,dh=b.h*scale;ctx.drawImage(img,b.x,b.y,b.w,b.h,x+(w-dw)/2,y+(h-dh)/2,dw,dh);return true;}
+function containTrimmedSharp(ctx,img,x,y,w,h){if(!img)return false;ctx.save();ctx.imageSmoothingEnabled=false;const ok=containTrimmed(ctx,img,x,y,w,h);ctx.restore();return ok;}
 function canonicalMedalCode(code){const normalized=String(code||"none").toLowerCase();for(const[key,codes]of MEDAL_GROUPS)if(codes.includes(normalized))return key;return normalized;}
-function shareMedalUrl(code,score=0){if(Number(score)===100000)return "./assets/cool-perfect.png";const canonical=canonicalMedalCode(code);return LOCAL_SHARE_MEDALS[canonical]||medalInfo(canonical).url||medalInfo(code).url;}
+function shareMedalUrl(code,score=0){if(Number(score)===100000)return "./assets/cool-perfect.png";const canonical=canonicalMedalCode(code);return medalInfo(canonical).url||medalInfo(code).url;}
 function currentMedalCode(row){
  if(row.current_medal_code!=null)return row.current_medal_code;
  return {perfect:"perfect",full_combo:"fc_21_plus",clear:"clear_bad_21_plus",easy:"easy",long_off:"long_off",failed:Number(row.version_score)>0?"failed_0_11":"none"}[row.current_clear_status]||"none";
 }
 function effectiveMedal(row,useCurrent=false){const code=useCurrent?currentMedalCode(row):row.medal_code;const score=useCurrent?row.version_score:row.score;const info=Number(score)===100000?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(canonicalMedalCode(code));return {...info,url:shareMedalUrl(code,score)};}
 function medalFallback(ctx,label,x,y,size){ctx.save();ctx.translate(x+size/2,y+size/2);ctx.rotate(Math.PI/4);rounded(ctx,-size*.31,-size*.31,size*.62,size*.62,8,"#f5e8ad",LINE,3);ctx.restore();text(ctx,label==="－　未プレー"?"－":label.slice(0,2),x+size/2,y+size/2,15,900,INK,"center");}
-async function drawMedal(ctx,row,x,y,size,useCurrent=false){const info=effectiveMedal(row,useCurrent),code=useCurrent?currentMedalCode(row):row.medal_code,score=useCurrent?row.version_score:row.score;if(String(code||"none").toLowerCase()==="none"&&Number(score)!==100000){text(ctx,"－",x+size/2,y+size/2,26,700,MUTED,"center");return;}const img=await loadImage(info.url);if(!containTrimmed(ctx,img,x,y,size,size))medalFallback(ctx,info.label,x,y,size);}
+async function drawMedal(ctx,row,x,y,size,useCurrent=false){const info=effectiveMedal(row,useCurrent),code=useCurrent?currentMedalCode(row):row.medal_code,score=useCurrent?row.version_score:row.score;if(String(code||"none").toLowerCase()==="none"&&Number(score)!==100000){text(ctx,"－",x+size/2,y+size/2,26,700,MUTED,"center");return;}const img=await loadImage(info.url);if(!containTrimmedSharp(ctx,img,x,y,size,size))medalFallback(ctx,info.label,x,y,size);}
 function fitLine(ctx,value,x,y,maxWidth,maxSize=13,minSize=8,weight=800,color=INK){
  const raw=String(value||"").trim()||"NO IMAGE";let size=maxSize;ctx.textAlign="center";ctx.textBaseline="middle";
  while(size>minSize){ctx.font=`${weight} ${size}px ${FONT}`;if(ctx.measureText(raw).width<=maxWidth)break;size--;}
@@ -138,7 +126,7 @@ async function drawMedalSummary(ctx,rows,x,y,w,h){
   const item=items[i],center=x+i*cellW+cellW/2;
   if(item.type==="dash")text(ctx,"－",center,y+19,18,800,MUTED,"center");
   else if(item.type==="no-play"){text(ctx,"NO",center,y+14,8,800,MUTED,"center");text(ctx,"PLAY",center,y+24,8,800,MUTED,"center");}
-  else{const img=await loadImage(item.url);if(img)containTrimmed(ctx,img,center-16,y+5,32,32);}
+  else{const img=await loadImage(item.url);if(img)containTrimmedSharp(ctx,img,center-16,y+5,32,32);}
   text(ctx,item.count.toLocaleString("ja-JP"),center,y+h-12,12,900,INK,"center");
  }
 }
@@ -163,7 +151,7 @@ export async function shareLevelMedalImage(rows,level,username){
 function distributionItems(rowsByLevel,levels){
  const itemDefs=[
   {type:"cool",key:"cool",url:"./assets/cool-perfect.png",label:"COOL PERFECT",countFor:(rows,code)=>rows.filter(row=>Number(row.score)===100000).length},
-  ...MEDAL_GROUPS.filter(([key])=>key!=="none").map(([key,codes])=>{const info=medalInfo(key);return{type:"image",key,url:LOCAL_SHARE_MEDALS[key]||info.url,label:info.label,countFor:(rows,code)=>rows.filter(row=>codes.includes(code(row))&&(key!=="perfect"||Number(row.score)!==100000)).length};}),
+  ...MEDAL_GROUPS.filter(([key])=>key!=="none").map(([key,codes])=>{const info=medalInfo(key);return{type:"image",key,url:info.url,label:info.label,countFor:(rows,code)=>rows.filter(row=>codes.includes(code(row))&&(key!=="perfect"||Number(row.score)!==100000)).length};}),
   {type:"dash",key:"dash",label:"－",countFor:(rows,code)=>rows.filter(row=>!noPlay(row)&&code(row)==="none").length},
   {type:"no-play",key:"no_play",label:"NO PLAY",countFor:rows=>rows.filter(noPlay).length}
  ];
@@ -172,7 +160,7 @@ function distributionItems(rowsByLevel,levels){
 async function drawDistributionIcon(ctx,item,x,y,w,h){
  if(item.type==="dash"){text(ctx,"－",x+w/2,y+h/2,18,800,MUTED,"center");return;}
  if(item.type==="no-play"){text(ctx,"NO",x+w/2,y+h/2-7,8,800,MUTED,"center");text(ctx,"PLAY",x+w/2,y+h/2+6,8,800,MUTED,"center");return;}
- const img=await loadImage(item.url);if(img){ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";containTrimmed(ctx,img,x+2,y+2,w-4,h-4);return;}
+ const img=await loadImage(item.url);if(img){containTrimmedSharp(ctx,img,x+2,y+2,w-4,h-4);return;}
  medalFallback(ctx,item.label,x+(w-30)/2,y+(h-30)/2,30);
 }
 export async function shareMedalDistributionImage(rows,startLevel,endLevel,username){
@@ -182,8 +170,9 @@ export async function shareMedalDistributionImage(rows,startLevel,endLevel,usern
  if(!target.length)throw new Error(`Lv.${start}〜${end} の譜面がありません。`);
  const rowsByLevel=new Map(levels.map(level=>[level,target.filter(row=>Number(row.level)===level)]));
  const items=distributionItems(rowsByLevel,levels),legendUrls=[...new Set(items.filter(item=>item.url).map(item=>item.url))];
- await Promise.all(legendUrls.map(url=>loadImage(url)));
- const pad=18,leftW=78,colW=52,rowH=40,headerH=56,tableW=leftW+items.length*colW,width=Math.max(940,pad*2+tableW),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+levels.length*rowH+34;
+ const missing=await Promise.all(legendUrls.map(async url=>({url,image:await loadImage(url)})));
+ if(missing.some(item=>!item.image))throw new Error("公式メダル画像を読み込めませんでした。通信環境を確認して再度お試しください。");
+ const pad=18,leftW=64,colW=52,rowH=40,headerH=56,tableW=leftW+items.length*colW,width=Math.max(940,pad*2+tableW),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+levels.length*rowH+34;
  const[c,ctx]=canvas(width,height);header(ctx,`Lv.${start}〜${end} 歴代メダル分布`,`対象 ${target.length.toLocaleString("ja-JP")}譜面`,username,width);
  rounded(ctx,tableX,tableY,tableW,headerH+levels.length*rowH,10,PANEL,LINE,2);
  ctx.strokeStyle="#e6dfc7";ctx.lineWidth=1;
@@ -191,8 +180,7 @@ export async function shareMedalDistributionImage(rows,startLevel,endLevel,usern
  ctx.beginPath();ctx.moveTo(tableX+leftW,tableY);ctx.lineTo(tableX+leftW,tableY+headerH+levels.length*rowH);ctx.stroke();
  ctx.beginPath();ctx.moveTo(tableX,tableY+headerH);ctx.lineTo(tableX+tableW,tableY+headerH);ctx.stroke();
  for(let i=1;i<levels.length;i++){const y=tableY+headerH+i*rowH;ctx.beginPath();ctx.moveTo(tableX,y);ctx.lineTo(tableX+tableW,y);ctx.stroke();}
- text(ctx,"レベル",tableX+leftW/2,tableY+headerH/2,12,900,INK,"center");
- for(let cIndex=0;cIndex<items.length;cIndex++)await drawDistributionIcon(ctx,items[cIndex],tableX+leftW+cIndex*colW+8,tableY+8,colW-16,headerH-16);
+  for(let cIndex=0;cIndex<items.length;cIndex++)await drawDistributionIcon(ctx,items[cIndex],tableX+leftW+cIndex*colW+8,tableY+8,colW-16,headerH-16);
  for(let r=0;r<levels.length;r++){
    const level=levels[r],rowY=tableY+headerH+r*rowH; text(ctx,`Lv.${level}`,tableX+leftW/2,rowY+rowH/2,13,900,INK,"center");
    items.forEach((item,cIndex)=>{const count=item.counts[r],color=count===0?MUTED:INK;text(ctx,count.toLocaleString("ja-JP"),tableX+leftW+cIndex*colW+colW/2,rowY+rowH/2,12,800,color,"center");});

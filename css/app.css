@@ -788,3 +788,111 @@ button,input,select,textarea{letter-spacing:inherit}
 }
 .image-share-range{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
 @media(max-width:760px){.image-share-range{grid-template-columns:1fr;gap:6px;}}
+
+/* v3.2.10: unify form field backgrounds and update score editor layout */
+:root[data-theme="light"]{--field-fill:#f5f7ff;}
+:root[data-theme="dark"]{--field-fill:#24345e;}
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+select,
+textarea,
+#manualDialog .manual-popclass,
+#manualDialog .rank-badge,
+#manualDialog .medal-picker-button{
+  background:var(--field-fill);
+}
+#manualDialog input:disabled,
+#manualDialog textarea:disabled,
+#manualDialog select:disabled{
+  opacity:1;
+  color:var(--text);
+  -webkit-text-fill-color:var(--text);
+}
+#manualDialog .manual-summary-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+#manualDialog .manual-score-sections{
+  display:grid;
+  gap:14px;
+  margin-top:12px;
+}
+#manualDialog .manual-score-section{
+  display:grid;
+  gap:8px;
+}
+#manualDialog .manual-score-section h3{
+  margin:0 2px;
+  font-size:1rem;
+  font-weight:900;
+  color:var(--text);
+}
+#manualDialog .manual-score-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+#manualDialog .manual-score-grid>label{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:6px;
+  margin:0;
+}
+#manualDialog .manual-score-grid .field-label{
+  display:block;
+  font-size:.78rem;
+  font-weight:800;
+  color:var(--muted);
+  line-height:1.2;
+}
+#manualDialog .manual-summary-grid .manual-popclass,
+#manualDialog .manual-score-grid .rank-badge,
+#manualDialog .manual-score-grid .medal-picker-button,
+#manualDialog .manual-score-grid input{
+  min-height:54px;
+  border-radius:12px;
+}
+#manualDialog .manual-summary-grid .manual-popclass{
+  display:grid;
+  place-items:center;
+  font-size:1.95rem;
+}
+#manualDialog .manual-score-grid .medal-picker-button{
+  width:100%;
+  margin:0;
+}
+#manualDialog .manual-score-grid .rank-badge{
+  display:grid;
+  place-items:center;
+  padding:4px;
+}
+#manualDialog .manual-score-grid .rank-badge img{
+  height:38px;
+  width:auto;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+#manualDialog .manual-score-grid .rank-badge.is-empty{
+  font-size:1.8rem;
+  font-weight:700;
+  color:var(--muted);
+}
+#manualDialog .manual-score-grid input{
+  width:100%;
+}
+#manualDialog .manual-score-grid .score-row-history small{
+  margin-top:2px;
+  line-height:1.35;
+}
+@media(max-width:760px){
+  #manualDialog .manual-score-grid{gap:8px;}
+  #manualDialog .manual-summary-grid .manual-popclass,
+  #manualDialog .manual-score-grid .rank-badge,
+  #manualDialog .manual-score-grid .medal-picker-button,
+  #manualDialog .manual-score-grid input{min-height:50px;}
+  #manualDialog .manual-summary-grid .manual-popclass{font-size:1.8rem;}
+  #manualDialog .manual-score-grid .rank-badge img{height:34px;}
+}
