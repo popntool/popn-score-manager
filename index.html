@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffd34e">
-  <meta name="psm-app-version" content="3.2.25">
+  <meta name="psm-app-version" content="3.2.26">
   <meta name="description" content="pop'n musicのスコアとメダルを管理する非公式ツール">
   <link rel="icon" type="image/x-icon" sizes="any" href="./assets/psm-favicon-315.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/psm-icon-192-315.png">
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./css/components.css?v=3.0.127">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css?v=3.1.9">
-<link rel="stylesheet" href="./css/app.css?v=3.2.25">
+<link rel="stylesheet" href="./css/app.css?v=3.2.26">
   <link rel="stylesheet" href="./css/loading-screen.css?v=3.1.6">
   <link rel="stylesheet" href="./css/average-scores.css?v=3.0.141">
   <link rel="stylesheet" href="./css/version-check.css?v=3.1.23">
@@ -286,7 +286,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.2.24</b>
+<b>3.2.26</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -451,10 +451,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module">
     // Check release metadata before loading the application. Network errors must not block startup.
-    import("./js/version-check.js?v=3.2.24").then(async ({checkOnLaunch, watchForUpdates}) => {
+    import("./js/version-check.js?v=3.2.26").then(async ({checkOnLaunch, watchForUpdates}) => {
       if (await checkOnLaunch()) return; // Navigating to the fresh HTML; skip loading this copy.
       watchForUpdates();
-      await import("./js/app.js?v=3.2.25");
+      await import("./js/app.js?v=3.2.26");
     }).catch(error => {
       console.error("Application module failed to load:", error);
       window.psmLoading?.error(error);

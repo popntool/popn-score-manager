@@ -221,28 +221,26 @@ function setupMedalFilter(inputId,buttonId,pickerId,description){
  activeMedalFilters.add({button,picker,close});
  function open(){
   for(const filter of activeMedalFilters)filter.close();
-  // Moving this existing element retains its click handler and selected state.
+  // Portaling avoids clipping by the filter grid and neighboring sort fields.
   document.body.append(picker);
   picker.classList.add("psm-floating-medal-picker");
-  const rect=button.getBoundingClientRect(),viewport=window.visualViewport,
+  picker.hidden=false;
+  picker.style.removeProperty("height");
+  picker.style.removeProperty("width");
+  picker.style.removeProperty("max-height");
+  const rect=button.getBoundingClientRect(),panel=$("#scoresPanel").getBoundingClientRect(),viewport=window.visualViewport,
    leftEdge=viewport?.offsetLeft||0,topEdge=viewport?.offsetTop||0,
    viewWidth=viewport?.width||window.innerWidth,viewHeight=viewport?.height||window.innerHeight,
-   mobile=window.matchMedia("(max-width: 430px)").matches,
-   columns=5,gap=3,padding=5,border=2,cell=mobile?34:36,
-   optionCount=picker.querySelectorAll("[data-filter-medal]").length,
-   rows=Math.max(1,Math.ceil(optionCount/columns)),
-   desiredWidth=(cell*columns)+(gap*(columns-1))+(padding*2)+border,
-   width=Math.min(desiredWidth,viewWidth-24),
-   left=Math.max(leftEdge+12,Math.min(rect.left + (rect.width-width)/2,leftEdge+viewWidth-width-12)),
-   roomBelow=topEdge+viewHeight-rect.bottom-12,roomAbove=rect.top-topEdge-12,
-   desiredHeight=(cell*rows)+(gap*Math.max(0,rows-1))+(padding*2)+border,
+   width=picker.getBoundingClientRect().width,
+   left=Math.max(leftEdge+12,Math.min(panel.left+(panel.width-width)/2,leftEdge+viewWidth-width-12)),
+   desiredHeight=picker.scrollHeight,roomBelow=topEdge+viewHeight-rect.bottom-12,roomAbove=rect.top-topEdge-12,
    above=roomBelow<desiredHeight&&roomAbove>roomBelow,
-   available=Math.max(cell+padding*2+border,Math.min(270,above?roomAbove-6:roomBelow-6)),
-   height=Math.min(desiredHeight,available);
-  picker.style.left=`${left}px`;picker.style.right="auto";picker.style.width=`${width}px`;
-  picker.style.height=`${height}px`;picker.style.maxHeight=`${height}px`;
-  picker.hidden=false;
-  picker.style.top=`${above?Math.max(topEdge+6,rect.top-height-6):rect.bottom+6}px`;
+   available=Math.max(44,Math.min(270,above?roomAbove-6:roomBelow-6));
+  picker.style.left=`${left}px`;
+  picker.style.right="auto";
+  picker.style.maxHeight=`${available}px`;
+  const actualHeight=picker.getBoundingClientRect().height;
+  picker.style.top=`${above?Math.max(topEdge+6,rect.top-actualHeight-6):rect.bottom+6}px`;
   button.setAttribute("aria-expanded","true");
  }
  button.addEventListener("click",()=>picker.hidden?open():close());
