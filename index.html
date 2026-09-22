@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffd34e">
-  <meta name="psm-app-version" content="3.2.26">
+  <meta name="psm-app-version" content="3.2.27">
   <meta name="description" content="pop'n musicのスコアとメダルを管理する非公式ツール">
   <link rel="icon" type="image/x-icon" sizes="any" href="./assets/psm-favicon-315.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/psm-icon-192-315.png">
@@ -344,6 +344,7 @@
 <label class="auto-field score-row-history-rank"><i id="manualHistoryRank" class="rank-text rank-badge" role="img" aria-label="歴代ランク －">－</i></label>
 <label class="history-score-input score-row-history"><input id="manualHistoryScore" name="history_score" aria-label="歴代スコア" type="number" min="0" max="100000" placeholder="未入力"><small id="historyScoreGuide">今作が上回る場合は同じ値を表示</small></label>
 </div>
+<div id="medalPicker" class="medal-picker" hidden></div>
 </section>
 <section class="manual-score-section">
 <h3>今作</h3>
@@ -352,13 +353,12 @@
 <label class="auto-field score-row-rank"><i id="manualRank" class="rank-text rank-badge" role="img" aria-label="今作ランク E"><img src="./assets/ranks/e.png" alt=""></i></label>
 <label class="score-row-current"><input id="manualScoreInput" name="version_score" aria-label="今作スコア" type="number" min="0" max="100000" required></label>
 </div>
+<div id="currentMedalPicker" class="medal-picker" hidden></div>
 </section>
 </div>
 <div class="manual-summary-grid">
 <label class="auto-field score-row-popclass">PSR<output id="manualPopClass" class="manual-popclass">0.00</output></label>
 </div>
-<div id="medalPicker" class="medal-picker" hidden></div>
-<div id="currentMedalPicker" class="medal-picker" hidden></div>
 <p id="manualError" class="error">
 </p>
 <div class="dialog-actions">
@@ -451,10 +451,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module">
     // Check release metadata before loading the application. Network errors must not block startup.
-    import("./js/version-check.js?v=3.2.26").then(async ({checkOnLaunch, watchForUpdates}) => {
+    import("./js/version-check.js?v=3.2.27").then(async ({checkOnLaunch, watchForUpdates}) => {
       if (await checkOnLaunch()) return; // Navigating to the fresh HTML; skip loading this copy.
       watchForUpdates();
-      await import("./js/app.js?v=3.2.26");
+      await import("./js/app.js?v=3.2.27");
     }).catch(error => {
       console.error("Application module failed to load:", error);
       window.psmLoading?.error(error);
