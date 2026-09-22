@@ -1273,3 +1273,47 @@ body>.psm-floating-medal-picker .compact-medal-option{min-height:var(--psm-medal
   body>.psm-floating-medal-picker .compact-medal-option,
   #manualDialog .medal-picker button{min-height:var(--psm-medal-palette-cell-height-mobile);}
 }
+
+
+/* v3.2.23: compact only the score-filter medal palette (not the editor). */
+#scoresPanel .filters .compact-filter-medal-picker,
+body>.psm-floating-medal-picker:not([hidden]){
+  gap:3px;
+  padding:5px;
+  align-content:start;
+  grid-auto-rows:36px;
+}
+#scoresPanel .filters .compact-filter-medal-picker .compact-medal-option,
+body>.psm-floating-medal-picker .compact-medal-option{
+  box-sizing:border-box;
+  height:36px;
+  min-height:0;
+  max-height:36px;
+  padding:2px;
+  border-radius:7px;
+}
+#scoresPanel .filters .compact-filter-medal-picker img,
+body>.psm-floating-medal-picker img{
+  width:27px;
+  height:27px;
+  max-width:100%;
+  object-fit:contain;
+}
+#scoresPanel .filters .compact-filter-medal-picker .compact-medal-empty,
+body>.psm-floating-medal-picker .compact-medal-empty{
+  width:27px;
+  height:27px;
+}
+@media(max-width:430px){
+  #scoresPanel .filters .compact-filter-medal-picker,
+  body>.psm-floating-medal-picker:not([hidden]){grid-auto-rows:34px;}
+  #scoresPanel .filters .compact-filter-medal-picker .compact-medal-option,
+  body>.psm-floating-medal-picker .compact-medal-option{
+    height:34px;
+    min-height:0;
+    max-height:34px;
+    padding:2px;
+  }
+  #scoresPanel .filters .compact-filter-medal-picker img,
+  body>.psm-floating-medal-picker img{width:25px;height:25px;}
+}
