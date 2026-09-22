@@ -1112,3 +1112,69 @@ textarea,
   #manualDialog .manual-score-grid .rank-badge,
   #manualDialog .manual-score-grid input:not([type=hidden]){height:38px;min-height:38px;}
 }
+
+
+/* v3.2.16: one consistent field fill, including search-input inner surfaces. */
+#scoresPanel .filters .search,#usersPanel .search,
+#scoresPanel .filters .search input,#usersPanel .search input,
+#scoresPanel .filters select,#scoresPanel .filters .filter-medal-button,
+#scoresPanel .list-sort-controls select,#usersPanel .list-sort-controls select,
+#manualDialog input:not([type=hidden]),#manualDialog .manual-popclass,
+#manualDialog .rank-badge,#manualDialog .medal-picker-button,
+#imageShareDialog select,#menuDialog select{
+  background-color:var(--field-fill)!important;
+  color:var(--text);
+}
+#scoresPanel .filters .search input,#usersPanel .search input{
+  border:0!important;box-shadow:none!important;border-radius:inherit;
+}
+#scoresPanel .filters .search,#usersPanel .search{overflow:hidden;}
+#scoresPanel .filters.score-filter-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:7px!important;
+  align-items:stretch;
+}
+#scoresPanel .score-filter-search{grid-column:1/-1!important;min-width:0;}
+#scoresPanel #levelFilter{grid-column:1/3;min-width:0;}
+#scoresPanel #versionFilter{grid-column:3/5;min-width:0;}
+#scoresPanel .score-filter-heading{grid-row:3;min-width:0;color:var(--muted);font-size:.81rem;font-weight:850;text-align:center;}
+#scoresPanel .score-filter-heading.history{grid-column:1/3;}
+#scoresPanel .score-filter-heading.current{grid-column:3/5;}
+#scoresPanel .history-medal-filter{grid-column:1;grid-row:4;}
+#scoresPanel #rankFilter{grid-column:2;grid-row:4;}
+#scoresPanel .current-medal-filter{grid-column:3;grid-row:4;}
+#scoresPanel #currentRankFilter{grid-column:4;grid-row:4;}
+#scoresPanel .filters .filter-medal-wrap{position:relative;min-width:0;}
+#scoresPanel .filters .filter-medal-button,#scoresPanel .filters select{width:100%;min-width:0;height:40px;min-height:40px;font-size:.79rem;padding-inline:7px;}
+#scoresPanel .filters .filter-medal-button{display:flex;justify-content:center;gap:1px;}
+#scoresPanel .filters .filter-medal-button img{width:28px;height:28px;min-width:0;object-fit:contain;}
+#scoresPanel .filters .filter-medal-button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#scoresPanel .filters .filter-medal-button b{margin-left:auto;}
+#scoresPanel .filters .compact-filter-medal-picker{
+  position:absolute;z-index:30;top:calc(100% + 4px);left:0;
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;
+  padding:8px;width:min(310px,calc(100vw - 48px));max-width:none;
+  border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:var(--shadow);
+}
+#scoresPanel .filters .current-medal-filter .compact-filter-medal-picker{left:auto;right:0;}
+#scoresPanel .filters .compact-filter-medal-picker[hidden]{display:none!important;}
+#scoresPanel .filters .compact-filter-medal-picker .compact-medal-option{
+  display:grid;place-items:center;min-width:0;min-height:44px;padding:4px;
+  border:1px solid var(--line);border-radius:9px;background:var(--field-fill);color:var(--text);
+}
+#scoresPanel .filters .compact-filter-medal-picker img{width:30px;height:30px;object-fit:contain;}
+#scoresPanel .filters .compact-filter-medal-picker [aria-pressed=true]{outline:2px solid var(--focus);outline-offset:-2px;}
+#scoresPanel .filters .compact-filter-medal-picker .filter-medal-all{font-size:.61rem;font-weight:850;}
+@media(max-width:430px){
+  #scoresPanel .filters.score-filter-grid{gap:5px!important;}
+  #scoresPanel .filters .filter-medal-button,#scoresPanel .filters select{height:38px;min-height:38px;font-size:.7rem;padding-inline:4px;}
+  #scoresPanel .filters .filter-medal-button img{width:25px;height:25px;}
+  #scoresPanel .filters .filter-medal-button b{width:6px;height:6px;margin-right:2px;}
+}
+
+/* v3.2.17: registration-only username privacy notice */
+#authGateUsernameNotice[hidden]{display:none!important}
+.auth-username-notice{display:grid;gap:5px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--text);font-size:.78rem;line-height:1.55}
+.auth-username-notice strong{font-size:.83rem}
+.auth-username-notice p{margin:0}
