@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffd34e">
-  <meta name="psm-app-version" content="3.2.24">
+  <meta name="psm-app-version" content="3.2.25">
   <meta name="description" content="pop'n musicのスコアとメダルを管理する非公式ツール">
   <link rel="icon" type="image/x-icon" sizes="any" href="./assets/psm-favicon-315.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/psm-icon-192-315.png">
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./css/components.css?v=3.0.127">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css?v=3.1.9">
-<link rel="stylesheet" href="./css/app.css?v=3.2.23">
+<link rel="stylesheet" href="./css/app.css?v=3.2.25">
   <link rel="stylesheet" href="./css/loading-screen.css?v=3.1.6">
   <link rel="stylesheet" href="./css/average-scores.css?v=3.0.141">
   <link rel="stylesheet" href="./css/version-check.css?v=3.1.23">
@@ -454,7 +454,7 @@
     import("./js/version-check.js?v=3.2.24").then(async ({checkOnLaunch, watchForUpdates}) => {
       if (await checkOnLaunch()) return; // Navigating to the fresh HTML; skip loading this copy.
       watchForUpdates();
-      await import("./js/app.js?v=3.2.24");
+      await import("./js/app.js?v=3.2.25");
     }).catch(error => {
       console.error("Application module failed to load:", error);
       window.psmLoading?.error(error);

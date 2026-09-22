@@ -216,7 +216,7 @@ function setupMedalFilter(inputId,buttonId,pickerId,description){
   picker.hidden=true;button.setAttribute("aria-expanded","false");
   if(picker.parentElement!==home)home.append(picker);
   picker.classList.remove("psm-floating-medal-picker");
-  picker.style.removeProperty("left");picker.style.removeProperty("right");picker.style.removeProperty("top");picker.style.removeProperty("width");picker.style.removeProperty("max-height");
+  picker.style.removeProperty("left");picker.style.removeProperty("right");picker.style.removeProperty("top");picker.style.removeProperty("width");picker.style.removeProperty("height");picker.style.removeProperty("max-height");
  };
  activeMedalFilters.add({button,picker,close});
  function open(){
@@ -227,15 +227,22 @@ function setupMedalFilter(inputId,buttonId,pickerId,description){
   const rect=button.getBoundingClientRect(),viewport=window.visualViewport,
    leftEdge=viewport?.offsetLeft||0,topEdge=viewport?.offsetTop||0,
    viewWidth=viewport?.width||window.innerWidth,viewHeight=viewport?.height||window.innerHeight,
-   width=Math.min(310,viewWidth-24),left=Math.max(leftEdge+12,Math.min(rect.left,leftEdge+viewWidth-width-12)),
+   mobile=window.matchMedia("(max-width: 430px)").matches,
+   columns=5,gap=3,padding=5,border=2,cell=mobile?34:36,
+   optionCount=picker.querySelectorAll("[data-filter-medal]").length,
+   rows=Math.max(1,Math.ceil(optionCount/columns)),
+   desiredWidth=(cell*columns)+(gap*(columns-1))+(padding*2)+border,
+   width=Math.min(desiredWidth,viewWidth-24),
+   left=Math.max(leftEdge+12,Math.min(rect.left + (rect.width-width)/2,leftEdge+viewWidth-width-12)),
    roomBelow=topEdge+viewHeight-rect.bottom-12,roomAbove=rect.top-topEdge-12,
-   above=roomBelow<175&&roomAbove>roomBelow,
-   available=Math.max(64,Math.min(270,above?roomAbove-6:roomBelow-6));
+   desiredHeight=(cell*rows)+(gap*Math.max(0,rows-1))+(padding*2)+border,
+   above=roomBelow<desiredHeight&&roomAbove>roomBelow,
+   available=Math.max(cell+padding*2+border,Math.min(270,above?roomAbove-6:roomBelow-6)),
+   height=Math.min(desiredHeight,available);
   picker.style.left=`${left}px`;picker.style.right="auto";picker.style.width=`${width}px`;
-  picker.style.maxHeight=`${available}px`;
+  picker.style.height=`${height}px`;picker.style.maxHeight=`${height}px`;
   picker.hidden=false;
-  // Measure after showing; above the trigger only when room below is limited.
-  picker.style.top=`${above?Math.max(topEdge+6,rect.top-picker.offsetHeight-6):rect.bottom+6}px`;
+  picker.style.top=`${above?Math.max(topEdge+6,rect.top-height-6):rect.bottom+6}px`;
   button.setAttribute("aria-expanded","true");
  }
  button.addEventListener("click",()=>picker.hidden?open():close());
