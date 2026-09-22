@@ -27,7 +27,35 @@ function scoreCard(row,useCurrentMedal=false){
  <div class="score-card-lower"><span class="card-chart ${String(row.chart||"").toLowerCase()}">${CHART_SHORT[row.chart]||esc(row.chart)}</span><span class="card-genre">${esc(row.genre)}</span><span class="card-psr-label">PSR</span><button class="score-edit" type="button" data-edit-score="${esc(row.id)}">編集</button><strong class="card-level">${Number(row.level)||"－"}</strong><h2 class="card-title">${esc(row.title)}</h2><strong class="card-popclass">${songPopClass(row).toFixed(2)}</strong></div>
  </article>`;
 }
-export function renderScores(rows,page=1){const list=document.querySelector("#scoreList");if(!rows.length){list.innerHTML='<div class="empty">条件に合う曲がありません。</div>';return 1;}const chartOrder={EX:0,HYPER:1,NORMAL:2,LIGHT:3},field=document.querySelector("#scoreSortField")?.value||"medal",direction=document.querySelector("#scoreSortOrder")?.value==="desc"?-1:1,medalOrder=code=>{const normalized=String(code||"none").toLowerCase(),index=MEDAL_GROUPS.findIndex(([,codes])=>codes.includes(normalized));return index<0?MEDAL_GROUPS.length:index;},fieldValue=(row,key)=>key==="medal"?(Number(row.score)===100000?-1:medalOrder(row.medal_code)):key==="pop_class"?songPopClass(row):Number(row[key]||0),defaultDirection={version:-1,level:-1,medal:1,version_score:-1,score:-1,pop_class:-1},priority=["version","level","medal","version_score","score","pop_class"],compareField=(a,b,key,dir=defaultDirection[key])=>key==="version"?(((Number(a.version_order)||0)-(Number(b.version_order)||0))*dir||String(a.version_name||"").localeCompare(String(b.version_name||""),"ja")*dir):(fieldValue(a,key)-fieldValue(b,key))*dir,compare=(a,b)=>{let result=compareField(a,b,field,direction);if(result)return result;for(const key of priority){if(key===field)continue;result=compareField(a,b,key);if(result)return result;}return String(a.title||"").localeCompare(String(b.title||""),"ja")||(chartOrder[a.chart]??9)-(chartOrder[b.chart]??9);},sorted=[...rows].sort(compare),pages=Math.ceil(sorted.length/PAGE_SIZE),current=Math.min(Math.max(1,Number(page)||1),pages),start=(current-1)*PAGE_SIZE;list.innerHTML=sorted.slice(start,start+PAGE_SIZE).map(scoreCard).join("")+`<nav class="score-pager"><span>${sorted.length.toLocaleString("ja-JP")}件中 ${(start+1).toLocaleString("ja-JP")}～${Math.min(start+PAGE_SIZE,sorted.length).toLocaleString("ja-JP")}件</span>${pager(current,pages,"score-page")}</nav>`;return current;}
+const SCORE_SORT_PRIORITY=["medal","version_score","pop_class","level","score","current_medal","title","version"];
+const SCORE_SORT_DIRECTION={medal:1,version_score:-1,pop_class:-1,level:-1,score:-1,current_medal:1,title:1,version:-1};
+function scoreMedalOrder(code,score){
+ if(Number(score)===100000)return -1;
+ const normalized=String(code||"none").toLowerCase();
+ const index=MEDAL_GROUPS.findIndex(([,codes])=>codes.includes(normalized));
+ return index<0?MEDAL_GROUPS.length:index;
+}
+function compareScoreField(a,b,key,direction=SCORE_SORT_DIRECTION[key]??1){
+ let value;
+ switch(key){
+  case "medal":value=scoreMedalOrder(a.medal_code,a.score)-scoreMedalOrder(b.medal_code,b.score);break;
+  case "current_medal":value=scoreMedalOrder(currentMedalCode(a),a.version_score)-scoreMedalOrder(currentMedalCode(b),b.version_score);break;
+  case "pop_class":value=songPopClass(a)-songPopClass(b);break;
+  case "title":value=String(a.title||"").localeCompare(String(b.title||""),"ja");break;
+  case "version":value=(Number(a.version_order)||0)-(Number(b.version_order)||0);if(!value)value=String(a.version_name||"").localeCompare(String(b.version_name||""),"ja");break;
+  default:value=(Number(a[key])||0)-(Number(b[key])||0);
+ }
+ return value*direction;
+}
+export function compareScoreRows(a,b,field="medal",direction="asc"){
+ const selected=SCORE_SORT_PRIORITY.includes(field)?field:"medal";
+ const first=compareScoreField(a,b,selected,direction==="desc"?-1:1);
+ if(first)return first;
+ for(const key of SCORE_SORT_PRIORITY){if(key===selected)continue;const result=compareScoreField(a,b,key);if(result)return result;}
+ const chartOrder={EX:0,HYPER:1,NORMAL:2,LIGHT:3};
+ return (chartOrder[a.chart]??9)-(chartOrder[b.chart]??9)||String(a.id||a.song_id||"").localeCompare(String(b.id||b.song_id||""),"ja");
+}
+export function renderScores(rows,page=1){const list=document.querySelector("#scoreList");if(!rows.length){list.innerHTML='<div class="empty">条件に合う曲がありません。</div>';return 1;}const field=document.querySelector("#scoreSortField")?.value||"medal",direction=document.querySelector("#scoreSortOrder")?.value||"asc",sorted=[...rows].sort((a,b)=>compareScoreRows(a,b,field,direction)),pages=Math.ceil(sorted.length/PAGE_SIZE),current=Math.min(Math.max(1,Number(page)||1),pages),start=(current-1)*PAGE_SIZE;list.innerHTML=sorted.slice(start,start+PAGE_SIZE).map(scoreCard).join("")+`<nav class="score-pager"><span>${sorted.length.toLocaleString("ja-JP")}件中 ${(start+1).toLocaleString("ja-JP")}～${Math.min(start+PAGE_SIZE,sorted.length).toLocaleString("ja-JP")}件</span>${pager(current,pages,"score-page")}</nav>`;return current;}
 export function renderPopClass(rows){const{current,other,total}=popClassSelection(rows),section=(title,items,limit)=>`<section class="popclass-group"><div class="popclass-group-title"><h2>${title}</h2><span>${items.length}/${limit}曲</span></div><div class="score-list">${items.length?items.map(item=>scoreCard(item,true)).join(""):'<div class="empty">対象曲がありません。</div>'}</div></section>`;document.querySelector("#totalPopClass").textContent=total.toFixed(2);document.querySelector("#popclassContent").innerHTML=section("新曲枠",current,20)+section("旧曲枠",other,40);return total;}
 const MEDAL_GROUPS=[
  ["perfect",["perfect","a"]],["fc_1_5",["fc_1_5","b"]],["fc_6_20",["fc_6_20","c"]],["fc_21_plus",["fc_21_plus","d"]],

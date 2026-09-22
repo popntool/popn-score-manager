@@ -5,7 +5,7 @@ import{downloadSongMaster,importSongMaster}from"./songs.js?v=3.0.92";
 import{currentMedalCode,currentMedalForNewSong,loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.2.3";
 import{loadUsers,invalidateUserCache}from"./users.js?v=3.1.25";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.0.107";
-import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.16";
+import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.19";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.1.4";
 import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.2.13";
@@ -103,7 +103,7 @@ async function refreshUsers(reset=false){
 async function refreshAdminNotices(){const box=$("#adminNoticeList");if(!box||!admin){if(box)box.hidden=true;return;}const notices=await loadAdminNotices(),items=[["requests","登録依頼","未承認",notices.requests],["banners","バナー依頼","未承認",notices.banners],["feedback","要望・不具合","未確認",notices.feedback]].filter(([, , ,count])=>count>0);box.hidden=!items.length;box.innerHTML=items.map(([tab,label,status,count])=>`<button type="button" data-admin-notice-tab="${tab}"><strong>${label}</strong><span>${status} ${count}件</span><b>›</b></button>`).join("");}
 for(const button of document.querySelectorAll(".tabs button"))button.addEventListener("click",async()=>{if(button.dataset.tab==="admin"&&!admin)return;showTab(button.dataset.tab);if(button.dataset.tab==="admin"){await Promise.all([renderAdmin(),refreshAdminNotices()]);}if(button.dataset.tab==="users"&&isConfigured){try{await refreshUsers(false);}catch(error){alert(error.message||error);}}});
 for(const selector of["#searchInput","#levelFilter","#versionFilter","#medalFilter","#rankFilter","#currentMedalFilter","#currentRankFilter"])$(selector).addEventListener(selector==="#searchInput"?"input":"change",()=>applyFilters(true));
-const DEFAULT_SCORE_SORT_ORDER={version:"desc",level:"desc",medal:"asc",score:"desc",version_score:"desc",pop_class:"desc"};
+const DEFAULT_SCORE_SORT_ORDER={version:"desc",level:"desc",medal:"asc",current_medal:"asc",score:"desc",version_score:"desc",pop_class:"desc"};
 $("#scoreSortField").addEventListener("change",()=>{$("#scoreSortOrder").value=DEFAULT_SCORE_SORT_ORDER[$("#scoreSortField").value]||"asc";applyFilters(true);});
 $("#scoreSortOrder").addEventListener("change",()=>applyFilters(true));
 $("#reloadButton").addEventListener("click",event=>{event.currentTarget.classList.add("is-loading");location.reload();});
@@ -205,17 +205,51 @@ $("#medalPickerButton").addEventListener("click",()=>{$("#medalPicker").hidden=!
 $("#medalPicker").addEventListener("click",event=>{const button=event.target.closest("[data-medal]");if(button)chooseMedal(button.dataset.medal);});chooseMedal("none");
 const filterMedals=[["ALL","全メダル",""],["cool_perfect","COOL PERFECT","./assets/cool-perfect.png"],...MEDALS.filter(([code])=>code!=="none"),...MEDALS.filter(([code])=>code==="none")];
 const filterImageUrl=(code,file)=>code==="cool_perfect"?file:file?`https://eacache.s.konaminet.jp/game/popn/popn29/images/p/howto/more/${file}`:"";
+// Keep the palette at document level: a nested grid/panel can paint over or clip
+// descendants even when their z-index is large (notably on mobile Safari).
+const activeMedalFilters=new Set();
 function setupMedalFilter(inputId,buttonId,pickerId,description){
- const input=$(inputId),button=$(buttonId),picker=$(pickerId),image=button.querySelector("img"),label=button.querySelector("span");
+ const input=$(inputId),button=$(buttonId),picker=$(pickerId),image=button.querySelector("img"),label=button.querySelector("span"),home=picker.parentElement;
  picker.innerHTML=filterMedals.map(([code,name,file])=>`<button type="button" class="compact-medal-option" data-filter-medal="${code}" title="${name}" aria-label="${name}">${code==="ALL"?'<span class="filter-medal-all">すべて</span>':file?`<img src="${filterImageUrl(code,file)}" alt="">`:'<span class="compact-medal-empty" aria-hidden="true">－</span>'}</button>`).join("");
- const close=()=>{picker.hidden=true;button.setAttribute("aria-expanded","false");};
- button.addEventListener("click",()=>{const opening=picker.hidden;document.querySelectorAll(".compact-filter-medal-picker").forEach(other=>{other.hidden=true;other.parentElement.querySelector(".filter-medal-button")?.setAttribute("aria-expanded","false");});picker.hidden=!opening;button.setAttribute("aria-expanded",String(opening));});
+ const close=()=>{
+  picker.hidden=true;button.setAttribute("aria-expanded","false");
+  if(picker.parentElement!==home)home.append(picker);
+  picker.classList.remove("psm-floating-medal-picker");
+  picker.style.removeProperty("left");picker.style.removeProperty("right");picker.style.removeProperty("top");picker.style.removeProperty("width");picker.style.removeProperty("max-height");
+ };
+ activeMedalFilters.add({button,picker,close});
+ function open(){
+  for(const filter of activeMedalFilters)filter.close();
+  // Moving this existing element retains its click handler and selected state.
+  document.body.append(picker);
+  picker.classList.add("psm-floating-medal-picker");
+  const rect=button.getBoundingClientRect(),viewport=window.visualViewport,
+   leftEdge=viewport?.offsetLeft||0,topEdge=viewport?.offsetTop||0,
+   viewWidth=viewport?.width||window.innerWidth,viewHeight=viewport?.height||window.innerHeight,
+   width=Math.min(310,viewWidth-24),left=Math.max(leftEdge+12,Math.min(rect.left,leftEdge+viewWidth-width-12)),
+   roomBelow=topEdge+viewHeight-rect.bottom-12,roomAbove=rect.top-topEdge-12,
+   above=roomBelow<175&&roomAbove>roomBelow,
+   available=Math.max(64,Math.min(270,above?roomAbove-6:roomBelow-6));
+  picker.style.left=`${left}px`;picker.style.right="auto";picker.style.width=`${width}px`;
+  picker.style.maxHeight=`${available}px`;
+  picker.hidden=false;
+  // Measure after showing; above the trigger only when room below is limited.
+  picker.style.top=`${above?Math.max(topEdge+6,rect.top-picker.offsetHeight-6):rect.bottom+6}px`;
+  button.setAttribute("aria-expanded","true");
+ }
+ button.addEventListener("click",()=>picker.hidden?open():close());
  picker.addEventListener("click",event=>{const option=event.target.closest("[data-filter-medal]");if(!option)return;select(option.dataset.filterMedal);close();input.dispatchEvent(new Event("change"));});
  function select(code){const info=code==="ALL"?{label:"全メダル",url:""}:code==="cool_perfect"?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(code);input.value=code;image.src=info.url||"";image.hidden=!info.url;label.textContent=code==="ALL"?"全メダル":code==="none"?"－":"";label.hidden=Boolean(info.url);button.title=`${description}：${info.label}`;button.setAttribute("aria-label",`${description}：${info.label}`);picker.querySelectorAll("[data-filter-medal]").forEach(option=>option.setAttribute("aria-pressed",String(option.dataset.filterMedal===code)));}
  select("ALL");
 }
 setupMedalFilter("#medalFilter","#filterMedalButton","#filterMedalPicker","歴代メダル");
 setupMedalFilter("#currentMedalFilter","#filterCurrentMedalButton","#filterCurrentMedalPicker","今作メダル");
+// A body-level palette must close when the viewport moves or the user taps elsewhere.
+document.addEventListener("pointerdown",event=>{for(const filter of activeMedalFilters){if(!filter.picker.hidden&&!filter.picker.contains(event.target)&&!filter.button.contains(event.target))filter.close();}});
+window.addEventListener("scroll",()=>{for(const filter of activeMedalFilters)if(!filter.picker.hidden)filter.close();},true);
+window.addEventListener("resize",()=>{for(const filter of activeMedalFilters)if(!filter.picker.hidden)filter.close();});
+window.visualViewport?.addEventListener("resize",()=>{for(const filter of activeMedalFilters)if(!filter.picker.hidden)filter.close();});
+document.addEventListener("keydown",event=>{if(event.key==="Escape")for(const filter of activeMedalFilters)if(!filter.picker.hidden)filter.close();});
 async function writeClipboard(text){try{await navigator.clipboard.writeText(text);}catch{const area=document.createElement("textarea");area.value=text;area.style.position="fixed";area.style.opacity="0";document.body.append(area);area.select();const copied=document.execCommand("copy");area.remove();if(!copied)throw new Error("クリップボードへ書き込めませんでした。");}}
 async function copyTool(file){const response=await fetch(`./tools/${file}`,{cache:"no-store"});if(!response.ok)throw new Error("コードを読み込めませんでした。");const text=await response.text();await writeClipboard(text);return file.includes("score-sync")?"同期用コードをコピーしました。ブックマークのURL欄へ貼り付けてください。":"抽出コードをコピーしました。公式サイトのConsoleへ貼り付けてください。";}
 // The code must already be loaded when the user taps Copy: awaiting fetch may lose

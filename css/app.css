@@ -1214,3 +1214,30 @@ textarea,
     right:calc(-100% - 5px);
   }
 }
+
+/* v3.2.20: palette is portaled to body, outside any clipping/stacking panel. */
+body>.psm-floating-medal-picker:not([hidden]){
+ position:fixed!important;
+ z-index:2147483000!important;
+ display:grid!important;
+ grid-template-columns:repeat(5,minmax(0,1fr));
+ gap:6px;
+ padding:8px;
+ margin:0;
+ box-sizing:border-box;
+ overflow-y:auto;
+ overscroll-behavior:contain;
+ border:1px solid var(--line);
+ border-radius:12px;
+ background:var(--surface);
+ box-shadow:0 12px 35px rgba(20,32,67,.26);
+}
+body>.psm-floating-medal-picker[hidden]{display:none!important;}
+body>.psm-floating-medal-picker .compact-medal-option{
+ display:grid;place-items:center;min-width:0;min-height:44px;padding:4px;
+ border:1px solid var(--line);border-radius:9px;
+ background:var(--field-fill);color:var(--text);
+}
+body>.psm-floating-medal-picker img{width:30px;height:30px;object-fit:contain;}
+body>.psm-floating-medal-picker [aria-pressed="true"]{outline:2px solid var(--focus);outline-offset:-2px;}
+body>.psm-floating-medal-picker .filter-medal-all{font-size:.61rem;font-weight:850;}
