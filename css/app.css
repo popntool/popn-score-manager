@@ -1178,3 +1178,39 @@ textarea,
 .auth-username-notice{display:grid;gap:5px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--text);font-size:.78rem;line-height:1.55}
 .auth-username-notice strong{font-size:.83rem}
 .auth-username-notice p{margin:0}
+
+/* v3.2.18: keep both medal palettes above the sort controls and song cards.
+   The palette sits inside .filters, so elevating only the palette cannot
+   overcome a later sibling's stacking/painting order. */
+#scoresPanel .filters.score-filter-grid{
+  position:relative;
+  z-index:5;
+  overflow:visible;
+  isolation:isolate;
+}
+#scoresPanel .filters .filter-medal-wrap{
+  position:relative;
+  z-index:1;
+}
+#scoresPanel .filters .filter-medal-wrap:has(.compact-filter-medal-picker:not([hidden])){
+  z-index:10;
+}
+#scoresPanel .filters .compact-filter-medal-picker:not([hidden]){
+  z-index:20;
+  max-height:min(270px,55vh);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+#scoresPanel .list-sort-controls{position:relative;z-index:1;}
+#scoresPanel #scoreList{position:relative;z-index:0;}
+/* The current-medal button is in column three: align its menu with the
+   outside edge of column four to keep the menu inside narrow viewports. */
+#scoresPanel .filters .current-medal-filter .compact-filter-medal-picker{
+  left:auto;
+  right:calc(-100% - 7px);
+}
+@media(max-width:430px){
+  #scoresPanel .filters .current-medal-filter .compact-filter-medal-picker{
+    right:calc(-100% - 5px);
+  }
+}
