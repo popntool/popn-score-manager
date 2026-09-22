@@ -178,6 +178,7 @@
         <strong>スコアを読み込んでいます</strong>
         <small>登録データを取得中です…</small>
       </div>
+      <div class="control-section-heading score-filter-section-heading">フィルタ</div>
       <div class="filters score-filter-grid">
 <label class="search score-filter-search"><span>⌕</span><input id="searchInput" type="search" placeholder="曲名・ジャンル・アーティスト検索"></label>
 <select id="levelFilter" aria-label="レベル"><option value="ALL">全レベル</option></select>
@@ -188,6 +189,7 @@
 <div class="filter-medal-wrap current-medal-filter"><input id="currentMedalFilter" type="hidden" value="ALL"><button id="filterCurrentMedalButton" class="filter-medal-button" type="button" aria-label="今作メダル：全メダル" aria-expanded="false"><img alt="" hidden><span>全メダル</span><b aria-hidden="true"></b></button><div id="filterCurrentMedalPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div>
 <select id="currentRankFilter" aria-label="今作ランク"><option value="ALL">全ランク</option><option>S+</option><option>S</option><option>AAA</option><option>AA+</option><option>AA</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D</option><option>E</option><option value="UNPLAYED">未プレー</option></select>
 </div>
+<div class="control-section-heading score-sort-section-heading">並び替え</div>
 <div class="list-sort-controls">
 <label>並び替え項目<select id="scoreSortField"><option value="level">レベル</option><option value="version">バージョン</option><option value="medal" selected>歴代メダル</option><option value="current_medal">今作メダル</option><option value="score">歴代スコア</option><option value="version_score">今作スコア</option><option value="pop_class">PSR</option></select></label>
 <label>並び順<select id="scoreSortOrder"><option value="asc" selected>昇順</option><option value="desc">降順</option></select></label>

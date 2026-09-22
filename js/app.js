@@ -5,7 +5,7 @@ import{downloadSongMaster,importSongMaster}from"./songs.js?v=3.0.92";
 import{currentMedalCode,currentMedalForNewSong,loadScoreCatalog,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.2.3";
 import{loadUsers,invalidateUserCache}from"./users.js?v=3.1.25";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.0.107";
-import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.19";
+import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.21";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.1.4";
 import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.2.13";
@@ -196,11 +196,12 @@ function chooseCurrentMedal(code,status="unplayed",mirror=true){
  if(mirror&&selectedSong?.version_is_current&&selectedGameVersion?.is_current)chooseMedal(selected,false);
  updateRankPreview();
 }
-$("#currentMedalPicker").innerHTML=MEDALS.map(([code,label,file])=>`<button type="button" class="compact-medal-option" data-current-medal="${code}" aria-label="${label}" title="${label}">${file?`<img src="https://eacache.s.konaminet.jp/game/popn/popn29/images/p/howto/more/${file}" alt="">`:`<span class="compact-medal-empty" aria-hidden="true">－</span>`}</button>`).join("");
+const manualMedals=[...MEDALS.filter(([code])=>code!=="none"),...MEDALS.filter(([code])=>code==="none")];
+$("#currentMedalPicker").innerHTML=manualMedals.map(([code,label,file])=>`<button type="button" class="compact-medal-option" data-current-medal="${code}" aria-label="${label}" title="${label}">${file?`<img src="https://eacache.s.konaminet.jp/game/popn/popn29/images/p/howto/more/${file}" alt="">`:`<span class="compact-medal-empty" aria-hidden="true">－</span>`}</button>`).join("");
 $("#currentMedalPickerButton").addEventListener("click",()=>{const picker=$("#currentMedalPicker");picker.hidden=!picker.hidden;$("#currentMedalPickerButton").setAttribute("aria-expanded",String(!picker.hidden));$("#medalPicker").hidden=true;});
 $("#currentMedalPicker").addEventListener("click",event=>{const b=event.target.closest("[data-current-medal]");if(b)chooseCurrentMedal(b.dataset.currentMedal);});
 chooseCurrentMedal("none");
-$("#medalPicker").innerHTML=MEDALS.map(([code,label,file])=>`<button type="button" class="compact-medal-option" data-medal="${code}" aria-label="${label}" title="${label}">${file?`<img src="https://eacache.s.konaminet.jp/game/popn/popn29/images/p/howto/more/${file}" alt="">`:`<span class="compact-medal-empty" aria-hidden="true">－</span>`}</button>`).join("");
+$("#medalPicker").innerHTML=manualMedals.map(([code,label,file])=>`<button type="button" class="compact-medal-option" data-medal="${code}" aria-label="${label}" title="${label}">${file?`<img src="https://eacache.s.konaminet.jp/game/popn/popn29/images/p/howto/more/${file}" alt="">`:`<span class="compact-medal-empty" aria-hidden="true">－</span>`}</button>`).join("");
 $("#medalPickerButton").addEventListener("click",()=>{$("#medalPicker").hidden=!$("#medalPicker").hidden;$("#currentMedalPicker").hidden=true;$("#currentMedalPickerButton").setAttribute("aria-expanded","false");});
 $("#medalPicker").addEventListener("click",event=>{const button=event.target.closest("[data-medal]");if(button)chooseMedal(button.dataset.medal);});chooseMedal("none");
 const filterMedals=[["ALL","全メダル",""],["cool_perfect","COOL PERFECT","./assets/cool-perfect.png"],...MEDALS.filter(([code])=>code!=="none"),...MEDALS.filter(([code])=>code==="none")];

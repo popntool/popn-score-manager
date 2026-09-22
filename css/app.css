@@ -1241,3 +1241,45 @@ body>.psm-floating-medal-picker .compact-medal-option{
 body>.psm-floating-medal-picker img{width:30px;height:30px;object-fit:contain;}
 body>.psm-floating-medal-picker [aria-pressed="true"]{outline:2px solid var(--focus);outline-offset:-2px;}
 body>.psm-floating-medal-picker .filter-medal-all{font-size:.61rem;font-weight:850;}
+
+
+/* v3.2.21: clearer separation between filter and sort, aligned heading sizes, and unified medal-picker row height. */
+:root{
+  --psm-medal-palette-cell-height:54px;
+  --psm-medal-palette-cell-height-mobile:48px;
+}
+#scoresPanel .control-section-heading{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:8px 0 6px;
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:900;
+  line-height:1.2;
+}
+#scoresPanel .control-section-heading::before{
+  content:"";
+  width:12px;
+  height:12px;
+  border-radius:4px;
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  flex:0 0 auto;
+}
+#scoresPanel .score-filter-section-heading{margin-top:6px;}
+#scoresPanel .score-sort-section-heading{margin-top:10px;padding-top:6px;border-top:1px solid var(--line);}
+#scoresPanel .filters.score-filter-grid{margin-bottom:2px;}
+#scoresPanel .score-filter-heading{font-size:.72rem;font-weight:900;}
+#scoresPanel .list-sort-controls{margin-top:0;}
+#manualDialog .medal-picker button{min-height:var(--psm-medal-palette-cell-height);}
+#scoresPanel .filters .compact-filter-medal-picker .compact-medal-option,
+body>.psm-floating-medal-picker .compact-medal-option{min-height:var(--psm-medal-palette-cell-height);}
+@media(max-width:430px){
+  #scoresPanel .control-section-heading{font-size:.58rem;gap:6px;margin:6px 0 5px;}
+  #scoresPanel .control-section-heading::before{width:10px;height:10px;border-radius:3px;}
+  #scoresPanel .score-filter-heading{font-size:.58rem;}
+  #scoresPanel .filters .compact-filter-medal-picker .compact-medal-option,
+  body>.psm-floating-medal-picker .compact-medal-option,
+  #manualDialog .medal-picker button{min-height:var(--psm-medal-palette-cell-height-mobile);}
+}
