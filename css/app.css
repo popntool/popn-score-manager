@@ -1006,6 +1006,11 @@ textarea,
 }
 
 
+/* v3.2.34: keep score-card banners compact on wide PC layouts.
+   The image intrinsic aspect ratio must not expand the auto-sized upper row. */
+.score-card-v300.score-card-v312 .score-card-upper{height:56px;min-height:56px;max-height:56px;}
+.score-card-v300.score-card-v312 .song-banner{height:56px;min-height:56px;max-height:56px;}
+
 /* v3.2.14: compact score editor; keep all three record columns explicit. */
 #manualDialog #manualForm{gap:7px;}
 #manualDialog #manualForm>h2{margin:0 36px 5px 0;line-height:1.25;}

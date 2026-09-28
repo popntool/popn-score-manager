@@ -8,7 +8,7 @@ import{loadUsers,invalidateUserCache}from"./users.js?v=3.2.32";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.0.107";
 import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.21";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
-import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.2.32";
+import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.2.34";
 import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.2.13";
 import{listPsrSnapshots,savePsrSnapshot,deletePsrSnapshot,comparePsrSnapshot}from"./psr-history.js?v=3.2.0";
 
