@@ -1,9 +1,10 @@
 import{requireDb}from"./supabase.js";
 
-// An in-memory cache avoids another request when switching back to the user tab.
-// Only current-session public summaries are kept; no persistent storage is used.
-const TTL_MS=90_000;
-const MAX_ENTRIES=12;
+// Public user summaries change far less often than search text. Fetch the version's
+// public list once, cache it briefly, and filter username searches locally. This
+// avoids a full RPC response for every search keystroke and every tab revisit.
+const TTL_MS=5*60_000;
+const MAX_ENTRIES=4;
 const entries=new Map();
 let generation=0;
 
@@ -12,14 +13,16 @@ export function invalidateUserCache(){
  entries.clear();
 }
 
-export async function loadUsers(search="",gameVersionId=null){
- const query=String(search||"").trim(),key=JSON.stringify([query,gameVersionId]);
+function normalized(value){return String(value||"").trim().toLocaleLowerCase("ja-JP");}
+
+async function loadBaseList(gameVersionId){
+ const key=String(gameVersionId||"");
  const cached=entries.get(key);
  if(cached&&cached.expires>Date.now())return cached.promise;
  const token=generation;
  const promise=(async()=>{
    const{data,error}=await requireDb().rpc("list_user_summaries_v31",{
-     p_search:query,p_game_version_id:gameVersionId
+     p_search:"",p_game_version_id:gameVersionId
    });
    if(error)throw error;
    return data||[];
@@ -28,11 +31,16 @@ export async function loadUsers(search="",gameVersionId=null){
  if(entries.size>MAX_ENTRIES)entries.delete(entries.keys().next().value);
  try{
    const result=await promise;
-   // A delayed response must not repopulate a cache that was invalidated meanwhile.
    if(token!==generation&&entries.get(key)?.promise===promise)entries.delete(key);
    return result;
  }catch(error){
    if(entries.get(key)?.promise===promise)entries.delete(key);
    throw error;
  }
+}
+
+export async function loadUsers(search="",gameVersionId=null){
+ const rows=await loadBaseList(gameVersionId),query=normalized(search);
+ if(!query)return rows;
+ return rows.filter(row=>normalized(row.username).includes(query));
 }
