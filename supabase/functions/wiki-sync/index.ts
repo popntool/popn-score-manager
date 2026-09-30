@@ -18,7 +18,7 @@ function decodeEntities(value:string){
   });
 }
 function textOf(html:string){return decodeEntities(html.replace(/<br\s*\/?\s*>/gi," ").replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim());}
-function normalize(value:string){return String(value||"").replace(/[Ⓤⓤ]/g,"").normalize("NFKC").toLowerCase().replace(/\(\s*upper\s*\)/g,"").replace(/[　\s]+/g,"").replace(/[〜～]/g,"~").trim();}
+function normalize(value:string){return String(value||"").replace(/[Ⓤⓤ]/g,"(UPPER)").normalize("NFKC").toLowerCase().replace(/\(\s*upper\s*\)/g,"(upper)").replace(/[　\s]+/g,"").replace(/[〜～]/g,"~").trim();}
 function relaxed(value:string){return normalize(value).replace(/[・･\-‐‑–—~'"“”‘’.,:：!！?？()（）\[\]【】]/g,"");}
 function parseDifficulty(text:string){
   const m=text.match(/^(入門|弱|中|強|別格)\(\s*([+-]?\d+(?:\.\d+)?)\s*(?:±\s*(\d+(?:\.\d+)?))?\s*\)$/);
