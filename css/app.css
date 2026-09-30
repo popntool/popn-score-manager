@@ -1266,3 +1266,15 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
  body > .psm-floating-medal-picker > .compact-medal-option{height:40px;max-height:40px;}
  body > .psm-floating-medal-picker > .compact-medal-option img{width:27px;height:27px;}
 }
+
+
+/* v3.2.35 — browser-specific score sync guidance. */
+#syncDialog .sync-browser-badge{
+  justify-self:center;display:inline-flex;align-items:center;justify-content:center;
+  min-width:118px;min-height:42px;padding:7px 18px;border:2px solid var(--line);
+  border-radius:14px;background:var(--surface-2);color:var(--text);font-size:1rem;font-weight:900;
+}
+#syncDialog .sync-browser-badge[hidden],#syncDialog .sync-step[hidden]{display:none!important}
+#syncDialog #syncStep4Action:not(:empty){margin-bottom:8px}
+#syncDialog #syncStep4 .official-link{margin-bottom:0}
+@media(max-width:760px){#syncDialog .sync-browser-badge{min-width:104px;min-height:38px;font-size:.92rem}}
