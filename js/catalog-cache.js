@@ -1,10 +1,10 @@
 import{requireDb}from"./supabase.js";
-import{loadScoreCatalog as loadScoreCatalogFresh}from"./scores.js?v=3.2.46";
+import{loadScoreCatalog as loadScoreCatalogFresh}from"./scores.js?v=3.2.49";
 
 const DB_NAME="popn-score-manager-cache";
 const DB_VERSION=1;
 const STORE="score_catalogs";
-const CACHE_SCHEMA="v3245";
+const CACHE_SCHEMA="v3249";
 const MAX_ENTRIES=6;
 
 function openCacheDb(){

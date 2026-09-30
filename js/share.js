@@ -1,8 +1,9 @@
-import{popClassSelection,songPopClass}from"./scores.js?v=3.2.46";
-import{medalInfo}from"./ui.js?v=3.2.46";
+import{popClassSelection,songPopClass}from"./scores.js?v=3.2.49";
+import{medalInfo}from"./ui.js?v=3.2.49";
 
 const HASHTAG="#popn_score_manager",SHARE_TEXT=`${HASHTAG}\n`,BG="#fffaf0",PANEL="#fffdf6",INK="#142b67",MUTED="#69789d",LINE="#3153a0",ACCENT="#ffd851",PINK="#ff789a";
 const TARGET_BYTES=1024*1024;
+
 const FONT='system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif';
 const imgCache=new Map();
 const trimCache=new WeakMap();
@@ -11,7 +12,14 @@ const chartOrder={EX:0,HYPER:1,NORMAL:2,LIGHT:3};
 
 function rounded(ctx,x,y,w,h,r=18,fill=PANEL,stroke=LINE,lw=3){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.lineWidth=lw;ctx.strokeStyle=stroke;ctx.stroke();}}
 function text(ctx,value,x,y,size=28,weight=700,color=INK,align="left",baseline="middle"){ctx.font=`${weight} ${size}px ${FONT}`;ctx.fillStyle=color;ctx.textAlign=align;ctx.textBaseline=baseline;ctx.fillText(String(value??""),x,y);}
-async function fetchBitmap(url){const response=await fetch(url,{mode:"cors",cache:"force-cache"});if(!response.ok)throw new Error(String(response.status));return createImageBitmap(await response.blob());}
+async function fetchBitmap(url){
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),6500);
+ try{
+  const response=await fetch(url,{mode:"cors",cache:"force-cache",signal:controller.signal});
+  if(!response.ok)throw new Error(String(response.status));
+  return await createImageBitmap(await response.blob());
+ }finally{clearTimeout(timeout);}
+}
 async function loadImage(url){if(!url)return null;if(imgCache.has(url))return imgCache.get(url);const promise=(async()=>{try{return await fetchBitmap(url);}catch{try{const parsed=new URL(url,location.href);if(parsed.origin===location.origin)return null;return await fetchBitmap(`https://wsrv.nl/?url=${encodeURIComponent(parsed.href)}&output=png`);}catch{return null;}}})();imgCache.set(url,promise);return promise;}
 function contain(ctx,img,x,y,w,h){if(!img)return false;const scale=Math.min(w/img.width,h/img.height),dw=img.width*scale,dh=img.height*scale;ctx.drawImage(img,x+(w-dw)/2,y+(h-dh)/2,dw,dh);return true;}
 function trimBounds(img){
@@ -21,11 +29,16 @@ function trimBounds(img){
  const bounds=maxX>=minX&&maxY>=minY?{x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1}:{x:0,y:0,w,h};trimCache.set(img,bounds);return bounds;
 }
 function containTrimmed(ctx,img,x,y,w,h){if(!img)return false;const b=trimBounds(img),scale=Math.min(w/b.w,h/b.h),dw=b.w*scale,dh=b.h*scale;ctx.drawImage(img,b.x,b.y,b.w,b.h,x+(w-dw)/2,y+(h-dh)/2,dw,dh);return true;}
-
 function containTrimmedSharp(ctx,img,x,y,w,h){if(!img)return false;ctx.save();ctx.imageSmoothingEnabled=false;const ok=containTrimmed(ctx,img,x,y,w,h);ctx.restore();return ok;}
-function effectiveMedal(row){return Number(row.score)===100000?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(row.medal_code);}
+function canonicalMedalCode(code){const normalized=String(code||"none").toLowerCase();for(const[key,codes]of MEDAL_GROUPS)if(codes.includes(normalized))return key;return normalized;}
+function shareMedalUrl(code,score=0){if(Number(score)===100000)return "./assets/cool-perfect.png";const canonical=canonicalMedalCode(code);return medalInfo(canonical).url||medalInfo(code).url;}
+function currentMedalCode(row){
+ if(row.current_medal_code!=null)return row.current_medal_code;
+ return {perfect:"perfect",full_combo:"fc_21_plus",clear:"clear_bad_21_plus",easy:"easy",long_off:"long_off",failed:Number(row.version_score)>0?"failed_0_11":"none"}[row.current_clear_status]||"none";
+}
+function effectiveMedal(row,useCurrent=false){const code=useCurrent?currentMedalCode(row):row.medal_code;const score=useCurrent?row.version_score:row.score;const info=Number(score)===100000?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(canonicalMedalCode(code));return {...info,url:shareMedalUrl(code,score)};}
 function medalFallback(ctx,label,x,y,size){ctx.save();ctx.translate(x+size/2,y+size/2);ctx.rotate(Math.PI/4);rounded(ctx,-size*.31,-size*.31,size*.62,size*.62,8,"#f5e8ad",LINE,3);ctx.restore();text(ctx,label==="－　未プレー"?"－":label.slice(0,2),x+size/2,y+size/2,15,900,INK,"center");}
-async function drawMedal(ctx,row,x,y,size){const info=effectiveMedal(row);if(String(row.medal_code||"none").toLowerCase()==="none"&&Number(row.score)!==100000){text(ctx,"－",x+size/2,y+size/2,26,700,MUTED,"center");return;}const img=await loadImage(info.url);if(!containTrimmed(ctx,img,x,y,size,size))medalFallback(ctx,info.label,x,y,size);}
+async function drawMedal(ctx,row,x,y,size,useCurrent=false){const info=effectiveMedal(row,useCurrent),code=useCurrent?currentMedalCode(row):row.medal_code,score=useCurrent?row.version_score:row.score;if(String(code||"none").toLowerCase()==="none"&&Number(score)!==100000){text(ctx,"－",x+size/2,y+size/2,26,700,MUTED,"center");return;}const img=await loadImage(info.url);if(!containTrimmedSharp(ctx,img,x,y,size,size))medalFallback(ctx,info.label,x,y,size);}
 function fitLine(ctx,value,x,y,maxWidth,maxSize=13,minSize=8,weight=800,color=INK){
  const raw=String(value||"").trim()||"NO IMAGE";let size=maxSize;ctx.textAlign="center";ctx.textBaseline="middle";
  while(size>minSize){ctx.font=`${weight} ${size}px ${FONT}`;if(ctx.measureText(raw).width<=maxWidth)break;size--;}
@@ -41,10 +54,10 @@ function header(ctx,title,subtitle,username,width){
  text(ctx,"pop'n Score Manager",62,33,22,900,INK);text(ctx,username||"PLAYER",62,59,14,700,MUTED);text(ctx,title,width-28,32,25,900,INK,"right");text(ctx,subtitle,width-28,59,14,700,MUTED,"right");
 }
 function footer(ctx,width,height){text(ctx,HASHTAG,width-36,height-25,16,800,MUTED,"right");}
-async function preload(rows,extraUrls=[]){const urls=new Set(["./assets/cool-perfect.png",...extraUrls]);for(const row of rows){if(row.banner_url)urls.add(row.banner_url);const m=effectiveMedal(row);if(m.url)urls.add(m.url);}const list=[...urls];let i=0;await Promise.all(Array.from({length:Math.min(12,list.length)},async()=>{while(i<list.length)await loadImage(list[i++]);}));}
+async function preload(rows,extraUrls=[],useCurrent=false){const urls=new Set(["./assets/cool-perfect.png",...extraUrls]);for(const row of rows){if(row.banner_url)urls.add(row.banner_url);const m=effectiveMedal(row,useCurrent);if(m.url)urls.add(m.url);}const list=[...urls];let i=0;await Promise.all(Array.from({length:Math.min(12,list.length)},async()=>{while(i<list.length)await loadImage(list[i++]);}));}
 function canvas(width,height){const c=document.createElement("canvas");c.width=width;c.height=height;const ctx=c.getContext("2d");ctx.fillStyle=BG;ctx.fillRect(0,0,width,height);return[c,ctx];}
 async function blobFromCanvas(c,type="image/jpeg"){if(type==="image/png")return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/png"));let quality=.86,blob=null;for(let i=0;i<5;i++){blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/jpeg",quality));if(blob.size<=TARGET_BYTES||quality<=.58)break;quality-=.07;}return blob;}
-async function shareBlob(blob,filename,title){const file=new File([blob],filename,{type:blob.type||"image/jpeg"}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
+async function shareBlob(blob,filename,title){const type=blob.type||(/\.png$/i.test(filename)?"image/png":"image/jpeg"),file=new File([blob],filename,{type}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
 
 const CHART_STYLE={EX:["#ef426f","#fff"],HYPER:["#fff2a6","#7b6500"],NORMAL:["#bdf39a","#17652b"],LIGHT:["#c8e3ff","#24558d"]};
 function chartLevelStack(ctx,chart,level,x,y,w,h){
@@ -71,7 +84,7 @@ async function drawScoreTile(ctx,row,x,y,w,h){
  const cell=scoreTileLayout(row,x,y,w,h);
  await drawBanner(ctx,row,cell.banner.x,cell.banner.y,cell.banner.w,cell.banner.h,false);
  const medalSize=Math.min(24,cell.medal.h);
- await drawMedal(ctx,row,cell.medal.x+(cell.medal.w-medalSize)/2,cell.medal.y+(cell.medal.h-medalSize)/2,medalSize);
+ await drawMedal(ctx,row,cell.medal.x+(cell.medal.w-medalSize)/2,cell.medal.y+(cell.medal.h-medalSize)/2,medalSize,true);
  chartLevelStack(ctx,row.chart,row.level,cell.stack.x,cell.stack.y,cell.stack.w,cell.stack.h);
  drawMetricColumn(ctx,"スコア",cell.score,cell.scoreCell);
  drawMetricColumn(ctx,"PSR",cell.psr,cell.psrCell);
@@ -79,7 +92,7 @@ async function drawScoreTile(ctx,row,x,y,w,h){
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username,officialPopnClass=null){
  const{current,other,total}=popClassSelection(rows),all=[...current,...other];if(!all.length)throw new Error("PSR対象曲がありません。");
- await preload(all);
+ await preload(all,[],true);
  const width=900,pad=15,gapX=7,gapY=5,cols=3,rowsPerCol=20,tileW=(width-pad*2-gapX*(cols-1))/cols,tileH=45,gridY=123;
  const height=gridY+rowsPerCol*(tileH+gapY)+29;
  const[c,ctx]=canvas(width,height),hasOfficial=officialPopnClass!==null&&officialPopnClass!==""&&Number.isFinite(Number(officialPopnClass)),official=hasOfficial?Number(officialPopnClass):null;header(ctx,"Popn Score Rating 対象曲一覧",`${hasOfficial?`ポップンクラス ${official.toFixed(2)}　`:""}PSR ${total.toFixed(2)}`,username,width);
@@ -113,7 +126,7 @@ async function drawMedalSummary(ctx,rows,x,y,w,h){
   const item=items[i],center=x+i*cellW+cellW/2;
   if(item.type==="dash")text(ctx,"－",center,y+19,18,800,MUTED,"center");
   else if(item.type==="no-play"){text(ctx,"NO",center,y+14,8,800,MUTED,"center");text(ctx,"PLAY",center,y+24,8,800,MUTED,"center");}
-  else{const img=await loadImage(item.url);if(img)containTrimmed(ctx,img,center-16,y+5,32,32);}
+  else{const img=await loadImage(item.url);if(img)containTrimmedSharp(ctx,img,center-16,y+5,32,32);}
   text(ctx,item.count.toLocaleString("ja-JP"),center,y+h-12,12,900,INK,"center");
  }
 }
@@ -124,19 +137,20 @@ async function drawLevelTile(ctx,row,x,y,w,h){
  await drawMedal(ctx,row,x+w-medalArea+(medalArea-medalSize)/2-2,y+(h-medalSize)/2,medalSize);
 }
 function wikiDifficultyValue(row){const value=Number(row?.wiki_difficulty_value);return Number.isFinite(value)?value:null;}
-function wikiDifficultyBand(value){const rounded=Math.round(Math.abs(value)*10)/10,sign=value>0?"+":value<0?"-":"";return `${sign}${rounded.toFixed(1)}`;}
-function groupByWikiDifficulty(rows){const groups=[];for(const row of rows){const value=wikiDifficultyValue(row),label=wikiDifficultyBand(value),last=groups.at(-1);if(last&&last.label===label)last.items.push(row);else groups.push({label,items:[row]});}return groups;}
-function drawWikiBandLabel(ctx,label,x,y,w,h){rounded(ctx,x,y,w,h,9,"#f4f6fb",LINE,2);text(ctx,label,x+w/2,y+h/2,16,900,INK,"center");}
+function wikiDifficultyBand(value){const sign=value<0?"-":"+",rounded=Math.round(Math.abs(value)*10)/10;return `${sign}${rounded.toFixed(1)}`;}
+function wikiDifficultyGroups(rows){const groups=[];for(const row of rows){const label=wikiDifficultyBand(wikiDifficultyValue(row)),last=groups[groups.length-1];if(last&&last.label===label)last.items.push(row);else groups.push({label,items:[row]});}return groups;}
+function drawWikiDifficultyBand(ctx,label,x,y,w,h){rounded(ctx,x,y,w,h,8,"#f4f6fb",LINE,2);text(ctx,label,x+w/2,y+h/2,15,900,INK,"center");}
 export async function shareLevelMedalImage(rows,level,username){
  const target=rows.filter(row=>Number(row.level)===Number(level)&&wikiDifficultyValue(row)!==null).sort((a,b)=>wikiDifficultyValue(b)-wikiDifficultyValue(a)||String(a.title||"").localeCompare(String(b.title||""),"ja")||(chartOrder[a.chart]??9)-(chartOrder[b.chart]??9));if(!target.length)throw new Error(`Lv.${level} にWiki難易度が登録された譜面がありません。`);
- const groups=groupByWikiDifficulty(target),stats=levelMedalStats(target),legendUrls=stats.filter(item=>item.url).map(item=>item.url);await preload(target,legendUrls);
+ const groups=wikiDifficultyGroups(target),stats=levelMedalStats(target),legendUrls=stats.filter(item=>item.url).map(item=>item.url);await preload(target,legendUrls);
  const width=900,pad=18,gap=6,cols=4,labelW=58,labelGap=7,contentW=width-pad*2-labelW-labelGap,tileW=(contentW-gap*(cols-1))/cols,tileH=50,groupGap=7;
  const registered=target.filter(row=>!noPlay(row)),code=row=>String(row.medal_code||"none").toLowerCase(),failed=row=>/^(h|i|j|l|m|n)$/.test(code(row))||code(row).startsWith("failed_"),cleared=registered.filter(row=>code(row)!=="none"&&code(row)!=="easy"&&code(row)!=="k"&&code(row)!=="long_off"&&!failed(row)).length,rate=registered.length?Math.floor(cleared/registered.length*10000)/100:0;
- const summaryY=91,summaryH=64,gridY=163,groupsHeight=groups.reduce((sum,g)=>sum+Math.ceil(g.items.length/cols)*(tileH+gap)+groupGap,0)-groupGap,height=gridY+groupsHeight+31;
+ const summaryY=91,summaryH=64,gridY=163,groupsHeight=groups.reduce((sum,group)=>sum+Math.ceil(group.items.length/cols)*(tileH+gap)-gap+groupGap,0)-groupGap,height=gridY+groupsHeight+31;
  const[c,ctx]=canvas(width,height);header(ctx,`Lv.${level} メダル一覧`,`Wiki難易度順　クリア率 ${rate.toFixed(2)}%`,username,width);await drawMedalSummary(ctx,target,pad,summaryY,width-pad*2,summaryH);
- let y=gridY;for(const group of groups){const rowsInGroup=Math.ceil(group.items.length/cols),groupH=rowsInGroup*(tileH+gap)-gap;drawWikiBandLabel(ctx,group.label,pad,y,labelW,groupH);for(let i=0;i<group.items.length;i++){const col=i%cols,row=Math.floor(i/cols);await drawLevelTile(ctx,group.items[i],pad+labelW+labelGap+col*(tileW+gap),y+row*(tileH+gap),tileW,tileH);}y+=groupH+groupGap;}
+ let y=gridY;for(const group of groups){const groupRows=Math.ceil(group.items.length/cols),groupH=groupRows*(tileH+gap)-gap;drawWikiDifficultyBand(ctx,group.label,pad,y,labelW,groupH);for(let i=0;i<group.items.length;i++){const col=i%cols,row=Math.floor(i/cols);await drawLevelTile(ctx,group.items[i],pad+labelW+labelGap+col*(tileW+gap),y+row*(tileH+gap),tileW,tileH);}y+=groupH+groupGap;}
  footer(ctx,width,height);return shareBlob(await blobFromCanvas(c),`popn_level${level}_${escFile(username)}.jpg`,`pop'n Score Manager Lv.${level} メダル一覧`);
 }
+
 
 function distributionItems(rowsByLevel,levels){
  const itemDefs=[
@@ -161,17 +175,18 @@ export async function shareMedalDistributionImage(rows,startLevel,endLevel,usern
  const rowsByLevel=new Map(levels.map(level=>[level,target.filter(row=>Number(row.level)===level)]));
  const items=distributionItems(rowsByLevel,levels),legendUrls=[...new Set(items.filter(item=>item.url).map(item=>item.url))];
  const missing=await Promise.all(legendUrls.map(async url=>({url,image:await loadImage(url)})));
- if(missing.some(item=>!item.image))throw new Error("メダル画像を読み込めませんでした。通信環境を確認して再度お試しください。");
+ if(missing.some(item=>!item.image))throw new Error("公式メダル画像を読み込めませんでした。通信環境を確認して再度お試しください。");
  const pad=18,leftW=64,colW=52,rowH=40,headerH=56,tableW=leftW+items.length*colW,width=Math.max(940,pad*2+tableW),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+levels.length*rowH+34;
  const[c,ctx]=canvas(width,height);header(ctx,`Lv.${start}〜${end} 歴代メダル分布`,`対象 ${target.length.toLocaleString("ja-JP")}譜面`,username,width);
  rounded(ctx,tableX,tableY,tableW,headerH+levels.length*rowH,10,PANEL,LINE,2);
  ctx.strokeStyle="#e6dfc7";ctx.lineWidth=1;
  for(let i=0;i<=items.length;i++){const x=tableX+leftW+i*colW;ctx.beginPath();ctx.moveTo(x,tableY);ctx.lineTo(x,tableY+headerH+levels.length*rowH);ctx.stroke();}
+ ctx.beginPath();ctx.moveTo(tableX+leftW,tableY);ctx.lineTo(tableX+leftW,tableY+headerH+levels.length*rowH);ctx.stroke();
  ctx.beginPath();ctx.moveTo(tableX,tableY+headerH);ctx.lineTo(tableX+tableW,tableY+headerH);ctx.stroke();
  for(let i=1;i<levels.length;i++){const y=tableY+headerH+i*rowH;ctx.beginPath();ctx.moveTo(tableX,y);ctx.lineTo(tableX+tableW,y);ctx.stroke();}
- for(let cIndex=0;cIndex<items.length;cIndex++)await drawDistributionIcon(ctx,items[cIndex],tableX+leftW+cIndex*colW+8,tableY+8,colW-16,headerH-16);
+  for(let cIndex=0;cIndex<items.length;cIndex++)await drawDistributionIcon(ctx,items[cIndex],tableX+leftW+cIndex*colW+8,tableY+8,colW-16,headerH-16);
  for(let r=0;r<levels.length;r++){
-   const level=levels[r],rowY=tableY+headerH+r*rowH;text(ctx,`Lv.${level}`,tableX+leftW/2,rowY+rowH/2,13,900,INK,"center");
+   const level=levels[r],rowY=tableY+headerH+r*rowH; text(ctx,`Lv.${level}`,tableX+leftW/2,rowY+rowH/2,13,900,INK,"center");
    items.forEach((item,cIndex)=>{const count=item.counts[r],color=count===0?MUTED:INK;text(ctx,count.toLocaleString("ja-JP"),tableX+leftW+cIndex*colW+colW/2,rowY+rowH/2,12,800,color,"center");});
  }
  footer(ctx,width,height);return shareBlob(await blobFromCanvas(c,"image/png"),`popn_medal_distribution_lv${start}-${end}_${escFile(username)}.png`,`pop'n Score Manager Lv.${start}〜${end} 歴代メダル分布`);
