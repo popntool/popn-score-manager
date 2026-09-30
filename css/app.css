@@ -1268,21 +1268,18 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 }
 
 
-/* v3.2.35 — browser-specific score sync guidance. */
-#syncDialog .sync-browser-badge{
-  justify-self:center;display:inline-flex;align-items:center;justify-content:center;
-  min-width:118px;min-height:42px;padding:7px 18px;border:2px solid var(--line);
-  border-radius:14px;background:var(--surface-2);color:var(--text);font-size:1rem;font-weight:900;
+/* v3.2.41 — keep the admin song editor compact and prevent horizontal overflow. */
+#adminEditDialog{overflow-x:hidden;}
+#adminEditDialog form,#adminEditFields,#adminEditFields>*{min-width:0;max-width:100%;box-sizing:border-box;}
+#adminEditFields input,#adminEditFields select,#adminEditFields textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box;}
+#adminEditFields .form-grid,#adminEditFields .master-levels{min-width:0;}
+#adminEditFields .form-grid>label,#adminEditFields .master-levels>label{min-width:0;}
+#adminEditFields .master-levels-with-wiki{align-items:start;}
+#adminEditFields .master-wiki-value{display:block;min-height:1.35em;margin-top:3px;color:var(--muted);font-size:.66rem;font-weight:800;line-height:1.25;overflow-wrap:anywhere;}
+#adminEditFields .master-wiki-note{display:block;margin-top:-4px;color:var(--muted);font-size:.66rem;}
+@media(max-width:560px){
+  #adminEditDialog form{padding:16px;}
+  #adminEditFields .master-levels{gap:5px;}
+  #adminEditFields .master-levels input{padding-left:5px;padding-right:5px;}
+  #adminEditFields .master-wiki-value{font-size:.6rem;}
 }
-#syncDialog .sync-browser-badge[hidden],#syncDialog .sync-step[hidden]{display:none!important}
-#syncDialog #syncStep4Action:not(:empty){margin-bottom:8px}
-#syncDialog #syncStep4 .official-link{margin-bottom:0}
-@media(max-width:760px){#syncDialog .sync-browser-badge{min-width:104px;min-height:38px;font-size:.92rem}}
-
-
-/* v3.2.36: admin-only popn.wiki difficulty sync preview. */
-.admin-toolbar .admin-wiki-sync-button{height:38px;min-height:38px;white-space:nowrap;padding-inline:14px}
-.master-wiki-difficulty{color:var(--navy)!important;font-weight:800}
-.song-detail-wiki{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
-.song-detail-wiki strong{min-width:0}.song-detail-wiki span{font-weight:900;color:var(--navy);white-space:nowrap}.song-detail-wiki a{font-size:.78rem;font-weight:700;white-space:nowrap}
-@media(max-width:430px){.admin-toolbar .admin-wiki-sync-button{padding-inline:10px}.song-detail-wiki{grid-template-columns:1fr auto}.song-detail-wiki a{grid-column:1/-1}}
