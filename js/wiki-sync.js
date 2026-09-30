@@ -44,3 +44,26 @@ export async function syncWikiDifficulties(level=50){
   clearWikiDifficultyCache();
   return data;
 }
+export async function syncWikiDifficultyRange({minLevel=29,maxLevel=50,onProgress}={}){
+  const min=Math.max(29,Math.min(50,Number(minLevel)||29));
+  const max=Math.max(min,Math.min(50,Number(maxLevel)||50));
+  const levels=[];for(let level=max;level>=min;level--)levels.push(level);
+  const summary={min_level:min,max_level:max,parsed:0,matched:0,unmatched_count:0,failed_count:0,unmatched:[],failed:[],results:[]};
+  for(let i=0;i<levels.length;i++){
+    const level=levels[i];
+    onProgress?.({level,index:i+1,total:levels.length});
+    try{
+      const result=await syncWikiDifficulties(level);
+      summary.results.push(result);
+      summary.parsed+=Number(result.parsed)||0;
+      summary.matched+=Number(result.matched)||0;
+      summary.unmatched_count+=Number(result.unmatched_count)||0;
+      for(const row of result.unmatched||[])summary.unmatched.push({...row,level});
+    }catch(error){
+      summary.failed.push({level,error:error?.message||String(error)});
+      summary.failed_count++;
+    }
+  }
+  clearWikiDifficultyCache();
+  return summary;
+}

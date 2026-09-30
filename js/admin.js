@@ -1,5 +1,5 @@
 import{requireDb}from"./supabase.js";
-import{loadWikiDifficultiesForSongs}from"./wiki-sync.js?v=3.2.36";
+import{loadWikiDifficultiesForSongs}from"./wiki-sync.js?v=3.2.43";
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])),fmt=v=>v?new Date(v).toLocaleString("ja-JP"):"-",PAGE_SIZE=50;let tab="master",search="",page=1,masterLevel="ALL",masterVersion="ALL",masterChart="ALL",serverPaged=false,serverTotal=0,versionNameCache=null;
 async function versionNames(db){if(versionNameCache)return versionNameCache;const{data,error}=await db.from("game_versions").select("id,name");if(error)throw error;versionNameCache=new Map((data||[]).map(v=>[v.id,v.name]));return versionNameCache;}
 export async function isAdmin(){const{data,error}=await requireDb().rpc("is_admin");if(error)throw error;return!!data;}

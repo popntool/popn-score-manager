@@ -8,8 +8,8 @@ import{loadUsers,invalidateUserCache}from"./users.js?v=3.2.32";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.0.107";
 import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.21";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
-import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.2.36";
-import{loadWikiDifficulty,syncWikiDifficulties}from"./wiki-sync.js?v=3.2.36";
+import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.2.43";
+import{loadWikiDifficulty,syncWikiDifficultyRange}from"./wiki-sync.js?v=3.2.43";
 import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.2.13";
 import{listPsrSnapshots,savePsrSnapshot,deletePsrSnapshot,comparePsrSnapshot}from"./psr-history.js?v=3.2.0";
 
@@ -380,13 +380,14 @@ $("#adminClearMyScoresButton").addEventListener("click",async()=>{if(!await askC
 for(const button of document.querySelectorAll("[data-admin-tab]"))button.addEventListener("click",()=>setAdminTab(button.dataset.adminTab));$("#adminNoticeList").addEventListener("click",async event=>{const button=event.target.closest("[data-admin-notice-tab]");if(!button)return;await setAdminTab(button.dataset.adminNoticeTab);});
 $("#adminSearch").addEventListener("input",wait(event=>setAdminSearch(event.target.value),300));
 $("#adminWikiSyncButton").addEventListener("click",async()=>{
-  if(!await askConfirm("popn.wiki のLv50難易度表を曲マスターへ同期しますか？\n現在は管理者確認用としてLv50のみ同期します。"))return;
+  if(!await askConfirm("popn.wiki のLv29〜50難易度表を曲マスターへ同期しますか？\n22レベルを順番に取得して統合します。"))return;
   const button=$("#adminWikiSyncButton"),original=button.textContent;button.disabled=true;button.textContent="同期中…";
   try{
-    const result=await syncWikiDifficulties(50);
+    const result=await syncWikiDifficultyRange({minLevel:29,maxLevel:50,onProgress:({level,index,total})=>{button.textContent=`同期中 Lv${level} (${index}/${total})`;}});
     await renderAdmin();
-    const unmatched=(result.unmatched||[]).slice(0,8).map(x=>`・${x.genre} / ${x.title}`).join("\n");
-    alert(`wiki同期が完了しました。\n取得 ${result.parsed}件 / 統合 ${result.matched}件 / 未照合 ${result.unmatched_count}件${unmatched?`\n\n未照合（最大8件）\n${unmatched}`:""}`);
+    const unmatched=(result.unmatched||[]).slice(0,12).map(x=>`・Lv${x.level} ${x.genre} / ${x.title}`).join("\n");
+    const failed=(result.failed||[]).map(x=>`・Lv${x.level}: ${x.error}`).join("\n");
+    alert(`wiki同期が完了しました。\n対象 Lv29〜50 / 取得 ${result.parsed}件 / 統合 ${result.matched}件 / 未照合 ${result.unmatched_count}件 / 失敗 ${result.failed_count}レベル${unmatched?`\n\n未照合（最大12件）\n${unmatched}`:""}${failed?`\n\n取得失敗\n${failed}`:""}`);
   }catch(error){alert(`wiki同期に失敗しました：${error.message||error}`);}finally{button.disabled=false;button.textContent=original;}
 });
 for(const selector of["#adminLevelFilter","#adminVersionFilter","#adminChartFilter"])$(selector).addEventListener("change",()=>setAdminMasterFilters({level:$("#adminLevelFilter").value,version:$("#adminVersionFilter").value,chart:$("#adminChartFilter").value}));

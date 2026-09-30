@@ -18,19 +18,28 @@ function decodeEntities(value:string){
   });
 }
 function textOf(html:string){return decodeEntities(html.replace(/<br\s*\/?\s*>/gi," ").replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim());}
-function normalize(value:string){return String(value||"").replace(/[Ⓤⓤ]/g,"(UPPER)").normalize("NFKC").toLowerCase().replace(/\(\s*upper\s*\)/g,"(upper)").replace(/[　\s]+/g,"").replace(/[〜～]/g,"~").trim();}
+function normalize(value:string){
+  return String(value||"")
+    .replace(/[Ⓤⓤ]/g,"(UPPER)")
+    .replace(/\(\s*upper\s*\)/gi,"(UPPER)")
+    .normalize("NFKC")
+    .toLowerCase()
+    .replace(/[　\s]+/g,"")
+    .replace(/[〜～]/g,"~")
+    .trim();
+}
 function relaxed(value:string){return normalize(value).replace(/[・･\-‐‑–—~'"“”‘’.,:：!！?？()（）\[\]【】]/g,"");}
 function parseDifficulty(text:string){
-  const m=text.match(/^(入門|弱|中|強|別格)\(\s*([+-]?\d+(?:\.\d+)?)\s*(?:±\s*(\d+(?:\.\d+)?))?\s*\)$/);
+  const m=text.match(/^([^()]+?)\(\s*([+-]?\d+(?:\.\d+)?)\s*(?:±\s*(\d+(?:\.\d+)?))?\s*\)$/);
   if(!m)return null;
-  return{label:m[1],value:Number(m[2]),sigma:m[3]==null?null:Number(m[3])};
+  return{label:m[1].trim(),value:Number(m[2]),sigma:m[3]==null?null:Number(m[3])};
 }
 function parseRows(html:string,level:number){
   const rows=[] as Array<{genre:string;title:string;chart:string;difficulty_text:string;difficulty_label:string;difficulty_value:number;difficulty_sigma:number|null}>;
   for(const match of html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)){
     const cells=[...match[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)].map(x=>textOf(x[1]));
     if(cells.length<3)continue;
-    const difficultyIndex=cells.findIndex(c=>/^(?:入門|弱|中|強|別格)\(/.test(c));
+    const difficultyIndex=cells.findIndex(c=>parseDifficulty(c)!==null);
     if(difficultyIndex<0)continue;
     let typeIndex=-1,chart="";
     for(let i=0;i<difficultyIndex;i++){
@@ -55,9 +64,9 @@ Deno.serve(async req=>{
     const{data:isAdmin,error:adminError}=await userDb.rpc("is_admin");
     if(adminError||!isAdmin)return json({ok:false,error:"管理者権限が必要です。"},403);
     const body=await req.json().catch(()=>({}));const level=Number(body?.level||50);
-    if(level!==50)return json({ok:false,error:"現在の試験運用ではLv50のみ同期できます。"},400);
+    if(!Number.isInteger(level)||level<29||level>50)return json({ok:false,error:"同期できるレベルはLv29〜50です。"},400);
     const sourceUrl=`https://popn.wiki/%E9%9B%A3%E6%98%93%E5%BA%A6%E8%A1%A8/lv${level}`;
-    const response=await fetch(sourceUrl,{headers:{"User-Agent":"PopnScoreManager-WikiSync/1.0 (+admin manual sync)"}});
+    const response=await fetch(sourceUrl,{headers:{"User-Agent":"PopnScoreManager-WikiSync/1.1 (+admin manual sync)"}});
     if(!response.ok)throw new Error(`popn.wiki の取得に失敗しました（HTTP ${response.status}）。`);
     const html=await response.text(),parsed=parseRows(html,level);
     if(parsed.length<5)throw new Error("難易度表を正しく解析できませんでした。ページ構造が変わっている可能性があります。");
