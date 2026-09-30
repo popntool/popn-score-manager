@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffd34e">
-  <meta name="psm-app-version" content="3.2.51">
+  <meta name="psm-app-version" content="3.2.53">
   <meta name="description" content="pop'n musicのスコアとメダルを管理する非公式ツール">
   <link rel="icon" type="image/x-icon" sizes="any" href="./assets/psm-favicon-315.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/psm-icon-192-315.png">
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./css/components.css?v=3.0.127">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css?v=3.1.9">
-<link rel="stylesheet" href="./css/app.css?v=3.2.51">
+<link rel="stylesheet" href="./css/app.css?v=3.2.53">
   <link rel="stylesheet" href="./css/loading-screen.css?v=3.1.6">
   <link rel="stylesheet" href="./css/average-scores.css?v=3.0.141">
   <link rel="stylesheet" href="./css/version-check.css?v=3.1.23">
@@ -249,6 +249,7 @@
       <button id="averageScoreButton" class="setting-row" type="button"><span><strong>レベル別平均スコア</strong><small>歴代・今作の平均スコアをレベル別に確認します</small></span><b>›</b></button>
       <button id="psrHistoryButton" class="setting-row" type="button"><span><strong>PSR保存履歴</strong><small>現在のPSRを保存・画像共有・過去と比較します</small></span><b>›</b></button>
       <button id="imageShareButton" class="setting-row" type="button"><span><strong>画像共有</strong><small>Popn Score Rating 対象曲・レベル別メダル一覧を画像で共有します</small></span><b>›</b></button>
+      <a class="setting-row wiki-source-row" href="https://popn.wiki/" target="_blank" rel="noopener noreferrer"><span><strong>Wiki難易度の出典</strong><small>popn.wiki の難易度表を参照しています</small></span><b>↗</b></a>
       <h2 class="menu-section-title admin-only" hidden>管理者ツール</h2>
       <button class="setting-row admin-only" data-copy-tool="master" type="button" hidden>
 <span>
@@ -284,7 +285,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.2.51</b>
+<b>3.2.53</b>
 </div>
       <h2 class="menu-section-title">サポート</h2>
       <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
@@ -453,10 +454,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module">
     // Check release metadata before loading the application. Network errors must not block startup.
-    import("./js/version-check.js?v=3.2.51").then(async ({checkOnLaunch, watchForUpdates}) => {
+    import("./js/version-check.js?v=3.2.53").then(async ({checkOnLaunch, watchForUpdates}) => {
       if (await checkOnLaunch()) return; // Navigating to the fresh HTML; skip loading this copy.
       watchForUpdates();
-      await import("./js/app.js?v=3.2.51");
+      await import("./js/app.js?v=3.2.53");
     }).catch(error => {
       console.error("Application module failed to load:", error);
       window.psmLoading?.error(error);
