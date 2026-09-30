@@ -21,6 +21,8 @@ function trimBounds(img){
  const bounds=maxX>=minX&&maxY>=minY?{x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1}:{x:0,y:0,w,h};trimCache.set(img,bounds);return bounds;
 }
 function containTrimmed(ctx,img,x,y,w,h){if(!img)return false;const b=trimBounds(img),scale=Math.min(w/b.w,h/b.h),dw=b.w*scale,dh=b.h*scale;ctx.drawImage(img,b.x,b.y,b.w,b.h,x+(w-dw)/2,y+(h-dh)/2,dw,dh);return true;}
+
+function containTrimmedSharp(ctx,img,x,y,w,h){if(!img)return false;ctx.save();ctx.imageSmoothingEnabled=false;const ok=containTrimmed(ctx,img,x,y,w,h);ctx.restore();return ok;}
 function effectiveMedal(row){return Number(row.score)===100000?{label:"COOL PERFECT",url:"./assets/cool-perfect.png"}:medalInfo(row.medal_code);}
 function medalFallback(ctx,label,x,y,size){ctx.save();ctx.translate(x+size/2,y+size/2);ctx.rotate(Math.PI/4);rounded(ctx,-size*.31,-size*.31,size*.62,size*.62,8,"#f5e8ad",LINE,3);ctx.restore();text(ctx,label==="－　未プレー"?"－":label.slice(0,2),x+size/2,y+size/2,15,900,INK,"center");}
 async function drawMedal(ctx,row,x,y,size){const info=effectiveMedal(row);if(String(row.medal_code||"none").toLowerCase()==="none"&&Number(row.score)!==100000){text(ctx,"－",x+size/2,y+size/2,26,700,MUTED,"center");return;}const img=await loadImage(info.url);if(!containTrimmed(ctx,img,x,y,size,size))medalFallback(ctx,info.label,x,y,size);}
@@ -41,8 +43,8 @@ function header(ctx,title,subtitle,username,width){
 function footer(ctx,width,height){text(ctx,HASHTAG,width-36,height-25,16,800,MUTED,"right");}
 async function preload(rows,extraUrls=[]){const urls=new Set(["./assets/cool-perfect.png",...extraUrls]);for(const row of rows){if(row.banner_url)urls.add(row.banner_url);const m=effectiveMedal(row);if(m.url)urls.add(m.url);}const list=[...urls];let i=0;await Promise.all(Array.from({length:Math.min(12,list.length)},async()=>{while(i<list.length)await loadImage(list[i++]);}));}
 function canvas(width,height){const c=document.createElement("canvas");c.width=width;c.height=height;const ctx=c.getContext("2d");ctx.fillStyle=BG;ctx.fillRect(0,0,width,height);return[c,ctx];}
-async function blobFromCanvas(c){let quality=.86,blob=null;for(let i=0;i<5;i++){blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/jpeg",quality));if(blob.size<=TARGET_BYTES||quality<=.58)break;quality-=.07;}return blob;}
-async function shareBlob(blob,filename,title){const file=new File([blob],filename,{type:"image/jpeg"}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
+async function blobFromCanvas(c,type="image/jpeg"){if(type==="image/png")return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/png"));let quality=.86,blob=null;for(let i=0;i<5;i++){blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/jpeg",quality));if(blob.size<=TARGET_BYTES||quality<=.58)break;quality-=.07;}return blob;}
+async function shareBlob(blob,filename,title){const file=new File([blob],filename,{type:blob.type||"image/jpeg"}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
 
 const CHART_STYLE={EX:["#ef426f","#fff"],HYPER:["#fff2a6","#7b6500"],NORMAL:["#bdf39a","#17652b"],LIGHT:["#c8e3ff","#24558d"]};
 function chartLevelStack(ctx,chart,level,x,y,w,h){
@@ -134,4 +136,43 @@ export async function shareLevelMedalImage(rows,level,username){
  const[c,ctx]=canvas(width,height);header(ctx,`Lv.${level} メダル一覧`,`Wiki難易度順　クリア率 ${rate.toFixed(2)}%`,username,width);await drawMedalSummary(ctx,target,pad,summaryY,width-pad*2,summaryH);
  let y=gridY;for(const group of groups){const rowsInGroup=Math.ceil(group.items.length/cols),groupH=rowsInGroup*(tileH+gap)-gap;drawWikiBandLabel(ctx,group.label,pad,y,labelW,groupH);for(let i=0;i<group.items.length;i++){const col=i%cols,row=Math.floor(i/cols);await drawLevelTile(ctx,group.items[i],pad+labelW+labelGap+col*(tileW+gap),y+row*(tileH+gap),tileW,tileH);}y+=groupH+groupGap;}
  footer(ctx,width,height);return shareBlob(await blobFromCanvas(c),`popn_level${level}_${escFile(username)}.jpg`,`pop'n Score Manager Lv.${level} メダル一覧`);
+}
+
+function distributionItems(rowsByLevel,levels){
+ const itemDefs=[
+  {type:"cool",key:"cool",url:"./assets/cool-perfect.png",label:"COOL PERFECT",countFor:(rows,code)=>rows.filter(row=>Number(row.score)===100000).length},
+  ...MEDAL_GROUPS.filter(([key])=>key!=="none").map(([key,codes])=>{const info=medalInfo(key);return{type:"image",key,url:info.url,label:info.label,countFor:(rows,code)=>rows.filter(row=>codes.includes(code(row))&&(key!=="perfect"||Number(row.score)!==100000)).length};}),
+  {type:"dash",key:"dash",label:"－",countFor:(rows,code)=>rows.filter(row=>!noPlay(row)&&code(row)==="none").length},
+  {type:"no-play",key:"no_play",label:"NO PLAY",countFor:rows=>rows.filter(noPlay).length}
+ ];
+ return itemDefs.map(item=>({...item,counts:levels.map(level=>item.countFor(rowsByLevel.get(level)||[],row=>String(row.medal_code||"none").toLowerCase()))}));
+}
+async function drawDistributionIcon(ctx,item,x,y,w,h){
+ if(item.type==="dash"){text(ctx,"－",x+w/2,y+h/2,18,800,MUTED,"center");return;}
+ if(item.type==="no-play"){text(ctx,"NO",x+w/2,y+h/2-7,8,800,MUTED,"center");text(ctx,"PLAY",x+w/2,y+h/2+6,8,800,MUTED,"center");return;}
+ const img=await loadImage(item.url);if(img){containTrimmedSharp(ctx,img,x+2,y+2,w-4,h-4);return;}
+ medalFallback(ctx,item.label,x+(w-30)/2,y+(h-30)/2,30);
+}
+export async function shareMedalDistributionImage(rows,startLevel,endLevel,username){
+ let start=Number(startLevel),end=Number(endLevel);if(!Number.isFinite(start)||!Number.isFinite(end))throw new Error("開始レベルと終了レベルを選択してください。");if(start>end)[start,end]=[end,start];
+ const levels=[];for(let level=end;level>=start;level--)levels.push(level);
+ const target=rows.filter(row=>Number(row.level)>=start&&Number(row.level)<=end);
+ if(!target.length)throw new Error(`Lv.${start}〜${end} の譜面がありません。`);
+ const rowsByLevel=new Map(levels.map(level=>[level,target.filter(row=>Number(row.level)===level)]));
+ const items=distributionItems(rowsByLevel,levels),legendUrls=[...new Set(items.filter(item=>item.url).map(item=>item.url))];
+ const missing=await Promise.all(legendUrls.map(async url=>({url,image:await loadImage(url)})));
+ if(missing.some(item=>!item.image))throw new Error("メダル画像を読み込めませんでした。通信環境を確認して再度お試しください。");
+ const pad=18,leftW=64,colW=52,rowH=40,headerH=56,tableW=leftW+items.length*colW,width=Math.max(940,pad*2+tableW),tableX=Math.round((width-tableW)/2),tableY=96,height=tableY+headerH+levels.length*rowH+34;
+ const[c,ctx]=canvas(width,height);header(ctx,`Lv.${start}〜${end} 歴代メダル分布`,`対象 ${target.length.toLocaleString("ja-JP")}譜面`,username,width);
+ rounded(ctx,tableX,tableY,tableW,headerH+levels.length*rowH,10,PANEL,LINE,2);
+ ctx.strokeStyle="#e6dfc7";ctx.lineWidth=1;
+ for(let i=0;i<=items.length;i++){const x=tableX+leftW+i*colW;ctx.beginPath();ctx.moveTo(x,tableY);ctx.lineTo(x,tableY+headerH+levels.length*rowH);ctx.stroke();}
+ ctx.beginPath();ctx.moveTo(tableX,tableY+headerH);ctx.lineTo(tableX+tableW,tableY+headerH);ctx.stroke();
+ for(let i=1;i<levels.length;i++){const y=tableY+headerH+i*rowH;ctx.beginPath();ctx.moveTo(tableX,y);ctx.lineTo(tableX+tableW,y);ctx.stroke();}
+ for(let cIndex=0;cIndex<items.length;cIndex++)await drawDistributionIcon(ctx,items[cIndex],tableX+leftW+cIndex*colW+8,tableY+8,colW-16,headerH-16);
+ for(let r=0;r<levels.length;r++){
+   const level=levels[r],rowY=tableY+headerH+r*rowH;text(ctx,`Lv.${level}`,tableX+leftW/2,rowY+rowH/2,13,900,INK,"center");
+   items.forEach((item,cIndex)=>{const count=item.counts[r],color=count===0?MUTED:INK;text(ctx,count.toLocaleString("ja-JP"),tableX+leftW+cIndex*colW+colW/2,rowY+rowH/2,12,800,color,"center");});
+ }
+ footer(ctx,width,height);return shareBlob(await blobFromCanvas(c,"image/png"),`popn_medal_distribution_lv${start}-${end}_${escFile(username)}.png`,`pop'n Score Manager Lv.${start}〜${end} 歴代メダル分布`);
 }
