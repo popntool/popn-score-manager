@@ -8,7 +8,8 @@ import{loadUsers,invalidateUserCache}from"./users.js?v=3.2.32";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.0.107";
 import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.21";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.0.42";
-import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.2.34";
+import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.2.36";
+import{loadWikiDifficulty,syncWikiDifficulties}from"./wiki-sync.js?v=3.2.36";
 import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.2.13";
 import{listPsrSnapshots,savePsrSnapshot,deletePsrSnapshot,comparePsrSnapshot}from"./psr-history.js?v=3.2.0";
 
@@ -147,7 +148,7 @@ async function loadGuideDialog(){
   if($("#guideDialog"))return $("#guideDialog");
   if(!guideLoadPromise){
     guideLoadPromise=(async()=>{
-      const response=await fetch("./partials/guide.html?v=3.2.35");
+      const response=await fetch("./partials/guide.html?v=3.2.36");
       if(!response.ok)throw new Error(`HTTP ${response.status}`);
       const template=document.createElement("template");
       template.innerHTML=await response.text();
@@ -378,6 +379,16 @@ document.querySelector('[data-copy-tool="master"]').addEventListener("click",()=
 $("#adminClearMyScoresButton").addEventListener("click",async()=>{if(!await askConfirm("管理者アカウントに登録されている全スコアデータを削除しますか？\nこの操作は取り消せません。"))return;try{await clearMyRegisteredScores();invalidateUserCache();scoreDataDirty=true;await refreshAuth();alert("管理者アカウントの登録データをすべて削除しました。");}catch(error){alert(`一括削除に失敗しました：${error.message||error}`);}});
 for(const button of document.querySelectorAll("[data-admin-tab]"))button.addEventListener("click",()=>setAdminTab(button.dataset.adminTab));$("#adminNoticeList").addEventListener("click",async event=>{const button=event.target.closest("[data-admin-notice-tab]");if(!button)return;await setAdminTab(button.dataset.adminNoticeTab);});
 $("#adminSearch").addEventListener("input",wait(event=>setAdminSearch(event.target.value),300));
+$("#adminWikiSyncButton").addEventListener("click",async()=>{
+  if(!await askConfirm("popn.wiki のLv50難易度表を曲マスターへ同期しますか？\n現在は管理者確認用としてLv50のみ同期します。"))return;
+  const button=$("#adminWikiSyncButton"),original=button.textContent;button.disabled=true;button.textContent="同期中…";
+  try{
+    const result=await syncWikiDifficulties(50);
+    await renderAdmin();
+    const unmatched=(result.unmatched||[]).slice(0,8).map(x=>`・${x.genre} / ${x.title}`).join("\n");
+    alert(`wiki同期が完了しました。\n取得 ${result.parsed}件 / 統合 ${result.matched}件 / 未照合 ${result.unmatched_count}件${unmatched?`\n\n未照合（最大8件）\n${unmatched}`:""}`);
+  }catch(error){alert(`wiki同期に失敗しました：${error.message||error}`);}finally{button.disabled=false;button.textContent=original;}
+});
 for(const selector of["#adminLevelFilter","#adminVersionFilter","#adminChartFilter"])$(selector).addEventListener("change",()=>setAdminMasterFilters({level:$("#adminLevelFilter").value,version:$("#adminVersionFilter").value,chart:$("#adminChartFilter").value}));
 function versionSlug(name){const normalized=String(name||"").normalize("NFKD").toLowerCase().replace(/[’'`]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");if(normalized)return normalized;let hash=2166136261;for(const char of String(name||"")){hash^=char.codePointAt(0);hash=Math.imul(hash,16777619);}return`version-${(hash>>>0).toString(16).padStart(8,"0")}`;}
 async function openAdminEditor(kind,item={}){adminEdit={kind,item};const fields=$("#adminEditFields");if(kind==="version"){
@@ -405,7 +416,7 @@ async function openSongDetail(row){
   box.textContent="ライバルのデータを取得中…";
   $("#songDetailDialog").showModal();
   try{
-    const entries=await rivalSongScores(row.song_id,row.chart);
+    const [entries,wikiDifficulty]=await Promise.all([rivalSongScores(row.song_id,row.chart),admin?loadWikiDifficulty(row.song_id,row.chart).catch(()=>null):Promise.resolve(null)]);
     const mine={username:"自分",score:row.score,medal_code:row.medal_code};
     // Non-public scores and unplayed scores have no rank and appear after ranked entries.
     const comparison=[mine,...entries].map((entry,index)=>({...entry,originalIndex:index}));
@@ -426,7 +437,8 @@ async function openSongDetail(row){
       const medal=info==null?'<span class="rival-medal-private">非公開</span>':r.medal_code==="none"?'<span class="rival-medal-private">－</span>':Number(r.score)===100000?'<img src="./assets/cool-perfect.png" alt="COOL PERFECT" title="COOL PERFECT">':info.url?`<img src="${attr(info.url)}" alt="${attr(info.label)}" title="${attr(info.label)}">`:`<span class="rival-medal-private">${attr(info.label)}</span>`;
       return `<div class="rival-comparison"><span class="rival-position" aria-label="${ranked?`${rank}位`:"順位なし"}">${ranked?`${rank}.`:"－"}</span><strong>${attr(r.username)}</strong><span class="rival-history-score" aria-label="歴代スコア ${attr(score)}">${score}</span><span class="rival-medal">${medal}</span></div>`;
     }).join("");
-    box.innerHTML=header+items;
+    const wiki=wikiDifficulty?`<div class="song-detail-wiki"><strong>Wiki難易度</strong><span>${attr(wikiDifficulty.difficulty_text)}</span><a href="${attr(wikiDifficulty.source_url)}" target="_blank" rel="noopener noreferrer">popn.wiki</a></div>`:"";
+    box.innerHTML=wiki+header+items;
   }catch(e){box.textContent=e.message||String(e);}
 }
 for(const id of ["#scoreList","#popclassContent"])$(id).addEventListener("click",event=>{if(event.target.closest("button,a,select,input"))return;const card=event.target.closest(".score-card-v300");if(!card)return;const edit=card.querySelector("[data-edit-score]");const row=scores.find(x=>String(x.id)===edit?.dataset.editScore);if(row)openSongDetail(row);});
