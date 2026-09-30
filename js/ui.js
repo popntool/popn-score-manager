@@ -29,7 +29,38 @@ function scoreCard(row,useCurrentMedal=false){
  <div class="score-card-lower"><span class="card-chart ${String(row.chart||"").toLowerCase()}">${CHART_SHORT[row.chart]||esc(row.chart)}</span><span class="card-genre">${esc(row.genre)}</span><span class="card-psr-label">PSR</span><button class="score-edit" type="button" data-edit-score="${esc(row.id)}">編集</button><strong class="card-level">${Number(row.level)||"－"}</strong><h2 class="card-title">${esc(row.title)}</h2><strong class="card-popclass">${songPopClass(row).toFixed(2)}</strong></div>
  </article>`;
 }
-export function renderScores(rows,page=1){const list=document.querySelector("#scoreList");if(!rows.length){list.innerHTML='<div class="empty">条件に合う曲がありません。</div>';return 1;}const chartOrder={EX:0,HYPER:1,NORMAL:2,LIGHT:3},field=document.querySelector("#scoreSortField")?.value||"level",direction=document.querySelector("#scoreSortOrder")?.value==="desc"?-1:1,medalOrder=code=>{const normalized=String(code||"none").toLowerCase(),index=MEDAL_GROUPS.findIndex(([,codes])=>codes.includes(normalized));return index<0?MEDAL_GROUPS.length:index;},wikiValue=row=>{const n=Number(row?.wiki_difficulty_value);return Number.isFinite(n)?n:null;},fieldValue=(row,key)=>key==="medal"?(Number(row.score)===100000?-1:medalOrder(row.medal_code)):key==="current_medal"?(Number(row.version_score)===100000?-1:medalOrder(currentMedalCode(row))):key==="pop_class"?songPopClass(row):key==="version"?Number(row.version_order??9999):key==="wiki_difficulty"?wikiValue(row):Number(row[key]||0),defaultDirection={level:-1,wiki_difficulty:-1,version:1,medal:1,current_medal:1,score:-1,version_score:-1,pop_class:-1},priority=["level","wiki_difficulty","medal","version_score","pop_class","score"],compareField=(a,b,key,dir=defaultDirection[key]??1)=>{const av=fieldValue(a,key),bv=fieldValue(b,key);if(key==="wiki_difficulty"){if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return-1;}return(av-bv)*dir;},compare=(a,b)=>{let result=compareField(a,b,field,direction);if(result)return result;for(const key of priority){if(key===field)continue;result=compareField(a,b,key);if(result)return result;}return String(a.title||"").localeCompare(String(b.title||""),"ja")||(chartOrder[a.chart]??9)-(chartOrder[b.chart]??9);},sorted=[...rows].sort(compare),pages=Math.ceil(sorted.length/PAGE_SIZE),current=Math.min(Math.max(1,Number(page)||1),pages),start=(current-1)*PAGE_SIZE;list.innerHTML=sorted.slice(start,start+PAGE_SIZE).map(scoreCard).join("")+`<nav class="score-pager"><span>${sorted.length.toLocaleString("ja-JP")}件中 ${(start+1).toLocaleString("ja-JP")}～${Math.min(start+PAGE_SIZE,sorted.length).toLocaleString("ja-JP")}件</span>${pager(current,pages,"score-page")}</nav>`;return current;}
+export function renderScores(rows,page=1){
+ const list=document.querySelector("#scoreList");
+ if(!rows.length){list.innerHTML='<div class="empty">条件に合う曲がありません。</div>';return 1;}
+ const chartOrder={EX:0,HYPER:1,NORMAL:2,LIGHT:3};
+ const field=document.querySelector("#scoreSortField")?.value||"medal";
+ const direction=document.querySelector("#scoreSortOrder")?.value==="desc"?-1:1;
+ const medalOrder=code=>{const normalized=String(code||"none").toLowerCase(),index=MEDAL_GROUPS.findIndex(([,codes])=>codes.includes(normalized));return index<0?MEDAL_GROUPS.length:index;};
+ const wikiValue=row=>{const n=Number(row?.wiki_difficulty_value);return Number.isFinite(n)?n:null;};
+ const defaultDirection={medal:1,version_score:-1,pop_class:-1,level:-1,score:-1,current_medal:1,title:1,version:-1,wiki_difficulty:-1};
+ const basePriority=["medal","version_score","pop_class","level","score","current_medal","title","version","wiki_difficulty"];
+ const priority=field==="wiki_difficulty"?["wiki_difficulty","level",...basePriority.filter(key=>key!=="wiki_difficulty"&&key!=="level")]:basePriority;
+ const fieldValue=(row,key)=>key==="medal"?(Number(row.score)===100000?-1:medalOrder(row.medal_code)):key==="current_medal"?(Number(row.version_score)===100000?-1:medalOrder(currentMedalCode(row))):key==="pop_class"?songPopClass(row):key==="version"?Number(row.version_order??9999):key==="wiki_difficulty"?wikiValue(row):key==="title"?String(row.title||""):Number(row[key]||0);
+ const compareField=(a,b,key,dir=defaultDirection[key]??1)=>{
+   const av=fieldValue(a,key),bv=fieldValue(b,key);
+   if(key==="wiki_difficulty"){
+     if(av==null&&bv==null)return 0;
+     if(av==null)return 1;
+     if(bv==null)return-1;
+   }
+   if(key==="title")return String(av).localeCompare(String(bv),"ja")*dir;
+   return(av-bv)*dir;
+ };
+ const compare=(a,b)=>{
+   let result=compareField(a,b,field,direction);
+   if(result)return result;
+   for(const key of priority){if(key===field)continue;result=compareField(a,b,key);if(result)return result;}
+   return String(a.title||"").localeCompare(String(b.title||""),"ja")||(chartOrder[a.chart]??9)-(chartOrder[b.chart]??9);
+ };
+ const sorted=[...rows].sort(compare),pages=Math.ceil(sorted.length/PAGE_SIZE),current=Math.min(Math.max(1,Number(page)||1),pages),start=(current-1)*PAGE_SIZE;
+ list.innerHTML=sorted.slice(start,start+PAGE_SIZE).map(scoreCard).join("")+`<nav class="score-pager"><span>${sorted.length.toLocaleString("ja-JP")}件中 ${(start+1).toLocaleString("ja-JP")}～${Math.min(start+PAGE_SIZE,sorted.length).toLocaleString("ja-JP")}件</span>${pager(current,pages,"score-page")}</nav>`;
+ return current;
+}
 export function renderPopClass(rows){const{current,other,total}=popClassSelection(rows),section=(title,items,limit)=>`<section class="popclass-group"><div class="popclass-group-title"><h2>${title}</h2><span>${items.length}/${limit}曲</span></div><div class="score-list">${items.length?items.map(item=>scoreCard(item,true)).join(""):'<div class="empty">対象曲がありません。</div>'}</div></section>`;document.querySelector("#totalPopClass").textContent=total.toFixed(2);document.querySelector("#popclassContent").innerHTML=section("新曲枠",current,20)+section("旧曲枠",other,40);return total;}
 const MEDAL_GROUPS=[
  ["perfect",["perfect","a"]],["fc_1_5",["fc_1_5","b"]],["fc_6_20",["fc_6_20","c"]],["fc_21_plus",["fc_21_plus","d"]],

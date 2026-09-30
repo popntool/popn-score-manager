@@ -6,7 +6,7 @@ import{currentMedalCode,currentMedalForNewSong,rankFromScore,saveScore,songPopCl
 import{loadScoreCatalogCached as loadScoreCatalog}from"./catalog-cache.js?v=3.2.49";
 import{loadUsers,invalidateUserCache}from"./users.js?v=3.2.49";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.2.49";
-import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.49";
+import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.51";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.2.49";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.2.49";
 import{loadWikiDifficulty,syncWikiDifficultyRange}from"./wiki-sync.js?v=3.2.49";
@@ -107,7 +107,7 @@ async function refreshUsers(reset=false){
 async function refreshAdminNotices(){const box=$("#adminNoticeList");if(!box||!admin){if(box)box.hidden=true;return;}const notices=await loadAdminNotices(),items=[["requests","登録依頼","未承認",notices.requests],["banners","バナー依頼","未承認",notices.banners],["feedback","要望・不具合","未確認",notices.feedback]].filter(([, , ,count])=>count>0);box.hidden=!items.length;box.innerHTML=items.map(([tab,label,status,count])=>`<button type="button" data-admin-notice-tab="${tab}"><strong>${label}</strong><span>${status} ${count}件</span><b>›</b></button>`).join("");}
 for(const button of document.querySelectorAll(".tabs button"))button.addEventListener("click",async()=>{if(button.dataset.tab==="admin"&&!admin)return;showTab(button.dataset.tab);if(button.dataset.tab==="admin"){await Promise.all([renderAdmin(),refreshAdminNotices()]);}if(button.dataset.tab==="users"&&isConfigured){try{await refreshUsers(false);}catch(error){alert(error.message||error);}}});
 for(const selector of["#searchInput","#levelFilter","#versionFilter","#medalFilter","#rankFilter","#currentMedalFilter","#currentRankFilter"])$(selector).addEventListener(selector==="#searchInput"?"input":"change",()=>applyFilters(true));
-const DEFAULT_SCORE_SORT_ORDER={version:"desc",level:"desc",wiki_difficulty:"desc",medal:"asc",current_medal:"asc",score:"desc",version_score:"desc",pop_class:"desc"};
+const DEFAULT_SCORE_SORT_ORDER={medal:"asc",version_score:"desc",pop_class:"desc",level:"desc",score:"desc",current_medal:"asc",title:"asc",version:"desc",wiki_difficulty:"desc"};
 $("#scoreSortField").addEventListener("change",()=>{$("#scoreSortOrder").value=DEFAULT_SCORE_SORT_ORDER[$("#scoreSortField").value]||"asc";applyFilters(true);});
 $("#scoreSortOrder").addEventListener("change",()=>applyFilters(true));
 $("#reloadButton").addEventListener("click",event=>{event.currentTarget.classList.add("is-loading");location.reload();});
@@ -417,7 +417,7 @@ async function openSongDetail(row){
   box.textContent="ライバルのデータを取得中…";
   $("#songDetailDialog").showModal();
   try{
-    const [entries,wikiDifficulty]=await Promise.all([rivalSongScores(row.song_id,row.chart),admin?loadWikiDifficulty(row.song_id,row.chart).catch(()=>null):Promise.resolve(null)]);
+    const entries=await rivalSongScores(row.song_id,row.chart);
     const mine={username:"自分",score:row.score,medal_code:row.medal_code};
     // Non-public scores and unplayed scores have no rank and appear after ranked entries.
     const comparison=[mine,...entries].map((entry,index)=>({...entry,originalIndex:index}));
@@ -438,8 +438,7 @@ async function openSongDetail(row){
       const medal=info==null?'<span class="rival-medal-private">非公開</span>':r.medal_code==="none"?'<span class="rival-medal-private">－</span>':Number(r.score)===100000?'<img src="./assets/cool-perfect.png" alt="COOL PERFECT" title="COOL PERFECT">':info.url?`<img src="${attr(info.url)}" alt="${attr(info.label)}" title="${attr(info.label)}">`:`<span class="rival-medal-private">${attr(info.label)}</span>`;
       return `<div class="rival-comparison"><span class="rival-position" aria-label="${ranked?`${rank}位`:"順位なし"}">${ranked?`${rank}.`:"－"}</span><strong>${attr(r.username)}</strong><span class="rival-history-score" aria-label="歴代スコア ${attr(score)}">${score}</span><span class="rival-medal">${medal}</span></div>`;
     }).join("");
-    const wiki=wikiDifficulty?`<div class="song-detail-wiki"><strong>Wiki難易度</strong><span>${attr(wikiDifficulty.difficulty_text)}</span><a href="${attr(wikiDifficulty.source_url)}" target="_blank" rel="noopener noreferrer">popn.wiki</a></div>`:"";
-    box.innerHTML=wiki+header+items;
+    box.innerHTML=header+items;
   }catch(e){box.textContent=e.message||String(e);}
 }
 for(const id of ["#scoreList","#popclassContent"])$(id).addEventListener("click",event=>{if(event.target.closest("button,a,select,input"))return;const card=event.target.closest(".score-card-v300");if(!card)return;const edit=card.querySelector("[data-edit-score]");const row=scores.find(x=>String(x.id)===edit?.dataset.editScore);if(row)openSongDetail(row);});
