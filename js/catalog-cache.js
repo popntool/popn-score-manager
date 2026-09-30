@@ -1,5 +1,5 @@
 import{requireDb}from"./supabase.js";
-import{loadScoreCatalog as loadScoreCatalogFresh}from"./scores.js?v=3.2.45";
+import{loadScoreCatalog as loadScoreCatalogFresh}from"./scores.js?v=3.2.46";
 
 const DB_NAME="popn-score-manager-cache";
 const DB_VERSION=1;
