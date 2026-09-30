@@ -12,6 +12,10 @@ export async function downloadSongMaster(){
   rows.push(...(data||[]));
   if(!data||data.length<1000)break;
  }
- const clean=v=>String(v??"").replace(/[|\r\n]+/g," ").trim(),level=v=>v??"",text=["曲ID|バナーURL|ジャンル名|曲名|アーティスト|登場バージョン|LIGHT|NORMAL|HYPER|EX",...rows.map(x=>[x.master_key,x.banner_url,x.genre,x.title,x.artist,versionSlugs.get(x.version_id)||"",level(x.light_level),level(x.normal_level),level(x.hyper_level),level(x.ex_level)].map(clean).join("|"))].join("\r\n"),blob=new Blob(["\ufeff",text],{type:"text/plain;charset=utf-8"}),url=URL.createObjectURL(blob),link=document.createElement("a");
- link.href=url;link.download=`popn_song_master_${new Date().toISOString().slice(0,10).replaceAll("-","")}.txt`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return rows.length;
+ const csv=v=>{const text=String(v??"").replace(/\r?\n/g," ");return /[",\r\n]/.test(text)?`"${text.replaceAll('"','""')}"`:text;};
+ const level=v=>v??"";
+ const header=["曲ID","バナーURL","ジャンル名","曲名","アーティスト","登場バージョン","LIGHT","NORMAL","HYPER","EX"];
+ const lines=[header,...rows.map(x=>[x.master_key,x.banner_url,x.genre,x.title,x.artist,versionSlugs.get(x.version_id)||"",level(x.light_level),level(x.normal_level),level(x.hyper_level),level(x.ex_level)])].map(row=>row.map(csv).join(","));
+ const text=lines.join("\r\n"),blob=new Blob(["\ufeff",text],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),link=document.createElement("a");
+ link.href=url;link.download=`popn_song_master_${new Date().toISOString().slice(0,10).replaceAll("-","")}.csv`;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return rows.length;
 }
