@@ -29,6 +29,14 @@ function normalize(value:string){
     .trim();
 }
 function relaxed(value:string){return normalize(value).replace(/[・･\-‐‑–—~'"“”‘’.,:：!！?？()（）\[\]【】]/g,"");}
+function loose(value:string){
+  return normalize(value)
+    .replace(/\(upper\)/g,"upper")
+    .replace(/[əƏ]/g,"e")
+    .replace(/[經经]/g,"経")
+    .replace(/[\p{P}\p{S}]/gu,"");
+}
+function unique<T>(items:T[]){return items.length===1?items:[];}
 function parseDifficulty(text:string){
   const m=text.match(/^([^()]+?)\(\s*([+-]?\d+(?:\.\d+)?)\s*(?:±\s*(\d+(?:\.\d+)?))?\s*\)$/);
   if(!m)return null;
@@ -83,9 +91,19 @@ Deno.serve(async req=>{
     for(const row of parsed){
       const pool=candidates.filter(x=>x.chart===row.chart);
       const titleKey=normalize(row.title),genreKey=normalize(row.genre);
-      let hits=pool.filter(x=>normalize(x.title)===titleKey&&normalize(x.genre)===genreKey);
-      if(hits.length!==1)hits=pool.filter(x=>normalize(x.title)===titleKey);
-      if(hits.length!==1){const relaxedTitle=relaxed(row.title);hits=pool.filter(x=>relaxed(x.title)===relaxedTitle);}
+      const looseTitle=loose(row.title),looseGenre=loose(row.genre);
+      let hits=unique(pool.filter(x=>normalize(x.title)===titleKey&&normalize(x.genre)===genreKey));
+      if(hits.length!==1)hits=unique(pool.filter(x=>normalize(x.title)===titleKey));
+      if(hits.length!==1)hits=unique(pool.filter(x=>loose(x.title)===looseTitle&&loose(x.genre)===looseGenre));
+      if(hits.length!==1)hits=unique(pool.filter(x=>loose(x.title)===looseTitle));
+      // popn.wiki と曲マスターで曲名表記が異なる旧曲があるため、
+      // 同一Lv・同一譜面内でジャンル名が一意ならジャンル名を安全なフォールバックに使う。
+      if(hits.length!==1)hits=unique(pool.filter(x=>normalize(x.genre)===genreKey));
+      if(hits.length!==1)hits=unique(pool.filter(x=>loose(x.genre)===looseGenre));
+      // 括弧内の副題など、片側だけに補足表記があるケースを一意候補に限って吸収する。
+      if(hits.length!==1&&looseTitle.length>=6){
+        hits=unique(pool.filter(x=>{const t=loose(x.title);return t.length>=6&&(t.includes(looseTitle)||looseTitle.includes(t));}));
+      }
       if(hits.length===1){matched.push({...row,song_id:hits[0].id});}else unmatched.push({genre:row.genre,title:row.title,chart:row.chart,difficulty:row.difficulty_text,candidates:hits.length});
     }
     if(matched.length){
