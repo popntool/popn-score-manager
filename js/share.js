@@ -69,11 +69,11 @@ function scoreTileLayout(row,x,y,w,h){
  const fixedW=medalCellW+stackCellW+scoreCellW+psrCellW+cellGap*4;
  const bannerW=Math.max(96,Math.floor(w-inner*2-fixedW));
  const banner={x:x+inner,y:y+inner,w:bannerW,h:bannerH};
- const medal={x:banner.x+banner.w+cellGap,y:y+inner,w:medalCellW,h:bannerH};
- const stack={x:medal.x+medal.w+cellGap,y:y+inner,w:stackCellW,h:bannerH};
- const scoreCell={x:stack.x+stack.w+cellGap,y:y+inner,w:scoreCellW,h:bannerH};
+ const stack={x:banner.x+banner.w+cellGap,y:y+inner,w:stackCellW,h:bannerH};
+ const medal={x:stack.x+stack.w+cellGap,y:y+inner,w:medalCellW,h:bannerH};
+ const scoreCell={x:medal.x+medal.w+cellGap,y:y+inner,w:scoreCellW,h:bannerH};
  const psrCell={x:scoreCell.x+scoreCell.w+cellGap,y:y+inner,w:psrCellW,h:bannerH};
- return{banner,medal,stack,scoreCell,psrCell,score,psr};
+ return{banner,stack,medal,scoreCell,psrCell,score,psr};
 }
 function drawMetricColumn(ctx,label,value,cell){
  text(ctx,label,cell.x+cell.w/2,cell.y+Math.round(cell.h*.30),8.2,800,MUTED,"center");
