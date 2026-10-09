@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v3.1.0
+/* pop'n music スコア同期 v3.2.58
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -98,7 +98,7 @@
     };
   }
 
-  async function parseList(doc){
+  async function parseList(doc,listKind){
     const anchors=[...doc.querySelectorAll('a[href*="mu_detail.html"]')].filter(a=>/[?&]no=/.test(a.getAttribute('href')||''));
     const items=[];
     const seenLi=new Set();
@@ -109,12 +109,14 @@
       const base={genre:info[0]||'',title:clean(a.textContent),artist:info[1]||'',detail_url:new URL(a.getAttribute('href'),location.origin).href};
       if(!base.title||!base.genre||!base.artist)continue;
 
-      // バージョン/BEMANI一覧(mu_top.html)は、1曲につき LIGHT/NORMAL/HYPER/EX の4セルを持つ。
-      // 各セルの medal/rank/score をそのまま歴代データとして取得する。
-      // mu_top.html は曲情報の直後に「でっかポップ君」列があり、その後に
-      // LIGHT / NORMAL / HYPER / EX の4列が並ぶ。末尾4セルだけを譜面として扱う。
-      const songCells=d.slice(-4);
-      if(d.length>=6&&songCells.length===4&&songCells.every(cell=>cell.querySelector('img[src*="meda_"]'))){
+      if(listKind!=='level'){
+        // バージョン/BEMANI一覧(mu_top.html)は必ず末尾4セルを
+        // LIGHT / NORMAL / HYPER / EX として扱う。
+        // 未プレー譜面にはメダル画像が無いため、画像の有無で画面形式を判定しない。
+        // ここでレベル一覧用の解析へフォールバックすると列を誤認して別譜面の値を保存するため禁止する。
+        if(d.length<5)continue;
+        const songCells=d.slice(-4);
+        if(songCells.length!==4)continue;
         for(const [index,chart] of ['LIGHT','NORMAL','HYPER','EX'].entries()){
           const history=historyCell(songCells[index]);
           items.push({...base,level:0,chart,...history});
@@ -122,7 +124,7 @@
         continue;
       }
 
-      // レベル一覧(mu_lv.html)は従来どおり1行=1譜面。
+      // レベル一覧(mu_lv.html)は1行=1譜面。
       if(d.length<4)continue;
       const history=historyCell(d[3]);
       const item={...base,level:Number(clean(d[2].textContent)),chart:clean(d[1].textContent).toUpperCase(),...history};
@@ -133,7 +135,15 @@
     return {rows:items.map((item,i)=>({master_key:keys[i],...item})),signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
   }
 
-  async function scanTarget(target,onPage){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const parsed=await parseList(await getDoc(listUrl(target,page),`${target.label} page=${page}`));if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;onPage?.();}}
+  function assertTargetFilter(doc,target){
+    if(target.kind==='level')return;
+    if(Number.isInteger(target.version)&&target.version>=0){
+      const select=doc.querySelector('select[name="version"],select#version');
+      if(select&&String(select.value)!==String(target.version))throw new Error(`${target.label}: 公式サイトのバージョン絞り込みを確認できませんでした。保存はしていません。`);
+    }
+  }
+
+  async function scanTarget(target,onPage){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const doc=await getDoc(listUrl(target,page),`${target.label} page=${page}`);assertTargetFilter(doc,target);const parsed=await parseList(doc,target.kind);if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;onPage?.();}}
   function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}const current_clear_status=hasPlayCount&&counts.play===0?'unplayed':counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
   async function mapLimit(items,limit,worker,onDone){let cursor=0,done=0;const out=new Array(items.length);await Promise.all(Array.from({length:Math.min(limit,items.length)},async()=>{while(!state.cancelled){const index=cursor++;if(index>=items.length)return;out[index]=await worker(items[index],index);done++;onDone?.(done,items.length);}}));return out;}
   function toBase64(bytes){let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary);}
