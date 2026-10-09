@@ -1351,7 +1351,7 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 }
 
 /* v3.2.57: admin-only sync update preview. */
-.sync-update-dialog{width:min(720px,calc(100vw - 24px));max-width:720px;padding:0;border:0;background:transparent;overflow:visible;}
+.sync-update-dialog{width:min(780px,calc(100vw - 24px));max-width:780px;padding:0;border:0;background:transparent;overflow:visible;}
 .sync-update-dialog::backdrop{background:rgba(18,31,68,.58);backdrop-filter:blur(2px);}
 .sync-update-modal{position:relative;overflow:hidden;border:2px solid #f3cf5a;border-radius:26px;background:linear-gradient(180deg,#fff8c9 0,#fffdf5 28%,#fffdf8 100%);box-shadow:0 20px 60px rgba(11,28,69,.28);color:var(--text);}
 .sync-update-head{padding:26px 28px 18px;text-align:center;background:radial-gradient(circle at 20% 15%,#fff4a8 0 3px,transparent 4px),radial-gradient(circle at 82% 24%,#ffd34d 0 4px,transparent 5px),linear-gradient(135deg,#fff9d4,#fff2a7);}
@@ -1362,23 +1362,28 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 .sync-update-head p{margin:10px 0 0;color:#24438d;font-weight:800;}
 .sync-update-close{top:12px;right:12px;background:#fff;box-shadow:0 4px 12px #20366c26;}
 .sync-update-list{display:grid;gap:10px;max-height:min(56vh,620px);padding:14px 16px;overflow:auto;overscroll-behavior:contain;}
-.sync-update-item{display:grid;grid-template-columns:138px minmax(0,1fr);gap:16px;align-items:center;padding:13px 15px;border:1px solid #f0dfaa;border-radius:18px;background:#fff;box-shadow:0 3px 10px rgba(36,67,141,.07);}
-.sync-update-thumb{display:flex;align-items:center;justify-content:center;width:138px;height:42px;padding:0;border:0;background:transparent;box-sizing:border-box;overflow:hidden;}
-.sync-update-banner{display:block;width:138px;height:42px;object-fit:contain;border:1px solid #d8e1f4;border-radius:7px;background:#fff;box-sizing:border-box;}
-.sync-update-no-banner{display:grid;place-items:center;width:138px;height:42px;border:1px solid #d8e1f4;border-radius:7px;background:#f7fbff;color:#ff6da5;font-size:22px;font-weight:900;}
-.sync-update-main{min-width:0;display:grid;gap:8px;align-content:center;}
-.sync-update-song{display:flex;align-items:center;gap:7px;min-width:0;flex-wrap:wrap;}
-.sync-update-song strong{min-width:0;max-width:100%;overflow-wrap:anywhere;font-size:1rem;color:#172c65;}
-.sync-update-chart,.sync-update-level{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:3px 9px;border-radius:9px;font-size:.75rem;font-weight:900;}
+.sync-update-item{display:grid;grid-template-columns:176px minmax(0,1fr);gap:16px;align-items:start;padding:14px 16px;border:1px solid #f0dfaa;border-radius:18px;background:#fff;box-shadow:0 3px 10px rgba(36,67,141,.07);}
+.sync-update-thumb{display:flex;align-items:flex-start;justify-content:center;width:176px;min-height:64px;padding-top:6px;box-sizing:border-box;}
+.sync-update-banner{display:block;width:176px;height:56px;object-fit:contain;border:1px solid #d8e1f4;border-radius:8px;background:#fff;box-sizing:border-box;}
+.sync-update-no-banner{display:grid;place-items:center;width:176px;height:56px;border:1px solid #d8e1f4;border-radius:8px;background:#f7fbff;color:#ff6da5;font-size:22px;font-weight:900;}
+.sync-update-main{min-width:0;display:grid;gap:10px;align-content:start;}
+.sync-update-song{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:8px;min-width:0;}
+.sync-update-song strong{min-width:0;max-width:100%;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;font-size:1rem;line-height:1.35;color:#172c65;word-break:break-word;}
+.sync-update-chart,.sync-update-level{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:3px 10px;border-radius:9px;font-size:.75rem;font-weight:900;white-space:nowrap;}
 .sync-update-chart{background:#eef1f6;color:#25375f;}.sync-update-chart.ex{background:#ff82aa;color:#fff}.sync-update-chart.hyper{background:#ffe37d;color:#695500}.sync-update-chart.normal{background:#bff0a4;color:#225d31}.sync-update-chart.light{background:#cae7ff;color:#315c88}.sync-update-level{background:#e4efff;color:#284d86;}
-.sync-update-score,.sync-update-medal-line{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
-.sync-update-score>small,.sync-update-medal-line>small{display:inline-flex;padding:3px 8px;border-radius:999px;background:#f0f1f4;color:#59677f;font-size:.7rem;font-weight:800;}
-.sync-update-score b{font-variant-numeric:tabular-nums;color:#1f376f;font-size:1rem;}.sync-update-score .is-new{color:#eb3f7d;font-size:1.08rem;}.sync-update-score>span,.sync-update-arrow{color:#8794aa;font-weight:900;}
-.sync-update-medal{display:inline-flex;align-items:center;justify-content:center;min-width:30px;}.sync-update-medal img{width:34px;height:34px;object-fit:contain;}.sync-update-medal-empty{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#edf0f5;color:#758198;font-weight:900;}
-.sync-update-actions{padding:2px 16px 16px;display:flex;justify-content:center;}.sync-update-actions .main-button{min-width:180px;border-radius:999px;background:#ff4f91;box-shadow:0 5px 0 #d72f70;}
-@media(max-width:560px){.sync-update-dialog{width:calc(100vw - 14px)}.sync-update-modal{border-radius:22px}.sync-update-head{padding:20px 16px 14px}.sync-update-list{padding:10px;gap:8px;max-height:60vh}.sync-update-item{grid-template-columns:108px minmax(0,1fr);gap:10px;padding:9px 10px}.sync-update-thumb{width:108px;height:34px}.sync-update-banner,.sync-update-no-banner{width:108px;height:34px;border-radius:6px}.sync-update-actions{padding:0 10px 12px}.sync-update-title-row{gap:8px}.sync-update-count{min-height:30px;padding:3px 9px}.sync-update-head p{font-size:.86rem}}
-
-
+.sync-update-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start;}
+.sync-update-column{display:grid;gap:8px;align-content:start;min-height:44px;}
+.sync-update-score-line,.sync-update-medal-line{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
+.sync-update-score-line small,.sync-update-medal-line small{display:inline-flex;min-width:72px;padding:3px 8px;border-radius:999px;background:#f0f1f4;color:#59677f;font-size:.7rem;font-weight:800;justify-content:center;}
+.sync-update-score-line b{font-variant-numeric:tabular-nums;color:#1f376f;font-size:1rem;}
+.sync-update-score-line .is-new{color:#eb3f7d;font-size:1.08rem;}
+.sync-update-score-line>span,.sync-update-arrow{color:#8794aa;font-weight:900;}
+.sync-update-medal{display:inline-flex;align-items:center;justify-content:center;min-width:30px;}
+.sync-update-medal img{width:34px;height:34px;object-fit:contain;}
+.sync-update-medal-empty{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#edf0f5;color:#758198;font-weight:900;}
+.sync-update-actions{padding:2px 16px 16px;display:flex;justify-content:center;}
+.sync-update-actions .main-button{min-width:180px;border-radius:999px;background:#ff4f91;box-shadow:0 5px 0 #d72f70;}
+@media(max-width:640px){.sync-update-dialog{width:calc(100vw - 14px)}.sync-update-modal{border-radius:22px}.sync-update-head{padding:20px 16px 14px}.sync-update-list{padding:10px;gap:8px;max-height:60vh}.sync-update-item{grid-template-columns:1fr;gap:10px;padding:10px}.sync-update-thumb{width:100%;min-height:auto;justify-content:flex-start;padding-top:0}.sync-update-banner,.sync-update-no-banner{width:138px;height:44px}.sync-update-song{grid-template-columns:auto minmax(0,1fr) auto;gap:7px}.sync-update-columns{gap:12px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.sync-update-score-line small,.sync-update-medal-line small{min-width:64px;padding:3px 7px}.sync-update-actions{padding:0 10px 12px}.sync-update-title-row{gap:8px}.sync-update-count{min-height:30px;padding:3px 9px}.sync-update-head p{font-size:.86rem}}
 /* v3.2.59: sync failures can be inspected without exposing retry counters. */
 .sync-failure-dialog{width:min(680px,calc(100vw - 24px));max-width:680px;padding:0;border:0;background:transparent;}
 .sync-failure-dialog::backdrop{background:rgba(18,31,68,.58);backdrop-filter:blur(2px);}
