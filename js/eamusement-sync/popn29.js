@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v3.2.58
+/* pop'n music スコア同期 v3.2.60
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -135,15 +135,7 @@
     return {rows:items.map((item,i)=>({master_key:keys[i],...item})),signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
   }
 
-  function assertTargetFilter(doc,target){
-    if(target.kind==='level')return;
-    if(Number.isInteger(target.version)&&target.version>=0){
-      const select=doc.querySelector('select[name="version"],select#version');
-      if(select&&String(select.value)!==String(target.version))throw new Error(`${target.label}: 公式サイトのバージョン絞り込みを確認できませんでした。保存はしていません。`);
-    }
-  }
-
-  async function scanTarget(target,onPage){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const doc=await getDoc(listUrl(target,page),`${target.label} page=${page}`);assertTargetFilter(doc,target);const parsed=await parseList(doc,target.kind);if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;onPage?.();}}
+  async function scanTarget(target,onPage){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const doc=await getDoc(listUrl(target,page),`${target.label} page=${page}`);const parsed=await parseList(doc,target.kind);if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;onPage?.();}}
   function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}const current_clear_status=hasPlayCount&&counts.play===0?'unplayed':counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
   async function mapLimit(items,limit,worker,onDone){let cursor=0,done=0;const out=new Array(items.length);await Promise.all(Array.from({length:Math.min(limit,items.length)},async()=>{while(!state.cancelled){const index=cursor++;if(index>=items.length)return;out[index]=await worker(items[index],index);done++;onDone?.(done,items.length);}}));return out;}
   function toBase64(bytes){let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary);}

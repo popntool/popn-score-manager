@@ -1377,3 +1377,19 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 .sync-update-medal{display:inline-flex;align-items:center;justify-content:center;min-width:30px;}.sync-update-medal img{width:34px;height:34px;object-fit:contain;}.sync-update-medal-empty{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#edf0f5;color:#758198;font-weight:900;}
 .sync-update-actions{padding:2px 16px 16px;display:flex;justify-content:center;}.sync-update-actions .main-button{min-width:180px;border-radius:999px;background:#ff4f91;box-shadow:0 5px 0 #d72f70;}
 @media(max-width:560px){.sync-update-dialog{width:calc(100vw - 14px)}.sync-update-modal{border-radius:22px}.sync-update-head{padding:20px 16px 14px}.sync-update-list{padding:10px;gap:8px;max-height:60vh}.sync-update-item{grid-template-columns:72px minmax(0,1fr);gap:9px;padding:8px}.sync-update-banner{width:72px;height:48px}.sync-update-actions{padding:0 10px 12px}.sync-update-title-row{gap:8px}.sync-update-count{min-height:30px;padding:3px 9px}.sync-update-head p{font-size:.86rem}}
+
+
+/* v3.2.59: sync failures can be inspected without exposing retry counters. */
+.sync-failure-dialog{width:min(680px,calc(100vw - 24px));max-width:680px;padding:0;border:0;background:transparent;}
+.sync-failure-dialog::backdrop{background:rgba(18,31,68,.58);backdrop-filter:blur(2px);}
+.sync-failure-modal{position:relative;max-height:min(82vh,760px);overflow:hidden;display:flex;flex-direction:column;padding:24px;border:1px solid var(--line);border-radius:24px;background:var(--surface,#fff);color:var(--text);box-shadow:0 20px 60px rgba(11,28,69,.28);}
+.sync-failure-modal h2{margin:0 42px 10px 0;color:var(--text);font-size:1.35rem;}
+.sync-failure-summary{margin:0 0 8px;line-height:1.65;color:var(--text);}
+.sync-failure-help{margin:0 0 14px;color:var(--muted);font-size:.88rem;line-height:1.55;}
+.sync-failure-list{min-height:0;overflow:auto;display:grid;gap:10px;padding-right:3px;overscroll-behavior:contain;}
+.sync-failure-item{padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2,#f7f9fd);}
+.sync-failure-title{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px;}.sync-failure-title b{min-width:0;overflow-wrap:anywhere;}.sync-failure-title span{display:inline-flex;padding:2px 8px;border-radius:999px;background:#e8efff;color:#294d87;font-size:.72rem;font-weight:900;}
+.sync-failure-meta{display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;margin-top:4px;font-size:.82rem;}.sync-failure-meta small{color:var(--muted);font-weight:800;}.sync-failure-meta span{overflow-wrap:anywhere;}
+.sync-failure-values{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}.sync-failure-values span{padding:3px 8px;border-radius:8px;background:var(--surface,#fff);font-size:.78rem;font-weight:800;font-variant-numeric:tabular-nums;}
+.sync-failure-item details{margin-top:8px;font-size:.78rem;color:var(--muted);}.sync-failure-item summary{cursor:pointer;font-weight:800;}.sync-failure-item code{display:block;margin-top:6px;padding:8px;border-radius:8px;background:rgba(80,94,125,.09);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.72rem;}
+@media(max-width:560px){.sync-failure-dialog{width:calc(100vw - 14px)}.sync-failure-modal{max-height:86vh;padding:18px 14px;border-radius:20px}.sync-failure-meta{grid-template-columns:70px minmax(0,1fr)}}
