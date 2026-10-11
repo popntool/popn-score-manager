@@ -1736,3 +1736,33 @@ html[data-theme="dark"] #userList .user-row-v3095{
   border-color:#58688d!important;
   box-shadow:0 5px 18px rgba(0,0,0,.28)!important;
 }
+
+
+/* v3.3.34: Safari-safe edit cell and continuous PSR divider. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
+  min-width:0!important;
+  max-width:none!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:0!important;
+  border-radius:0!important;
+  overflow:hidden!important;
+  -webkit-appearance:none!important;
+  appearance:none!important;
+}
+
+/* Keep the edit column fully inside the card on Safari while preserving the overall 100% width. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
+  width:58.552632%!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
+  width:8.552632%!important;
+}
+
+/* PSR label/value share one straight top separator. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
+  border-top:1px solid var(--line)!important;
+  border-radius:0!important;
+}
