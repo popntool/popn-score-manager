@@ -901,7 +901,7 @@ textarea,
 /* v3.2.12: an isolated score-card structure, independent of old grid placements. */
 .score-card-v300.score-card-v312{display:block;overflow:hidden;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);}
 .score-card-v312 .score-card-upper{display:grid;grid-template-columns:minmax(0,42%) minmax(0,58%);min-width:0;min-height:76px;border-bottom:1px solid var(--line);}
-.score-card-v312 .song-banner{display:block;grid-area:auto;width:100%;height:100%;min-height:0;max-height:none;max-width:none;object-fit:contain;background:var(--surface-2);border:0!important;border-right:1px solid var(--line)!important;border-radius:0;}
+.score-card-v312 .song-banner{display:block;grid-area:auto;width:100%;height:100%;min-height:0;max-height:none;max-width:none;object-fit:contain;object-position:center center;background:var(--surface-2);border:0!important;border-right:1px solid var(--line)!important;border-radius:0;}
 .score-card-v312 .banner-empty{display:grid;place-items:center;font-size:.68rem;color:var(--muted)}
 .score-card-v312 .score-records{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));min-width:0;}
 .score-card-v312 .score-record{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,.7fr) minmax(0,.82fr) minmax(0,1.12fr);align-items:center;min-width:0;min-height:38px;font-variant-numeric:tabular-nums;}
@@ -1472,9 +1472,9 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
 body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .banner-empty{
   position:absolute!important;
   left:0!important;
-  top:0!important;
+  top:2px!important;
   width:32.894737%!important;
-  height:56.818182%!important;
+  height:calc(56.818182% - 4px)!important;
   box-sizing:border-box!important;
   margin:0!important;
   padding:0!important;
@@ -1485,8 +1485,14 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
 }
 body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .song-banner{
   display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
   object-fit:contain!important;
-  object-position:50% 50%!important;
+  object-position:center center!important;
 }
 
 body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
