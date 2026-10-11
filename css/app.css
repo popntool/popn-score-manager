@@ -1439,7 +1439,7 @@ body.admin-score-card-preview #scoreList{
 
 body.admin-score-card-preview #scoreList .score-card-v300.score-card-v312{
   display:grid!important;
-  grid-template-columns:62px 42px 50px 70px 62px 42px 50px 70px 48px 62px 50px!important;
+  grid-template-columns:70px 50px 58px 70px 56px 42px 48px 66px 44px 56px 48px!important;
   grid-template-rows:40px 40px 36px!important;
   width:var(--admin-score-card-width,608px)!important;
   min-width:var(--admin-score-card-width,608px)!important;
@@ -1471,11 +1471,11 @@ body.admin-score-card-preview #scoreList .score-card-v312 .song-banner{
   grid-column:1/4!important;
   grid-row:1/3!important;
   display:block!important;
-  width:154px!important;
+  width:178px!important;
   height:80px!important;
-  min-width:154px!important;
+  min-width:178px!important;
   min-height:80px!important;
-  max-width:154px!important;
+  max-width:178px!important;
   max-height:80px!important;
   object-fit:contain!important;
   object-position:center!important;
@@ -1490,7 +1490,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .song-banner{
 body.admin-score-card-preview #scoreList .score-card-v312 .banner-empty{
   grid-column:1/4!important;
   grid-row:1/3!important;
-  width:154px!important;
+  width:178px!important;
   height:80px!important;
   border-right:1px solid var(--line)!important;
   border-bottom:1px solid var(--line)!important;
@@ -1671,3 +1671,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record-rank img
   object-fit:contain!important;
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .unplayed-mark{font-size:.75rem!important;}
+
+/* v3.3.13 tweaks: widen banner horizontally for admin preview */
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score,body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{font-size:.72rem!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-genre,body.admin-score-card-preview #scoreList .score-card-v312 .card-title{padding-left:7px!important;padding-right:7px!important;}
