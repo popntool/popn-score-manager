@@ -1,11 +1,16 @@
-/* pop'n music スコア同期 v3.2.60
+/* pop'n music スコア同期 v3.1.1
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
 (async()=>{
   'use strict';
   const RETURN_URL='https://popntool.github.io/popn-score-manager/';
-  const LIST_CONCURRENCY=16,DETAIL_CONCURRENCY=32,MAX_PAGE=200;
+  const MOBILE_LIKE=/iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent||'')||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4);
+  const LIST_CONCURRENCY=MOBILE_LIKE?2:6,DETAIL_CONCURRENCY=MOBILE_LIKE?3:8,MAX_PAGE=200;
+  const yieldUi=()=>new Promise(resolve=>{
+    if(typeof requestIdleCallback==='function')requestIdleCallback(()=>resolve(),{timeout:80});
+    else setTimeout(resolve,0);
+  });
   const VERSION_OPTIONS=[
     ['ALL','-1'],["pop'n 家庭用",'0'],["pop'n music",'1'],["pop'n music 2",'2'],["pop'n music 3",'3'],["pop'n music 4",'4'],["pop'n music 5",'5'],["pop'n music 6",'6'],["pop'n music 7",'7'],["pop'n music 8",'8'],["pop'n music 9",'9'],["pop'n music 10",'10'],["pop'n music 11",'11'],["pop'n music 12 いろは",'12'],["pop'n music 13 カーニバル",'13'],["pop'n music 14 FEVER！",'14'],["pop'n music 15 ADVENTURE",'15'],["pop'n music 16 PARTY♪",'16'],["pop'n music 17 THE MOVIE",'17'],["pop'n music 18 せんごく列伝",'18'],["pop'n music 19 TUNE STREET",'19'],["pop'n music 20 fantasia",'20'],["pop'n music Sunny Park",'21'],["pop'n music ラピストリア",'22'],["pop'n music éclale",'23'],["pop'n music うさぎと猫と少年の夢",'24'],["pop'n music peace",'25'],["pop'n music 解明リドルズ",'26'],["pop'n music UniLab",'27'],["pop'n music Jam&Fizz",'28'],["pop'n music High☆Cheers!!",'29'],['BEMANI','BEMANI']
   ];
@@ -98,7 +103,7 @@
     };
   }
 
-  async function parseList(doc,listKind){
+  async function parseList(doc){
     const anchors=[...doc.querySelectorAll('a[href*="mu_detail.html"]')].filter(a=>/[?&]no=/.test(a.getAttribute('href')||''));
     const items=[];
     const seenLi=new Set();
@@ -109,14 +114,12 @@
       const base={genre:info[0]||'',title:clean(a.textContent),artist:info[1]||'',detail_url:new URL(a.getAttribute('href'),location.origin).href};
       if(!base.title||!base.genre||!base.artist)continue;
 
-      if(listKind!=='level'){
-        // バージョン/BEMANI一覧(mu_top.html)は必ず末尾4セルを
-        // LIGHT / NORMAL / HYPER / EX として扱う。
-        // 未プレー譜面にはメダル画像が無いため、画像の有無で画面形式を判定しない。
-        // ここでレベル一覧用の解析へフォールバックすると列を誤認して別譜面の値を保存するため禁止する。
-        if(d.length<5)continue;
-        const songCells=d.slice(-4);
-        if(songCells.length!==4)continue;
+      // バージョン/BEMANI一覧(mu_top.html)は、1曲につき LIGHT/NORMAL/HYPER/EX の4セルを持つ。
+      // 各セルの medal/rank/score をそのまま歴代データとして取得する。
+      // mu_top.html は曲情報の直後に「でっかポップ君」列があり、その後に
+      // LIGHT / NORMAL / HYPER / EX の4列が並ぶ。末尾4セルだけを譜面として扱う。
+      const songCells=d.slice(-4);
+      if(d.length>=6&&songCells.length===4&&songCells.every(cell=>cell.querySelector('img[src*="meda_"]'))){
         for(const [index,chart] of ['LIGHT','NORMAL','HYPER','EX'].entries()){
           const history=historyCell(songCells[index]);
           items.push({...base,level:0,chart,...history});
@@ -124,20 +127,49 @@
         continue;
       }
 
-      // レベル一覧(mu_lv.html)は1行=1譜面。
+      // レベル一覧(mu_lv.html)は従来どおり1行=1譜面。
       if(d.length<4)continue;
       const history=historyCell(d[3]);
       const item={...base,level:Number(clean(d[2].textContent)),chart:clean(d[1].textContent).toUpperCase(),...history};
       if(!['LIGHT','NORMAL','HYPER','EX'].includes(item.chart)||!Number.isFinite(item.level))continue;
       items.push(item);
     }
-    const keys=await Promise.all(items.map(masterKey));
-    return {rows:items.map((item,i)=>({master_key:keys[i],...item})),signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
+    // A version list can contain four charts for the same song. Hash the song identity once,
+    // not once per chart, to avoid unnecessary crypto work on mobile browsers.
+    const identity=v=>[v.genre,v.title,v.artist].map(normalize).join('|');
+    const unique=new Map();
+    for(const item of items){const key=identity(item);if(!unique.has(key))unique.set(key,masterKey(item));}
+    const resolved=new Map(await Promise.all([...unique].map(async([key,promise])=>[key,await promise])));
+    return {rows:items.map(item=>({master_key:resolved.get(identity(item)),...item})),signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
   }
 
-  async function scanTarget(target,onPage){const seen=new Set();for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){const doc=await getDoc(listUrl(target,page),`${target.label} page=${page}`);const parsed=await parseList(doc,target.kind);if(!parsed.rows.length||seen.has(parsed.signature))break;seen.add(parsed.signature);state.records.push(...parsed.rows);state.pages++;onPage?.();}}
+  async function scanTarget(target,onPage){
+    const seen=new Set();
+    for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){
+      const parsed=await parseList(await getDoc(listUrl(target,page),`${target.label} page=${page}`));
+      if(!parsed.rows.length||seen.has(parsed.signature))break;
+      seen.add(parsed.signature);
+      state.records.push(...parsed.rows);
+      state.pages++;
+      onPage?.();
+      // Give Safari/Chrome a chance to paint the progress UI and release parsed DOM objects.
+      await yieldUi();
+    }
+  }
   function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}const current_clear_status=hasPlayCount&&counts.play===0?'unplayed':counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
-  async function mapLimit(items,limit,worker,onDone){let cursor=0,done=0;const out=new Array(items.length);await Promise.all(Array.from({length:Math.min(limit,items.length)},async()=>{while(!state.cancelled){const index=cursor++;if(index>=items.length)return;out[index]=await worker(items[index],index);done++;onDone?.(done,items.length);}}));return out;}
+  async function mapLimit(items,limit,worker,onDone){
+    let cursor=0,done=0;
+    await Promise.all(Array.from({length:Math.min(limit,items.length)},async()=>{
+      while(!state.cancelled){
+        const index=cursor++;
+        if(index>=items.length)return;
+        await worker(items[index],index);
+        done++;
+        onDone?.(done,items.length);
+        if(done%2===0)await yieldUi();
+      }
+    }));
+  }
   function toBase64(bytes){let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary);}
 
   try{
@@ -166,14 +198,23 @@
     const detailGroups=allDetailGroups;
     progress.max=Math.max(1,detailGroups.length);progress.value=0;
     status.textContent=`対象${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
-    const parsed=await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>({rows:group.rows,values:parseDetail(await getDoc(group.url,'曲詳細'))}),(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中`;});
+    const details=new Map();
+    await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>{
+      const values=parseDetail(await getDoc(group.url,'曲詳細'));
+      for(const row of group.rows){
+        const value=values.get(row.chart);
+        if(value)details.set(`${row.master_key}|${row.chart}`,value);
+      }
+    },(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中`;});
     if(state.cancelled)throw new Error('中止しました。');
-    const details=new Map();for(const group of parsed)for(const row of group.rows){const value=group.values.get(row.chart);if(value)details.set(`${row.master_key}|${row.chart}`,value);}
     const rows=base.map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0,current_clear_status:detail.current_clear_status||'failed'};})
       .filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none'||Number(row.version_score)>0||row.current_clear_status!=='failed')
       .map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面・ポップンクラスを確認中…`;
-    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:5,source_url:location.origin+SOURCE_PATH,popn_class,records:rows})),compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
+    await yieldUi();
+    const raw=new TextEncoder().encode(JSON.stringify({type:'POPN_SCORE_SYNC',version:5,source_url:location.origin+SOURCE_PATH,popn_class,records:rows}));
+    await yieldUi();
+    const compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
     status.textContent=`取得完了：${rows.length}譜面${popn_class===null?"":"・ポップンクラス "+popn_class.toFixed(2)}。サイトへ戻ります…`;
     location.href=RETURN_URL+'#popn-sync-gzip='+encodeURIComponent(toBase64(compressed));
   }catch(e){const status=box.querySelector('[data-status]');if(status)status.textContent=`エラー：${e?.message||e}`;const cancel=box.querySelector('[data-cancel]');if(cancel){cancel.textContent='閉じる';cancel.disabled=false;cancel.onclick=()=>box.remove();}console.error(e);window.__POPN_SCORE_SYNC_RUNNING__=false;}
