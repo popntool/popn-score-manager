@@ -8,7 +8,7 @@ import{loadUsers,invalidateUserCache}from"./users.js?v=3.2.49";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.2.49";
 import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.57";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.2.49";
-import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.3.3";
+import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.3.4";
 import{loadWikiDifficulty,syncWikiDifficultyRange}from"./wiki-sync.js?v=3.2.49";
 import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.2.57";
 import{listPsrSnapshots,savePsrSnapshot,deletePsrSnapshot,comparePsrSnapshot}from"./psr-history.js?v=3.2.49";
@@ -165,7 +165,7 @@ async function loadGuideDialog(){
   if($("#guideDialog"))return $("#guideDialog");
   if(!guideLoadPromise){
     guideLoadPromise=(async()=>{
-      const response=await fetch("./partials/guide.html?v=3.3.3");
+      const response=await fetch("./partials/guide.html?v=3.3.4");
       if(!response.ok)throw new Error(`HTTP ${response.status}`);
       const template=document.createElement("template");
       template.innerHTML=await response.text();
@@ -430,9 +430,10 @@ $("#visibilityButton").addEventListener("click",async()=>{try{const p=await load
 $("#visibilityForm").addEventListener("submit",async event=>{event.preventDefault();const f=event.currentTarget;try{await saveVisibility({poptomo_id:$("#poptomoIdInput").value,poptomo_public:$("#poptomoPublicInput").checked,...Object.fromEntries(["highest_clear_public","popn_class_public","psr_public","rival_scores_public","rival_medals_public"].map(k=>[k,f.elements[k].checked]))});invalidateUserCache();f.querySelector(".error").textContent="";await refreshUsers();alert("公開設定を保存しました。");}catch(e){f.querySelector(".error").textContent=e.message||e;}});
 async function openSongDetail(row){
   $("#songDetailTitle").textContent=`${row.title} / ${row.chart} Lv.${row.level}`;
-  const box=$("#songDetailContent");
+  const box=$("#songDetailContent"),dialog=$("#songDetailDialog"),returnScrollY=window.scrollY;
   box.textContent="ライバルのデータを取得中…";
-  $("#songDetailDialog").showModal();
+  dialog.showModal();
+  if(!document.body.classList.contains("modal-open")){lockedScroll=returnScrollY;document.body.classList.add("modal-open");document.body.style.top=`-${returnScrollY}px`;}
   try{
     const entries=await rivalSongScores(row.song_id,row.chart);
     const mine={username:"自分",score:row.score,medal_code:row.medal_code};
