@@ -1441,8 +1441,8 @@ body.admin-score-card-preview #scoreList .score-card-v300.score-card-v312{
   display:grid!important;
   grid-template-columns:62px 42px 50px 70px 62px 42px 50px 70px 48px 64px 50px!important;
   grid-template-rows:34px 34px 36px!important;
-  width:var(--admin-score-card-width,640px)!important;
-  min-width:var(--admin-score-card-width,640px)!important;
+  width:var(--admin-score-card-width,610px)!important;
+  min-width:var(--admin-score-card-width,610px)!important;
   max-width:none!important;
   height:104px!important;
   min-height:104px!important;
@@ -1506,13 +1506,21 @@ body.admin-score-card-preview #scoreList .score-card-v312 .card-chart{
   border-right:1px solid var(--line)!important;
   border-bottom:1px solid var(--line)!important;
   border-radius:0!important;
+  background:transparent!important;
+  color:#fff!important;
   font-size:.72rem!important;
   font-weight:900!important;
+  width:40px!important;
+  height:24px!important;
+  justify-self:center!important;
+  align-self:center!important;
+  border-radius:10px!important;
+  box-shadow:0 1px 0 rgba(0,0,0,.04)!important;
 }
-body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.ex{background:#ed476a!important;color:#fff!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.hyper{background:#efce3e!important;color:#302500!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.normal{background:#42a758!important;color:#fff!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.light{background:#448bd5!important;color:#fff!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.ex{background:#f05d86!important;color:#fff!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.hyper{background:#f4c84f!important;color:#4a3500!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.normal{background:#57b86a!important;color:#fff!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.light{background:#62a5e8!important;color:#fff!important}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-level{
   grid-column:4!important;
   grid-row:2!important;
@@ -1523,7 +1531,13 @@ body.admin-score-card-preview #scoreList .score-card-v312 .card-level{
   border:0!important;
   border-right:1px solid var(--line)!important;
   border-bottom:1px solid var(--line)!important;
-  background:var(--surface)!important;
+  background:#fbe7ee!important;
+  color:#273b74!important;
+  width:40px!important;
+  height:28px!important;
+  justify-self:center!important;
+  align-self:center!important;
+  border-radius:10px!important;
   font-size:.9rem!important;
   font-weight:850!important;
 }
@@ -1680,3 +1694,11 @@ body.admin-score-card-preview #scoreList .score-card-v312 .unplayed-mark{
   font-size:.75rem!important;
 }
 
+
+/* v3.3.11 tweaks */
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-level{border-bottom:0!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-title{font-size:.86rem!important;padding:0 8px!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-genre{padding:0 8px!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score{font-size:.7rem!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .song-banner{padding-right:0!important;}
