@@ -44,8 +44,9 @@ export async function saveScore(songId,chart,historyScore,versionScore,medalCode
 export async function syncScores(records,onProgress,gameVersion){
  const allowedStatuses=["unplayed","failed","easy","long_off","clear","full_combo","perfect"],rows=records.filter(x=>Number(x.score)>0||Number(x.version_score)>0||String(x.medal_code||"none").toLowerCase()!=="none"||String(x.rank_code||"none").toLowerCase()!=="none"||String(x.current_clear_status||"").toLowerCase()==="unplayed").map(x=>({...x,score:Math.max(0,Number(x.score)||0),version_score:Math.max(0,Number(x.version_score)||0),current_clear_status:allowedStatuses.includes(String(x.current_clear_status||"").toLowerCase())?String(x.current_clear_status).toLowerCase():"failed"}));
  if(!rows.length)return{saved:0,unmatched:0,failed:0,failed_details:[],retries:0};
- // Smaller batches reduce statement timeouts during full-level syncs while keeping two workers for throughput.
- const db=requireDb(),BATCH=60,WORKERS=2,MAX_RETRIES=4,queue=[];
+ // Played charts only are sent by the sync script. Serialize batches as an extra safeguard against
+ // concurrent statement triggers updating the same per-user admin stats cache row.
+ const db=requireDb(),BATCH=60,WORKERS=1,MAX_RETRIES=4,queue=[];
  for(let i=0;i<rows.length;i+=BATCH)queue.push(rows.slice(i,i+BATCH));
  let saved=0,unmatched=0,failed=0,done=0,retries=0,cursor=0,activeRetries=0;
  const failedDetails=[],wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));

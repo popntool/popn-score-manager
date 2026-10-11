@@ -2,7 +2,7 @@ import{isConfigured}from"./supabase.js";
 import{levelScoreAverages}from"./average-scores.js?v=3.2.49";
 import{changePassword,changeUsername,currentUser,loadMyProfile,login,logout,onAuthChange,register,saveDisplayPreferences,saveOfficialPopnClass,savePoptomo}from"./auth.js?v=3.2.49";
 import{downloadSongMaster,importSongMaster}from"./songs.js?v=3.3.3";
-import{currentMedalCode,currentMedalForNewSong,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.2.60";
+import{currentMedalCode,currentMedalForNewSong,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.3.33";
 import{loadScoreCatalogCached as loadScoreCatalog}from"./catalog-cache.js?v=3.2.49";
 import{loadUsers,invalidateUserCache}from"./users.js?v=3.2.49";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.2.49";
@@ -168,7 +168,7 @@ async function loadGuideDialog(){
   if($("#guideDialog"))return $("#guideDialog");
   if(!guideLoadPromise){
     guideLoadPromise=(async()=>{
-      const response=await fetch("./partials/guide.html?v=3.3.30");
+      const response=await fetch("./partials/guide.html?v=3.3.33");
       if(!response.ok)throw new Error(`HTTP ${response.status}`);
       const template=document.createElement("template");
       template.innerHTML=await response.text();

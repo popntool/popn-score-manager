@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v3.1.1
+/* pop'n music スコア同期 v3.1.2
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -102,6 +102,11 @@
       rank_code:code(images.find(i=>/rank_/i.test(i.getAttribute('src')||'')),'rank')||'none'
     };
   }
+  function hasPlayedHistory(row){
+    return Number(row?.score)>0
+      || String(row?.medal_code||'none').toLowerCase()!=='none'
+      || String(row?.rank_code||'none').toLowerCase()!=='none';
+  }
 
   async function parseList(doc){
     const anchors=[...doc.querySelectorAll('a[href*="mu_detail.html"]')].filter(a=>/[?&]no=/.test(a.getAttribute('href')||''));
@@ -122,6 +127,9 @@
       if(d.length>=6&&songCells.length===4&&songCells.every(cell=>cell.querySelector('img[src*="meda_"]'))){
         for(const [index,chart] of ['LIGHT','NORMAL','HYPER','EX'].entries()){
           const history=historyCell(songCells[index]);
+          // The official list already tells us whether this chart has ever been played.
+          // Never-played charts do not need a detail request or a site-side save.
+          if(!hasPlayedHistory(history))continue;
           items.push({...base,level:0,chart,...history});
         }
         continue;
@@ -132,6 +140,7 @@
       const history=historyCell(d[3]);
       const item={...base,level:Number(clean(d[2].textContent)),chart:clean(d[1].textContent).toUpperCase(),...history};
       if(!['LIGHT','NORMAL','HYPER','EX'].includes(item.chart)||!Number.isFinite(item.level))continue;
+      if(!hasPlayedHistory(item))continue;
       items.push(item);
     }
     // A version list can contain four charts for the same song. Hash the song identity once,
@@ -187,17 +196,18 @@
     cancel.onclick=()=>{state.cancelled=true;cancel.disabled=true;};
     progress.max=Math.max(1,targets.length);
     let cursor=0,done=0;
-    await Promise.all(Array.from({length:Math.min(LIST_CONCURRENCY,targets.length)},async()=>{while(!state.cancelled){const i=cursor++;if(i>=targets.length)return;await scanTarget(targets[i],()=>{status.textContent=`一覧 ${done}/${targets.length}カテゴリ・${state.pages}ページ・${state.records.length}譜面`;});done++;progress.value=done;status.textContent=`一覧 ${done}/${targets.length}カテゴリ・${state.pages}ページ・${state.records.length}譜面`;}}));
+    await Promise.all(Array.from({length:Math.min(LIST_CONCURRENCY,targets.length)},async()=>{while(!state.cancelled){const i=cursor++;if(i>=targets.length)return;await scanTarget(targets[i],()=>{status.textContent=`一覧 ${done}/${targets.length}カテゴリ・${state.pages}ページ・プレー済み${state.records.length}譜面`;});done++;progress.value=done;status.textContent=`一覧 ${done}/${targets.length}カテゴリ・${state.pages}ページ・プレー済み${state.records.length}譜面`;}}));
     if(state.cancelled)throw new Error('中止しました。');
 
     const base=[...new Map(state.records.map(r=>[`${r.master_key}|${r.chart}`,r])).values()];
     const detailGroupMap=new Map();
     for(const row of base){const url=new URL(row.detail_url);url.hash='';const no=url.searchParams.get('no'),detailKey=no?`${url.pathname}?no=${no}`:url.href;let group=detailGroupMap.get(detailKey);if(!group){group={url:url.href,rows:[]};detailGroupMap.set(detailKey,group);}group.rows.push(row);}
     const allDetailGroups=[...detailGroupMap.values()];
-    // VERSIONプレー回数0回を未プレーとして判定するため、同期対象はすべて詳細ページを確認する。
+    // 一覧でプレー済みと判定できた譜面だけ詳細ページを確認する。
+    // 歴代プレー済み・今作未プレーの譜面は、歴代記録を保持するため対象に残す。
     const detailGroups=allDetailGroups;
     progress.max=Math.max(1,detailGroups.length);progress.value=0;
-    status.textContent=`対象${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
+    status.textContent=`プレー済み${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
     const details=new Map();
     await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>{
       const values=parseDetail(await getDoc(group.url,'曲詳細'));
