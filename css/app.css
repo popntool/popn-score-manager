@@ -1422,7 +1422,7 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
 
-/* v3.3.19: admin-only score-card layout preview.
+/* v3.3.20: admin-only score-card layout preview.
    Match the latest wireframe with:
    - top area: banner / genre / title / edit
    - bottom area: EX / level / history / current / PSR
@@ -1473,13 +1473,12 @@ body.admin-score-card-preview #scoreList .score-card-v312 .banner-empty{
   width:200px!important; height:64px!important;
   background:var(--surface-2)!important;
   border-right:1px solid var(--line)!important;
-  border-bottom:1px solid var(--line)!important;
   z-index:2!important;
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .song-banner{
   display:block!important;
-  object-fit:fill!important;
-  object-position:center!important;
+  object-fit:contain!important;
+  object-position:center center!important;
   margin:0!important;
   padding:0!important;
   border-radius:0!important;
@@ -1494,7 +1493,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
   margin:0!important;
   padding:0 10px!important;
   border-right:1px solid var(--line)!important;
-  border-bottom:1px solid var(--line)!important;
+  border-bottom:0!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
   white-space:nowrap!important;
@@ -1530,7 +1529,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-edit{
   padding:0!important;
   border:0!important;
   border-left:1px solid var(--line)!important;
-  border-bottom:1px solid var(--line)!important;
+  border-bottom:0!important;
   background:var(--surface-2)!important;
   color:#233b72!important;
   font-size:.72rem!important;
@@ -1659,3 +1658,8 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-chil
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-score{left:404px;width:72px!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{left:476px;width:44px!important;background:#fff!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{left:520px;width:88px!important;border-right:0!important;background:#fff!important;}
+
+/* v3.3.20 tweaks */
+body.admin-score-card-preview #scoreList .score-card-v312 .song-banner,
+body.admin-score-card-preview #scoreList .score-card-v312 .banner-empty{display:block!important;overflow:hidden!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .song-banner{vertical-align:middle!important;}
