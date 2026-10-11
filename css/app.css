@@ -1422,11 +1422,8 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
 
-/* v3.3.16: admin-only score-card layout preview.
-   Wireframe-based layout:
-   top rows = banner | genre/title | edit
-   bottom row = EX | level | history | current | PSR
-*/
+/* v3.3.17: admin-only score-card layout preview.
+   Layout based on approved mockup, with history/current labels + soft block tint. */
 body.admin-score-card-preview #scoreList{
   display:flex;
   flex-direction:column;
@@ -1509,7 +1506,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-edit{
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .score-edit::before{content:"✎";display:grid!important;place-items:center!important;width:24px;height:24px;border-radius:8px;background:#dfe7f8!important;color:#355186!important;font-size:.95rem;font-weight:900;line-height:1;}
 
-/* bottom cells shared */
+/* bottom row shared */
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart,
 body.admin-score-card-preview #scoreList .score-card-v312 .card-level,
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record-label,
@@ -1549,6 +1546,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.hyper{--ba
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.normal{--badge-fill:#57b86a!important;color:#fff!important}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.light{--badge-fill:#62a5e8!important;color:#fff!important}
 
+/* labels + tinted groups */
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record-label,
 body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{font-size:.64rem!important;font-weight:850!important;color:var(--text)!important;white-space:nowrap!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score,
@@ -1558,7 +1556,21 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record-medal .c
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record-rank img{width:34px!important;height:27px!important;object-fit:contain!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .unplayed-mark{font-size:.75rem!important;}
 
-/* widths follow the wireframe */
+/* history group - pale blue */
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-medal,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-rank,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-score{background:#eef8ff!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label{color:#1979c8!important;font-weight:900!important;}
+
+/* current group - pale pink */
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-label,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-medal,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-rank,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-score{background:#fff0f7!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-label{color:#e94b8a!important;font-weight:900!important;}
+
+/* positions */
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label{left:80px;width:44px!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-medal{left:124px;width:38px!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-rank{left:162px;width:44px!important;}
@@ -1568,4 +1580,4 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-chil
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-rank{left:348px;width:44px!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-score{left:392px;width:60px!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{left:452px;width:44px!important;}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{left:496px;width:64px!important;border-right:1px solid var(--line)!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{left:496px;width:64px!important;border-right:1px solid var(--line)!important;background:#fff!important;}
