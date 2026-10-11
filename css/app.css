@@ -1403,3 +1403,19 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 .sync-failure-values{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}.sync-failure-values span{padding:3px 8px;border-radius:8px;background:var(--surface,#fff);font-size:.78rem;font-weight:800;font-variant-numeric:tabular-nums;}
 .sync-failure-item details{margin-top:8px;font-size:.78rem;color:var(--muted);}.sync-failure-item summary{cursor:pointer;font-weight:800;}.sync-failure-item code{display:block;margin-top:6px;padding:8px;border-radius:8px;background:rgba(80,94,125,.09);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.72rem;}
 @media(max-width:560px){.sync-failure-dialog{width:calc(100vw - 14px)}.sync-failure-modal{max-height:86vh;padding:18px 14px;border-radius:20px}.sync-failure-meta{grid-template-columns:70px minmax(0,1fr)}}
+
+
+/* v3.3.2: reorganized menu sections and spacing. */
+#menuDialog .menu-scroll-body{display:flex;flex-direction:column;gap:9px;}
+#menuDialog .menu-section-title{margin:14px 2px 1px;padding-top:0;}
+#menuDialog .menu-scroll-body>.menu-section-title:first-child{margin-top:0;}
+#menuDialog .setting-row{margin:0;box-sizing:border-box;}
+#menuDialog .menu-info-row{cursor:default;}
+#menuDialog .menu-info-row:hover{background:var(--surface);}
+.display-settings-dialog{width:min(620px,calc(100vw - 24px));}
+.display-settings-dialog .display-settings-content{display:grid;gap:10px;padding:14px;}
+.display-settings-dialog .setting-row{margin:0;padding:12px 14px;box-sizing:border-box;}
+.display-settings-dialog .setting-row>span>strong{display:block;font-size:1rem;font-weight:900;line-height:1.25;}
+.display-settings-dialog .setting-row>span>small{display:block;margin-top:3px;color:var(--muted);font-size:.78rem;font-weight:400;line-height:1.45;}
+.display-settings-dialog .setting-row select{max-width:min(280px,48vw);}
+@media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
