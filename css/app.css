@@ -1715,3 +1715,24 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
   border-left:1px solid var(--line)!important;
 }
+
+
+/* v3.3.32: strengthen outer card outlines so they do not blend into the page background. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312{
+  border:2px solid #c3cde6!important;
+  box-shadow:0 4px 14px rgba(31,53,112,.08)!important;
+}
+#userList .user-row-v3095{
+  border:2px solid #c3cde6!important;
+  box-shadow:0 4px 14px rgba(31,53,112,.07)!important;
+}
+@media(hover:hover){
+  #userList .user-row-v3095:hover{
+    box-shadow:0 7px 22px rgba(31,53,112,.12)!important;
+  }
+}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312,
+html[data-theme="dark"] #userList .user-row-v3095{
+  border-color:#58688d!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.28)!important;
+}
