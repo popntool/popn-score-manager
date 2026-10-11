@@ -1421,25 +1421,262 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 .display-settings-dialog .setting-row select{max-width:min(280px,48vw);}
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
-/* v3.3.9: admin-only score-card layout preview. */
-body.admin-score-card-preview #scoreList{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;min-width:0;overflow:hidden}
-body.admin-score-card-preview #scoreList .score-card-v300.score-card-v312{display:grid!important;grid-template-columns:240px 54px minmax(180px,1fr) 220px 72px 64px!important;grid-template-rows:34px 42px!important;width:var(--admin-score-card-width,860px)!important;min-width:var(--admin-score-card-width,860px)!important;max-width:none!important;min-height:76px!important;height:76px!important;margin:0!important;overflow:hidden!important;zoom:var(--admin-score-card-scale,1);border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:0 3px 12px rgba(31,53,112,.05)}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-card-upper,body.admin-score-card-preview #scoreList .score-card-v312 .score-card-lower{display:contents!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .song-banner{grid-column:1!important;grid-row:1/3!important;display:block!important;width:240px!important;height:76px!important;min-width:240px!important;min-height:76px!important;max-width:240px!important;max-height:76px!important;object-fit:contain!important;border:0!important;border-right:1px solid var(--line)!important;border-radius:0!important;background:var(--surface-2)!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .banner-empty{grid-column:1!important;grid-row:1/3!important;width:240px!important;height:76px!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-chart{grid-column:2!important;grid-row:1!important;align-self:center!important;justify-self:center!important;width:44px!important;height:24px!important;margin:0!important;border:0!important;border-radius:7px!important;font-size:.72rem!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-level{grid-column:2!important;grid-row:2!important;display:grid!important;place-items:center!important;font-size:.88rem!important;font-weight:850!important;border:0!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-genre{grid-column:3!important;grid-row:1!important;display:flex!important;align-items:end!important;padding:0 10px 3px!important;border:0!important;color:var(--muted)!important;font-size:.69rem!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-title{grid-column:3!important;grid-row:2!important;display:flex!important;align-items:start!important;padding:3px 10px 0!important;border:0!important;color:var(--text)!important;font-size:.9rem!important;font-weight:850!important;line-height:1.15!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-records{grid-column:4!important;grid-row:1/3!important;display:grid!important;grid-template-rows:repeat(2,38px)!important;width:220px!important;height:76px!important;min-height:76px!important;border-left:1px solid var(--line)!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record{display:grid!important;grid-template-columns:36px 38px 42px minmax(0,1fr)!important;width:220px!important;min-width:0!important;min-height:38px!important;height:38px!important;align-items:center!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record+.score-record{border-top:1px solid var(--line)!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record>*{display:grid!important;place-items:center!important;align-self:stretch!important;min-width:0!important;padding:1px!important;border-right:1px solid var(--line)!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record>*:last-child{border-right:0!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record-label{font-size:.62rem!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record-medal img,body.admin-score-card-preview #scoreList .score-card-v312 .score-record-medal .cool-perfect-medal{width:27px!important;height:27px!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record-rank img{width:33px!important;height:27px!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score{font-size:.72rem!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{grid-column:5!important;grid-row:1!important;display:grid!important;place-items:end center!important;padding-bottom:3px!important;border:0!important;border-left:1px solid var(--line)!important;color:var(--muted)!important;font-size:.68rem!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{grid-column:5!important;grid-row:2!important;display:grid!important;place-items:start center!important;padding-top:3px!important;border:0!important;border-left:1px solid var(--line)!important;background:var(--surface)!important;font-size:.88rem!important;font-weight:850!important}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-edit{grid-column:6!important;grid-row:1/3!important;display:grid!important;place-items:center!important;align-self:stretch!important;justify-self:stretch!important;width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-left:1px solid var(--line)!important;border-radius:0!important;background:var(--surface-2)!important;color:var(--text)!important;font-size:.75rem!important;font-weight:800!important}
+
+/* v3.3.10: admin-only score-card layout preview.
+   Reference layout:
+   row 1-2 = banner | chart/level | genre/title | edit
+   row 3   = history medal rank score | current medal rank score | PSR value
+   The complete card is scaled to the available screen width. */
+body.admin-score-card-preview #scoreList{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  min-width:0;
+  overflow:hidden;
+}
+
+body.admin-score-card-preview #scoreList .score-card-v300.score-card-v312{
+  display:grid!important;
+  grid-template-columns:62px 42px 50px 70px 62px 42px 50px 70px 48px 64px 50px!important;
+  grid-template-rows:34px 34px 36px!important;
+  width:var(--admin-score-card-width,640px)!important;
+  min-width:var(--admin-score-card-width,640px)!important;
+  max-width:none!important;
+  height:104px!important;
+  min-height:104px!important;
+  max-height:104px!important;
+  margin:0!important;
+  overflow:hidden!important;
+  zoom:var(--admin-score-card-scale,1);
+  border:1px solid var(--line)!important;
+  border-radius:14px!important;
+  background:var(--surface)!important;
+  box-shadow:0 3px 12px rgba(31,53,112,.06)!important;
+}
+
+/* Flatten the existing upper/lower wrappers so every cell can be placed on one card grid. */
+body.admin-score-card-preview #scoreList .score-card-v312 .score-card-upper,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-card-lower,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-records,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record{
+  display:contents!important;
+}
+
+/* Top: banner */
+body.admin-score-card-preview #scoreList .score-card-v312 .song-banner{
+  grid-column:1/4!important;
+  grid-row:1/3!important;
+  display:block!important;
+  width:154px!important;
+  height:68px!important;
+  min-width:154px!important;
+  min-height:68px!important;
+  max-width:154px!important;
+  max-height:68px!important;
+  object-fit:contain!important;
+  border:0!important;
+  border-right:1px solid var(--line)!important;
+  border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;
+  background:var(--surface-2)!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .banner-empty{
+  grid-column:1/4!important;
+  grid-row:1/3!important;
+  width:154px!important;
+  height:68px!important;
+  border-right:1px solid var(--line)!important;
+  border-bottom:1px solid var(--line)!important;
+}
+
+/* Top: EX / level */
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart{
+  grid-column:4!important;
+  grid-row:1!important;
+  align-self:stretch!important;
+  justify-self:stretch!important;
+  display:grid!important;
+  place-items:center!important;
+  width:auto!important;
+  height:auto!important;
+  margin:0!important;
+  border:0!important;
+  border-right:1px solid var(--line)!important;
+  border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;
+  font-size:.72rem!important;
+  font-weight:900!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.ex{background:#ed476a!important;color:#fff!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.hyper{background:#efce3e!important;color:#302500!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.normal{background:#42a758!important;color:#fff!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.light{background:#448bd5!important;color:#fff!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-level{
+  grid-column:4!important;
+  grid-row:2!important;
+  display:grid!important;
+  place-items:center!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-right:1px solid var(--line)!important;
+  border-bottom:1px solid var(--line)!important;
+  background:var(--surface)!important;
+  font-size:.9rem!important;
+  font-weight:850!important;
+}
+
+/* Top: genre / title */
+body.admin-score-card-preview #scoreList .score-card-v312 .card-genre{
+  grid-column:5/11!important;
+  grid-row:1!important;
+  display:flex!important;
+  align-items:center!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0 10px!important;
+  border:0!important;
+  border-right:1px solid var(--line)!important;
+  border-bottom:1px solid var(--line)!important;
+  color:var(--muted)!important;
+  font-size:.7rem!important;
+  line-height:1.15!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
+  grid-column:5/11!important;
+  grid-row:2!important;
+  display:flex!important;
+  align-items:center!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:0 10px!important;
+  border:0!important;
+  border-right:1px solid var(--line)!important;
+  border-bottom:1px solid var(--line)!important;
+  color:var(--text)!important;
+  font-size:.88rem!important;
+  font-weight:850!important;
+  line-height:1.15!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+/* Top: edit button spanning two rows */
+body.admin-score-card-preview #scoreList .score-card-v312 .score-edit{
+  grid-column:11!important;
+  grid-row:1/3!important;
+  display:grid!important;
+  place-items:center!important;
+  align-self:stretch!important;
+  justify-self:stretch!important;
+  width:auto!important;
+  height:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;
+  background:var(--surface-2)!important;
+  color:var(--text)!important;
+  font-size:.74rem!important;
+  font-weight:850!important;
+}
+
+/* Bottom row: history cells */
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label{
+  grid-column:1!important;grid-row:3!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-medal{
+  grid-column:2!important;grid-row:3!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-rank{
+  grid-column:3!important;grid-row:3!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-score{
+  grid-column:4!important;grid-row:3!important;
+}
+
+/* Bottom row: current cells */
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-label{
+  grid-column:5!important;grid-row:3!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-medal{
+  grid-column:6!important;grid-row:3!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-rank{
+  grid-column:7!important;grid-row:3!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-score{
+  grid-column:8!important;grid-row:3!important;
+}
+
+/* Bottom row: PSR */
+body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{
+  grid-column:9!important;
+  grid-row:3!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{
+  grid-column:10/12!important;
+  grid-row:3!important;
+}
+
+/* Shared bottom-cell styling */
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-label,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-medal,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-rank,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{
+  display:grid!important;
+  place-items:center!important;
+  align-self:stretch!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:1px!important;
+  border:0!important;
+  border-right:1px solid var(--line)!important;
+  background:var(--surface)!important;
+  font-variant-numeric:tabular-nums!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{border-right:0!important}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-label,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{
+  font-size:.65rem!important;
+  font-weight:850!important;
+  color:var(--text)!important;
+  white-space:nowrap!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score{
+  font-size:.72rem!important;
+  font-weight:750!important;
+  white-space:nowrap!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{
+  font-size:.8rem!important;
+  font-weight:850!important;
+  color:var(--text)!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-medal img,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-medal .cool-perfect-medal{
+  width:27px!important;
+  height:27px!important;
+  object-fit:contain!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-rank img{
+  width:34px!important;
+  height:27px!important;
+  object-fit:contain!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .unplayed-mark{
+  font-size:.75rem!important;
+}
+
