@@ -1422,7 +1422,7 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
 
-/* v3.3.28: admin-only score-card preview.
+/* v3.3.29: admin-only score-card preview.
    No CSS zoom: card geometry is width-based so Safari/Chrome render the same proportions.
    The same card layout is used in the score list and PSR target lists. */
 body.admin-score-card-preview #scoreList,
@@ -1583,6 +1583,7 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   border-right:1px solid var(--line)!important;
   border-bottom:0!important;
   border-left:0!important;
+  border-radius:0!important;
   background:var(--surface)!important;
   font-family:inherit!important;
   font-variant-numeric:tabular-nums lining-nums!important;
@@ -1675,7 +1676,7 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
 }
 body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-score,
 body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
-  font-size:clamp(8px,1.84cqw,14px)!important;
+  font-size:clamp(10px,calc(1.84cqw + 2px),16px)!important;
   font-weight:800!important;
   white-space:nowrap!important;
   color:var(--text)!important;
@@ -1700,17 +1701,18 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   font-size:clamp(8px,1.84cqw,14px)!important;
 }
 
-/* exact lower-row horizontal proportions from the 608px reference */
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label{left:13.157895%!important;width:7.236842%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-medal{left:20.394737%!important;width:6.25%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-rank{left:26.644737%!important;width:7.236842%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-score{left:33.881579%!important;width:11.842105%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label{left:45.723684%!important;width:7.236842%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-medal{left:52.960526%!important;width:6.25%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-rank{left:59.210526%!important;width:7.236842%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-score{left:66.447368%!important;width:11.842105%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label{left:78.289474%!important;width:7.236842%!important;background:var(--surface)!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{left:85.526316%!important;width:14.473684%!important;border-right:0!important;background:var(--surface)!important}
+/* exact lower-row horizontal proportions from the 608px reference.
+   History score, current score, and PSR value are all 76px at the reference width. */
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label{left:13.157895%!important;width:7.894737%!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-medal{left:21.052632%!important;width:6.25%!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-rank{left:27.302632%!important;width:7.236842%!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-score{left:34.539474%!important;width:12.5%!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label{left:47.039474%!important;width:7.894737%!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-medal{left:54.934211%!important;width:6.25%!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-rank{left:61.184211%!important;width:7.236842%!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-score{left:68.421053%!important;width:12.5%!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label{left:80.921053%!important;width:6.578947%!important;background:var(--surface)!important}
+body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{left:87.5%!important;width:12.5%!important;border-right:0!important;background:var(--surface)!important}
 
 /* theme variables */
 html[data-theme="light"]{
