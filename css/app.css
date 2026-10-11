@@ -1422,7 +1422,7 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
 
-/* v3.3.21: admin-only score-card layout preview.
+/* v3.3.22: admin-only score-card layout preview.
    Match the latest wireframe with:
    - top area: banner / genre / title / edit
    - bottom area: EX / level / history / current / PSR
@@ -1502,17 +1502,19 @@ body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
 body.admin-score-card-preview #scoreList .score-card-v312 .card-genre{
   top:0;
   height:30px!important;
+  border-bottom:1px solid var(--line)!important;
   color:var(--muted)!important;
-  font-size:.67rem!important;
-  line-height:1.1!important;
+  font-size:.65rem!important;
+  line-height:1.05!important;
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
   top:30px;
   height:30px!important;
+  border-bottom:0!important;
   color:var(--text)!important;
-  font-size:.84rem!important;
+  font-size:.82rem!important;
   font-weight:850!important;
-  line-height:1.1!important;
+  line-height:1.05!important;
 }
 
 /* edit button only on the top block */
@@ -1624,13 +1626,13 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-chil
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-medal,
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-rank,
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-score{
-  background:#eef8ff!important;
+  background:var(--admin-history-bg,#eef8ff)!important;
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-label,
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-medal,
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-rank,
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-score{
-  background:#fff0f7!important;
+  background:var(--admin-current-bg,#fff0f7)!important;
 }
 
 /* rounded label pills */
@@ -1642,10 +1644,10 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record-label::b
   width:34px;height:22px;border-radius:999px;
   z-index:-1;
 }
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label{color:#1979c8!important;font-weight:900!important;}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label::before{background:#d8efff!important;}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-label{color:#e94b8a!important;font-weight:900!important;}
-body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-label::before{background:#ffd9ea!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label{color:var(--admin-history-label,#1979c8)!important;font-weight:900!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label::before{background:var(--admin-history-pill,#d8efff)!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-label{color:var(--admin-current-label,#e94b8a)!important;font-weight:900!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-label::before{background:var(--admin-current-pill,#ffd9ea)!important;}
 
 /* positions: EX 40 + LV 40 + history 198 + current 198 + PSR 132 = 608 */
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(1) .score-record-label{left:80px;width:44px!important;}
@@ -1656,6 +1658,116 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-chil
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-medal{left:322px;width:38px!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-rank{left:360px;width:44px!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-child(2) .score-record-score{left:404px;width:72px!important;}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{left:476px;width:44px!important;background:#fff!important;}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{left:520px;width:88px!important;border-right:0!important;background:#fff!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{left:476px;width:44px!important;background:var(--surface)!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{left:520px;width:88px!important;border-right:0!important;background:var(--surface)!important;}
 
+
+
+/* v3.3.22: display-settings dialog layout + dark-mode-safe admin preview. */
+html[data-theme="light"]{
+  --admin-history-bg:#eef8ff;
+  --admin-history-pill:#d8efff;
+  --admin-history-label:#1979c8;
+  --admin-current-bg:#fff0f7;
+  --admin-current-pill:#ffd9ea;
+  --admin-current-label:#e94b8a;
+}
+html[data-theme="dark"]{
+  --admin-history-bg:#203652;
+  --admin-history-pill:#284d70;
+  --admin-history-label:#8fd0ff;
+  --admin-current-bg:#472b45;
+  --admin-current-pill:#63364f;
+  --admin-current-label:#ff9ec5;
+}
+
+/* Keep the genre/title divider visible without doubling the lower divider. */
+body.admin-score-card-preview #scoreList .score-card-v312 .card-genre{
+  border-bottom:1px solid var(--line)!important;
+}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
+  border-bottom:0!important;
+}
+
+/* Dark-mode overrides for the preview's decorative controls. */
+html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312 .score-edit{
+  background:var(--surface-2)!important;
+  color:var(--text)!important;
+}
+html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312 .score-edit::before{
+  background:#31415f!important;
+  color:#dce8ff!important;
+}
+html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312 .card-level::before{
+  background:#3d3142!important;
+}
+html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312 .card-level{
+  color:#f4e9f0!important;
+}
+
+/* Display settings is a normal child menu dialog; give its header the same structure as other menu children. */
+#displaySettingsDialog{
+  box-sizing:border-box;
+  width:min(620px,calc(100vw - 24px));
+  max-height:calc(100dvh - 24px);
+  padding:0;
+  overflow:hidden;
+  background:var(--surface);
+  color:var(--text);
+}
+#displaySettingsDialog>.account-dialog-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  position:static;
+  margin:0;
+  padding:16px 18px 12px;
+  border-bottom:1px solid var(--line);
+  background:var(--surface);
+}
+#displaySettingsDialog>.account-dialog-header>h2{
+  flex:1;
+  min-width:0;
+  margin:0;
+  padding:0;
+  color:var(--text);
+  font-size:1.2rem;
+  font-weight:800;
+  line-height:1.4;
+  letter-spacing:-.025em;
+}
+#displaySettingsDialog>.account-dialog-header>.dialog-back{
+  position:static;
+  flex:none;
+  width:auto;
+  margin:0;
+  align-self:center;
+}
+#displaySettingsDialog .display-settings-content{
+  box-sizing:border-box;
+  display:grid;
+  gap:10px;
+  padding:14px 18px 18px;
+  overflow-y:auto;
+}
+#displaySettingsDialog .setting-row{
+  width:100%;
+  min-width:0;
+  margin:0;
+  box-sizing:border-box;
+}
+#displaySettingsDialog .setting-row>span{
+  min-width:0;
+}
+#displaySettingsDialog .setting-row select{
+  min-width:0;
+  max-width:min(300px,48vw);
+}
+@media(max-width:760px){
+  #displaySettingsDialog{width:min(620px,calc(100vw - 14px));max-height:calc(100dvh - 14px)}
+  #displaySettingsDialog>.account-dialog-header{padding:13px 12px 10px}
+  #displaySettingsDialog .display-settings-content{padding:10px 12px 14px}
+  #displaySettingsDialog .setting-row{padding:11px 12px}
+  #displaySettingsDialog .setting-row select{max-width:46vw}
+}
