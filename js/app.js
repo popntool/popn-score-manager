@@ -8,7 +8,7 @@ import{loadUsers,invalidateUserCache}from"./users.js?v=3.2.49";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.2.49";
 import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.2.57";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.2.49";
-import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.2.49";
+import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.3.1";
 import{loadWikiDifficulty,syncWikiDifficultyRange}from"./wiki-sync.js?v=3.2.49";
 import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.2.57";
 import{listPsrSnapshots,savePsrSnapshot,deletePsrSnapshot,comparePsrSnapshot}from"./psr-history.js?v=3.2.49";
@@ -55,7 +55,7 @@ function populateAverageLevelOptions(){
   }
 }
 function populateLevels(){const selects=[$("#levelFilter"),$("#defaultLevelFilter"),$("#adminLevelFilter")];for(let level=50;level>=1;level--){for(const select of selects){const option=document.createElement("option");option.value=String(level);option.textContent=`Lv.${level}`;select.append(option);}}const saved=localStorage.getItem("popn-default-level")||"ALL";for(const select of selects.slice(0,2))select.value=[...select.options].some(x=>x.value===saved)?saved:"ALL";}
-async function populateAdminMasterFilters(){const select=$("#adminVersionFilter"),current=select.value,versions=await loadVersions();select.innerHTML='<option value="ALL">全バージョン</option>'+versions.map(x=>`<option value="${attr(x.id)}">${attr(x.name)}</option>`).join("");select.value=[...select.options].some(x=>x.value===current)?current:"ALL";}
+async function populateAdminMasterFilters(){const select=$("#adminVersionFilter"),current=select.value,versions=await loadVersions();select.innerHTML='<option value="ALL">全バージョン</option><option value="UNSET">未設定</option>'+versions.map(x=>`<option value="${attr(x.id)}">${attr(x.name)}</option>`).join("");select.value=[...select.options].some(x=>x.value===current)?current:"ALL";}
 function syncNotice(){let box=document.querySelector("#syncSaveNotice");if(box)return box;box=document.createElement("div");box.id="syncSaveNotice";Object.assign(box.style,{position:"fixed",left:"12px",right:"12px",bottom:"12px",zIndex:"2147483647",maxWidth:"520px",margin:"0 auto",padding:"12px 14px",border:"2px solid var(--line,#334b93)",borderRadius:"12px",background:"var(--page,#fff)",color:"var(--text,#17244d)",boxShadow:"0 4px 18px #0004",fontSize:"14px"});box.innerHTML='<strong>スコアを保存中</strong><div data-sync-save-status>準備中…</div><progress data-sync-save-progress value="0" max="1" style="width:100%;margin-top:6px"></progress>';document.body.appendChild(box);return box;}
 function storedSyncRow(row){return row&&!String(row.id||"").startsWith("catalog:")&&String(row.source||"")!=="catalog";}
 function syncRowKey(row){return `${row.song_id||row.id}|${String(row.chart||"").toUpperCase()}`;}
@@ -165,7 +165,7 @@ async function loadGuideDialog(){
   if($("#guideDialog"))return $("#guideDialog");
   if(!guideLoadPromise){
     guideLoadPromise=(async()=>{
-      const response=await fetch("./partials/guide.html?v=3.3.0");
+      const response=await fetch("./partials/guide.html?v=3.3.1");
       if(!response.ok)throw new Error(`HTTP ${response.status}`);
       const template=document.createElement("template");
       template.innerHTML=await response.text();
