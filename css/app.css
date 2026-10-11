@@ -1422,7 +1422,7 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
 
-/* v3.3.22: admin-only score-card layout preview.
+/* v3.3.23: admin-only score-card layout preview.
    Match the latest wireframe with:
    - top area: banner / genre / title / edit
    - bottom area: EX / level / history / current / PSR
@@ -1446,9 +1446,9 @@ body.admin-score-card-preview #scoreList .score-card-v300.score-card-v312{
   width:var(--admin-score-card-width,608px)!important;
   min-width:var(--admin-score-card-width,608px)!important;
   max-width:none!important;
-  height:98px!important;
-  min-height:98px!important;
-  max-height:98px!important;
+  height:92px!important;
+  min-height:92px!important;
+  max-height:92px!important;
   margin:0!important;
   overflow:hidden!important;
   zoom:var(--admin-score-card-scale,1);
@@ -1470,7 +1470,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .song-banner,
 body.admin-score-card-preview #scoreList .score-card-v312 .banner-empty{
   position:absolute!important;
   left:0; top:0;
-  width:200px!important; height:60px!important;
+  width:200px!important; height:54px!important;
   background:var(--surface-2)!important;
   border-right:1px solid var(--line)!important;
   z-index:2!important;
@@ -1501,27 +1501,29 @@ body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .card-genre{
   top:0;
-  height:30px!important;
+  height:26px!important;
   border-bottom:1px solid var(--line)!important;
   color:var(--muted)!important;
-  font-size:.65rem!important;
-  line-height:1.05!important;
+  font-size:.63rem!important;
+  line-height:1!important;
+  justify-content:flex-start!important;
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
-  top:30px;
-  height:30px!important;
+  top:26px;
+  height:28px!important;
   border-bottom:0!important;
   color:var(--text)!important;
-  font-size:.82rem!important;
+  font-size:.8rem!important;
   font-weight:850!important;
-  line-height:1.05!important;
+  line-height:1!important;
+  justify-content:flex-start!important;
 }
 
 /* edit button only on the top block */
 body.admin-score-card-preview #scoreList .score-card-v312 .score-edit{
   position:absolute!important;
   right:0; top:0;
-  width:48px!important; height:60px!important;
+  width:48px!important; height:54px!important;
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
@@ -1562,7 +1564,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score,
 body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label,
 body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{
   position:absolute!important;
-  top:60px;
+  top:54px;
   height:38px!important;
   display:grid!important;
   place-items:center!important;
@@ -1590,11 +1592,15 @@ body.admin-score-card-preview #scoreList .score-card-v312 .card-level{left:40px;
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart::before,
 body.admin-score-card-preview #scoreList .score-card-v312 .card-level::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:10px;z-index:-1;}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart::before{width:34px;height:22px;background:var(--badge-fill,#f05d86)!important;box-shadow:0 1px 0 rgba(0,0,0,.05)!important;}
-body.admin-score-card-preview #scoreList .score-card-v312 .card-level::before{width:34px;height:24px;background:#fbe7ee!important;box-shadow:0 1px 0 rgba(0,0,0,.03)!important;}
+body.admin-score-card-preview #scoreList .score-card-v312 .card-level::before{width:34px;height:24px;background:var(--admin-level-fill,#fbe7ee)!important;box-shadow:0 1px 0 rgba(0,0,0,.03)!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.ex{--badge-fill:#f05d86!important;color:#fff!important}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.hyper{--badge-fill:#f4c84f!important;color:#4a3500!important}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.normal{--badge-fill:#57b86a!important;color:#fff!important}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-chart.light{--badge-fill:#62a5e8!important;color:#fff!important}
+body.admin-score-card-preview #scoreList .score-card-v312:has(.card-chart.ex){--admin-level-fill:#fde6ed;}
+body.admin-score-card-preview #scoreList .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#fff5cf;}
+body.admin-score-card-preview #scoreList .score-card-v312:has(.card-chart.normal){--admin-level-fill:#e4f6e8;}
+body.admin-score-card-preview #scoreList .score-card-v312:has(.card-chart.light){--admin-level-fill:#e5f1fd;}
 
 /* shared text/icon sizes */
 body.admin-score-card-preview #scoreList .score-card-v312 .score-record-label,
@@ -1698,9 +1704,10 @@ html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v31
   background:#31415f!important;
   color:#dce8ff!important;
 }
-html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312 .card-level::before{
-  background:#3d3142!important;
-}
+html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312:has(.card-chart.ex){--admin-level-fill:#563440;}
+html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#51492c;}
+html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312:has(.card-chart.normal){--admin-level-fill:#294634;}
+html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312:has(.card-chart.light){--admin-level-fill:#29425d;}
 html[data-theme="dark"] body.admin-score-card-preview #scoreList .score-card-v312 .card-level{
   color:#f4e9f0!important;
 }
