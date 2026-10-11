@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v3.1.2
+/* pop'n music スコア同期 v3.1.3
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -6,7 +6,8 @@
   'use strict';
   const RETURN_URL='https://popntool.github.io/popn-score-manager/';
   const MOBILE_LIKE=/iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent||'')||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4);
-  const LIST_CONCURRENCY=MOBILE_LIKE?2:6,DETAIL_CONCURRENCY=MOBILE_LIKE?3:8,MAX_PAGE=200;
+  const LIST_CONCURRENCY=MOBILE_LIKE?2:6,MAX_PAGE=200;
+  const DETAIL_MIN=MOBILE_LIKE?3:6,DETAIL_INITIAL=MOBILE_LIKE?5:10,DETAIL_MAX=MOBILE_LIKE?8:12;
   const yieldUi=()=>new Promise(resolve=>{
     if(typeof requestIdleCallback==='function')requestIdleCallback(()=>resolve(),{timeout:80});
     else setTimeout(resolve,0);
@@ -38,7 +39,22 @@
   async function masterKey({genre,title,artist}){const source=[normalize(genre),normalize(title),normalize(artist)].join('|');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(source));return [...new Uint8Array(bytes)].map(v=>v.toString(16).padStart(2,'0')).join('');}
   function code(img,prefix){const src=img?.getAttribute('src')||'';const file=src.split('/').pop()?.split('?')[0]||'';return file.replace(/\.[^.]+$/,'').replace(new RegExp(`^${prefix}(?:_big)?_`,'i'),'');}
   function number(text){const match=clean(text).replace(/,/g,'').match(/\d{1,6}/);return match?Number(match[0]):0;}
-  async function getDoc(url,label,retry=2){for(let attempt=0;;attempt++){const r=await fetch(url,{credentials:'include',cache:'no-store'});if(r.ok){const text=await r.text();if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');return new DOMParser().parseFromString(text,'text/html');}if(attempt>=retry||![429,500,502,503,504].includes(r.status))throw new Error(`${label}: HTTP ${r.status}`);await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));}}
+  async function getDoc(url,label,retry=2,hooks=null){
+    const started=performance.now();
+    for(let attempt=0;;attempt++){
+      const r=await fetch(url,{credentials:'include',cache:'no-store'});
+      if(r.ok){
+        const text=await r.text();
+        if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');
+        hooks?.success?.({elapsed:performance.now()-started,attempt,status:r.status});
+        return new DOMParser().parseFromString(text,'text/html');
+      }
+      const retryable=[429,500,502,503,504].includes(r.status);
+      if(attempt>=retry||!retryable)throw new Error(`${label}: HTTP ${r.status}`);
+      hooks?.retry?.({status:r.status,attempt});
+      await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));
+    }
+  }
 
   async function fetchPopnClass(){
     const doc=await getDoc(new URL(`${SOURCE_PATH}playdata/index.html`,location.origin),'ポップンクラス');
@@ -166,18 +182,56 @@
     }
   }
   function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}const current_clear_status=hasPlayCount&&counts.play===0?'unplayed':counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
-  async function mapLimit(items,limit,worker,onDone){
-    let cursor=0,done=0;
-    await Promise.all(Array.from({length:Math.min(limit,items.length)},async()=>{
-      while(!state.cancelled){
-        const index=cursor++;
-        if(index>=items.length)return;
-        await worker(items[index],index);
-        done++;
-        onDone?.(done,items.length);
-        if(done%2===0)await yieldUi();
+  async function adaptiveDetailMap(items,worker,onDone){
+    let cursor=0,active=0,done=0,limit=Math.min(DETAIL_INITIAL,Math.max(1,items.length));
+    let ewma=0,cleanSuccesses=0,settled=false;
+    const clampLimit=value=>Math.max(Math.min(DETAIL_MIN,items.length||1),Math.min(DETAIL_MAX,items.length||1,value));
+    const hooks={
+      retry({status}){
+        if(status===429||status>=500){
+          limit=clampLimit(Math.max(DETAIL_MIN,Math.floor(limit/2)));
+          cleanSuccesses=0;
+        }
+      },
+      success({elapsed,attempt}){
+        ewma=ewma?ewma*.75+elapsed*.25:elapsed;
+        if(attempt===0&&elapsed<1800)cleanSuccesses++;else cleanSuccesses=0;
+        if(ewma>4200&&limit>DETAIL_MIN){
+          limit=clampLimit(limit-1);
+          cleanSuccesses=0;
+        }else if(cleanSuccesses>=8&&limit<DETAIL_MAX){
+          limit=clampLimit(limit+1);
+          cleanSuccesses=0;
+        }
       }
-    }));
+    };
+    return await new Promise((resolve,reject)=>{
+      const finish=()=>{if(!settled){settled=true;resolve();}};
+      const fail=error=>{if(!settled){settled=true;reject(error);}};
+      const pump=()=>{
+        if(settled)return;
+        if((state.cancelled||cursor>=items.length)&&active===0){finish();return;}
+        while(!state.cancelled&&active<limit&&cursor<items.length){
+          const index=cursor++,item=items[index];
+          active++;
+          (async()=>{
+            try{
+              await worker(item,index,hooks);
+              done++;
+              onDone?.(done,items.length,limit,ewma);
+              if(done%2===0)await yieldUi();
+            }catch(error){
+              fail(error);
+              return;
+            }finally{
+              active--;
+            }
+            pump();
+          })();
+        }
+      };
+      pump();
+    });
   }
   function toBase64(bytes){let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(binary);}
 
@@ -209,13 +263,13 @@
     progress.max=Math.max(1,detailGroups.length);progress.value=0;
     status.textContent=`プレー済み${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
     const details=new Map();
-    await mapLimit(detailGroups,DETAIL_CONCURRENCY,async group=>{
-      const values=parseDetail(await getDoc(group.url,'曲詳細'));
+    await adaptiveDetailMap(detailGroups,async(group,index,hooks)=>{
+      const values=parseDetail(await getDoc(group.url,'曲詳細',2,hooks));
       for(const row of group.rows){
         const value=values.get(row.chart);
         if(value)details.set(`${row.master_key}|${row.chart}`,value);
       }
-    },(count,total)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中`;});
+    },(count,total,parallel)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中（${parallel}並列）`;});
     if(state.cancelled)throw new Error('中止しました。');
     const rows=base.map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0,current_clear_status:detail.current_clear_status||'failed'};})
       .filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none'||Number(row.version_score)>0||row.current_clear_status!=='failed')
