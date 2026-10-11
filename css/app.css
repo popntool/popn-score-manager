@@ -1422,11 +1422,11 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
 
-/* v3.3.29: admin-only score-card preview.
+/* v3.3.30: shared score-card layout for all logged-in users.
    No CSS zoom: card geometry is width-based so Safari/Chrome render the same proportions.
    The same card layout is used in the score list and PSR target lists. */
-body.admin-score-card-preview #scoreList,
-body.admin-score-card-preview #popclassContent .score-list{
+body.score-card-responsive #scoreList,
+body.score-card-responsive #popclassContent .score-list{
   display:flex;
   flex-direction:column;
   gap:10px;
@@ -1435,7 +1435,7 @@ body.admin-score-card-preview #popclassContent .score-list{
   overflow:visible;
 }
 
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312{
   position:relative!important;
   display:block!important;
   box-sizing:border-box!important;
@@ -1460,16 +1460,16 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v300.
   container-type:inline-size;
 }
 
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-card-upper,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-card-lower,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-records,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-card-upper,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-card-lower,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-records,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record{
   display:contents!important;
 }
 
 /* upper area: 50/88 of card height */
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .song-banner,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .banner-empty{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .song-banner,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .banner-empty{
   position:absolute!important;
   left:0!important;
   top:0!important;
@@ -1487,14 +1487,14 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   background:var(--surface-2)!important;
   overflow:hidden!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .song-banner{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .song-banner{
   display:block!important;
   object-fit:contain!important;
   object-position:center center!important;
 }
 
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
   position:absolute!important;
   left:32.894737%!important;
   width:59.210526%!important;
@@ -1509,7 +1509,7 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   text-overflow:ellipsis!important;
   white-space:nowrap!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-genre{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre{
   top:0!important;
   height:28.409091%!important;
   border-bottom:1px solid var(--line)!important;
@@ -1517,7 +1517,7 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   font-size:clamp(8px,1.63cqw,13px)!important;
   line-height:1!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
   top:28.409091%!important;
   height:28.409091%!important;
   border-bottom:0!important;
@@ -1527,7 +1527,7 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   line-height:1!important;
 }
 
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
   position:absolute!important;
   right:0!important;
   top:0!important;
@@ -1542,14 +1542,14 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   margin:0!important;
   padding:0!important;
   border:0!important;
-  border-left:1px solid var(--line)!important;
+  border-left:0!important;
   background:var(--surface-2)!important;
   color:var(--text)!important;
   font-size:clamp(8px,1.53cqw,12px)!important;
   font-weight:850!important;
   line-height:1!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-edit::before{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit::before{
   content:"✎";
   display:grid!important;
   place-items:center!important;
@@ -1563,14 +1563,14 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
 }
 
 /* lower row */
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-chart,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-level,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-rank,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-score,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-rank,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-score,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
   position:absolute!important;
   top:56.818182%!important;
   height:43.181818%!important;
@@ -1594,7 +1594,7 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
 }
 
 /* EX + level */
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-chart{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart{
   left:0!important;
   width:6.578947%!important;
   font-size:clamp(8px,1.84cqw,14px)!important;
@@ -1602,7 +1602,7 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   color:#fff!important;
   isolation:isolate!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-level{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{
   left:6.578947%!important;
   width:6.578947%!important;
   font-size:clamp(9px,2.30cqw,17px)!important;
@@ -1610,8 +1610,8 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   color:#273b74!important;
   isolation:isolate!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
   content:"";
   position:absolute;
   left:50%;
@@ -1620,39 +1620,39 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   border-radius:999px;
   z-index:-1;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before{
   width:85%!important;
   height:60%!important;
   background:var(--badge-fill,#f05d86)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
   width:85%!important;
   height:66%!important;
   background:var(--admin-level-fill,#fbe7ee)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.ex{--badge-fill:#f05d86!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.hyper{--badge-fill:#f4c84f!important;color:#4a3500!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.normal{--badge-fill:#57b86a!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.light{--badge-fill:#62a5e8!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#fde6ed}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#fff5cf}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#e4f6e8}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#e5f1fd}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.ex{--badge-fill:#f05d86!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.hyper{--badge-fill:#f4c84f!important;color:#4a3500!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.normal{--badge-fill:#57b86a!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.light{--badge-fill:#62a5e8!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#fde6ed}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#fff5cf}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#e4f6e8}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#e5f1fd}
 
 /* history/current visual groups */
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1)>*{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1)>*{
   background:var(--admin-history-bg,#eef8ff)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2)>*{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2)>*{
   background:var(--admin-current-bg,#fff0f7)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label{
   font-size:clamp(7px,1.58cqw,12px)!important;
   font-weight:900!important;
   white-space:nowrap!important;
   isolation:isolate!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label::before{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label::before{
   content:"";
   position:absolute;
   left:50%; top:50%;
@@ -1662,57 +1662,57 @@ body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 
   border-radius:999px;
   z-index:-1;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label{
   color:var(--admin-history-label,#1979c8)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label::before{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label::before{
   background:var(--admin-history-pill,#d8efff)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label{
   color:var(--admin-current-label,#e94b8a)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label::before{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label::before{
   background:var(--admin-current-pill,#ffd9ea)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-score,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-score,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
   font-size:clamp(10px,calc(1.84cqw + 2px),16px)!important;
   font-weight:800!important;
   white-space:nowrap!important;
   color:var(--text)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label{
   font-size:clamp(7px,1.58cqw,12px)!important;
   font-weight:850!important;
   color:var(--text)!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal img,
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal .cool-perfect-medal{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal img,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal .cool-perfect-medal{
   width:clamp(18px,4.44cqw,30px)!important;
   height:clamp(18px,4.44cqw,30px)!important;
   object-fit:contain!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record-rank img{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-rank img{
   width:clamp(22px,5.60cqw,38px)!important;
   height:clamp(18px,4.44cqw,30px)!important;
   object-fit:contain!important;
 }
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .unplayed-mark{
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .unplayed-mark{
   font-size:clamp(8px,1.84cqw,14px)!important;
 }
 
 /* exact lower-row horizontal proportions from the 608px reference.
    History score, current score, and PSR value are all 76px at the reference width. */
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label{left:13.157895%!important;width:7.894737%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-medal{left:21.052632%!important;width:6.25%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-rank{left:27.302632%!important;width:7.236842%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-score{left:34.539474%!important;width:12.5%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label{left:47.039474%!important;width:7.894737%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-medal{left:54.934211%!important;width:6.25%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-rank{left:61.184211%!important;width:7.236842%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-score{left:68.421053%!important;width:12.5%!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label{left:80.921053%!important;width:6.578947%!important;background:var(--surface)!important}
-body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{left:87.5%!important;width:12.5%!important;border-right:0!important;background:var(--surface)!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label{left:13.157895%!important;width:7.894737%!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-medal{left:21.052632%!important;width:6.25%!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-rank{left:27.302632%!important;width:7.236842%!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-score{left:34.539474%!important;width:12.5%!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label{left:47.039474%!important;width:7.894737%!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-medal{left:54.934211%!important;width:6.25%!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-rank{left:61.184211%!important;width:7.236842%!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-score{left:68.421053%!important;width:12.5%!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label{left:80.921053%!important;width:6.578947%!important;background:var(--surface)!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{left:87.5%!important;width:12.5%!important;border-right:0!important;background:var(--surface)!important}
 
 /* theme variables */
 html[data-theme="light"]{
@@ -1731,19 +1731,19 @@ html[data-theme="dark"]{
   --admin-current-pill:#63364f;
   --admin-current-label:#ff9ec5;
 }
-html[data-theme="dark"] body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
   background:var(--surface-2)!important;
   color:var(--text)!important;
 }
-html[data-theme="dark"] body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .score-edit::before{
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit::before{
   background:#31415f!important;
   color:#dce8ff!important;
 }
-html[data-theme="dark"] body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#563440}
-html[data-theme="dark"] body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#51492c}
-html[data-theme="dark"] body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#294634}
-html[data-theme="dark"] body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#29425d}
-html[data-theme="dark"] body.admin-score-card-preview :is(#scoreList,#popclassContent) .score-card-v312 .card-level{color:#f4e9f0!important}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#563440}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#51492c}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#294634}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#29425d}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{color:#f4e9f0!important}
 
 /* iPhone Safari: disable text inflation at the document level as well. */
 html,body{
