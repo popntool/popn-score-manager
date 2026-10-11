@@ -1422,7 +1422,7 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
 
-/* v3.3.23: admin-only score-card layout preview.
+/* v3.3.24: admin-only score-card layout preview.
    Match the latest wireframe with:
    - top area: banner / genre / title / edit
    - bottom area: EX / level / history / current / PSR
@@ -1446,9 +1446,9 @@ body.admin-score-card-preview #scoreList .score-card-v300.score-card-v312{
   width:var(--admin-score-card-width,608px)!important;
   min-width:var(--admin-score-card-width,608px)!important;
   max-width:none!important;
-  height:92px!important;
-  min-height:92px!important;
-  max-height:92px!important;
+  height:88px!important;
+  min-height:88px!important;
+  max-height:88px!important;
   margin:0!important;
   overflow:hidden!important;
   zoom:var(--admin-score-card-scale,1);
@@ -1470,7 +1470,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .song-banner,
 body.admin-score-card-preview #scoreList .score-card-v312 .banner-empty{
   position:absolute!important;
   left:0; top:0;
-  width:200px!important; height:54px!important;
+  width:200px!important; height:50px!important;
   background:var(--surface-2)!important;
   border-right:1px solid var(--line)!important;
   z-index:2!important;
@@ -1501,29 +1501,31 @@ body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .card-genre{
   top:0;
-  height:26px!important;
+  height:24px!important;
   border-bottom:1px solid var(--line)!important;
   color:var(--muted)!important;
-  font-size:.63rem!important;
-  line-height:1!important;
+  font-size:.61rem!important;
+  line-height:1.1!important;
   justify-content:flex-start!important;
+  align-items:center!important;
 }
 body.admin-score-card-preview #scoreList .score-card-v312 .card-title{
-  top:26px;
-  height:28px!important;
+  top:24px;
+  height:26px!important;
   border-bottom:0!important;
   color:var(--text)!important;
-  font-size:.8rem!important;
+  font-size:.78rem!important;
   font-weight:850!important;
-  line-height:1!important;
+  line-height:1.1!important;
   justify-content:flex-start!important;
+  align-items:center!important;
 }
 
 /* edit button only on the top block */
 body.admin-score-card-preview #scoreList .score-card-v312 .score-edit{
   position:absolute!important;
   right:0; top:0;
-  width:48px!important; height:54px!important;
+  width:48px!important; height:50px!important;
   display:flex!important;
   flex-direction:column!important;
   align-items:center!important;
@@ -1564,7 +1566,7 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score,
 body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label,
 body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{
   position:absolute!important;
-  top:54px;
+  top:50px;
   height:38px!important;
   display:grid!important;
   place-items:center!important;
@@ -1667,6 +1669,20 @@ body.admin-score-card-preview #scoreList .score-card-v312 .score-record:nth-chil
 body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label{left:476px;width:44px!important;background:var(--surface)!important;}
 body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{left:520px;width:88px!important;border-right:0!important;background:var(--surface)!important;}
 
+
+body.admin-score-card-preview #scoreList .score-card-v312 .song-banner,
+body.admin-score-card-preview #scoreList .score-card-v312 .banner-empty,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-genre,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-title,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-edit,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-chart,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-level,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-label,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-medal,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-rank,
+body.admin-score-card-preview #scoreList .score-card-v312 .score-record-score,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-psr-label,
+body.admin-score-card-preview #scoreList .score-card-v312 .card-popclass{vertical-align:middle!important;}
 
 
 /* v3.3.22: display-settings dialog layout + dark-mode-safe admin preview. */
