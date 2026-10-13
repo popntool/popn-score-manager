@@ -1,12 +1,12 @@
-.filters{grid-template-columns:repeat(4,minmax(0,1fr))}
+
 .tabs{grid-template-columns:repeat(3,1fr)}
 .tabs.has-admin{grid-template-columns:repeat(4,1fr)}
-.filters .search{grid-column:1/-1}
+
 .search{height:38px;min-height:38px}
 .search input{height:100%;min-height:0;padding:0;border:0}
-.filters select,.filter-medal-button,.admin-master-filters select{width:100%;height:38px;min-height:38px}
-.filter-medal-button{padding-block:2px}
-.filters select,.admin-master-filters select,.default-level-row select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 8px) 50%;background-repeat:no-repeat;background-size:6px 6px;padding-right:25px}
+.admin-master-filters select{width:100%;height:38px;min-height:38px}
+
+.admin-master-filters select,.default-level-row select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 13px) 50%,calc(100% - 8px) 50%;background-repeat:no-repeat;background-size:6px 6px;padding-right:25px}
 .filter-medal-button b{width:8px;height:8px;margin:0 4px 4px 8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);flex:none}
 .filter-medal-button img{width:30px;height:30px;object-fit:contain}
 .default-level-row select{width:min(160px,42%);height:38px;min-height:38px;border:2px solid var(--line);border-radius:9px;background-color:var(--surface);color:var(--text);padding:5px 28px 5px 8px}
@@ -68,29 +68,14 @@
 .request-levels label{gap:5px;text-align:center;font-size:.76rem}
 .request-levels input{text-align:center;font-variant-numeric:tabular-nums}
 .request-levels .light{color:#1762b8}.request-levels .normal{color:#1b8b38}.request-levels .hyper{color:#8a7100}.request-levels .ex{color:#b50064}
-.score-entry-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-areas:"psr psr rank rank" "medal medal history history" "clear clear current current";align-items:stretch;gap:8px}
-.score-entry-grid>label{display:grid;grid-template-rows:1.35em 48px;align-content:start;gap:5px;min-width:0;margin:0;padding:0}
-.score-row-popclass{grid-area:psr}.score-row-rank{grid-area:rank}.score-row-medal{grid-area:medal}.score-row-history{grid-area:history}.score-row-current{grid-area:current}.score-row-clear{grid-area:clear}
-.score-entry-grid .history-score-input{border:0;border-radius:0;background:transparent}
-.score-entry-grid .history-score-input small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-.score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input,.score-entry-grid select,.score-entry-grid .manual-popclass{box-sizing:border-box;width:100%;height:48px;min-height:48px;margin:0}
-.score-entry-grid .medal-picker-button{padding:3px;justify-content:center;background:var(--surface-2)}
-.score-entry-grid .rank-text{display:grid;place-items:center!important;padding:0;text-align:center!important;line-height:1}
-.score-entry-grid input{padding:5px 6px;background:var(--surface-2);font-size:.95rem;letter-spacing:-.04em;text-align:center}
-.score-entry-grid select{padding:5px 38px 5px 10px;background:var(--surface-2);font-size:.95rem}
-#manualDialog .auto-field>input:disabled{background:var(--page);color:var(--muted);opacity:1}
-#manualDialog .manual-popclass,#manualDialog .auto-field>.rank-text{background:var(--page)}
-#manualDialog .auto-field>.rank-text{box-shadow:none!important;font-size:1.24rem;font-weight:1000}
-#manualDialog #medalPickerButton img{display:block;width:36px;height:36px;min-width:36px;min-height:36px;max-width:36px;max-height:36px;object-fit:contain}
-#manualDialog #medalPickerButton.cool-perfect-active>img{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;max-width:36px!important;max-height:36px!important}
 
 
 
 @media(max-width:760px){
-  .filters{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
-  .filters .search{grid-column:1/-1}
-  .filters select,.filter-medal-button{height:38px;min-height:38px;padding-left:7px;padding-right:22px;font-size:.72rem}
-  .filter-medal-button{padding-right:8px}
+  
+  
+  
+  
   .list-sort-controls{grid-template-columns:minmax(0,1.35fr) minmax(0,.8fr);gap:5px;margin-bottom:7px}
   .list-sort-controls label{grid-template-columns:1fr;gap:2px;font-size:.58rem}
   .list-sort-controls select{height:38px;min-height:38px;font-size:.72rem}
@@ -114,10 +99,10 @@
   .master-song-card>[data-edit-song]{min-height:31px;padding:3px 7px;font-size:.7rem}
   .feedback-admin-card{flex-direction:column}
   .request-levels{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .score-entry-grid{gap:6px}
-  .score-entry-grid>label{grid-template-rows:1.25em 46px;gap:4px}
-  .score-entry-grid .medal-picker-button,.score-entry-grid .rank-text,.score-entry-grid input,.score-entry-grid select,.score-entry-grid .manual-popclass{height:46px;min-height:46px}
-  #manualDialog #medalPickerButton img,#manualDialog #medalPickerButton.cool-perfect-active>img{width:34px!important;height:34px!important;min-width:34px!important;min-height:34px!important;max-width:34px!important;max-height:34px!important}
+  
+  
+  
+  
   .score-overview{grid-template-columns:minmax(0,1fr) 76px;gap:5px}
   .medal-summary{grid-template-columns:repeat(7,1fr)}
   .medal-stat:nth-child(7){border-right:1px solid var(--surface-2)}
@@ -126,11 +111,7 @@
   .clear-rate-summary small{font-size:.5rem}
   .clear-rate-summary strong{font-size:.66rem}
 }
-@media(max-width:380px){
-  
-  .score-entry-grid{gap:5px}
-  .score-entry-grid label{font-size:.7rem}
-}
+
 
 body.auth-pending>.topbar,body.auth-pending>.page-shell,body.auth-pending>footer,body.auth-pending>.auth-gate{display:none}
 body.auth-guest>.topbar,body.auth-guest>.page-shell,body.auth-guest>footer{display:none}
@@ -183,7 +164,7 @@ body.auth-user>.auth-gate{display:none}
 [data-theme="dark"] #myPageDialog>form>h2,[data-theme="dark"] #myPageDialog .mypage-section h3{color:var(--text)}
 @media(max-width:760px){#myPageDialog>form>h2{font-size:1.1rem}#myPageDialog .mypage-section h3{font-size:.94rem}#myPageDialog .mypage-section label:not(.check-row){font-size:.74rem}#myPageDialog .mypage-section label:not(.check-row) input{font-size:.92rem}}
 
-#scoresPanel.is-score-loading .filters,#scoresPanel.is-score-loading .list-sort-controls,#scoresPanel.is-score-loading #scoreList{display:none}
+#scoresPanel.is-score-loading .list-sort-controls,#scoresPanel.is-score-loading #scoreList{display:none}
 .score-loading{min-height:210px;place-items:center;align-content:center;gap:8px;text-align:center;color:var(--text)}
 .score-loading:not([hidden]){display:grid}
 .score-loading strong{font-size:1rem}
@@ -350,18 +331,9 @@ body.auth-user>.auth-gate{display:none}
 /* Rank artwork: the approved 12 separate transparent PNGs. */
 
 
-#manualDialog .score-entry-grid .rank-badge{
-  display:grid;place-items:center;width:100%;height:48px;min-height:48px;
-  padding:3px;margin:0;background:var(--page);border-radius:10px;
-}
-#manualDialog .score-entry-grid .rank-badge img{
-  display:block;max-width:100%;max-height:100%;width:auto;height:40px;object-fit:contain;
-}
-@media(max-width:760px){
-  
-  #manualDialog .score-entry-grid .rank-badge{height:46px;min-height:46px;}
-  #manualDialog .score-entry-grid .rank-badge img{height:38px;}
-}
+
+
+
 
 /* iPhone Safari: form controls below 16px trigger focus zoom and can leave the page enlarged.
    Keep all editable controls in the score editor, My Page and feedback dialogs at 16px or above. */
@@ -505,7 +477,7 @@ html[data-theme="dark"] .main-button{background:#405fb0;color:#fff}
 .sub-button,.icon-button,.dialog-back{border:1px solid var(--line);background:var(--surface);border-radius:11px}
 .icon-button{border-radius:12px}
 .dialog-close{border:1px solid var(--line);background:var(--surface);box-shadow:0 2px 8px rgba(31,53,112,.06)}
-.search,select,input,textarea,.filter-medal-button,.medal-picker-button{border:1px solid var(--line);border-radius:11px;background:var(--surface);box-shadow:none}
+.search,select,input,textarea,.medal-picker-button{border:1px solid var(--line);border-radius:11px;background:var(--surface);box-shadow:none}
 input:focus,select:focus,textarea:focus,.search:focus-within{border-color:var(--focus)}
 
 
@@ -730,8 +702,7 @@ button,input,select,textarea{letter-spacing:inherit}
 #manualDialog .medal-picker button:hover{background:var(--surface-2)}
 #manualDialog .medal-picker button:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
 #manualDialog #currentMedalPickerButton img{width:34px;height:34px;object-fit:contain}
-#manualDialog #currentMedalPickerButton[aria-expanded="true"],
-#manualDialog #medalPickerButton[aria-expanded="true"]{outline:2px solid var(--focus);outline-offset:1px}
+#manualDialog #currentMedalPickerButton[aria-expanded="true"]{outline:2px solid var(--focus);outline-offset:1px}
 @media(max-width:480px){
   #manualDialog .medal-picker{gap:6px}
   #manualDialog .medal-picker button{min-height:48px;padding:5px}
@@ -740,15 +711,10 @@ button,input,select,textarea{letter-spacing:inherit}
 }
 
 
-/* v3.2.4 */
-
-
-
-
 .image-share-range{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
 @media(max-width:760px){.image-share-range{grid-template-columns:1fr;gap:6px;}}
 
-/* v3.2.10: unify form field backgrounds and update score editor layout */
+/* v3.3.47: canonical form field and score-editor layout. */
 :root[data-theme="light"]{--field-fill:#f5f7ff;}
 :root[data-theme="dark"]{--field-fill:#24345e;}
 input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]),
@@ -766,303 +732,65 @@ textarea,
   color:var(--text);
   -webkit-text-fill-color:var(--text);
 }
-#manualDialog .manual-summary-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  gap:10px;
-  margin-top:12px;
-}
-#manualDialog .manual-score-sections{
-  display:grid;
-  gap:14px;
-  margin-top:12px;
-}
-#manualDialog .manual-score-section{
-  display:grid;
-  gap:8px;
-}
-#manualDialog .manual-score-section h3{
-  margin:0 2px;
-  font-size:1rem;
-  font-weight:900;
-  color:var(--text);
-}
-#manualDialog .manual-score-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:10px;
-}
-#manualDialog .manual-score-grid>label{
-  display:flex;
-  flex-direction:column;
-  align-items:stretch;
-  gap:6px;
-  margin:0;
-}
-#manualDialog .manual-score-grid .field-label{
-  display:block;
-  font-size:.78rem;
-  font-weight:800;
-  color:var(--muted);
-  line-height:1.2;
-}
-#manualDialog .manual-summary-grid .manual-popclass,
-#manualDialog .manual-score-grid .rank-badge,
-#manualDialog .manual-score-grid .medal-picker-button,
-#manualDialog .manual-score-grid input{
-  min-height:54px;
-  border-radius:12px;
-}
-#manualDialog .manual-summary-grid .manual-popclass{
-  display:grid;
-  place-items:center;
-  font-size:1.95rem;
-}
-#manualDialog .manual-score-grid .medal-picker-button{
-  width:100%;
-  margin:0;
-}
-#manualDialog .manual-score-grid .rank-badge{
-  display:grid;
-  place-items:center;
-  padding:4px;
-}
-#manualDialog .manual-score-grid .rank-badge img{
-  height:38px;
-  width:auto;
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
-}
-#manualDialog .manual-score-grid .rank-badge.is-empty{
-  font-size:1.8rem;
-  font-weight:700;
-  color:var(--muted);
-}
-#manualDialog .manual-score-grid input{
-  width:100%;
-}
-#manualDialog .manual-score-grid .score-row-history small{
-  margin-top:2px;
-  line-height:1.35;
-}
-@media(max-width:760px){
-  #manualDialog .manual-score-grid{gap:8px;}
-  #manualDialog .manual-summary-grid .manual-popclass,
-  #manualDialog .manual-score-grid .rank-badge,
-  #manualDialog .manual-score-grid .medal-picker-button,
-  #manualDialog .manual-score-grid input{min-height:50px;}
-  #manualDialog .manual-summary-grid .manual-popclass{font-size:1.8rem;}
-  #manualDialog .manual-score-grid .rank-badge img{height:34px;}
-}
-
-
-/* v3.2.12: an isolated score-card structure, independent of old grid placements. */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Editor: remove old named grid areas and inherited score-field boxes.
-   Each 3-column group is explicitly defined and cannot create implicit columns. */
-#manualDialog .manual-summary-grid{display:block;width:100%;min-width:0;margin-top:12px;}
-#manualDialog .manual-summary-grid>label{display:grid;grid-area:auto;grid-template-columns:minmax(0,1fr);gap:6px;width:100%;min-width:0;margin:0;padding:0;border:0;background:transparent;}
-#manualDialog .manual-summary-grid .manual-popclass{box-sizing:border-box;width:100%;height:52px;min-height:52px;margin:0;border:0;background:var(--field-fill);border-radius:11px;font-size:1.2rem;}
-#manualDialog .manual-score-sections{display:grid;grid-template-columns:minmax(0,1fr);width:100%;gap:13px;margin-top:12px;}
-#manualDialog .manual-score-section{display:block;width:100%;min-width:0;margin:0;padding:0;}
-#manualDialog .manual-score-section h3{margin:0 0 7px;font-size:1rem;font-weight:850;}
-#manualDialog .manual-score-grid{display:grid;grid-template-areas:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:start;width:100%;min-width:0;}
-#manualDialog .manual-score-grid>label,#manualDialog .manual-score-grid>.history-score-input{display:flex;grid-area:auto;flex-direction:column;align-items:stretch;align-content:initial;grid-template-rows:none;gap:5px;min-width:0;width:100%;min-height:0;margin:0;padding:0;border:0;border-radius:0;background:transparent;font-size:.78rem;}
-#manualDialog .manual-score-grid .field-label{display:block;writing-mode:horizontal-tb;white-space:nowrap;font-size:.7rem;font-weight:800;line-height:1.4;color:var(--muted);}
-#manualDialog .manual-score-grid .medal-picker-button,#manualDialog .manual-score-grid .rank-badge,#manualDialog .manual-score-grid input:not([type=hidden]){box-sizing:border-box;display:grid;place-items:center;width:100%;height:52px;min-height:52px;max-width:100%;margin:0;padding:4px;border:1px solid var(--line);border-radius:11px;background:var(--field-fill);color:var(--text);box-shadow:none;}
-#manualDialog .manual-score-grid .medal-picker-button{display:flex;align-items:center;justify-content:center;gap:3px;}
-#manualDialog .manual-score-grid .medal-picker-button img{width:36px;height:36px;max-width:100%;max-height:100%;object-fit:contain;}
-#manualDialog .manual-score-grid .rank-badge{border-color:transparent;background:var(--field-fill);font-style:normal;}
-#manualDialog .manual-score-grid .rank-badge img{width:auto;height:38px;max-width:100%;object-fit:contain;}
-#manualDialog .manual-score-grid input:not([type=hidden]){font-size:16px!important;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;}
-#manualDialog .manual-score-grid .history-score-input small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}
-#manualDialog .medal-picker[hidden]{display:none!important;}
-@media(max-width:430px){#manualDialog .manual-score-grid{gap:6px}#manualDialog .manual-score-grid .field-label{font-size:.68rem}#manualDialog .manual-score-grid .medal-picker-button,#manualDialog .manual-score-grid .rank-badge,#manualDialog .manual-score-grid input:not([type=hidden]){height:48px;min-height:48px;}#manualDialog .manual-score-grid .rank-badge img{height:33px}}
-/* Keep long titles from determining the intrinsic width of the dialog grid. */
 #manualDialog{box-sizing:border-box;max-width:calc(100vw - 18px);}
-#manualDialog #manualForm{box-sizing:border-box;grid-template-columns:minmax(0,1fr);width:100%;min-width:0;max-width:100%;}
+#manualDialog #manualForm{box-sizing:border-box;grid-template-columns:minmax(0,1fr);width:100%;min-width:0;max-width:100%;gap:7px;}
 #manualDialog #manualForm>*{min-width:0;max-width:100%;}
-#manualDialog .song-search-fields{grid-template-columns:repeat(2,minmax(0,1fr));min-width:0;width:100%;}
-#manualDialog .song-search-fields>label{min-width:0;}
-#manualDialog .song-search-fields input{box-sizing:border-box;min-width:0;width:100%;}
-@media(max-width:760px){#manualDialog .song-search-fields{grid-template-columns:minmax(0,1fr);}}
-
-
-/* v3.2.13: compact historical/current records; use reclaimed width for banner. */
-
-
-
-
-
-
-
-
-
-
-
-/* v3.2.34: keep score-card banners compact on wide PC layouts.
-   The image intrinsic aspect ratio must not expand the auto-sized upper row. */
-
-
-
-/* v3.2.14: compact score editor; keep all three record columns explicit. */
-#manualDialog #manualForm{gap:7px;}
 #manualDialog #manualForm>h2{margin:0 36px 5px 0;line-height:1.25;}
-#manualDialog .song-search-fields{gap:8px;}
-#manualDialog .song-search-fields>label{gap:3px;line-height:1.25;}
-#manualDialog .song-search-fields input{height:40px;min-height:40px;padding:6px 10px;}
-#manualDialog .manual-meta{display:grid;gap:5px;min-width:0;margin:3px 0 1px;}
-#manualDialog .manual-meta-row{display:grid;grid-template-columns:108px minmax(0,1fr);align-items:center;min-height:30px;min-width:0;gap:8px;}
-#manualDialog .manual-meta-row>strong{font-size:.78rem;font-weight:850;line-height:1.25;white-space:nowrap;color:var(--text);}
-#manualDialog .manual-meta-value{display:block;min-width:0;margin:0;padding:5px 9px;border-radius:9px;background:var(--field-fill);color:var(--muted);font-size:.78rem;line-height:1.3;overflow-wrap:anywhere;}
+#manualDialog .song-search-fields{grid-template-columns:repeat(2,minmax(0,1fr));min-width:0;width:100%;gap:8px;}
+#manualDialog .song-search-fields>label{min-width:0;gap:3px;line-height:1.25;}
+#manualDialog .song-search-fields input{box-sizing:border-box;min-width:0;width:100%;height:40px;min-height:40px;padding:6px 10px;}
+#manualDialog .manual-meta{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;min-width:0;margin:2px 0 0;}
+#manualDialog .manual-meta-row{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;gap:3px;min-height:0;width:100%;align-items:stretch;}
+#manualDialog .manual-meta-row>strong{font-size:.79rem;font-weight:850;line-height:1.2;white-space:nowrap;color:var(--text);}
+#manualDialog .manual-meta-value{box-sizing:border-box;display:block;width:100%;min-width:0;min-height:36px;margin:0;padding:7px 10px;border-radius:9px;background:var(--field-fill);color:var(--muted);font-size:.82rem;line-height:1.3;overflow-wrap:anywhere;}
 #manualDialog .manual-meta-value[hidden]{display:none;}
 #manualDialog .manual-meta-row:has(.manual-meta-value[hidden]){display:none;}
-#manualDialog .manual-score-sections{gap:8px;margin-top:4px;}
-#manualDialog .manual-score-section h3{margin:0 0 3px;font-size:.93rem;line-height:1.25;}
-#manualDialog .manual-score-grid{grid-template-areas:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;}
-#manualDialog .manual-score-grid>label,#manualDialog .manual-score-grid>.history-score-input{gap:3px;}
-#manualDialog .manual-score-grid .field-label{font-size:.68rem;line-height:1.2;}
-#manualDialog .manual-score-grid .medal-picker-button,#manualDialog .manual-score-grid .rank-badge,#manualDialog .manual-score-grid input:not([type=hidden]){height:40px;min-height:40px;padding:2px 4px;border-radius:9px;}
-#manualDialog .manual-score-grid .medal-picker-button img,#manualDialog #medalPickerButton img,#manualDialog #medalPickerButton.cool-perfect-active>img{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;max-width:30px!important;max-height:30px!important;}
-#manualDialog .manual-score-grid #currentMedalPickerButton img{width:30px;height:30px;}
-#manualDialog .manual-score-grid .rank-badge img{height:30px;}
-#manualDialog .manual-summary-grid{margin-top:3px;}
-#manualDialog .manual-summary-grid>label{gap:3px;line-height:1.25;}
-#manualDialog .manual-summary-grid .manual-popclass{height:40px;min-height:40px;font-size:1.1rem;}
-#manualDialog .dialog-actions{margin-top:4px;}
-#manualDialog .dialog-actions button{min-height:40px;padding-top:7px;padding-bottom:7px;}
-@media(max-width:760px){
-  #manualDialog .song-search-fields{gap:6px;}
-  #manualDialog .song-search-fields input{height:38px;min-height:38px;}
-  #manualDialog .manual-score-grid{gap:6px;}
-  #manualDialog .manual-score-grid .medal-picker-button,#manualDialog .manual-score-grid .rank-badge,#manualDialog .manual-score-grid input:not([type=hidden]){height:38px;min-height:38px;}
-  #manualDialog .manual-score-grid .rank-badge img{height:28px;}
-  #manualDialog .manual-meta-row{grid-template-columns:100px minmax(0,1fr);min-height:28px;gap:5px;}
-}
-
-
-/* v3.2.15: compact song-card title row, separator between PSR and edit. */
-
-
-
-
-/* Artist and version: label above a full-width display-only value. */
-#manualDialog .manual-meta{
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  gap:7px;
-  margin:2px 0 0;
-}
-#manualDialog .manual-meta-row{
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  grid-template-rows:auto auto;
-  gap:3px;
-  min-height:0;
-  width:100%;
-  align-items:stretch;
-}
-#manualDialog .manual-meta-row>strong{
-  font-size:.79rem;
-  line-height:1.2;
-}
-#manualDialog .manual-meta-value{
-  box-sizing:border-box;
-  display:block;
-  width:100%;
-  min-height:36px;
-  padding:7px 10px;
-  background:var(--field-fill);
-  border-radius:9px;
-  line-height:1.3;
-  font-size:.82rem;
-}
+#manualDialog .manual-score-sections{display:grid;grid-template-columns:minmax(0,1fr);width:100%;gap:8px;margin-top:4px;}
+#manualDialog .manual-score-section{display:block;width:100%;min-width:0;margin:0;padding:0;}
+#manualDialog .manual-score-section h3{margin:0 0 3px;font-size:.93rem;font-weight:850;line-height:1.25;}
+#manualDialog .manual-score-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:start;width:100%;min-width:0;}
 #manualDialog .manual-score-grid>label,
-#manualDialog .manual-score-grid>.history-score-input{
-  gap:0;
-}
+#manualDialog .manual-score-grid>.history-score-input{display:flex;flex-direction:column;align-items:stretch;gap:0;min-width:0;width:100%;min-height:0;margin:0;padding:0;border:0;border-radius:0;background:transparent;font-size:.78rem;}
+#manualDialog .manual-score-grid .field-label{display:block;white-space:nowrap;font-size:.68rem;font-weight:800;line-height:1.2;color:var(--muted);}
 #manualDialog .manual-score-grid .medal-picker-button,
 #manualDialog .manual-score-grid .rank-badge,
-#manualDialog .manual-score-grid input:not([type=hidden]){
-  height:40px;
-  min-height:40px;
-}
+#manualDialog .manual-score-grid input:not([type=hidden]){box-sizing:border-box;display:grid;place-items:center;width:100%;height:40px;min-height:40px;max-width:100%;margin:0;padding:2px 4px;border:1px solid var(--line);border-radius:9px;background:var(--field-fill);color:var(--text);box-shadow:none;}
+#manualDialog .manual-score-grid .medal-picker-button{display:flex;align-items:center;justify-content:center;gap:3px;}
+#manualDialog .manual-score-grid .medal-picker-button img,
+#manualDialog #medalPickerButton img,
+#manualDialog #medalPickerButton.cool-perfect-active>img{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;max-width:30px!important;max-height:30px!important;object-fit:contain;}
+#manualDialog .manual-score-grid #currentMedalPickerButton img{width:30px;height:30px;object-fit:contain;}
+#manualDialog .manual-score-grid .rank-badge{border-color:transparent;font-style:normal;}
+#manualDialog .manual-score-grid .rank-badge img{width:auto;height:30px;max-width:100%;object-fit:contain;}
+#manualDialog .manual-score-grid .rank-badge.is-empty{font-size:1.8rem;font-weight:700;color:var(--muted);}
+#manualDialog .manual-score-grid input:not([type=hidden]){font-size:16px!important;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;}
+#manualDialog .manual-score-grid .history-score-input small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}
+#manualDialog .manual-summary-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin:2px 0 0;}
+#manualDialog .manual-summary-grid>label{display:grid;grid-template-columns:minmax(0,1fr);gap:3px;width:100%;min-width:0;margin:0;padding:0;border:0;background:transparent;line-height:1.25;}
+#manualDialog .manual-summary-grid .manual-popclass{box-sizing:border-box;display:grid;place-items:center;width:100%;height:40px;min-height:40px;margin:0;border:0;border-radius:11px;background:var(--field-fill);font-size:1.1rem;}
+#manualDialog .medal-picker[hidden]{display:none!important;}
+#manualDialog .dialog-actions{margin-top:4px;}
+#manualDialog .dialog-actions button{min-height:40px;padding-top:7px;padding-bottom:7px;}
+#usersPanel .search,
+#usersPanel .search input,
+#usersPanel .list-sort-controls select,
+#manualDialog input:not([type=hidden]),
+#manualDialog .manual-popclass,
+#manualDialog .rank-badge,
+#manualDialog .medal-picker-button,
+#imageShareDialog select,
+#menuDialog select{background-color:var(--field-fill)!important;color:var(--text);}
+#usersPanel .search input{border:0!important;box-shadow:none!important;border-radius:inherit;}
+#usersPanel .search{overflow:hidden;}
 @media(max-width:760px){
-  
-  #manualDialog .manual-meta-row{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;gap:3px;min-height:0;}
-  #manualDialog .manual-meta-value{min-height:34px;padding:6px 9px;}
+  #manualDialog .song-search-fields{grid-template-columns:minmax(0,1fr);gap:6px;}
+  #manualDialog .song-search-fields input{height:38px;min-height:38px;}
+  #manualDialog .manual-score-grid{gap:6px;}
   #manualDialog .manual-score-grid .medal-picker-button,
   #manualDialog .manual-score-grid .rank-badge,
   #manualDialog .manual-score-grid input:not([type=hidden]){height:38px;min-height:38px;}
-}
-
-
-/* v3.2.16: one consistent field fill, including search-input inner surfaces. */
-#scoresPanel .filters .search,#usersPanel .search,
-#scoresPanel .filters .search input,#usersPanel .search input,
-#scoresPanel .filters select,#scoresPanel .filters .filter-medal-button,
-#scoresPanel .list-sort-controls select,#usersPanel .list-sort-controls select,
-#manualDialog input:not([type=hidden]),#manualDialog .manual-popclass,
-#manualDialog .rank-badge,#manualDialog .medal-picker-button,
-#imageShareDialog select,#menuDialog select{
-  background-color:var(--field-fill)!important;
-  color:var(--text);
-}
-#scoresPanel .filters .search input,#usersPanel .search input{
-  border:0!important;box-shadow:none!important;border-radius:inherit;
-}
-#scoresPanel .filters .search,#usersPanel .search{overflow:hidden;}
-#scoresPanel .filters.score-filter-grid{
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:7px!important;
-  align-items:stretch;
-}
-#scoresPanel .score-filter-search{grid-column:1/-1!important;min-width:0;}
-#scoresPanel #levelFilter{grid-column:1/3;min-width:0;}
-#scoresPanel #versionFilter{grid-column:3/5;min-width:0;}
-#scoresPanel .score-filter-heading{grid-row:3;min-width:0;color:var(--muted);font-size:.81rem;font-weight:850;text-align:center;}
-#scoresPanel .score-filter-heading.history{grid-column:1/3;}
-#scoresPanel .score-filter-heading.current{grid-column:3/5;}
-#scoresPanel .history-medal-filter{grid-column:1;grid-row:4;}
-#scoresPanel #rankFilter{grid-column:2;grid-row:4;}
-#scoresPanel .current-medal-filter{grid-column:3;grid-row:4;}
-#scoresPanel #currentRankFilter{grid-column:4;grid-row:4;}
-#scoresPanel .filters .filter-medal-wrap{position:relative;min-width:0;}
-#scoresPanel .filters .filter-medal-button,#scoresPanel .filters select{width:100%;min-width:0;height:40px;min-height:40px;font-size:.79rem;padding-inline:7px;}
-#scoresPanel .filters .filter-medal-button{display:flex;justify-content:center;gap:1px;}
-#scoresPanel .filters .filter-medal-button img{width:28px;height:28px;min-width:0;object-fit:contain;}
-#scoresPanel .filters .filter-medal-button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-#scoresPanel .filters .filter-medal-button b{margin-left:auto;}
-@media(max-width:430px){
-  #scoresPanel .filters.score-filter-grid{gap:5px!important;}
-  #scoresPanel .filters .filter-medal-button,#scoresPanel .filters select{height:38px;min-height:38px;font-size:.7rem;padding-inline:4px;}
-  #scoresPanel .filters .filter-medal-button img{width:25px;height:25px;}
-  #scoresPanel .filters .filter-medal-button b{width:6px;height:6px;margin-right:2px;}
+  #manualDialog .manual-score-grid .rank-badge img{height:28px;}
+  #manualDialog .manual-meta-value{min-height:34px;padding:6px 9px;}
 }
 
 /* v3.2.17: registration-only username privacy notice */
@@ -1071,106 +799,6 @@ textarea,
 .auth-username-notice strong{font-size:.83rem}
 .auth-username-notice p{margin:0}
 
-/* v3.2.21: clearer separation between filter and sort, aligned heading sizes, and unified medal-picker row height. */
-#scoresPanel .control-section-heading{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin:8px 0 6px;
-  color:var(--muted);
-  font-size:.72rem;
-  font-weight:900;
-  line-height:1.2;
-}
-#scoresPanel .score-filter-section-heading{margin-top:6px;}
-#scoresPanel .score-sort-section-heading{margin-top:10px;padding-top:6px;border-top:1px solid var(--line);}
-#scoresPanel .filters.score-filter-grid{margin-bottom:2px;}
-#scoresPanel .score-filter-heading{font-size:.72rem;font-weight:900;}
-#scoresPanel .list-sort-controls{margin-top:0;}
-@media(max-width:430px){
-  #scoresPanel .control-section-heading{font-size:.58rem;gap:6px;margin:6px 0 5px;}
-  #scoresPanel .score-filter-heading{font-size:.58rem;}
-}
-
-
-/* v3.2.26: single source of truth for the body-level score-filter medal palette.
-   components.css sets each .filter-medal-picker button to a two-column LIST row.
-   Override that grid template as well as the sizes so icons truly center in each tile. */
-body > .psm-floating-medal-picker:not([hidden]){
-  position:fixed!important;
-  bottom:auto!important; /* responsive.css pins generic pickers to bottom:12px */
-  z-index:2147483000!important;
-  display:grid!important;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  grid-auto-rows:42px;
-  gap:4px;
-  align-content:start;
-  justify-content:center;
-  padding:6px;
-  margin:0;
-  width:min(260px,calc(100vw - 24px));
-  height:auto!important;
-  min-height:0!important;
-  box-sizing:border-box;
-  overflow-x:hidden;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  border:1px solid var(--line);
-  border-radius:11px;
-  background:var(--surface);
-  box-shadow:0 12px 35px rgba(20,32,67,.22);
-}
-body > .psm-floating-medal-picker[hidden]{display:none!important;}
-body > .psm-floating-medal-picker > .compact-medal-option{
-  box-sizing:border-box;
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  grid-template-rows:minmax(0,1fr);
-  place-items:center;
-  justify-items:center;
-  align-items:center;
-  width:100%;
-  height:42px;
-  min-width:0;
-  min-height:0;
-  max-height:42px;
-  padding:2px;
-  margin:0;
-  border:1px solid var(--line);
-  border-radius:7px;
-  background:var(--field-fill);
-  color:var(--text);
-  text-align:center;
-  cursor:pointer;
-}
-body > .psm-floating-medal-picker > .compact-medal-option img,
-body > .psm-floating-medal-picker > .compact-medal-option .compact-medal-empty{
-  display:block;
-  width:28px;
-  height:28px;
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;
-}
-body > .psm-floating-medal-picker > .compact-medal-option .compact-medal-empty{display:grid;place-items:center;}
-body > .psm-floating-medal-picker > .compact-medal-option .filter-medal-all{
-  font-size:.65rem;
-  line-height:1;
-  font-weight:850;
-  white-space:nowrap;
-}
-body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
-  outline:2px solid var(--focus);
-  outline-offset:-2px;
-}
-@media(max-width:430px){
- body > .psm-floating-medal-picker:not([hidden]){grid-auto-rows:40px;width:min(250px,calc(100vw - 24px));}
- body > .psm-floating-medal-picker > .compact-medal-option{height:40px;max-height:40px;}
- body > .psm-floating-medal-picker > .compact-medal-option img{width:27px;height:27px;}
-}
-
-
-/* v3.2.41 — keep the admin song editor compact and prevent horizontal overflow. */
 #adminEditDialog{overflow-x:hidden;}
 #adminEditDialog form,#adminEditFields,#adminEditFields>*{min-width:0;max-width:100%;box-sizing:border-box;}
 #adminEditFields input,#adminEditFields select,#adminEditFields textarea{width:100%;min-width:0;max-width:100%;box-sizing:border-box;}
@@ -1187,7 +815,6 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 }
 
 
-/* v3.2.49: menu heading fixed; only menu items scroll. */
 #menuDialog .menu-modal{display:flex;flex-direction:column;gap:0;padding:0;overflow:hidden;max-height:calc(100dvh - 24px);}
 #menuDialog .menu-fixed-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto;padding:16px 18px 12px;border-bottom:1px solid var(--line);background:var(--surface);z-index:4;}
 #menuDialog .menu-fixed-header h1{margin:0;color:var(--text);font-size:clamp(1.16rem,3.5vw,1.48rem);font-weight:750;line-height:1.35;letter-spacing:-.035em;}
@@ -1310,9 +937,8 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 .display-settings-dialog .setting-row select{max-width:min(280px,48vw);}
 @media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
 
-/* v3.3.31: shared score-card layout (legacy card CSS removed).
-   No CSS zoom: card geometry is width-based so Safari/Chrome render the same proportions.
-   The same card layout is used in the score list and PSR target lists. */
+/* v3.3.47: canonical score-card layout for the score list and PSR target lists.
+   Geometry is width-based so Safari/Chrome use the same proportions. */
 body.score-card-responsive #scoreList,
 body.score-card-responsive #popclassContent .score-list{
   display:flex;
@@ -1336,10 +962,10 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.sco
   max-height:none!important;
   margin:0 auto!important;
   overflow:hidden!important;
-  border:1px solid var(--line)!important;
+  border:2px solid #c3cde6!important;
   border-radius:14px!important;
   background:var(--surface)!important;
-  box-shadow:0 3px 12px rgba(31,53,112,.06)!important;
+  box-shadow:0 4px 14px rgba(31,53,112,.08)!important;
   font-family:inherit!important;
   font-variant-numeric:tabular-nums lining-nums!important;
   font-feature-settings:"tnum" 1,"lnum" 1!important;
@@ -1371,21 +997,32 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ba
   margin:0!important;
   padding:0!important;
   border:0!important;
-  border-right:1px solid var(--line)!important;
-  background:var(--surface-2)!important;
+  border-right:0!important;
   overflow:hidden!important;
+  border-radius:0!important;
 }
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .song-banner{
   display:block!important;
+  background:transparent!important;
   object-fit:contain!important;
   object-position:center center!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .banner-empty{
+  display:grid!important;
+  place-items:center!important;
+  background:var(--surface-2)!important;
+  color:var(--muted)!important;
+  font-size:clamp(8px,1.75cqw,13px)!important;
+  font-weight:800!important;
+  line-height:1!important;
+  text-align:center!important;
 }
 
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
   position:absolute!important;
   left:32.894737%!important;
-  width:59.210526%!important;
+  width:58.552632%!important;
   box-sizing:border-box!important;
   display:flex!important;
   align-items:center!important;
@@ -1419,7 +1056,7 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .sc
   position:absolute!important;
   right:0!important;
   top:0!important;
-  width:7.894737%!important;
+  width:8.552632%!important;
   height:56.818182%!important;
   box-sizing:border-box!important;
   display:flex!important;
@@ -1430,7 +1067,15 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .sc
   margin:0!important;
   padding:0!important;
   border:0!important;
-  border-left:0!important;
+  border-left:1px solid var(--line)!important;
+  border-radius:0!important;
+  overflow:hidden!important;
+  -webkit-appearance:none!important;
+  appearance:none!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:0!important;
+  max-height:none!important;
   background:var(--surface-2)!important;
   color:var(--text)!important;
   font-size:clamp(8px,1.53cqw,12px)!important;
@@ -1585,9 +1230,40 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .sc
   height:clamp(18px,4.44cqw,30px)!important;
   object-fit:contain!important;
 }
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .unplayed-mark{
-  font-size:clamp(8px,1.84cqw,14px)!important;
+
+/* Centered field for an unplayed history/current record. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-unplayed{
+  position:absolute!important;
+  top:56.818182%!important;
+  height:43.181818%!important;
+  box-sizing:border-box!important;
+  display:grid!important;
+  place-items:center!important;
+  margin:0!important;
+  padding:0!important;
+  border-top:1px solid var(--line)!important;
+  border-right:1px solid var(--line)!important;
+  color:var(--muted)!important;
+  font-size:clamp(7px,1.58cqw,12px)!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:.02em!important;
+  text-align:center!important;
+  white-space:nowrap!important;
 }
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-unplayed{
+  left:21.052632%!important;
+  width:25.986842%!important;
+  background:var(--admin-history-bg,#eef8ff)!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-unplayed{
+  left:54.934211%!important;
+  width:25.986842%!important;
+  background:var(--admin-current-bg,#fff0f7)!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-medal,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-rank,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-score{display:none!important;}
 
 /* exact lower-row horizontal proportions from the 608px reference.
    History score, current score, and PSR value are all 76px at the reference width. */
@@ -1618,6 +1294,10 @@ html[data-theme="dark"]{
   --admin-current-bg:#472b45;
   --admin-current-pill:#63364f;
   --admin-current-label:#ff9ec5;
+}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312{
+  border-color:#58688d!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.28)!important;
 }
 html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
   background:var(--surface-2)!important;
@@ -1707,157 +1387,91 @@ html,body{
   #displaySettingsDialog .setting-row select{max-width:46vw}
 }
 
-/* v3.3.31: final card border ownership. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
-  border-right:0!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
-  border-left:1px solid var(--line)!important;
-}
-
-
-/* v3.3.32: strengthen outer card outlines so they do not blend into the page background. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312{
-  border:2px solid #c3cde6!important;
-  box-shadow:0 4px 14px rgba(31,53,112,.08)!important;
-}
+/* v3.3.47: canonical user-list card outline. */
 #userList .user-row-v3095{
   border:2px solid #c3cde6!important;
   box-shadow:0 4px 14px rgba(31,53,112,.07)!important;
 }
 @media(hover:hover){
-  #userList .user-row-v3095:hover{
-    box-shadow:0 7px 22px rgba(31,53,112,.12)!important;
-  }
+  #userList .user-row-v3095:hover{box-shadow:0 7px 22px rgba(31,53,112,.12)!important;}
 }
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312,
 html[data-theme="dark"] #userList .user-row-v3095{
   border-color:#58688d!important;
   box-shadow:0 5px 18px rgba(0,0,0,.28)!important;
 }
 
-
-/* v3.3.34: Safari-safe edit cell and continuous PSR divider. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
-  min-width:0!important;
-  max-width:none!important;
-  min-height:0!important;
-  max-height:none!important;
-  padding:0!important;
-  border-radius:0!important;
-  overflow:hidden!important;
-  -webkit-appearance:none!important;
-  appearance:none!important;
-}
-
-/* Keep the edit column fully inside the card on Safari while preserving the overall 100% width. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
-  width:58.552632%!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
-  width:8.552632%!important;
-}
-
-/* PSR label/value share one straight top separator. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
-  border-top:1px solid var(--line)!important;
-  border-radius:0!important;
-}
-
-/* v3.3.40: compact score filters with expandable detail panels */
+/* v3.3.47: canonical expandable score-filter/sort layout. */
 #scoresPanel.is-score-loading .score-filter-shell,
 #scoresPanel.is-score-loading #scoreList{display:none!important;}
 #scoresPanel .score-filter-shell{display:grid;gap:10px;margin:6px 0 12px;}
-#scoresPanel .score-search-inline,
-#scoresPanel .score-search-inline input,
-#scoresPanel .score-detail-panel select,
-#scoresPanel .score-detail-panel .filter-medal-button{
-  background-color:var(--field-fill)!important;
-  color:var(--text);
-}
-#scoresPanel .score-search-inline{overflow:hidden;min-height:42px;height:42px;}
-#scoresPanel .score-search-inline input{border:0!important;box-shadow:none!important;border-radius:inherit;}
+#scoresPanel .score-search-inline{height:42px;min-height:42px;overflow:hidden;background:var(--field-fill);}
+#scoresPanel .score-search-inline input{height:100%;min-height:0;border:0;box-shadow:none;border-radius:inherit;background:var(--field-fill);color:var(--text);}
 #scoresPanel .score-quick-actions{display:grid;gap:8px;align-items:start;}
 #scoresPanel .score-quick-buttons{display:flex;flex-wrap:wrap;gap:8px;}
-#scoresPanel .score-quick-toggle{
-  display:inline-flex;align-items:center;gap:10px;
-  min-height:44px;padding:0 14px;
-  border:1px solid var(--line);border-radius:14px;
-  background:var(--surface);color:var(--text);
-  font-size:.95rem;font-weight:900;
-}
+#scoresPanel .score-quick-toggle{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--text);font-size:.95rem;font-weight:900;}
 #scoresPanel .score-quick-toggle:hover{transform:translateY(-1px);}
-#scoresPanel .score-quick-toggle b{
-  width:8px;height:8px;display:inline-block;flex:0 0 auto;
-  border-right:2px solid currentColor;border-bottom:2px solid currentColor;
-  transform:rotate(45deg);margin-top:-4px;
-}
-#scoresPanel .score-quick-toggle.is-open b{transform:rotate(-135deg);margin-top:3px;}
-#scoresPanel .score-quick-toggle-count{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:24px;height:24px;padding:0 7px;
-  border-radius:999px;background:var(--brand);color:#fff;
-  font-size:.78rem;font-weight:900;line-height:1;
-}
+#scoresPanel .score-quick-toggle b{display:inline-block;flex:0 0 auto;width:8px;height:8px;margin-top:-4px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);}
+#scoresPanel .score-quick-toggle.is-open b{margin-top:3px;transform:rotate(-135deg);}
+#scoresPanel .score-quick-toggle-count{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 7px;border-radius:999px;background:var(--brand);color:#fff;font-size:.78rem;font-weight:900;line-height:1;}
 #scoresPanel .score-active-conditions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;min-width:0;}
 #scoresPanel .score-active-conditions-label{color:var(--muted);font-size:.78rem;font-weight:900;white-space:nowrap;}
 #scoresPanel .score-active-filter-chips{display:flex;flex-wrap:wrap;gap:7px;min-width:0;}
-#scoresPanel .score-active-chip{
-  display:inline-flex;align-items:center;max-width:100%;
-  padding:6px 11px;border-radius:999px;
-  background:var(--surface-2);border:1px solid var(--line);
-  color:var(--text);font-size:.76rem;font-weight:800;line-height:1.2;
-}
+#scoresPanel .score-active-chip{display:inline-flex;align-items:center;max-width:100%;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--text);font-size:.76rem;font-weight:800;line-height:1.2;}
 #scoresPanel .score-active-chip.is-muted{color:var(--muted);}
-#scoresPanel .score-detail-panel{
-  border:1px solid var(--line);border-radius:18px;
-  background:var(--surface);box-shadow:0 8px 20px rgba(23,36,77,.05);
-}
+#scoresPanel .score-detail-panel{border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 8px 20px rgba(23,36,77,.05);}
 #scoresPanel .score-detail-panel[hidden]{display:none!important;}
-#scoresPanel .score-detail-panel-inner{display:grid;gap:14px;padding:16px;}
-#scoresPanel .score-detail-section{display:grid;gap:10px;}
-#scoresPanel .score-detail-title-row{display:grid;gap:2px;}
+#scoresPanel .score-detail-panel-inner{display:grid;gap:10px;padding:12px;}
+#scoresPanel .score-detail-section{display:grid;gap:8px;}
+#scoresPanel .score-detail-title-row{display:grid;gap:0;}
 #scoresPanel .score-detail-title-row h2{margin:0;color:var(--text);font-size:1rem;line-height:1.3;}
 #scoresPanel .score-detail-title-row p{margin:0;color:var(--muted);font-size:.75rem;line-height:1.5;}
-#scoresPanel .score-basic-filter-grid,
-#scoresPanel .score-history-current-grid,
-#scoresPanel .score-side-panel-grid{display:grid;gap:12px;}
-#scoresPanel .score-basic-filter-grid,
-#scoresPanel .score-history-current-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-#scoresPanel .score-side-panel{display:grid;gap:10px;padding:14px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line);}
-#scoresPanel .score-side-panel-head{display:grid;gap:2px;}
-#scoresPanel .score-side-panel-head h3{margin:0;font-size:1rem;color:var(--text);line-height:1.3;}
+#scoresPanel .score-basic-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch;}
+#scoresPanel .score-basic-filter-grid>label{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;width:100%;min-width:0;margin:0;color:var(--muted);font-size:.74rem;font-weight:900;}
+#scoresPanel .score-basic-filter-grid>label>span{display:block;line-height:1.25;}
+#scoresPanel .score-basic-filter-grid select{box-sizing:border-box;display:block;width:100%;min-width:0;max-width:none;height:38px;min-height:38px;margin:0;background:var(--field-fill);color:var(--text);}
+#scoresPanel .score-history-current-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+#scoresPanel .score-side-panel{display:grid;gap:8px;padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);}
+#scoresPanel .score-side-panel-head{display:grid;gap:0;}
+#scoresPanel .score-side-panel-head h3{margin:0;color:var(--text);font-size:1rem;line-height:1.3;}
 #scoresPanel .score-side-panel-head p{margin:0;color:var(--muted);font-size:.75rem;line-height:1.45;}
-#scoresPanel .score-select-field,
-#scoresPanel .score-basic-filter-grid label,
-#scoresPanel .score-sort-panel-controls label{display:grid;gap:6px;min-width:0;color:var(--muted);font-size:.74rem;font-weight:900;}
-#scoresPanel .score-detail-panel select,
-#scoresPanel .score-detail-panel .filter-medal-button{width:100%;min-width:0;height:42px;min-height:42px;}
-#scoresPanel .score-detail-panel .filter-medal-wrap{position:relative;min-width:0;}
-#scoresPanel .score-detail-panel .filter-medal-button{display:flex;align-items:center;justify-content:center;gap:4px;padding-inline:10px;}
-#scoresPanel .score-detail-panel .filter-medal-button img{width:28px;height:28px;object-fit:contain;}
-#scoresPanel .score-detail-panel .filter-medal-button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-#scoresPanel .score-detail-panel .filter-medal-button b{margin-left:auto;}
-#scoresPanel .score-detail-actions{display:flex;justify-content:flex-end;gap:10px;padding-top:2px;border-top:1px solid var(--line);}
+#scoresPanel .score-side-panel-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:stretch;}
+#scoresPanel .score-side-panel-grid>.score-select-field{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:4px;width:100%;min-width:0;margin:0;color:var(--muted);font-size:.74rem;font-weight:900;}
+#scoresPanel .score-side-panel-grid>.score-select-field>span{display:block;line-height:1.25;}
+#scoresPanel .filter-medal-wrap,
+#scoresPanel .filter-rank-wrap{position:relative;box-sizing:border-box;width:100%;min-width:0;max-width:none;margin:0;}
+#scoresPanel .filter-medal-button,
+#scoresPanel .filter-rank-button{box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:4px;width:100%;min-width:0;max-width:none;height:38px;min-height:38px;margin:0;padding:0 10px;border:1px solid var(--line);border-radius:11px;background:var(--field-fill);color:var(--text);font:inherit;font-weight:850;}
+#scoresPanel .filter-medal-button img{width:28px;height:28px;object-fit:contain;}
+#scoresPanel .filter-rank-button img{display:block;width:36px;height:26px;object-fit:contain;}
+#scoresPanel .filter-medal-button span,
+#scoresPanel .filter-rank-button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#scoresPanel .filter-medal-button b,
+#scoresPanel .filter-rank-button b{flex:0 0 auto;width:7px;height:7px;margin-left:auto;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);}
+#scoresPanel .filter-rank-button[aria-expanded="true"] b{margin-top:4px;transform:rotate(-135deg);}
+#scoresPanel .score-sort-panel-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0;}
+#scoresPanel .score-sort-panel-controls label{display:grid;grid-template-columns:1fr;gap:3px;min-width:0;margin:0;color:var(--muted);font-size:.74rem;font-weight:900;}
+#scoresPanel .score-sort-panel-controls select{width:100%;min-width:0;height:38px;min-height:38px;background:var(--field-fill);color:var(--text);}
+#scoresPanel .score-detail-actions{display:flex;justify-content:flex-end;gap:8px;padding-top:8px;border-top:1px solid var(--line);}
 #scoresPanel .score-detail-actions .sub-button,
 #scoresPanel .score-detail-actions .main-button{min-width:120px;}
-#scoresPanel .score-sort-panel-controls{margin:0;}
-#scoresPanel .score-sort-panel-controls label{grid-template-columns:1fr;gap:6px;font-size:.74rem;}
-
 @media(max-width:760px){
-  #scoresPanel .score-basic-filter-grid,
-  #scoresPanel .score-history-current-grid,
-  #scoresPanel .score-side-panel-grid,
-  #scoresPanel .score-sort-panel-controls{grid-template-columns:minmax(0,1fr)!important;}
-  #scoresPanel .score-detail-actions{justify-content:stretch;}
+  #scoresPanel .score-history-current-grid{grid-template-columns:minmax(0,1fr);gap:8px;}
+  #scoresPanel .score-detail-panel-inner{padding:10px;gap:8px;}
+  #scoresPanel .score-side-panel{padding:9px 10px;gap:7px;}
+  #scoresPanel .score-detail-title-row h2,
+  #scoresPanel .score-side-panel-head h3{font-size:.9rem;}
+  #scoresPanel .score-detail-title-row p,
+  #scoresPanel .score-side-panel-head p{font-size:.67rem;line-height:1.35;}
+  #scoresPanel .score-basic-filter-grid>label,
+  #scoresPanel .score-side-panel-grid>.score-select-field,
+  #scoresPanel .score-sort-panel-controls label{font-size:.67rem;}
+  #scoresPanel .score-detail-actions{justify-content:stretch;padding-top:7px;}
   #scoresPanel .score-detail-actions .sub-button,
   #scoresPanel .score-detail-actions .main-button{flex:1;min-width:0;}
 }
 @media(max-width:430px){
   #scoresPanel .score-filter-shell{gap:8px;margin-bottom:10px;}
+  #scoresPanel .score-search-inline{height:40px;min-height:40px;}
   #scoresPanel .score-quick-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
   #scoresPanel .score-quick-toggle{justify-content:center;gap:8px;min-height:42px;padding:0 10px;font-size:.84rem;}
   #scoresPanel .score-quick-toggle-count{min-width:22px;height:22px;font-size:.72rem;}
@@ -1865,401 +1479,20 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
   #scoresPanel .score-active-conditions-label{font-size:.68rem;}
   #scoresPanel .score-active-filter-chips{gap:6px;}
   #scoresPanel .score-active-chip{padding:5px 9px;font-size:.68rem;}
-  #scoresPanel .score-detail-panel-inner{padding:12px;gap:12px;}
-  #scoresPanel .score-side-panel{padding:12px;}
-  #scoresPanel .score-detail-panel select,
-  #scoresPanel .score-detail-panel .filter-medal-button,
-  #scoresPanel .score-search-inline{height:40px;min-height:40px;}
-}
-
-/* v3.3.42: compact expanded filter/sort panels, especially on mobile. */
-#scoresPanel .score-detail-panel-inner{
-  gap:10px;
-  padding:12px;
-}
-#scoresPanel .score-detail-section,
-#scoresPanel .score-side-panel,
-#scoresPanel .score-side-panel-grid,
-#scoresPanel .score-basic-filter-grid{
-  gap:8px;
-}
-#scoresPanel .score-side-panel{
-  padding:10px;
-  border-radius:14px;
-}
-#scoresPanel .score-detail-title-row,
-#scoresPanel .score-side-panel-head{
-  gap:0;
-}
-#scoresPanel .score-select-field,
-#scoresPanel .score-basic-filter-grid label,
-#scoresPanel .score-sort-panel-controls label{
-  gap:3px;
-  margin:0!important;
-}
-#scoresPanel .score-detail-panel select,
-#scoresPanel .score-detail-panel .filter-medal-button{
-  height:38px;
-  min-height:38px;
-}
-#scoresPanel .score-detail-actions{
-  gap:8px;
-  padding-top:8px;
-}
-
-@media(max-width:760px){
-  /* Keep compact pairs side-by-side; only the history/current groups stack. */
-  #scoresPanel .score-basic-filter-grid,
-  #scoresPanel .score-side-panel-grid,
-  #scoresPanel .score-sort-panel-controls{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-  #scoresPanel .score-history-current-grid{
-    grid-template-columns:minmax(0,1fr)!important;
-    gap:8px!important;
-  }
-  #scoresPanel .score-detail-panel-inner{
-    padding:10px;
-    gap:8px;
-  }
-  #scoresPanel .score-side-panel{
-    padding:9px 10px;
-    gap:7px;
-  }
-  #scoresPanel .score-detail-title-row h2,
-  #scoresPanel .score-side-panel-head h3{
-    font-size:.9rem;
-  }
-  #scoresPanel .score-detail-title-row p,
-  #scoresPanel .score-side-panel-head p{
-    font-size:.67rem;
-    line-height:1.35;
-  }
-  #scoresPanel .score-select-field,
-  #scoresPanel .score-basic-filter-grid label,
-  #scoresPanel .score-sort-panel-controls label{
-    font-size:.67rem;
-    gap:3px;
-  }
-  #scoresPanel .score-detail-panel select,
-  #scoresPanel .score-detail-panel .filter-medal-button{
-    height:38px;
-    min-height:38px;
-    font-size:.72rem;
-  }
-  #scoresPanel .score-detail-actions{
-    padding-top:7px;
-  }
-}
-
-@media(max-width:430px){
-  #scoresPanel .score-detail-panel-inner{
-    padding:8px;
-    gap:7px;
-  }
+  #scoresPanel .score-detail-panel-inner{padding:8px;gap:7px;}
   #scoresPanel .score-detail-section,
-  #scoresPanel .score-side-panel,
-  #scoresPanel .score-side-panel-grid,
-  #scoresPanel .score-basic-filter-grid{
-    gap:6px;
-  }
-  #scoresPanel .score-side-panel{
-    padding:8px;
-    border-radius:12px;
-  }
+  #scoresPanel .score-side-panel{gap:6px;}
+  #scoresPanel .score-side-panel{padding:8px;border-radius:12px;}
   #scoresPanel .score-basic-filter-grid,
   #scoresPanel .score-side-panel-grid,
-  #scoresPanel .score-sort-panel-controls{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:6px!important;
-  }
-  #scoresPanel .score-detail-panel select,
-  #scoresPanel .score-detail-panel .filter-medal-button{
-    height:36px;
-    min-height:36px;
-    padding-inline:7px;
-    font-size:.68rem;
-  }
-  #scoresPanel .score-detail-panel .filter-medal-button img{
-    width:24px;
-    height:24px;
-  }
-  #scoresPanel .score-detail-actions{
-    gap:6px;
-    padding-top:6px;
-  }
-  #scoresPanel .score-detail-actions .sub-button,
-  #scoresPanel .score-detail-actions .main-button{
-    min-height:38px;
-    padding:7px 10px;
-    font-size:.75rem;
-  }
-}
-
-
-/* v3.3.43: align filter controls and use image-style rank pickers like medals. */
-#scoresPanel .score-basic-filter-grid > label,
-#scoresPanel .score-side-panel-grid > .score-select-field{
-  min-width:0!important;
-  width:100%!important;
-  align-self:stretch!important;
-}
-#scoresPanel .score-basic-filter-grid select,
-#scoresPanel .filter-medal-wrap,
-#scoresPanel .filter-rank-wrap,
-#scoresPanel .filter-medal-button,
-#scoresPanel .filter-rank-button{
-  box-sizing:border-box!important;
-  width:100%!important;
-  min-width:0!important;
-  max-width:none!important;
-}
-#scoresPanel .filter-rank-wrap{position:relative;min-width:0;}
-#scoresPanel .filter-rank-button{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  height:38px;
-  min-height:38px;
-  padding:0 10px;
-  border:1px solid var(--line);
-  border-radius:11px;
-  background:var(--field-fill);
-  color:var(--text);
-  font:inherit;
-  font-weight:850;
-}
-#scoresPanel .filter-rank-button img{
-  display:block;
-  width:36px;
-  height:26px;
-  object-fit:contain;
-}
-#scoresPanel .filter-rank-button span{
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-#scoresPanel .filter-rank-button b{
-  width:7px;
-  height:7px;
-  margin-left:auto;
-  border-right:2px solid currentColor;
-  border-bottom:2px solid currentColor;
-  transform:rotate(45deg);
-  flex:0 0 auto;
-}
-#scoresPanel .filter-rank-button[aria-expanded="true"] b{
-  transform:rotate(-135deg);
-  margin-top:4px;
-}
-#scoresPanel #rankFilter,
-#scoresPanel #currentRankFilter{
-  grid-column:auto!important;
-  grid-row:auto!important;
-}
-body > .psm-floating-medal-picker > .rank-filter-option img{
-  width:34px;
-  height:24px;
-}
-body > .psm-floating-medal-picker > .rank-filter-option .compact-medal-empty{
-  font-size:.9rem;
-  font-weight:900;
-}
-#scoresPanel .score-side-panel-grid{
-  align-items:end!important;
-}
-#scoresPanel .score-side-panel-grid > .score-select-field{
-  display:grid!important;
-  grid-template-rows:auto 38px!important;
-  gap:3px!important;
-}
-#scoresPanel .score-side-panel-grid > .score-select-field > span{
-  min-height:1.15em;
-  display:flex;
-  align-items:flex-end;
-}
-#scoresPanel .score-basic-filter-grid{
-  align-items:end!important;
-}
-#scoresPanel .score-basic-filter-grid > label{
-  display:grid!important;
-  grid-template-rows:auto 38px!important;
-  gap:3px!important;
-}
-#scoresPanel .score-basic-filter-grid > label > span{
-  min-height:1.15em;
-  display:flex;
-  align-items:flex-end;
-}
-#scoresPanel .score-basic-filter-grid select{
-  height:38px!important;
-  min-height:38px!important;
-}
-
-@media(max-width:430px){
+  #scoresPanel .score-sort-panel-controls{gap:6px;}
+  #scoresPanel .score-basic-filter-grid select,
+  #scoresPanel .filter-medal-button,
   #scoresPanel .filter-rank-button,
-  #scoresPanel .score-basic-filter-grid select{
-    height:36px!important;
-    min-height:36px!important;
-    padding-inline:7px;
-    font-size:.68rem;
-  }
-  #scoresPanel .score-side-panel-grid > .score-select-field,
-  #scoresPanel .score-basic-filter-grid > label{
-    grid-template-rows:auto 36px!important;
-  }
-  #scoresPanel .filter-rank-button img{
-    width:31px;
-    height:23px;
-  }
-}
-
-
-/* v3.3.44: final alignment fixes for filters, banner fallback, and NO PLAY rows. */
-
-/* The old score-filter grid rules still target these IDs/classes.
-   Explicitly neutralize them inside the new expandable layout. */
-#scoresPanel .score-basic-filter-grid #levelFilter,
-#scoresPanel .score-basic-filter-grid #versionFilter,
-#scoresPanel .score-side-panel-grid .history-medal-filter,
-#scoresPanel .score-side-panel-grid .current-medal-filter,
-#scoresPanel .score-side-panel-grid .history-rank-filter,
-#scoresPanel .score-side-panel-grid .current-rank-filter{
-  grid-column:auto!important;
-  grid-row:auto!important;
-}
-
-/* Basic conditions: two exactly equal columns, labels stacked uniformly. */
-#scoresPanel .score-basic-filter-grid{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:8px!important;
-  align-items:stretch!important;
-}
-#scoresPanel .score-basic-filter-grid > label{
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:stretch!important;
-  justify-content:flex-start!important;
-  gap:4px!important;
-  width:100%!important;
-  min-width:0!important;
-  margin:0!important;
-}
-#scoresPanel .score-basic-filter-grid > label > span{
-  display:block!important;
-  min-height:0!important;
-  line-height:1.25!important;
-}
-#scoresPanel .score-basic-filter-grid select{
-  display:block!important;
-  width:100%!important;
-  min-width:0!important;
-  max-width:none!important;
-  margin:0!important;
-}
-
-/* History/current: medal and rank use the exact same two-column geometry. */
-#scoresPanel .score-side-panel-grid{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:8px!important;
-  align-items:stretch!important;
-}
-#scoresPanel .score-side-panel-grid > .score-select-field{
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:stretch!important;
-  justify-content:flex-start!important;
-  gap:4px!important;
-  width:100%!important;
-  min-width:0!important;
-  margin:0!important;
-}
-#scoresPanel .score-side-panel-grid > .score-select-field > span{
-  display:block!important;
-  min-height:0!important;
-  line-height:1.25!important;
-}
-#scoresPanel .score-side-panel-grid .filter-medal-wrap,
-#scoresPanel .score-side-panel-grid .filter-rank-wrap,
-#scoresPanel .score-side-panel-grid .filter-medal-button,
-#scoresPanel .score-side-panel-grid .filter-rank-button{
-  width:100%!important;
-  min-width:0!important;
-  max-width:none!important;
-  margin:0!important;
-}
-
-/* NO IMAGE is a fallback only. It must be centered and must not visually sit behind real banners. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .song-banner.banner-empty{
-  display:grid!important;
-  place-items:center!important;
-  text-align:center!important;
-  padding:0!important;
-  background:var(--surface-2)!important;
-  color:var(--muted)!important;
-  font-size:clamp(8px,1.75cqw,13px)!important;
-  font-weight:800!important;
-  line-height:1!important;
-  object-fit:initial!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 img.song-banner:not(.banner-empty){
-  display:block!important;
-  background:transparent!important;
-  object-fit:contain!important;
-  object-position:center center!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 img.song-banner:not(.banner-empty)::before,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 img.song-banner:not(.banner-empty)::after{
-  content:none!important;
-}
-
-/* One centered NO PLAY field replaces the three independent dash cells. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-unplayed{
-  position:absolute!important;
-  top:56.818182%!important;
-  height:43.181818%!important;
-  box-sizing:border-box!important;
-  display:grid!important;
-  place-items:center!important;
-  margin:0!important;
-  padding:0!important;
-  border-top:1px solid var(--line)!important;
-  border-right:1px solid var(--line)!important;
-  color:var(--muted)!important;
-  font-size:clamp(7px,1.58cqw,12px)!important;
-  font-weight:900!important;
-  line-height:1!important;
-  letter-spacing:.02em!important;
-  text-align:center!important;
-  white-space:nowrap!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-unplayed{
-  left:21.052632%!important;
-  width:25.986842%!important;
-  background:var(--admin-history-bg,#eef8ff)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-unplayed{
-  left:54.934211%!important;
-  width:25.986842%!important;
-  background:var(--admin-current-bg,#fff0f7)!important;
-}
-
-/* Ensure any older dash placeholders cannot leak into no-play rows. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-medal,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-rank,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-score{
-  display:none!important;
-}
-
-@media(max-width:430px){
-  #scoresPanel .score-basic-filter-grid,
-  #scoresPanel .score-side-panel-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:6px!important;
-  }
+  #scoresPanel .score-sort-panel-controls select{height:36px;min-height:36px;padding-inline:7px;font-size:.68rem;}
+  #scoresPanel .filter-medal-button img{width:24px;height:24px;}
+  #scoresPanel .filter-rank-button img{width:31px;height:23px;}
+  #scoresPanel .score-detail-actions{gap:6px;padding-top:6px;}
+  #scoresPanel .score-detail-actions .sub-button,
+  #scoresPanel .score-detail-actions .main-button{min-height:38px;padding:7px 10px;font-size:.75rem;}
 }
