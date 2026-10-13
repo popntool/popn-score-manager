@@ -21,28 +21,28 @@
 .medal-summary{grid-template-columns:repeat(14,minmax(46px,1fr));}
 .no-play-label{display:grid;place-items:center;width:29px;height:29px;color:var(--muted);font-size:.52rem;font-weight:900;line-height:.95}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.score-card-v300{display:grid;grid-template-columns:52px minmax(0,1fr) 58px 58px 66px 66px 66px;grid-template-rows:46px 24px 32px;align-items:stretch;min-width:0;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:var(--page);box-shadow:var(--shadow)}
+.score-card-v300>*{min-width:0}
+.score-card-v300 .song-banner{grid-column:1/3;grid-row:1;width:100%;height:46px;min-height:0;max-width:none;max-height:none;overflow:hidden;border:0;border-bottom:1px solid var(--line);border-radius:0;object-fit:contain;}
+.score-card-v300 .banner-empty{display:grid;place-items:center;white-space:nowrap;background:transparent}
+.score-card-v300 .card-medal{grid-column:3;grid-row:1}
+.score-card-v300 .card-rank{grid-column:4;grid-row:1;}
+.score-card-v300 .card-history{grid-column:5;grid-row:1}
+.score-card-v300 .card-current{grid-column:6;grid-row:1}
+.score-card-v300 .card-popclass{grid-column:7;grid-row:1}
+.score-card-v300 .card-medal,.score-card-v300 .card-rank,.score-card-v300 .card-score,.score-card-v300 .card-popclass{display:grid;place-items:center;align-content:center;gap:1px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--page);font-variant-numeric:tabular-nums}
+.score-card-v300 .card-medal img{width:32px;height:32px;max-width:100%;max-height:100%;object-fit:contain}
+.score-card-v300 .card-medal .unplayed-mark{min-width:0}
+.score-card-v300 .card-rank{min-height:0;height:auto;padding:0;border-width:0 0 1px 1px;border-radius:0;font-size:.78rem;text-align:center;line-height:1;-webkit-text-stroke:0;}
+.score-card-v300 .card-score small,.score-card-v300 .card-popclass small{font-size:.58rem;color:var(--muted);white-space:nowrap}
+.score-card-v300 .card-score strong,.score-card-v300 .card-popclass strong{max-width:100%;font-size:.76rem;letter-spacing:-.035em}
+.score-card-v300 .card-chart,.score-card-v300 .card-level{grid-column:1;display:grid;place-items:center;border-right:1px solid var(--line);font-variant-numeric:tabular-nums}
+.score-card-v300 .card-chart{grid-row:2;color:#fff;font-size:.66rem;font-weight:900;text-shadow:0 1px 1px #0005}
+.score-card-v300 .card-level{grid-row:3;font-size:.78rem}
+.score-card-v300 .card-chart.light{background:#3f8fdd}.score-card-v300 .card-chart.normal{background:#38a754}.score-card-v300 .card-chart.hyper{background:#e6c82f;color:#332b00;text-shadow:none}.score-card-v300 .card-chart.ex{background:#f14e61}
+.score-card-v300 .card-genre{grid-column:2/7;grid-row:2;display:flex;align-items:center;padding:2px 8px;border-bottom:1px solid var(--line);color:var(--muted);font-size:.66rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score-card-v300 .card-title{grid-column:2/7;grid-row:3;display:flex;align-items:center;padding:2px 8px;font-size:1rem;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.score-card-v300 .score-edit{grid-column:7;grid-row:2/span 2;align-self:stretch;justify-self:stretch;width:auto;height:auto;min-width:0;min-height:0;margin:0;padding:0;border:0;border-left:1px solid var(--line);border-radius:0;background:var(--blue);color:#10234e;font-weight:900}
 .popclass-group{display:grid;gap:7px}.popclass-group+.popclass-group{margin-top:14px}.popclass-group-title{display:flex;align-items:end;justify-content:space-between;border-bottom:1px solid var(--line);padding:2px}.popclass-group-title span{color:var(--muted);font-size:.75rem;font-weight:800}.manual-popclass{display:grid;place-items:center;width:100%;height:48px;border:2px solid var(--line);border-radius:10px;background:var(--surface-2);font-weight:900;font-variant-numeric:tabular-nums}
 
 .master-song-card{align-items:stretch;gap:8px;padding:7px 8px}
@@ -94,18 +94,18 @@
   .list-sort-controls{grid-template-columns:minmax(0,1.35fr) minmax(0,.8fr);gap:5px;margin-bottom:7px}
   .list-sort-controls label{grid-template-columns:1fr;gap:2px;font-size:.58rem}
   .list-sort-controls select{height:38px;min-height:38px;font-size:.72rem}
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  .score-card-v300{grid-template-columns:36px minmax(0,1fr) 40px 40px 50px 50px 50px;grid-template-rows:40px 21px 27px}
+  .score-card-v300 .song-banner{height:40px}
+  .score-card-v300 .card-medal img{width:28px;height:28px}
+  .score-card-v300 .card-rank{font-size:.62rem}
+  .score-card-v300 .card-score,.score-card-v300 .card-popclass{padding:1px}
+  .score-card-v300 .card-score small,.score-card-v300 .card-popclass small{font-size:.43rem}
+  .score-card-v300 .card-score strong,.score-card-v300 .card-popclass strong{font-size:.58rem;letter-spacing:-.06em}
+  .score-card-v300 .card-chart{font-size:.5rem}
+  .score-card-v300 .card-level{font-size:.67rem}
+  .score-card-v300 .card-genre{padding:1px 5px;font-size:.55rem}
+  .score-card-v300 .card-title{padding:1px 5px;font-size:.76rem}
+  .score-card-v300 .score-edit{padding:1px;font-size:.62rem}
           .master-song-card{flex-direction:row;align-items:stretch;gap:5px;padding:5px}
   .master-song-card .admin-card-main{grid-template-columns:76px minmax(0,1fr);gap:6px}
   .master-song-card .admin-card-main img,.master-song-card .admin-no-image{width:76px;height:31px}
@@ -127,7 +127,7 @@
   .clear-rate-summary strong{font-size:.66rem}
 }
 @media(max-width:380px){
-  
+  .score-card-v300{grid-template-columns:34px minmax(0,1fr) 36px 36px 46px 46px 46px}
   .score-entry-grid{gap:5px}
   .score-entry-grid label{font-size:.7rem}
 }
@@ -156,7 +156,7 @@ body.auth-user>.auth-gate{display:none}
 [data-theme="dark"] .auth-password-notice strong{color:#ffbf27}
 @media(max-width:520px){.auth-password-notice{padding:10px 12px;font-size:.74rem}.auth-password-notice strong{font-size:.82rem}}
 
-
+.score-card-v300 .song-banner{background:var(--page)!important;}
 .master-song-card .admin-card-main img,.master-song-card .admin-no-image{background:var(--page)!important;}
 .dialog-back{position:relative;justify-self:end;display:inline-grid;place-items:center;min-height:34px;padding:4px 10px;border:2px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--text);font-weight:900;line-height:1}
 #myPageDialog>form{gap:8px;padding:12px 14px}
@@ -258,7 +258,7 @@ body.auth-user>.auth-gate{display:none}
   background:none!important;clip-path:none!important;filter:none!important;
 }
 .cool-perfect-medal::before,.cool-perfect-medal::after,.cool-perfect-medal i{display:none!important}
-
+.score-card-v300 .card-medal .cool-perfect-medal{width:32px!important;height:32px!important}
 .medal-picker-button.cool-perfect-active::before,.medal-picker-button.cool-perfect-active::after{display:none!important}
 .medal-picker-button.cool-perfect-active>img{visibility:visible!important;width:42px;height:42px;object-fit:contain}
 .medal-picker-button.cool-perfect-active>span{visibility:hidden!important}
@@ -268,7 +268,7 @@ body.auth-user>.auth-gate{display:none}
   box-shadow:inset 2px 0 0 var(--line),inset 0 2px 0 var(--line)!important;
 }
 @media(max-width:760px){
-  
+  .score-card-v300 .card-medal .cool-perfect-medal{width:28px!important;height:28px!important}
   .medal-picker-button.cool-perfect-active>img{width:38px;height:38px}
 }
 
@@ -348,8 +348,13 @@ body.auth-user>.auth-gate{display:none}
 }
 
 /* Rank artwork: the approved 12 separate transparent PNGs. */
-
-
+.score-card-v300 .card-rank.rank-badge{
+  display:grid;place-items:center;padding:2px;background:var(--surface);
+  border-left:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.score-card-v300 .card-rank.rank-badge img{
+  display:block;max-width:100%;max-height:100%;width:38px;height:36px;object-fit:contain;
+}
 #manualDialog .score-entry-grid .rank-badge{
   display:grid;place-items:center;width:100%;height:48px;min-height:48px;
   padding:3px;margin:0;background:var(--page);border-radius:10px;
@@ -358,7 +363,7 @@ body.auth-user>.auth-gate{display:none}
   display:block;max-width:100%;max-height:100%;width:auto;height:40px;object-fit:contain;
 }
 @media(max-width:760px){
-  
+  .score-card-v300 .card-rank.rank-badge img{width:32px;height:30px;}
   #manualDialog .score-entry-grid .rank-badge{height:46px;min-height:46px;}
   #manualDialog .score-entry-grid .rank-badge img{height:38px;}
 }
@@ -388,7 +393,7 @@ body.auth-user>.auth-gate{display:none}
 .rival-star.is-active{color:#d89b12}
 .rival-entry,.rival-comparison{display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:.75rem .25rem}
 .rival-comparison strong{width:100%}
-
+.score-card-v300{cursor:pointer}
 #visibilityDialog .check-row{display:flex;align-items:center;gap:.6rem;margin:.6rem 0}
 #visibilityDialog input,#visibilityDialog select{font-size:16px}
 
@@ -507,10 +512,10 @@ html[data-theme="dark"] .main-button{background:#405fb0;color:#fff}
 .dialog-close{border:1px solid var(--line);background:var(--surface);box-shadow:0 2px 8px rgba(31,53,112,.06)}
 .search,select,input,textarea,.filter-medal-button,.medal-picker-button{border:1px solid var(--line);border-radius:11px;background:var(--surface);box-shadow:none}
 input:focus,select:focus,textarea:focus,.search:focus-within{border-color:var(--focus)}
-
-
-
-
+.score-card-v300{border:1px solid var(--line);border-radius:13px;box-shadow:0 3px 12px rgba(31,53,112,.045);background:var(--surface)}
+.score-card-v300 .card-medal,.score-card-v300 .card-rank,.score-card-v300 .card-score,.score-card-v300 .card-popclass{background:var(--surface);border-color:var(--line)}
+.score-card-v300 .score-edit{background:var(--surface-2);color:var(--navy);border-color:var(--line)}
+.score-card-v300 .card-genre{border-color:var(--line)}
 #userList .user-row-v3095{border-color:var(--line)!important;border-radius:13px!important;background:var(--surface)!important;box-shadow:0 3px 12px rgba(31,53,112,.04)}
 .setting-row,.admin-card,.admin-tabs button,.admin-notice-list button,.feedback-history-card{border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:none}
 .menu-modal .setting-row{padding:12px 14px;transition:background-color .16s,transform .16s}
@@ -526,24 +531,50 @@ dialog::backdrop{background:rgba(14,25,52,.52);backdrop-filter:blur(5px)}
 #visibilityDialog .account-dialog-header,#rivalListDialog .account-dialog-header{padding-bottom:9px;border-bottom:1px solid var(--line)}
 #visibilityDialog .account-dialog-header>h2,#rivalListDialog .account-dialog-header>h2,#songDetailDialog>h2{letter-spacing:-.025em}
 button:not(:disabled){-webkit-tap-highlight-color:transparent}
-@media(hover:hover){.main-button:hover{filter:brightness(1.08)}#userList .user-row-v3095:hover{box-shadow:0 6px 20px rgba(31,53,112,.09)}}
+@media(hover:hover){.main-button:hover{filter:brightness(1.08)}.score-card-v300:hover,#userList .user-row-v3095:hover{box-shadow:0 6px 20px rgba(31,53,112,.09)}}
 @media(prefers-reduced-motion:reduce){.tabs button,.menu-modal .setting-row{transition:none}}
 
 
 /* v3.0.114 — score cards: remove the spreadsheet-like cell borders. */
-
-
-
-
-
-
-
-
-
-
-
-
-
+.score-card-v300{
+  column-gap:0;row-gap:0;border:1px solid var(--line);
+  border-radius:16px;background:var(--surface);overflow:hidden;
+  box-shadow:0 4px 18px rgba(31,53,112,.045);
+}
+.score-card-v300 .song-banner{
+  border:0!important;border-radius:0;object-fit:contain;
+  background:var(--surface-2)!important;
+}
+.score-card-v300 .card-medal,.score-card-v300 .card-rank,
+.score-card-v300 .card-score,.score-card-v300 .card-popclass{
+  border:0!important;border-bottom:1px solid var(--line)!important;
+  background-color:var(--surface)!important;
+}
+.score-card-v300 .card-medal{padding-left:5px}
+.score-card-v300 .card-score small,.score-card-v300 .card-popclass small{
+  color:var(--muted);font-weight:500;letter-spacing:.02em;
+}
+.score-card-v300 .card-chart,.score-card-v300 .card-level{
+  border:0!important;
+}
+.score-card-v300 .card-chart{align-self:center;justify-self:center;width:calc(100% - 8px);height:calc(100% - 4px);border-radius:6px;font-weight:800}
+.score-card-v300 .card-level{font-weight:800;color:var(--text)}
+.score-card-v300 .card-genre{
+  border:0!important;padding-top:3px;color:var(--muted);font-weight:500;
+}
+.score-card-v300 .card-title{font-weight:800;letter-spacing:-.02em;color:var(--text)}
+.score-card-v300 .score-edit{
+  align-self:center;justify-self:center;width:calc(100% - 8px);
+  height:calc(100% - 12px);min-height:32px;border:0!important;
+  border-radius:9px;background:var(--surface-2);color:var(--navy);
+  font-weight:800;
+}
+@media(hover:hover){.score-card-v300 .score-edit:hover{background:var(--line)}}
+@media(max-width:760px){
+  .score-card-v300{border-radius:14px}
+  .score-card-v300 .card-medal{padding-left:2px}
+  .score-card-v300 .score-edit{width:calc(100% - 6px);height:calc(100% - 8px);min-height:26px;border-radius:7px}
+}
 
 
 /* v3.0.115 — typography and rank-color restoration. */
@@ -557,9 +588,9 @@ button,input,select,textarea{letter-spacing:inherit}
 .popclass-group-title{align-items:center;margin:0 0 10px;padding:0 0 10px;border-bottom:1px solid var(--line)}
 .popclass-group-title h2,.popclass-group-title h3{margin:0;font-size:1.02rem;font-weight:750;letter-spacing:-.025em;line-height:1.4;color:var(--text)}
 .popclass-group-title span{font-size:.72rem;font-weight:600;letter-spacing:0;color:var(--muted);font-variant-numeric:tabular-nums}
-
-
-
+.score-card-v300 .card-title{font-weight:750;letter-spacing:-.025em}
+.score-card-v300 .card-score strong,.score-card-v300 .card-popclass strong{font-weight:750;font-variant-numeric:tabular-nums}
+.score-card-v300 .score-edit{font-weight:700}
 /* v3.0.116 — prevent mobile dialog auto-focus from drawing a second blue ring. */
 @media (hover: none) and (pointer: coarse) {
   dialog .dialog-close:focus, dialog .dialog-back:focus,
@@ -741,10 +772,20 @@ button,input,select,textarea{letter-spacing:inherit}
 
 
 /* v3.2.4 */
-
-
-
-
+.score-card-v300{grid-template-rows:46px 24px 28px}
+.score-card-v300 .card-title{
+  padding-top:0;
+  padding-bottom:0;
+  line-height:1.2;
+}
+.score-card-v300 .score-edit{
+  height:calc(100% - 6px);
+  min-height:0;
+}
+@media(max-width:760px){
+  .score-card-v300{grid-template-rows:40px 21px 24px}
+  .score-card-v300 .score-edit{height:calc(100% - 4px);min-height:22px;}
+}
 .image-share-range{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
 @media(max-width:760px){.image-share-range{grid-template-columns:1fr;gap:6px;}}
 
@@ -858,29 +899,29 @@ textarea,
 
 
 /* v3.2.12: an isolated score-card structure, independent of old grid placements. */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.score-card-v300.score-card-v312{display:block;overflow:hidden;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);}
+.score-card-v312 .score-card-upper{display:grid;grid-template-columns:minmax(0,42%) minmax(0,58%);min-width:0;min-height:76px;border-bottom:1px solid var(--line);}
+.score-card-v312 .song-banner{display:block;grid-area:auto;width:100%;height:100%;min-height:0;max-height:none;max-width:none;object-fit:contain;background:var(--surface-2);border:0!important;border-right:1px solid var(--line)!important;border-radius:0;}
+.score-card-v312 .banner-empty{display:grid;place-items:center;font-size:.68rem;color:var(--muted)}
+.score-card-v312 .score-records{display:grid;grid-template-rows:repeat(2,minmax(0,1fr));min-width:0;}
+.score-card-v312 .score-record{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,.7fr) minmax(0,.82fr) minmax(0,1.12fr);align-items:center;min-width:0;min-height:38px;font-variant-numeric:tabular-nums;}
+.score-card-v312 .score-record+.score-record{border-top:1px solid var(--line)}
+.score-card-v312 .score-record>*{display:grid;place-items:center;align-self:stretch;min-width:0;padding:2px;border-right:1px solid var(--line)}
+.score-card-v312 .score-record>*:last-child{border-right:0}
+.score-card-v312 .score-record-label{font-size:.68rem;color:var(--text);font-weight:850;white-space:nowrap;}
+.score-card-v312 .score-record-medal img{display:block;width:30px;height:30px;max-width:100%;object-fit:contain}
+.score-card-v312 .score-record-rank img{display:block;max-width:100%;width:36px;height:30px;object-fit:contain}
+.score-card-v312 .score-record-score{font-size:.73rem;letter-spacing:-.04em;white-space:nowrap;}
+.score-card-v312 .score-card-lower{display:grid;grid-template-columns:48px minmax(0,1fr) 65px 57px;grid-template-rows:24px 32px;min-width:0;align-items:stretch;}
+.score-card-v312 .card-chart{grid-area:1/1/2/2;width:auto;height:auto;align-self:stretch;justify-self:stretch;margin:2px 3px;border:0!important;border-radius:6px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:.69rem;}
+.score-card-v312 .card-chart.ex{background:#ed476a}.score-card-v312 .card-chart.hyper{background:#efce3e;color:#302500}.score-card-v312 .card-chart.normal{background:#42a758}.score-card-v312 .card-chart.light{background:#448bd5}
+.score-card-v312 .card-genre{grid-area:1/2/2/3;display:flex;align-items:center;min-width:0;padding:0 5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:.68rem;border:0!important;}
+.score-card-v312 .card-psr-label{grid-area:1/3/2/4;display:grid;place-items:center;font-size:.68rem;color:var(--muted);border-left:1px solid var(--line);}
+.score-card-v312 .score-edit{grid-area:1/4/3/5;display:grid;place-items:center;align-self:stretch;justify-self:stretch;width:auto;height:auto;min-height:0;margin:3px;padding:0;border:0;border-radius:10px;background:var(--surface-2);color:var(--text);font-size:.76rem;font-weight:800;}
+.score-card-v312 .card-level{grid-area:2/1/3/2;display:grid;place-items:center;border:0!important;font-size:.85rem;}
+.score-card-v312 .card-title{grid-area:2/2/3/3;display:flex;align-items:center;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin:0;padding:0 5px;font-size:.84rem;font-weight:850;line-height:1.2;border:0!important;}
+.score-card-v312 .card-popclass{grid-area:2/3/3/4;display:grid;place-items:center;border:0!important;border-left:1px solid var(--line)!important;background:var(--surface)!important;font-size:.78rem;font-weight:850;font-variant-numeric:tabular-nums;}
+@media(max-width:430px){.score-card-v312 .score-card-upper{grid-template-columns:minmax(0,40%) minmax(0,60%)}.score-card-v312 .score-record{grid-template-columns:minmax(0,.72fr) minmax(0,.66fr) minmax(0,.74fr) minmax(0,1.2fr)}.score-card-v312 .score-record-label{font-size:.61rem}.score-card-v312 .score-record-score{font-size:.65rem}.score-card-v312 .score-record-medal img{width:27px;height:27px}.score-card-v312 .score-record-rank img{width:30px;height:26px}.score-card-v312 .score-card-lower{grid-template-columns:40px minmax(0,1fr) 55px 52px}.score-card-v312 .card-title{font-size:.79rem}.score-card-v312 .card-popclass{font-size:.7rem}}
 
 /* Editor: remove old named grid areas and inherited score-field boxes.
    Each 3-column group is explicitly defined and cannot create implicit columns. */
@@ -913,21 +954,62 @@ textarea,
 
 
 /* v3.2.13: compact historical/current records; use reclaimed width for banner. */
-
-
-
-
-
-
-
-
-
+.score-card-v300.score-card-v312 .score-card-upper{
+  grid-template-columns:minmax(0,1fr) clamp(166px,48%,214px);
+  min-height:56px;
+}
+.score-card-v312 .score-records{
+  grid-template-rows:repeat(2,28px);
+  min-height:56px;
+}
+.score-card-v312 .score-record{
+  grid-template-columns:32px 30px 34px minmax(0,1fr);
+  min-width:0;
+  min-height:28px;
+  height:28px;
+}
+.score-card-v312 .score-record>*{padding:0 1px;min-width:0;}
+.score-card-v312 .score-record-label{font-size:.59rem;letter-spacing:-.035em;}
+.score-card-v312 .score-record-medal img,
+.score-card-v312 .score-record-medal .cool-perfect-medal{
+  width:23px!important;
+  height:23px!important;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+.score-card-v312 .score-record-rank img{
+  width:29px;
+  height:23px;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+.score-card-v312 .score-record-score{
+  font-size:.7rem;
+  letter-spacing:-.035em;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:430px){
+  .score-card-v300.score-card-v312 .score-card-upper{
+    grid-template-columns:minmax(0,1fr) clamp(166px,48%,214px);
+  }
+  .score-card-v312 .score-record{
+    grid-template-columns:32px 30px 34px minmax(0,1fr);
+    min-height:28px;
+  }
+  .score-card-v312 .score-record-label{font-size:.59rem;}
+  .score-card-v312 .score-record-score{font-size:.68rem;}
+  .score-card-v312 .score-record-medal img{width:23px;height:23px;}
+  .score-card-v312 .score-record-rank img{width:29px;height:23px;}
+}
 
 
 /* v3.2.34: keep score-card banners compact on wide PC layouts.
    The image intrinsic aspect ratio must not expand the auto-sized upper row. */
-
-
+.score-card-v300.score-card-v312 .score-card-upper{height:56px;min-height:56px;max-height:56px;}
+.score-card-v300.score-card-v312 .song-banner{height:56px;min-height:56px;max-height:56px;}
 
 /* v3.2.14: compact score editor; keep all three record columns explicit. */
 #manualDialog #manualForm{gap:7px;}
@@ -966,10 +1048,26 @@ textarea,
 
 
 /* v3.2.15: compact song-card title row, separator between PSR and edit. */
-
-
-
-
+.score-card-v300.score-card-v312 .score-card-lower{
+  grid-template-rows:20px 26px;
+  min-height:46px;
+}
+.score-card-v300.score-card-v312 .card-title{
+  min-height:0;
+  padding:0 5px;
+  line-height:1.15;
+}
+.score-card-v300.score-card-v312 .score-edit{
+  border-left:1px solid var(--line)!important;
+  border-radius:0;
+  margin:0;
+  padding:2px;
+  background:var(--surface-2);
+}
+.score-card-v300.score-card-v312 .card-psr-label,
+.score-card-v300.score-card-v312 .card-popclass{
+  border-right:1px solid var(--line)!important;
+}
 /* Artist and version: label above a full-width display-only value. */
 #manualDialog .manual-meta{
   display:grid;
@@ -1012,7 +1110,7 @@ textarea,
   min-height:40px;
 }
 @media(max-width:760px){
-  
+  .score-card-v300.score-card-v312 .score-card-lower{grid-template-rows:20px 26px;}
   #manualDialog .manual-meta-row{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;gap:3px;min-height:0;}
   #manualDialog .manual-meta-value{min-height:34px;padding:6px 9px;}
   #manualDialog .manual-score-grid .medal-picker-button,
@@ -1231,7 +1329,20 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
 #manualDialog .song-search-fields>label{align-self:start;}
 
 /* v3.2.53: keep empty medal/rank marks centered on wide desktop score cards. */
-
+.score-card-v312 .score-record-medal .unplayed-mark,
+.score-card-v312 .score-record-rank .unplayed-mark{
+  box-sizing:border-box;
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
+  min-width:0;
+  margin:0;
+  padding:0;
+  text-align:center;
+  justify-self:stretch;
+  align-self:stretch;
+}
 
 /* v3.2.53: external Wiki source uses the same menu-row appearance. */
 #menuDialog a.setting-row.wiki-source-row{
@@ -1239,530 +1350,107 @@ body > .psm-floating-medal-picker > .compact-medal-option[aria-pressed="true"]{
   color:var(--text);
 }
 
-/* v3.2.57: admin-only sync update preview. */
-.sync-update-dialog{width:min(94vw,920px);max-width:920px;padding:0;border:0;background:transparent;overflow:visible;}
-.sync-update-dialog::backdrop{background:rgba(18,31,68,.58);backdrop-filter:blur(2px);}
-.sync-update-modal{position:relative;overflow:hidden;border:2px solid #f3cf5a;border-radius:26px;background:linear-gradient(180deg,#fff8c9 0,#fffdf5 28%,#fffdf8 100%);box-shadow:0 20px 60px rgba(11,28,69,.28);color:var(--text);}
-.sync-update-head{padding:26px 28px 18px;text-align:center;background:radial-gradient(circle at 20% 15%,#fff4a8 0 3px,transparent 4px),radial-gradient(circle at 82% 24%,#ffd34d 0 4px,transparent 5px),linear-gradient(135deg,#fff9d4,#fff2a7);}
-.sync-update-title-row{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;}
-.sync-update-title-row h2{margin:0;color:#24438d;font-size:clamp(2rem,7vw,3rem);font-weight:950;letter-spacing:.03em;text-shadow:2px 2px 0 #fff;}
-.sync-update-title-row h2::first-letter{color:#ff4f91;}
-.sync-update-count{display:inline-flex;align-items:center;min-height:36px;padding:5px 12px;border:2px solid #ffb7cf;border-radius:999px;background:#fff;color:#e83278;font-size:.95rem;font-weight:900;}
-.sync-update-head p{margin:10px 0 0;color:#24438d;font-weight:800;}
-.sync-update-close{top:12px;right:12px;background:#fff;box-shadow:0 4px 12px #20366c26;}
-.sync-update-list{display:grid;gap:12px;max-height:min(58vh,640px);padding:14px 16px;overflow:auto;overscroll-behavior:contain;}
-.sync-update-item{display:grid;gap:14px;padding:16px 18px;border:1px solid #f0dfaa;border-radius:22px;background:#fff;box-shadow:0 3px 10px rgba(36,67,141,.07);}
-.sync-update-top{display:grid;grid-template-columns:150px 54px minmax(0,1fr);gap:12px;align-items:center;}
-.sync-update-thumb{display:flex;align-items:center;justify-content:flex-start;width:150px;height:50px;box-sizing:border-box;}
-.sync-update-banner{display:block;width:150px;height:50px;object-fit:contain;border:1px solid #d8e1f4;border-radius:10px;background:#fff;box-sizing:border-box;}
-.sync-update-no-banner{display:grid;place-items:center;width:150px;height:50px;border:1px solid #d8e1f4;border-radius:10px;background:#f7fbff;color:#ff6da5;font-size:22px;font-weight:900;}
-.sync-update-chart-level{display:grid;grid-template-rows:auto auto;align-self:stretch;min-width:0;border-radius:11px;overflow:hidden;background:#e4efff;}
-.sync-update-chart,.sync-update-level{display:flex;align-items:center;justify-content:center;min-height:25px;padding:2px 6px;font-size:.76rem;font-weight:900;white-space:nowrap;}
-.sync-update-chart{background:#ff82aa;color:#fff;}.sync-update-chart.hyper{background:#ffe37d;color:#695500}.sync-update-chart.normal{background:#bff0a4;color:#225d31}.sync-update-chart.light{background:#cae7ff;color:#315c88}.sync-update-level{background:#e4efff;color:#284d86;}
-.sync-update-song-title{min-width:0;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;color:#172c65;font-size:1.05rem;line-height:1.35;word-break:break-word;}
-.sync-update-changes{display:grid;gap:12px;}
-.sync-update-change-block{display:grid;grid-template-rows:auto auto;gap:6px;}
-.sync-update-heading-grid,.sync-update-value-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:18px;}
-.sync-update-heading-cell,.sync-update-value-cell{min-width:0;}
-.sync-update-heading-cell:nth-child(2),.sync-update-value-cell:nth-child(2){border-left:1px dashed #d6deee;padding-left:18px;}
-.sync-update-heading-cell{min-height:30px;display:flex;align-items:center;}
-.sync-update-heading-cell span{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:3px 11px;border-radius:999px;background:#eef0f4;color:#59677f;font-size:.78rem;font-weight:800;white-space:nowrap;}
-.sync-update-value-cell{min-height:42px;display:flex;align-items:center;gap:9px;}
-.sync-update-score-value{font-variant-numeric:tabular-nums;white-space:nowrap;}
-.sync-update-score-value b{color:#1f376f;font-size:1.02rem;line-height:1;}
-.sync-update-score-value .is-new{color:#eb3f7d;font-size:1.1rem;}
-.sync-update-score-value>span,.sync-update-arrow{color:#8794aa;font-weight:900;}
-.sync-update-medal-value{justify-content:flex-start;}
-.sync-update-medal{display:inline-flex;align-items:center;justify-content:center;min-width:36px;}
-.sync-update-medal img{width:38px;height:38px;object-fit:contain;}
-.sync-update-medal-empty{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#edf0f5;color:#758198;font-weight:900;}
-.sync-update-actions{padding:2px 16px 16px;display:flex;justify-content:center;}.sync-update-actions .main-button{min-width:180px;border-radius:999px;background:#ff4f91;box-shadow:0 5px 0 #d72f70;}
-@media(min-width:641px){.sync-update-list{padding:16px 20px}.sync-update-item{padding:18px 20px}.sync-update-top{grid-template-columns:170px 58px minmax(0,1fr);gap:14px}.sync-update-thumb,.sync-update-banner,.sync-update-no-banner{width:170px;height:56px}.sync-update-heading-grid,.sync-update-value-grid{column-gap:24px}.sync-update-heading-cell:nth-child(2),.sync-update-value-cell:nth-child(2){padding-left:24px}.sync-update-song-title{font-size:1.1rem}.sync-update-score-value b{font-size:1.06rem}.sync-update-score-value .is-new{font-size:1.16rem}.sync-update-medal img{width:40px;height:40px}}
-@media(max-width:640px){.sync-update-dialog{width:calc(100vw - 14px)}.sync-update-modal{border-radius:22px}.sync-update-head{padding:20px 16px 14px}.sync-update-list{padding:10px;gap:10px;max-height:62vh}.sync-update-item{gap:12px;padding:13px}.sync-update-top{grid-template-columns:112px 44px minmax(0,1fr);gap:9px}.sync-update-thumb,.sync-update-banner,.sync-update-no-banner{width:112px;height:38px}.sync-update-chart,.sync-update-level{min-height:19px;padding:1px 4px;font-size:.7rem}.sync-update-song-title{font-size:.93rem}.sync-update-heading-grid,.sync-update-value-grid{column-gap:12px}.sync-update-heading-cell:nth-child(2),.sync-update-value-cell:nth-child(2){padding-left:12px}.sync-update-heading-cell{min-height:26px}.sync-update-heading-cell span{min-height:26px;padding:2px 8px;font-size:.7rem}.sync-update-value-cell{min-height:38px;gap:6px}.sync-update-score-value b{font-size:.88rem}.sync-update-score-value .is-new{font-size:.96rem}.sync-update-medal img{width:34px;height:34px}.sync-update-medal{min-width:32px}.sync-update-actions{padding:0 10px 12px}.sync-update-title-row{gap:8px}.sync-update-count{min-height:30px;padding:3px 9px}.sync-update-head p{font-size:.86rem}}
-/* v3.2.59: sync failures can be inspected without exposing retry counters. */
-.sync-failure-dialog{width:min(680px,calc(100vw - 24px));max-width:680px;padding:0;border:0;background:transparent;}
-.sync-failure-dialog::backdrop{background:rgba(18,31,68,.58);backdrop-filter:blur(2px);}
-.sync-failure-modal{position:relative;max-height:min(82vh,760px);overflow:hidden;display:flex;flex-direction:column;padding:24px;border:1px solid var(--line);border-radius:24px;background:var(--surface,#fff);color:var(--text);box-shadow:0 20px 60px rgba(11,28,69,.28);}
-.sync-failure-modal h2{margin:0 42px 10px 0;color:var(--text);font-size:1.35rem;}
-.sync-failure-summary{margin:0 0 8px;line-height:1.65;color:var(--text);}
-.sync-failure-help{margin:0 0 14px;color:var(--muted);font-size:.88rem;line-height:1.55;}
-.sync-failure-list{min-height:0;overflow:auto;display:grid;gap:10px;padding-right:3px;overscroll-behavior:contain;}
-.sync-failure-item{padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2,#f7f9fd);}
-.sync-failure-title{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px;}.sync-failure-title b{min-width:0;overflow-wrap:anywhere;}.sync-failure-title span{display:inline-flex;padding:2px 8px;border-radius:999px;background:#e8efff;color:#294d87;font-size:.72rem;font-weight:900;}
-.sync-failure-meta{display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;margin-top:4px;font-size:.82rem;}.sync-failure-meta small{color:var(--muted);font-weight:800;}.sync-failure-meta span{overflow-wrap:anywhere;}
-.sync-failure-values{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}.sync-failure-values span{padding:3px 8px;border-radius:8px;background:var(--surface,#fff);font-size:.78rem;font-weight:800;font-variant-numeric:tabular-nums;}
-.sync-failure-item details{margin-top:8px;font-size:.78rem;color:var(--muted);}.sync-failure-item summary{cursor:pointer;font-weight:800;}.sync-failure-item code{display:block;margin-top:6px;padding:8px;border-radius:8px;background:rgba(80,94,125,.09);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--text);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.72rem;}
-@media(max-width:560px){.sync-failure-dialog{width:calc(100vw - 14px)}.sync-failure-modal{max-height:86vh;padding:18px 14px;border-radius:20px}.sync-failure-meta{grid-template-columns:70px minmax(0,1fr)}}
-
-
-/* v3.3.2: reorganized menu sections and spacing. */
-#menuDialog .menu-scroll-body{display:flex;flex-direction:column;gap:9px;}
-#menuDialog .menu-section-title{margin:14px 2px 1px;padding-top:0;}
-#menuDialog .menu-scroll-body>.menu-section-title:first-child{margin-top:0;}
-#menuDialog .setting-row{margin:0;box-sizing:border-box;}
-#menuDialog .menu-info-row{cursor:default;}
-#menuDialog .menu-info-row:hover{background:var(--surface);}
-.display-settings-dialog{width:min(620px,calc(100vw - 24px));}
-.display-settings-dialog .display-settings-content{display:grid;gap:10px;padding:14px;}
-.display-settings-dialog .setting-row{margin:0;padding:12px 14px;box-sizing:border-box;}
-.display-settings-dialog .setting-row>span>strong{display:block;font-size:1rem;font-weight:900;line-height:1.25;}
-.display-settings-dialog .setting-row>span>small{display:block;margin-top:3px;color:var(--muted);font-size:.78rem;font-weight:400;line-height:1.45;}
-.display-settings-dialog .setting-row select{max-width:min(280px,48vw);}
-@media(max-width:760px){#menuDialog .menu-scroll-body{gap:8px;padding:8px 10px 14px;}#menuDialog .menu-section-title{margin-top:13px}.display-settings-dialog .display-settings-content{padding:10px}.display-settings-dialog .setting-row{padding:11px 12px}.display-settings-dialog .setting-row select{max-width:46vw}}
-
-/* v3.3.31: shared score-card layout (legacy card CSS removed).
-   No CSS zoom: card geometry is width-based so Safari/Chrome render the same proportions.
-   The same card layout is used in the score list and PSR target lists. */
-body.score-card-responsive #scoreList,
-body.score-card-responsive #popclassContent .score-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  width:100%;
-  min-width:0;
-  overflow:visible;
-}
-
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312{
-  position:relative!important;
-  display:block!important;
-  box-sizing:border-box!important;
-  width:100%!important;
-  max-width:1000px!important;
-  min-width:0!important;
-  aspect-ratio:608 / 88!important;
-  height:auto!important;
-  min-height:0!important;
-  max-height:none!important;
-  margin:0 auto!important;
-  overflow:hidden!important;
-  border:1px solid var(--line)!important;
-  border-radius:14px!important;
-  background:var(--surface)!important;
-  box-shadow:0 3px 12px rgba(31,53,112,.06)!important;
-  font-family:inherit!important;
-  font-variant-numeric:tabular-nums lining-nums!important;
-  font-feature-settings:"tnum" 1,"lnum" 1!important;
-  -webkit-text-size-adjust:100%!important;
-  text-size-adjust:100%!important;
-  container-type:inline-size;
-}
-
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-card-upper,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-card-lower,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-records,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record{
-  display:contents!important;
-}
-
-/* upper area: 50/88 of card height */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .song-banner,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .banner-empty{
-  position:absolute!important;
-  left:0!important;
-  top:0!important;
-  width:32.894737%!important;
-  height:56.818182%!important;
-  min-width:0!important;
-  min-height:0!important;
-  max-width:none!important;
-  max-height:none!important;
-  box-sizing:border-box!important;
-  margin:0!important;
-  padding:0!important;
-  border:0!important;
-  border-right:1px solid var(--line)!important;
-  background:var(--surface-2)!important;
-  overflow:hidden!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .song-banner{
-  display:block!important;
-  object-fit:contain!important;
-  object-position:center center!important;
-}
-
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
-  position:absolute!important;
-  left:32.894737%!important;
-  width:59.210526%!important;
-  box-sizing:border-box!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:flex-start!important;
-  margin:0!important;
-  padding:0 clamp(5px,1.32cqw,10px)!important;
-  border-right:1px solid var(--line)!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre{
-  top:0!important;
-  height:28.409091%!important;
-  border-bottom:1px solid var(--line)!important;
-  color:var(--muted)!important;
-  font-size:clamp(8px,1.63cqw,13px)!important;
-  line-height:1!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
-  top:28.409091%!important;
-  height:28.409091%!important;
-  border-bottom:0!important;
-  color:var(--text)!important;
-  font-size:clamp(10px,2.08cqw,17px)!important;
-  font-weight:850!important;
-  line-height:1!important;
-}
-
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
-  position:absolute!important;
-  right:0!important;
-  top:0!important;
-  width:7.894737%!important;
-  height:56.818182%!important;
-  box-sizing:border-box!important;
-  display:flex!important;
-  flex-direction:column!important;
-  align-items:center!important;
-  justify-content:center!important;
-  gap:clamp(1px,.45cqw,4px)!important;
-  margin:0!important;
-  padding:0!important;
-  border:0!important;
-  border-left:0!important;
-  background:var(--surface-2)!important;
-  color:var(--text)!important;
-  font-size:clamp(8px,1.53cqw,12px)!important;
-  font-weight:850!important;
-  line-height:1!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit::before{
-  content:"✎";
-  display:grid!important;
-  place-items:center!important;
-  width:clamp(16px,3.62cqw,26px)!important;
-  aspect-ratio:1!important;
-  border-radius:8px!important;
-  background:#dfe7f8!important;
-  color:#355186!important;
-  font-size:clamp(10px,1.98cqw,16px)!important;
-  font-weight:900!important;
-}
-
-/* lower row */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-rank,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-score,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
-  position:absolute!important;
-  top:56.818182%!important;
-  height:43.181818%!important;
-  box-sizing:border-box!important;
-  display:grid!important;
-  place-items:center!important;
-  margin:0!important;
-  padding:0!important;
-  border-top:1px solid var(--line)!important;
-  border-right:1px solid var(--line)!important;
-  border-bottom:0!important;
-  border-left:0!important;
-  border-radius:0!important;
-  background:var(--surface)!important;
-  font-family:inherit!important;
-  font-variant-numeric:tabular-nums lining-nums!important;
-  font-feature-settings:"tnum" 1,"lnum" 1!important;
-  -webkit-text-size-adjust:100%!important;
-  text-size-adjust:100%!important;
-  line-height:1!important;
-}
-
-/* EX + level */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart{
-  left:0!important;
-  width:6.578947%!important;
-  font-size:clamp(8px,1.84cqw,14px)!important;
-  font-weight:900!important;
-  color:#fff!important;
-  isolation:isolate!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{
-  left:6.578947%!important;
-  width:6.578947%!important;
-  font-size:clamp(9px,2.30cqw,17px)!important;
-  font-weight:850!important;
-  color:#273b74!important;
-  isolation:isolate!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  border-radius:999px;
-  z-index:-1;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before{
-  width:85%!important;
-  height:60%!important;
-  background:var(--badge-fill,#f05d86)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
-  width:85%!important;
-  height:66%!important;
-  background:var(--admin-level-fill,#fbe7ee)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.ex{--badge-fill:#f05d86!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.hyper{--badge-fill:#f4c84f!important;color:#4a3500!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.normal{--badge-fill:#57b86a!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.light{--badge-fill:#62a5e8!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#fde6ed}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#fff5cf}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#e4f6e8}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#e5f1fd}
-
-/* history/current visual groups */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1)>*{
-  background:var(--admin-history-bg,#eef8ff)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2)>*{
-  background:var(--admin-current-bg,#fff0f7)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label{
-  font-size:clamp(7px,1.58cqw,12px)!important;
-  font-weight:900!important;
-  white-space:nowrap!important;
-  isolation:isolate!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-label::before{
-  content:"";
-  position:absolute;
-  left:50%; top:50%;
-  transform:translate(-50%,-50%);
-  width:78%!important;
-  height:58%!important;
-  border-radius:999px;
-  z-index:-1;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label{
-  color:var(--admin-history-label,#1979c8)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label::before{
-  background:var(--admin-history-pill,#d8efff)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label{
-  color:var(--admin-current-label,#e94b8a)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label::before{
-  background:var(--admin-current-pill,#ffd9ea)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-score,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
-  font-size:clamp(10px,calc(1.84cqw + 2px),16px)!important;
-  font-weight:800!important;
-  white-space:nowrap!important;
-  color:var(--text)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label{
-  font-size:clamp(7px,1.58cqw,12px)!important;
-  font-weight:850!important;
-  color:var(--text)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal img,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-medal .cool-perfect-medal{
-  width:clamp(18px,4.44cqw,30px)!important;
-  height:clamp(18px,4.44cqw,30px)!important;
-  object-fit:contain!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-rank img{
-  width:clamp(22px,5.60cqw,38px)!important;
-  height:clamp(18px,4.44cqw,30px)!important;
-  object-fit:contain!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .unplayed-mark{
-  font-size:clamp(8px,1.84cqw,14px)!important;
-}
-
-/* exact lower-row horizontal proportions from the 608px reference.
-   History score, current score, and PSR value are all 76px at the reference width. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-label{left:13.157895%!important;width:7.894737%!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-medal{left:21.052632%!important;width:6.25%!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-rank{left:27.302632%!important;width:7.236842%!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-score{left:34.539474%!important;width:12.5%!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-label{left:47.039474%!important;width:7.894737%!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-medal{left:54.934211%!important;width:6.25%!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-rank{left:61.184211%!important;width:7.236842%!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-score{left:68.421053%!important;width:12.5%!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label{left:80.921053%!important;width:6.578947%!important;background:var(--surface)!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{left:87.5%!important;width:12.5%!important;border-right:0!important;background:var(--surface)!important}
-
-/* theme variables */
-html[data-theme="light"]{
-  --admin-history-bg:#eef8ff;
-  --admin-history-pill:#d8efff;
-  --admin-history-label:#1979c8;
-  --admin-current-bg:#fff0f7;
-  --admin-current-pill:#ffd9ea;
-  --admin-current-label:#e94b8a;
-}
-html[data-theme="dark"]{
-  --admin-history-bg:#203652;
-  --admin-history-pill:#284d70;
-  --admin-history-label:#8fd0ff;
-  --admin-current-bg:#472b45;
-  --admin-current-pill:#63364f;
-  --admin-current-label:#ff9ec5;
-}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
-  background:var(--surface-2)!important;
-  color:var(--text)!important;
-}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit::before{
-  background:#31415f!important;
-  color:#dce8ff!important;
-}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#563440}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#51492c}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#294634}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#29425d}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{color:#f4e9f0!important}
-
-/* iPhone Safari: disable text inflation at the document level as well. */
-html,body{
-  -webkit-text-size-adjust:100%;
-  text-size-adjust:100%;
-}
-
-
-/* Display settings is a normal child menu dialog; give its header the same structure as other menu children. */
-#displaySettingsDialog{
-  box-sizing:border-box;
-  width:min(620px,calc(100vw - 24px));
-  max-height:calc(100dvh - 24px);
-  padding:0;
-  overflow:hidden;
-  background:var(--surface);
+/* v3.3.40: compact score filters with expandable detail panels */
+#scoresPanel.is-score-loading .score-filter-shell,
+#scoresPanel.is-score-loading #scoreList{display:none!important;}
+#scoresPanel .score-filter-shell{display:grid;gap:10px;margin:6px 0 12px;}
+#scoresPanel .score-search-inline,
+#scoresPanel .score-search-inline input,
+#scoresPanel .score-detail-panel select,
+#scoresPanel .score-detail-panel .filter-medal-button{
+  background-color:var(--field-fill)!important;
   color:var(--text);
 }
-#displaySettingsDialog>.account-dialog-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  position:static;
-  margin:0;
-  padding:16px 18px 12px;
-  border-bottom:1px solid var(--line);
-  background:var(--surface);
+#scoresPanel .score-search-inline{overflow:hidden;min-height:42px;height:42px;}
+#scoresPanel .score-search-inline input{border:0!important;box-shadow:none!important;border-radius:inherit;}
+#scoresPanel .score-quick-actions{display:grid;gap:8px;align-items:start;}
+#scoresPanel .score-quick-buttons{display:flex;flex-wrap:wrap;gap:8px;}
+#scoresPanel .score-quick-toggle{
+  display:inline-flex;align-items:center;gap:10px;
+  min-height:44px;padding:0 14px;
+  border:1px solid var(--line);border-radius:14px;
+  background:var(--surface);color:var(--text);
+  font-size:.95rem;font-weight:900;
 }
-#displaySettingsDialog>.account-dialog-header>h2{
-  flex:1;
-  min-width:0;
-  margin:0;
-  padding:0;
-  color:var(--text);
-  font-size:1.2rem;
-  font-weight:800;
-  line-height:1.4;
-  letter-spacing:-.025em;
+#scoresPanel .score-quick-toggle:hover{transform:translateY(-1px);}
+#scoresPanel .score-quick-toggle b{
+  width:8px;height:8px;display:inline-block;flex:0 0 auto;
+  border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:rotate(45deg);margin-top:-4px;
 }
-#displaySettingsDialog>.account-dialog-header>.dialog-back{
-  position:static;
-  flex:none;
-  width:auto;
-  margin:0;
-  align-self:center;
+#scoresPanel .score-quick-toggle.is-open b{transform:rotate(-135deg);margin-top:3px;}
+#scoresPanel .score-quick-toggle-count{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:24px;height:24px;padding:0 7px;
+  border-radius:999px;background:var(--brand);color:#fff;
+  font-size:.78rem;font-weight:900;line-height:1;
 }
-#displaySettingsDialog .display-settings-content{
-  box-sizing:border-box;
-  display:grid;
-  gap:10px;
-  padding:14px 18px 18px;
-  overflow-y:auto;
+#scoresPanel .score-active-conditions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;min-width:0;}
+#scoresPanel .score-active-conditions-label{color:var(--muted);font-size:.78rem;font-weight:900;white-space:nowrap;}
+#scoresPanel .score-active-filter-chips{display:flex;flex-wrap:wrap;gap:7px;min-width:0;}
+#scoresPanel .score-active-chip{
+  display:inline-flex;align-items:center;max-width:100%;
+  padding:6px 11px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--line);
+  color:var(--text);font-size:.76rem;font-weight:800;line-height:1.2;
 }
-#displaySettingsDialog .setting-row{
-  width:100%;
-  min-width:0;
-  margin:0;
-  box-sizing:border-box;
+#scoresPanel .score-active-chip.is-muted{color:var(--muted);}
+#scoresPanel .score-detail-panel{
+  border:1px solid var(--line);border-radius:18px;
+  background:var(--surface);box-shadow:0 8px 20px rgba(23,36,77,.05);
 }
-#displaySettingsDialog .setting-row>span{
-  min-width:0;
-}
-#displaySettingsDialog .setting-row select{
-  min-width:0;
-  max-width:min(300px,48vw);
-}
+#scoresPanel .score-detail-panel[hidden]{display:none!important;}
+#scoresPanel .score-detail-panel-inner{display:grid;gap:14px;padding:16px;}
+#scoresPanel .score-detail-section{display:grid;gap:10px;}
+#scoresPanel .score-detail-title-row{display:grid;gap:2px;}
+#scoresPanel .score-detail-title-row h2{margin:0;color:var(--text);font-size:1rem;line-height:1.3;}
+#scoresPanel .score-detail-title-row p{margin:0;color:var(--muted);font-size:.75rem;line-height:1.5;}
+#scoresPanel .score-basic-filter-grid,
+#scoresPanel .score-history-current-grid,
+#scoresPanel .score-side-panel-grid{display:grid;gap:12px;}
+#scoresPanel .score-basic-filter-grid,
+#scoresPanel .score-history-current-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+#scoresPanel .score-side-panel{display:grid;gap:10px;padding:14px;border-radius:16px;background:var(--surface-2);border:1px solid var(--line);}
+#scoresPanel .score-side-panel-head{display:grid;gap:2px;}
+#scoresPanel .score-side-panel-head h3{margin:0;font-size:1rem;color:var(--text);line-height:1.3;}
+#scoresPanel .score-side-panel-head p{margin:0;color:var(--muted);font-size:.75rem;line-height:1.45;}
+#scoresPanel .score-select-field,
+#scoresPanel .score-basic-filter-grid label,
+#scoresPanel .score-sort-panel-controls label{display:grid;gap:6px;min-width:0;color:var(--muted);font-size:.74rem;font-weight:900;}
+#scoresPanel .score-detail-panel select,
+#scoresPanel .score-detail-panel .filter-medal-button{width:100%;min-width:0;height:42px;min-height:42px;}
+#scoresPanel .score-detail-panel .filter-medal-wrap{position:relative;min-width:0;}
+#scoresPanel .score-detail-panel .filter-medal-button{display:flex;align-items:center;justify-content:center;gap:4px;padding-inline:10px;}
+#scoresPanel .score-detail-panel .filter-medal-button img{width:28px;height:28px;object-fit:contain;}
+#scoresPanel .score-detail-panel .filter-medal-button span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#scoresPanel .score-detail-panel .filter-medal-button b{margin-left:auto;}
+#scoresPanel .score-detail-actions{display:flex;justify-content:flex-end;gap:10px;padding-top:2px;border-top:1px solid var(--line);}
+#scoresPanel .score-detail-actions .sub-button,
+#scoresPanel .score-detail-actions .main-button{min-width:120px;}
+#scoresPanel .score-sort-panel-controls{margin:0;}
+#scoresPanel .score-sort-panel-controls label{grid-template-columns:1fr;gap:6px;font-size:.74rem;}
+
 @media(max-width:760px){
-  #displaySettingsDialog{width:min(620px,calc(100vw - 14px));max-height:calc(100dvh - 14px)}
-  #displaySettingsDialog>.account-dialog-header{padding:13px 12px 10px}
-  #displaySettingsDialog .display-settings-content{padding:10px 12px 14px}
-  #displaySettingsDialog .setting-row{padding:11px 12px}
-  #displaySettingsDialog .setting-row select{max-width:46vw}
+  #scoresPanel .score-basic-filter-grid,
+  #scoresPanel .score-history-current-grid,
+  #scoresPanel .score-side-panel-grid,
+  #scoresPanel .score-sort-panel-controls{grid-template-columns:minmax(0,1fr)!important;}
+  #scoresPanel .score-detail-actions{justify-content:stretch;}
+  #scoresPanel .score-detail-actions .sub-button,
+  #scoresPanel .score-detail-actions .main-button{flex:1;min-width:0;}
 }
-
-/* v3.3.31: final card border ownership. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
-  border-right:0!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
-  border-left:1px solid var(--line)!important;
-}
-
-
-/* v3.3.32: strengthen outer card outlines so they do not blend into the page background. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312{
-  border:2px solid #c3cde6!important;
-  box-shadow:0 4px 14px rgba(31,53,112,.08)!important;
-}
-#userList .user-row-v3095{
-  border:2px solid #c3cde6!important;
-  box-shadow:0 4px 14px rgba(31,53,112,.07)!important;
-}
-@media(hover:hover){
-  #userList .user-row-v3095:hover{
-    box-shadow:0 7px 22px rgba(31,53,112,.12)!important;
-  }
-}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312,
-html[data-theme="dark"] #userList .user-row-v3095{
-  border-color:#58688d!important;
-  box-shadow:0 5px 18px rgba(0,0,0,.28)!important;
-}
-
-
-/* v3.3.34: Safari-safe edit cell and continuous PSR divider. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
-  min-width:0!important;
-  max-width:none!important;
-  min-height:0!important;
-  max-height:none!important;
-  padding:0!important;
-  border-radius:0!important;
-  overflow:hidden!important;
-  -webkit-appearance:none!important;
-  appearance:none!important;
-}
-
-/* Keep the edit column fully inside the card on Safari while preserving the overall 100% width. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-genre,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-title{
-  width:58.552632%!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-edit{
-  width:8.552632%!important;
-}
-
-/* PSR label/value share one straight top separator. */
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-psr-label,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-popclass{
-  border-top:1px solid var(--line)!important;
-  border-radius:0!important;
+@media(max-width:430px){
+  #scoresPanel .score-filter-shell{gap:8px;margin-bottom:10px;}
+  #scoresPanel .score-quick-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+  #scoresPanel .score-quick-toggle{justify-content:center;gap:8px;min-height:42px;padding:0 10px;font-size:.84rem;}
+  #scoresPanel .score-quick-toggle-count{min-width:22px;height:22px;font-size:.72rem;}
+  #scoresPanel .score-active-conditions{gap:6px;align-items:flex-start;}
+  #scoresPanel .score-active-conditions-label{font-size:.68rem;}
+  #scoresPanel .score-active-filter-chips{gap:6px;}
+  #scoresPanel .score-active-chip{padding:5px 9px;font-size:.68rem;}
+  #scoresPanel .score-detail-panel-inner{padding:12px;gap:12px;}
+  #scoresPanel .score-side-panel{padding:12px;}
+  #scoresPanel .score-detail-panel select,
+  #scoresPanel .score-detail-panel .filter-medal-button,
+  #scoresPanel .score-search-inline{height:40px;min-height:40px;}
 }
