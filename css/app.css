@@ -113,9 +113,11 @@
 }
 
 
-body.auth-pending>.topbar,body.auth-pending>.page-shell,body.auth-pending>footer,body.auth-pending>.auth-gate{display:none}
-body.auth-guest>.topbar,body.auth-guest>.page-shell,body.auth-guest>footer{display:none}
-body.auth-user>.auth-gate{display:none}
+/* Authentication visibility for the split partial layout. */
+#authMount,#appMount{display:contents}
+body.auth-pending #authMount,body.auth-pending #appMount{display:none}
+body.auth-guest #appMount{display:none}
+body.auth-user #authMount{display:none}
 .auth-gate{min-height:100dvh;display:grid;place-items:center;padding:24px 14px;background:linear-gradient(180deg,var(--header) 0 132px,var(--page) 132px 100%)}
 .auth-gate-card{width:min(460px,100%);padding:28px;border:2px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:var(--shadow)}
 .auth-gate-brand{display:flex;align-items:center;justify-content:center;gap:12px;text-align:left}
