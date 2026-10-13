@@ -1,0 +1,15 @@
+    <section id="adminPanel" class="panel tab-panel" hidden>
+      <div class="panel-heading"><div><small>ADMINISTRATION</small><h1>管理者画面</h1></div></div>
+      <div id="adminNoticeList" class="admin-notice-list" hidden></div>
+      <nav class="admin-tabs" aria-label="管理メニュー">
+        <button class="active" data-admin-tab="master" type="button">曲マスター</button>
+        <button data-admin-tab="versions" type="button">バージョン管理</button>
+        <button data-admin-tab="users" type="button">ユーザーリスト</button>
+        <button data-admin-tab="requests" type="button">登録依頼</button>
+        <button data-admin-tab="banners" type="button">バナー依頼</button>
+        <button data-admin-tab="feedback" type="button">要望・不具合</button>
+      </nav>
+      <div class="admin-toolbar"><input id="adminSearch" type="search" placeholder="検索"><button id="adminWikiSyncButton" class="sub-button admin-wiki-sync-button" type="button">wiki同期</button><button id="adminAddButton" class="main-button" type="button">追加</button></div>
+      <div id="adminMasterFilters" class="admin-master-filters"><select id="adminLevelFilter" aria-label="レベル"><option value="ALL">全レベル</option></select><select id="adminVersionFilter" aria-label="カテゴリ"><option value="ALL">全カテゴリ</option><option value="UNSET">未設定</option></select><select id="adminChartFilter" aria-label="譜面"><option value="ALL">全譜面</option><option>LIGHT</option><option>NORMAL</option><option>HYPER</option><option>EX</option></select></div>
+      <div id="adminContent" class="admin-content"><div class="empty">管理データを読み込みます。</div></div>
+    </section>

@@ -1,0 +1,147 @@
+  <dialog id="manualDialog">
+<form id="manualForm" method="dialog">
+<button class="dialog-close" type="button" data-dialog-close aria-label="閉じる">×</button>
+<h2>登録スコアを編集</h2>
+<div class="form-grid song-search-fields"><label class="auto-field">ジャンル名<input id="songGenreInput" type="search" placeholder="ジャンル名で検索" autocomplete="off"></label><label class="auto-field">曲名<textarea id="songTitleInput" rows="1" placeholder="曲名で検索" autocomplete="off"></textarea></label></div>
+<div id="songSuggestions" class="suggestions">
+</div>
+<div class="manual-meta" aria-label="曲情報">
+  <div class="manual-meta-row"><strong>アーティスト</strong><span id="manualArtist" class="manual-meta-value" hidden></span></div>
+  <div class="manual-meta-row"><strong>カテゴリ</strong><span id="manualVersion" class="manual-meta-value" hidden></span></div>
+  <div class="manual-meta-row"><strong>Wiki難易度</strong><span id="manualWikiDifficulty" class="manual-meta-value" hidden></span></div>
+</div>
+<input name="song_id" type="hidden">
+<div class="manual-score-sections">
+<section class="manual-score-section">
+<h3>歴代</h3>
+<div class="manual-score-grid">
+<label class="score-row-medal"><input name="medal_code" type="hidden" value="none" required><button id="medalPickerButton" class="medal-picker-button" type="button" aria-label="歴代メダルを選択"><img alt=""><span>－</span></button></label>
+<label class="auto-field score-row-history-rank"><i id="manualHistoryRank" class="rank-text rank-badge" role="img" aria-label="歴代ランク －">－</i></label>
+<label class="history-score-input score-row-history"><input id="manualHistoryScore" name="history_score" aria-label="歴代スコア" type="number" min="0" max="100000" placeholder="未入力"><small id="historyScoreGuide">今作が上回る場合は同じ値を表示</small></label>
+</div>
+<div id="medalPicker" class="medal-picker" hidden></div>
+</section>
+<section class="manual-score-section">
+<h3>今作</h3>
+<div class="manual-score-grid">
+<label class="current-clear-status score-row-clear"><input id="manualCurrentClearStatus" name="current_clear_status" type="hidden" value="unplayed"><input id="manualCurrentMedal" name="current_medal_code" type="hidden" value="none"><button id="currentMedalPickerButton" class="medal-picker-button" type="button" aria-label="今作メダルを選択" aria-expanded="false"><img alt="" hidden><span>－</span></button></label>
+<label class="auto-field score-row-rank"><i id="manualRank" class="rank-text rank-badge" role="img" aria-label="今作ランク E"><img src="./assets/ranks/e.png" alt=""></i></label>
+<label class="score-row-current"><input id="manualScoreInput" name="version_score" aria-label="今作スコア" type="number" min="0" max="100000" required></label>
+</div>
+<div id="currentMedalPicker" class="medal-picker" hidden></div>
+</section>
+</div>
+<div class="manual-summary-grid">
+<label class="auto-field score-row-popclass">PSR<output id="manualPopClass" class="manual-popclass">0.00</output></label>
+</div>
+<p id="manualError" class="error">
+</p>
+<div class="dialog-actions">
+<button class="sub-button" type="button" data-dialog-close>キャンセル</button>
+<button class="main-button" type="submit">保存</button>
+</div>
+</form>
+</dialog>
+  <dialog id="syncDialog" class="sync-dialog">
+<form method="dialog">
+<div class="account-dialog-header"><h2>スコアを同期する</h2><button class="dialog-back" type="button" data-menu-back aria-label="メニューに戻る">戻る</button></div><small class="sync-kicker">e-amusement連携</small>
+<p class="sync-lead"><strong>実行前にe-amusementへログインしてください。</strong><br>「同期用ブックマーク」を使ってスコアを取得します。2回目以降も同じブックマークを使えます。</p>
+<p class="sync-lead"><strong>注意：</strong>スコア同期はSafariまたはChromeでの利用を推奨します。e-amusement ベーシックコース(月額330円)に加入していないと同期が正しく動作しません。加入していない場合でも当サイト上で手動での登録と編集は可能です。</p>
+<div id="syncBrowserBadge" class="sync-browser-badge" hidden aria-live="polite"></div>
+<div class="sync-status">待機中</div>
+<section id="syncStep1" class="sync-step"><b>1</b><div><h3 id="syncStep1Title">同期用ブックマークの作成</h3><p id="syncStep1Text">「コードをコピー」を押し、このページをブックマークしてURL欄をコピーしたコードに置き換えます。</p><button id="copySyncButton" class="sub-button" type="button">コードをコピー</button>
+<div id="syncManualCopy" hidden style="margin-top:12px;">
+<label for="syncManualCode">同期用コード（コピーできない場合はこちら）</label>
+<textarea id="syncManualCode" readonly rows="3" spellcheck="false" style="width:100%;font-size:16px;user-select:text;-webkit-user-select:text;"></textarea>
+<button id="selectSyncCodeButton" class="sub-button" type="button">コードを選択</button>
+<p style="font-size:.85rem;">選択したコードを長押しして「コピー」し、ブックマークのURL欄へ貼り付けてください。</p>
+</div></div></section>
+<section id="syncStep2" class="sync-step"><b>2</b><div><h3 id="syncStep2Title">e-amusementを開く</h3><p id="syncStep2Text">公式サイトへログインした状態で曲データページを開きます。</p><div id="syncStep2Action"><a id="syncOfficialLink" class="official-link" href="https://p.eagate.573.jp/game/popn/popn29/playdata/mu_top.html?page=0&amp;version=-1&amp;bemani=0&amp;category=0&amp;keyword=&amp;sort=music&amp;sort_type=up" target="_blank" rel="noopener">pop'n music公式サイトを開く</a></div></div></section>
+<section id="syncStep3" class="sync-step"><b>3</b><div><h3 id="syncStep3Title">自動取得・登録</h3><p id="syncStep3Text">公式サイト上で作成した同期用ブックマークを実行します。完了後、このサイトへ戻ると自動保存されます。</p></div></section>
+<section id="syncStep4" class="sync-step" hidden><b>4</b><div><h3 id="syncStep4Title">同期する</h3><div id="syncStep4Action"></div><p id="syncStep4Text"></p></div></section>
+</form>
+</dialog>
+  <dialog id="myPageDialog"><div class="account-dialog-header"><h2>マイページ</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><form id="usernameForm" method="dialog"><section class="mypage-section"><h3>ユーザー名変更</h3><label>新しいユーザー名<input id="newUsernameInput" name="username" required maxlength="32" autocomplete="username"></label><button class="main-button" type="submit">ユーザー名を変更</button><p class="error"></p></section></form><form id="passwordForm" method="dialog"><section class="mypage-section"><h3>パスワード変更</h3><label>新しいパスワード<input name="password" type="password" required minlength="6" autocomplete="new-password"></label><label>新しいパスワード（確認）<input name="password_confirm" type="password" required minlength="6" autocomplete="new-password"></label><button class="main-button" type="submit">パスワードを変更</button><p class="error"></p></section></form><section class="mypage-section"><h3>ログアウト</h3><button id="logoutButton" class="main-button" type="button" hidden>ログアウト</button></section></dialog>
+  <dialog id="rivalListDialog" class="menu-dialog"><div class="account-dialog-header"><h2>ライバル一覧 <small id="rivalCount">0/10人</small></h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><div id="rivalListContent" class="rival-list"></div></dialog>
+<dialog id="visibilityDialog" class="menu-dialog"><div class="account-dialog-header"><h2>公開情報</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><form id="visibilityForm"><section class="mypage-section"><h3>ポプともID</h3><label>ポプともID（12桁）<input id="poptomoIdInput" name="poptomo_id" type="text" inputmode="numeric" pattern="[0-9]{12}" maxlength="12" placeholder="123456789012"></label><label class="check-row"><input id="poptomoPublicInput" name="poptomo_public" type="checkbox">ポプともIDを公開する</label></section><section class="mypage-section"><h3>公開する項目</h3><label class="check-row"><input type="checkbox" name="highest_clear_public">最高クリア難度</label><label class="check-row"><input type="checkbox" name="popn_class_public">ポップンクラス</label><label class="check-row"><input type="checkbox" name="psr_public">PSR</label><h3>ライバル向け公開</h3><p>自分をライバル登録したユーザーにのみ表示します。</p><label class="check-row"><input type="checkbox" name="rival_scores_public">スコアを公開</label><label class="check-row"><input type="checkbox" name="rival_medals_public">メダルを公開</label></section><button class="main-button" type="submit">公開設定を保存</button><p class="error" aria-live="polite"></p></form></dialog>
+<dialog id="songDetailDialog" class="menu-dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2 id="songDetailTitle">曲詳細</h2><div id="songDetailContent"></div></dialog>
+<dialog id="songRequestDialog"><form id="songRequestForm" method="dialog"><button class="dialog-close" type="button" data-dialog-close>×</button><h2>曲の登録依頼</h2><div class="form-grid"><label>ジャンル名<input name="genre" required maxlength="100"></label><label>曲名<input name="title" required maxlength="200"></label></div><label>アーティスト<input name="artist" required maxlength="200"></label><fieldset class="request-levels"><legend>譜面・レベル（1つ以上入力）</legend><label class="light">LIGHT<input name="light_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="normal">NORMAL<input name="normal_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="hyper">HYPER<input name="hyper_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label><label class="ex">EX<input name="ex_level" type="number" min="1" max="50" inputmode="numeric" placeholder="任意"></label></fieldset><label>補足<textarea name="note" maxlength="1000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>キャンセル</button><button class="main-button" type="submit">送信</button></div></form></dialog>
+  <dialog id="averageScoreDialog" class="menu-dialog average-score-dialog" aria-labelledby="averageScoreTitle">
+    <div class="account-dialog-header"><h2 id="averageScoreTitle">レベル別平均スコア</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
+    <div class="average-score-body">
+      <div class="average-score-filters">
+        <span class="average-score-label">表示レベル</span>
+        <select id="averageLevelFrom" aria-label="開始レベル"><option value="">選択</option></select>
+        <span aria-hidden="true">～</span>
+        <select id="averageLevelTo" aria-label="終了レベル"><option value="">選択</option></select>
+        <button id="averageScoreShowButton" class="sub-button" type="button">表示する</button>
+      </div>
+      <p class="average-score-note">各譜面のスコアが1点以上の場合のみ平均に含めます。歴代・今作はそれぞれ別に集計します。</p>
+      <div id="averageScoreResult" class="average-score-result" aria-live="polite">表示レベルを選択して「表示する」を押してください。</div>
+    </div>
+  </dialog>
+  <dialog id="psrHistoryDialog" class="menu-dialog psr-history-dialog"><div class="account-dialog-header"><h2>PSR保存履歴</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><p class="psr-history-help">同期完了時に自動保存します。現在のPSRも手動で保存できます。</p><button id="savePsrSnapshotButton" class="main-button" type="button">現在のPSRを保存</button><p id="psrHistoryStatus" class="image-share-status" aria-live="polite"></p><div id="psrHistoryList"></div></dialog>
+  <dialog id="psrCompareDialog" class="menu-dialog psr-history-dialog"><div class="account-dialog-header"><h2 id="psrCompareTitle">PSR比較</h2><button class="dialog-back" type="button" id="psrCompareBack">戻る</button></div><div id="psrCompareContent"></div></dialog>
+  <dialog id="imageShareDialog" class="image-share-dialog"><div class="image-share-shell">
+<div class="account-dialog-header"><h2>画像共有</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
+<p class="image-share-lead">共有ボタンからSNS・共有先を選べます。共有機能が使えない端末では画像として保存します。</p>
+<section class="image-share-section">
+<h3>Popn Score Rating 対象曲一覧</h3>
+<p>新曲枠20曲＋旧曲枠40曲のPopn Score Rating対象曲を1枚の画像にします。</p>
+<button id="sharePopClassButton" class="main-button" type="button">対象曲を共有</button>
+</section>
+<section class="image-share-section">
+<h3>レベル別メダル一覧</h3>
+<p>選択したレベルのバナー画像と歴代メダルを一覧画像にします。</p>
+<label>レベル<select id="shareLevelSelect" aria-label="共有するレベル"></select></label>
+<button id="shareLevelButton" class="main-button" type="button">このレベルを共有</button>
+</section>
+<section class="image-share-section">
+<h3>歴代メダル分布</h3>
+<p>選択したレベル幅ごとに、歴代メダルの曲数分布を画像にします。</p>
+<div class="image-share-range">
+<label>開始レベル<select id="shareRangeStartSelect" aria-label="共有する開始レベル"></select></label>
+<label>終了レベル<select id="shareRangeEndSelect" aria-label="共有する終了レベル"></select></label>
+</div>
+<button id="shareDistributionButton" class="main-button" type="button">このレベル幅を共有</button>
+</section>
+<p class="image-share-hashtag">SNS共有文：<strong>#popn_score_manager</strong></p>
+<p id="imageShareStatus" class="image-share-status" aria-live="polite"></p>
+</div></dialog>
+
+  <dialog id="bannerRequestDialog" class="banner-request-dialog"><form id="bannerRequestForm" method="dialog">
+<div class="account-dialog-header"><h2>バナーを送信</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
+<p class="banner-request-lead">曲マスターにバナーがない曲だけ送信できます。</p>
+<p class="banner-source-link"><a href="https://p.eagate.573.jp/game/popn/popn29/music/list.html?page=0&amp;version=-1&amp;lv=0&amp;bemani=0&amp;category=0&amp;keyword=&amp;sort=music&amp;sort_type=up" target="_blank" rel="noopener noreferrer">バナー取得はこちらから ↗</a></p>
+<label>対象曲<select id="bannerRequestSong" name="song_id" required><option value="">読み込み中…</option></select></label>
+<label>バナー画像<input id="bannerRequestFile" name="banner_file" type="file" accept="image/png,image/jpeg,image/webp,image/gif" required><small>PNG・JPEG・WebP・GIF / 2MB以下</small></label>
+<div id="bannerRequestPreview" class="banner-request-preview" hidden><img alt="選択したバナー画像のプレビュー"></div>
+<p class="error"></p>
+<div class="dialog-actions"><button class="sub-button" type="button" data-menu-back>戻る</button><button id="bannerRequestSubmit" class="main-button" type="submit">管理者へ送信</button></div>
+</form></dialog>
+  <dialog id="feedbackDialog"><form id="feedbackForm" method="dialog"><div class="account-dialog-header"><h2>要望・不具合</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div><label>種類<select name="category"><option value="request">要望</option><option value="bug">不具合</option></select></label><div class="form-grid"><label>機種名（任意）<input name="device_name" maxlength="100" placeholder="例：iPhone 16"></label><label>ブラウザ名（任意）<input name="browser_name" maxlength="100" placeholder="例：Safari"></label></div><label>内容<textarea name="message" required maxlength="3000"></textarea></label><p class="error"></p><div class="dialog-actions"><button class="sub-button" type="button" data-dialog-close>閉じる</button><button class="main-button" type="submit">送信</button></div><section class="feedback-history"><h3>送信履歴</h3><div id="feedbackHistory"></div></section></form></dialog>
+  <div id="adminDialogMount"></div>
+  <dialog id="syncUpdateDialog" class="sync-update-dialog" hidden aria-labelledby="syncUpdateTitle">
+    <div class="sync-update-modal">
+      <button class="dialog-close sync-update-close" type="button" data-dialog-close aria-label="閉じる">×</button>
+      <header class="sync-update-head">
+        <div class="sync-update-title-row"><h2 id="syncUpdateTitle">同期完了</h2><span id="syncUpdateCount" class="sync-update-count">0件更新</span></div>
+        <p>登録済みの譜面で更新された情報です。</p>
+      </header>
+      <div id="syncUpdateList" class="sync-update-list"></div>
+      <div class="sync-update-actions"><button id="syncUpdateCloseButton" class="main-button" type="button">閉じる</button></div>
+    </div>
+  </dialog>
+  <dialog id="syncFailureDialog" class="sync-failure-dialog" aria-labelledby="syncFailureTitle">
+    <div class="sync-failure-modal">
+      <button class="dialog-close" type="button" data-dialog-close aria-label="閉じる">×</button>
+      <h2 id="syncFailureTitle">保存できなかった譜面</h2>
+      <p id="syncFailureSummary" class="sync-failure-summary"></p>
+      <p class="sync-failure-help">下の譜面だけ保存に失敗しています。内容を確認したあと、時間をおいて再同期してください。</p>
+      <div id="syncFailureList" class="sync-failure-list"></div>
+      <div class="dialog-actions"><button class="main-button" type="button" data-dialog-close>閉じる</button></div>
+    </div>
+  </dialog>
+  <dialog id="noticeDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2>お知らせ</h2><p id="noticeMessage"></p><div class="dialog-actions"><button class="main-button" value="ok">閉じる</button></div></form></dialog>
+  <dialog id="confirmDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2>確認</h2><p id="confirmMessage"></p><div class="dialog-actions"><button class="sub-button" value="cancel">キャンセル</button><button class="main-button" value="ok">実行</button></div></form></dialog>
+  <dialog id="promptDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="閉じる">×</button><h2 id="promptTitle">入力</h2><label><span id="promptLabel"></span><input id="promptInput" type="text"></label><div class="dialog-actions"><button class="sub-button" value="cancel">キャンセル</button><button class="main-button" value="ok">決定</button></div></form></dialog>

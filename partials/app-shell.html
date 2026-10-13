@@ -1,0 +1,211 @@
+  <header class="topbar">
+    <a class="brand brand-wordmark" href="./" aria-label="Pop'n Score Manager">
+      <img class="psm-wordmark psm-wordmark-header" src="./assets/psm-wordmark-3114.png" alt="" width="320" height="59">
+    </a>
+<div class="header-actions">
+<button id="reloadButton" class="icon-button" type="button" aria-label="ページを再読み込み" title="ページを再読み込み">↻</button>
+<button id="menuButton" class="icon-button" type="button" aria-label="メニューを開く" title="メニュー">☰</button>
+</div>
+  </header>
+
+  <main class="page-shell">
+    <section id="appUpdateNotice" class="app-update-notice" role="status" aria-live="polite" hidden>
+      <div class="app-update-notice-copy"><strong>新しいバージョンがあります</strong><small>現在の画面はそのまま利用できます。操作が終わったら最新版に更新してください。</small></div>
+      <div class="app-update-notice-actions"><button id="appUpdateLater" type="button" class="sub-button">あとで</button><button id="appUpdateNow" type="button" class="main-button">更新する</button></div>
+    </section>
+    <section class="player-bar">
+<span class="player-identity" hidden>
+<small>PLAYER</small>
+<strong id="playerName"></strong>
+</span>
+<span class="player-ratings"><span class="player-official-class"><small>ポップンクラス</small><strong id="officialPopnClass">－</strong></span><span class="player-popclass"><small>Popn Score Rating</small><strong id="totalPopClass">0.00</strong></span></span>
+</section>
+    <div id="setupNotice" class="notice" hidden>
+<strong>Supabaseが未設定です</strong>
+<span>
+<code>js/config.js</code>へURLとAnon Keyを設定してください。</span>
+</div>
+
+    <nav class="tabs" aria-label="メインメニュー">
+<button data-tab="popclass" type="button">PSR</button>
+<button class="active" data-tab="scores" type="button">スコア</button>
+<button data-tab="users" type="button">ユーザー</button>
+<button id="adminTabButton" data-tab="admin" type="button" hidden>管理</button>
+</nav>
+
+    <section id="scoreOverview" class="score-overview" aria-label="スコア概要" hidden>
+      <div id="medalSummary" class="medal-summary" aria-label="メダル別登録数とNO PLAY数"></div>
+      <div id="clearRateSummary" class="clear-rate-summary" aria-label="クリア率"></div>
+    </section>
+
+    <section id="popclassPanel" class="panel tab-panel" hidden>
+      <div class="panel-heading"><div><h1>Popn Score Rating 対象曲</h1></div></div>
+      <div id="popclassContent"><div class="empty">ログインするとPSR対象曲を表示します。</div></div>
+    </section>
+
+    <section id="scoresPanel" class="panel tab-panel">
+      <div class="panel-heading">
+<div>
+<small>MY PLAY DATA</small>
+<h1>曲・スコア一覧</h1>
+</div>
+<div class="action-row">
+<button id="manualButton" class="sub-button" type="button">＋ 追加依頼</button>
+</div>
+</div>
+      <div id="scoreLoading" class="score-loading" role="status" aria-live="polite" hidden>
+        <span class="score-loading-spinner" aria-hidden="true"></span>
+        <strong>スコアを読み込んでいます</strong>
+        <small>登録データを取得中です…</small>
+      </div>
+      <div class="score-filter-shell">
+        <label class="search score-search-inline"><span>⌕</span><input id="searchInput" type="search" placeholder="曲名・ジャンル・アーティスト検索"></label>
+        <div class="score-quick-actions">
+          <div class="score-quick-buttons">
+            <button id="scoreFilterToggle" class="score-quick-toggle" type="button" aria-expanded="false" aria-controls="scoreFilterPanel">
+              <span class="score-quick-toggle-label">絞り込み</span>
+              <span id="scoreFilterActiveCount" class="score-quick-toggle-count">0</span>
+              <b aria-hidden="true"></b>
+            </button>
+            <button id="scoreSortToggle" class="score-quick-toggle" type="button" aria-expanded="false" aria-controls="scoreSortPanel">
+              <span class="score-quick-toggle-label">並び替え</span>
+              <b aria-hidden="true"></b>
+            </button>
+          </div>
+          <div class="score-active-conditions" aria-live="polite">
+            <span class="score-active-conditions-label">現在の条件：</span>
+            <div id="scoreActiveFilterChips" class="score-active-filter-chips"></div>
+          </div>
+        </div>
+        <section id="scoreFilterPanel" class="score-detail-panel score-filter-panel" hidden aria-label="詳細絞り込み">
+          <div class="score-detail-panel-inner">
+            <div class="score-detail-section">
+              <div class="score-detail-title-row"><h2>基本条件</h2><p>レベルやカテゴリで絞り込みます。</p></div>
+              <div class="score-basic-filter-grid">
+                <label><span>レベル</span><select id="levelFilter" aria-label="レベル"><option value="ALL">全レベル</option></select></label>
+                <label><span>カテゴリ</span><select id="versionFilter" aria-label="カテゴリ"><option value="ALL">全カテゴリ</option></select></label>
+              </div>
+            </div>
+            <div class="score-history-current-grid">
+              <section class="score-side-panel score-history-panel" aria-label="歴代の絞り込み">
+                <div class="score-side-panel-head"><h3>歴代</h3><p>これまでのプレイ記録</p></div>
+                <div class="score-side-panel-grid">
+                  <label class="score-select-field"><span>メダル</span><div class="filter-medal-wrap history-medal-filter"><input id="medalFilter" type="hidden" value="ALL"><button id="filterMedalButton" class="filter-medal-button" type="button" aria-label="歴代メダル：全メダル" aria-expanded="false"><img alt="" hidden><span>全メダル</span><b aria-hidden="true"></b></button><div id="filterMedalPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div></label>
+                  <label class="score-select-field"><span>ランク</span><div class="filter-rank-wrap history-rank-filter"><input id="rankFilter" type="hidden" value="ALL"><button id="filterRankButton" class="filter-rank-button" type="button" aria-label="歴代ランク：全ランク" aria-expanded="false"><img alt="" hidden><span>全ランク</span><b aria-hidden="true"></b></button><div id="filterRankPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div></label>
+                </div>
+              </section>
+              <section class="score-side-panel score-current-panel" aria-label="今作の絞り込み">
+                <div class="score-side-panel-head"><h3>今作</h3><p>選択中バージョンの記録</p></div>
+                <div class="score-side-panel-grid">
+                  <label class="score-select-field"><span>メダル</span><div class="filter-medal-wrap current-medal-filter"><input id="currentMedalFilter" type="hidden" value="ALL"><button id="filterCurrentMedalButton" class="filter-medal-button" type="button" aria-label="今作メダル：全メダル" aria-expanded="false"><img alt="" hidden><span>全メダル</span><b aria-hidden="true"></b></button><div id="filterCurrentMedalPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div></label>
+                  <label class="score-select-field"><span>ランク</span><div class="filter-rank-wrap current-rank-filter"><input id="currentRankFilter" type="hidden" value="ALL"><button id="filterCurrentRankButton" class="filter-rank-button" type="button" aria-label="今作ランク：全ランク" aria-expanded="false"><img alt="" hidden><span>全ランク</span><b aria-hidden="true"></b></button><div id="filterCurrentRankPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div></label>
+                </div>
+              </section>
+            </div>
+            <div class="score-detail-actions">
+              <button id="scoreFilterResetButton" class="sub-button" type="button">リセット</button>
+              <button id="scoreFilterApplyButton" class="main-button" type="button">適用</button>
+            </div>
+          </div>
+        </section>
+        <section id="scoreSortPanel" class="score-detail-panel score-sort-panel" hidden aria-label="並び替え">
+          <div class="score-detail-panel-inner">
+            <div class="score-detail-section">
+              <div class="score-detail-title-row"><h2>並び替え</h2><p>一覧の表示順を変更します。</p></div>
+              <div class="list-sort-controls score-sort-panel-controls">
+                <label>項目<select id="scoreSortField"><option value="medal" selected>歴代メダル</option><option value="version_score">今作スコア</option><option value="pop_class">PSR</option><option value="level">レベル</option><option value="score">歴代スコア</option><option value="current_medal">今作メダル</option><option value="title">曲名</option><option value="version">カテゴリ</option><option value="wiki_difficulty">Wiki難易度</option></select></label>
+                <label>並び順<select id="scoreSortOrder"><option value="asc" selected>昇順</option><option value="desc">降順</option></select></label>
+              </div>
+            </div>
+            <div class="score-detail-actions">
+              <button id="scoreSortResetButton" class="sub-button" type="button">リセット</button>
+              <button id="scoreSortApplyButton" class="main-button" type="button">適用</button>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="scoreList" class="score-list">
+<div class="empty">ログインすると登録スコアを表示します。</div>
+</div>
+    </section>
+
+    <section id="usersPanel" class="panel tab-panel" hidden>
+<div class="panel-heading">
+<div>
+<h1>ユーザーリスト</h1>
+</div>
+</div>
+<label class="search">
+<span>⌕</span>
+<input id="userSearchInput" type="search" placeholder="ユーザー名検索">
+</label>
+<div class="list-sort-controls user-sort-controls">
+<label>項目<select id="userSortField"><option value="username">ユーザー名</option><option value="highest_clear_level">最高クリア</option><option value="pop_class" selected>Popn Score Rating</option><option value="official_popn_class">ポップンクラス</option></select></label>
+<label>並び順<select id="userSortOrder"><option value="asc">昇順</option><option value="desc" selected>降順</option></select></label>
+</div>
+<div id="userList" class="user-list">
+<div class="empty">ユーザーを読み込みます。</div>
+</div>
+</section>
+
+    <dialog id="menuDialog" class="menu-dialog"><div class="menu-modal settings">
+      <div class="menu-fixed-header">
+        <h1>メニュー</h1>
+        <button class="dialog-close" type="button" data-dialog-close aria-label="閉じる">×</button>
+      </div>
+      <div class="menu-scroll-body">
+      <h2 class="menu-section-title">アカウント</h2>
+      <button id="myPageButton" class="setting-row" type="button"><span><strong>マイページ</strong><small>ユーザー情報の変更・ログアウト</small></span><b>›</b></button>
+      <button id="displaySettingsButton" class="setting-row" type="button"><span><strong>表示設定</strong><small>テーマ・表示レベル・ゲームバージョンを設定します</small></span><b>›</b></button>
+      <button id="visibilityButton" class="setting-row" type="button"><span><strong>公開情報</strong><small>公開する情報とポプともIDを設定します</small></span><b>›</b></button>
+      <button id="rivalListButton" class="setting-row" type="button"><span><strong>ライバル一覧</strong><small>登録したライバルを管理します（最大10人）</small></span><b>›</b></button>
+
+      <h2 class="menu-section-title">データ・共有</h2>
+      <button id="syncHelpButton" class="setting-row" type="button"><span><strong>スコア同期</strong><small>公式サイトで実行する同期用ブックマークを設定します</small></span><b>›</b></button>
+      <button id="imageShareButton" class="setting-row" type="button"><span><strong>画像共有</strong><small>Popn Score Rating 対象曲・レベル別メダル一覧を画像で共有します</small></span><b>›</b></button>
+      <button id="averageScoreButton" class="setting-row" type="button"><span><strong>レベル別平均スコア</strong><small>歴代・今作の平均スコアをレベル別に確認します</small></span><b>›</b></button>
+      <button id="psrHistoryButton" class="setting-row" type="button"><span><strong>PSR保存履歴</strong><small>現在のPSRを保存・画像共有・過去と比較します</small></span><b>›</b></button>
+
+      <h2 class="menu-section-title">サポート</h2>
+      <button id="guideButton" class="setting-row" type="button"><span><strong>使い方・サイトマップ</strong><small>スコア登録、PSRの仕組み、ライバル機能など</small></span><b>›</b></button>
+      <button id="bannerRequestButton" class="setting-row" type="button"><span><strong>バナー送信</strong><small>バナー未登録の曲へ画像を送信します</small></span><b>›</b></button>
+      <button id="feedbackButton" class="setting-row" type="button"><span><strong>要望・不具合</strong><small>改善案や問題を管理者へ送信します</small></span><b>›</b></button>
+      <a class="setting-row wiki-source-row" href="https://popn.wiki/" target="_blank" rel="noopener noreferrer"><span><strong>Wiki難易度の出典</strong><small>popn.wiki の難易度表を参照しています</small></span><b>↗</b></a>
+      <button id="supportButton" class="setting-row" type="button"><span><strong>運営を支援する</strong><small>OFUSEから任意で運営費をご支援いただけます</small></span><b>›</b></button>
+
+      <div id="adminMenuMount"></div>
+      <h2 class="menu-section-title">情報</h2>
+      <div class="setting-row menu-info-row">
+<span>
+<strong>APP VERSION</strong>
+<small>pop'n Score Manager</small>
+</span>
+<b>3.3.48</b>
+</div>
+      <button id="appUpdateMenu" class="setting-row app-update-menu" type="button" hidden><span><strong>新しいバージョンがあります</strong><small>最新版に更新できます</small></span><b>↻</b></button>
+      </div>
+    </div></dialog>
+
+    <dialog id="displaySettingsDialog" class="menu-dialog display-settings-dialog" aria-labelledby="displaySettingsTitle">
+      <div class="account-dialog-header"><h2 id="displaySettingsTitle">表示設定</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
+      <div class="display-settings-content">
+        <button id="settingsThemeButton" class="setting-row" type="button"><span><strong>表示テーマ</strong><small>ライト／ダークを切り替えます</small></span><b id="themeLabel">ライト</b></button>
+        <label class="setting-row default-level-row"><span><strong>デフォルト表示レベル</strong><small>起動時に表示するレベルを選びます</small></span><select id="defaultLevelFilter" aria-label="デフォルト表示レベル"><option value="ALL">全レベル</option></select></label>
+        <label class="setting-row game-version-row"><span><strong>ゲームバージョン</strong><small>今作スコア・クリア状況の表示先を切り替えます</small></span><select id="gameVersionSelect" aria-label="表示するゲームバージョン"><option value="">読み込み中…</option></select></label>
+      </div>
+    </dialog>
+
+    <dialog id="supportDialog" class="menu-dialog support-dialog" aria-labelledby="supportTitle">
+      <div class="account-dialog-header"><h2 id="supportTitle">運営を支援する</h2><button class="dialog-back" type="button" data-menu-back>戻る</button></div>
+      <div class="support-dialog-content">
+        <p>Pop'n Score Managerは無料で公開・運営しています。</p>
+        <p>サイトの維持・運営費として、任意でご支援いただけると助かります。</p>
+        <p>支援の有無によって利用できる機能が変わることはありません。</p>
+        <a class="support-ofuse-link" href="https://ofuse.me/gitadorafc" target="_blank" rel="noopener noreferrer">OFUSEで支援する</a>
+      </div>
+    </dialog>
+
+    <div id="adminPanelMount"></div>
+  </main>
+
+  <footer>本サイトは非公式のファン制作ツールです。<br>KONAMIおよび各権利者とは関係ありません。</footer>

@@ -1,0 +1,26 @@
+  <section id="authGate" class="auth-gate" aria-label="ログイン・新規登録">
+    <div class="auth-gate-card">
+      <div class="auth-gate-brand">
+        <h1><img class="psm-wordmark psm-wordmark-login" src="./assets/psm-wordmark-3114.png" alt="Pop'n Score Manager" width="320" height="59"></h1>
+      </div>
+      <p class="auth-gate-lead">pop'n musicのスコア・メダル・<br>Popn Score Ratingを管理します。</p>
+      <div class="auth-gate-tabs" role="tablist" aria-label="認証方法">
+        <button id="gateLoginTab" class="active" type="button" role="tab" aria-selected="true">ログイン</button>
+        <button id="gateRegisterTab" type="button" role="tab" aria-selected="false">新規登録</button>
+      </div>
+      <form id="authGateForm" class="auth-gate-form">
+        <h2 id="authGateTitle">ログイン</h2>
+        <label>ユーザー名<input name="username" required maxlength="32" autocomplete="username" placeholder="日本語可・32文字まで"></label>
+        <aside id="authGateUsernameNotice" class="auth-username-notice" hidden role="note"><strong>ユーザー名についてのお願い</strong><p>メールアドレス・電話番号・本名などの個人情報をユーザー名に入力しないでください。管理者が個人情報を含むと判断した場合、アカウントが削除対象となることがあります。</p></aside>
+        <label>パスワード<input name="password" type="password" required minlength="6" autocomplete="current-password" placeholder="パスワードを入力"></label>
+        <label id="authGatePasswordConfirmRow" hidden>パスワード（確認）<input name="password_confirm" type="password" minlength="8" autocomplete="new-password" placeholder="もう一度入力"></label>
+        <aside id="authGatePasswordNotice" class="auth-password-notice" hidden>
+          <strong>パスワードについての重要なお知らせ</strong>
+          <p>このサイトではメールアドレスなどの個人情報を取得していないため、通常のパスワード再発行はできません。<br>パスワードは忘れないように保管してください。原則、パスワードを忘れた場合は再登録が必要です。<br>どうしてもパスワードの再発行が必要な場合は、管理者の <a href="https://x.com/popn_psm?s=11&t=olZ1-TxVx25_yPBpaqPhZQ" target="_blank" rel="noopener noreferrer">X（旧Twitter）</a> へ直接ご連絡ください。</p>
+        </aside>
+        <p id="authGateError" class="error" aria-live="polite"></p>
+        <button class="main-button auth-gate-submit" type="submit">ログイン</button>
+      </form>
+      <p class="auth-gate-note">本サイトは非公式のファン制作ツールです。</p>
+    </div>
+  </section>
