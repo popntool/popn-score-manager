@@ -2263,3 +2263,24 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .sc
     gap:6px!important;
   }
 }
+
+
+/* v3.3.45: fully neutralize legacy global banner styling.
+   components.css still gives .song-banner/.banner-empty rounded corners; on narrow Safari
+   those inherited corners become very visible even when the banner itself exists. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .song-banner,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .banner-empty{
+  border-radius:0!important;
+  box-shadow:none!important;
+  outline:0!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .banner-empty{
+  border:0!important;
+  border-right:1px solid var(--line)!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 img.song-banner{
+  border:0!important;
+  border-right:1px solid var(--line)!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
