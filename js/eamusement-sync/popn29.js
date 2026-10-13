@@ -1,4 +1,4 @@
-/* pop'n music スコア同期 v3.1.3
+/* pop'n music スコア同期 v3.1.4
  * e-amusementへログインし、同期用ブックマークから実行してください。
  * 実行時に「レベル範囲」または「バージョン」を選択して同期します。
  */
@@ -7,9 +7,11 @@
   const RETURN_URL='https://popntool.github.io/popn-score-manager/';
   const MOBILE_LIKE=/iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent||'')||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4);
   const LIST_CONCURRENCY=MOBILE_LIKE?2:6,MAX_PAGE=200;
-  const DETAIL_MIN=MOBILE_LIKE?3:6,DETAIL_INITIAL=MOBILE_LIKE?5:10,DETAIL_MAX=MOBILE_LIKE?8:12;
+  const DETAIL_MIN=MOBILE_LIKE?2:5,DETAIL_INITIAL=MOBILE_LIKE?4:8,DETAIL_MAX=MOBILE_LIKE?6:10;
+  const REQUEST_TIMEOUT_MS=MOBILE_LIKE?15000:18000;
+  const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   const yieldUi=()=>new Promise(resolve=>{
-    if(typeof requestIdleCallback==='function')requestIdleCallback(()=>resolve(),{timeout:80});
+    if(document.visibilityState==='visible'&&typeof requestAnimationFrame==='function')requestAnimationFrame(()=>setTimeout(resolve,0));
     else setTimeout(resolve,0);
   });
   const VERSION_OPTIONS=[
@@ -42,17 +44,29 @@
   async function getDoc(url,label,retry=2,hooks=null){
     const started=performance.now();
     for(let attempt=0;;attempt++){
-      const r=await fetch(url,{credentials:'include',cache:'no-store'});
-      if(r.ok){
-        const text=await r.text();
-        if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');
-        hooks?.success?.({elapsed:performance.now()-started,attempt,status:r.status});
-        return new DOMParser().parseFromString(text,'text/html');
-      }
-      const retryable=[429,500,502,503,504].includes(r.status);
-      if(attempt>=retry||!retryable)throw new Error(`${label}: HTTP ${r.status}`);
-      hooks?.retry?.({status:r.status,attempt});
-      await new Promise(resolve=>setTimeout(resolve,350*(attempt+1)));
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort('timeout'),REQUEST_TIMEOUT_MS);
+      try{
+        const r=await fetch(url,{credentials:'include',cache:'no-store',signal:controller.signal});
+        if(r.ok){
+          const text=await r.text();
+          if(/ログインしてください|コースへの加入が必要/.test(text))throw new Error('ログイン状態を確認してください。');
+          hooks?.success?.({elapsed:performance.now()-started,attempt,status:r.status});
+          return new DOMParser().parseFromString(text,'text/html');
+        }
+        const retryable=[429,500,502,503,504].includes(r.status);
+        if(attempt>=retry||!retryable)throw new Error(`${label}: HTTP ${r.status}`);
+        hooks?.retry?.({status:r.status,attempt,reason:'http'});
+        const retryAfter=Math.min(3000,Math.max(0,Number(r.headers.get('Retry-After'))||0)*1000);
+        await sleep(Math.max(retryAfter,500*(attempt+1)));
+      }catch(error){
+        const timedOut=error?.name==='AbortError'||controller.signal.aborted;
+        const networkError=error instanceof TypeError;
+        if(!timedOut&&!networkError)throw error;
+        if(attempt>=retry)throw new Error(`${label}: ${timedOut?'通信がタイムアウトしました':'通信に失敗しました'}`);
+        hooks?.retry?.({status:0,attempt,reason:timedOut?'timeout':'network'});
+        await sleep(500*(attempt+1));
+      }finally{clearTimeout(timer);}
     }
   }
 
@@ -182,13 +196,15 @@
     }
   }
   function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}const current_clear_status=hasPlayCount&&counts.play===0?'unplayed':counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
-  async function adaptiveDetailMap(items,worker,onDone){
+  async function adaptiveDetailMap(items,worker,onDone,onRetry){
     let cursor=0,active=0,done=0,limit=Math.min(DETAIL_INITIAL,Math.max(1,items.length));
     let ewma=0,cleanSuccesses=0,settled=false;
     const clampLimit=value=>Math.max(Math.min(DETAIL_MIN,items.length||1),Math.min(DETAIL_MAX,items.length||1,value));
     const hooks={
-      retry({status}){
-        if(status===429||status>=500){
+      retry(info){
+        onRetry?.(info,done,items.length,limit);
+        const status=info.status;
+        if(status===0||status===429||status>=500){
           limit=clampLimit(Math.max(DETAIL_MIN,Math.floor(limit/2)));
           cleanSuccesses=0;
         }
@@ -219,7 +235,8 @@
               await worker(item,index,hooks);
               done++;
               onDone?.(done,items.length,limit,ewma);
-              if(done%2===0)await yieldUi();
+              if(MOBILE_LIKE||done%2===0)await yieldUi();
+              if(MOBILE_LIKE&&done%40===0)await sleep(120);
             }catch(error){
               fail(error);
               return;
@@ -262,16 +279,20 @@
     const detailGroups=allDetailGroups;
     progress.max=Math.max(1,detailGroups.length);progress.value=0;
     status.textContent=`プレー済み${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
-    const details=new Map();
     await adaptiveDetailMap(detailGroups,async(group,index,hooks)=>{
       const values=parseDetail(await getDoc(group.url,'曲詳細',2,hooks));
       for(const row of group.rows){
         const value=values.get(row.chart);
-        if(value)details.set(`${row.master_key}|${row.chart}`,value);
+        row.version_score=Number(value?.version_score)||0;
+        row.current_clear_status=value?.current_clear_status||'failed';
       }
-    },(count,total,parallel)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中（${parallel}並列）`;});
+      values.clear();
+    },(count,total,parallel)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中（${parallel}並列）`;},(info,done,total,parallel)=>{
+      const reason=info.reason==='timeout'?'応答待ちを打ち切って再試行':info.status===429?'アクセス集中のため待機・再試行':'通信エラーを再試行';
+      status.textContent=`曲詳細 ${done}/${total}曲・${reason}（${parallel}並列）`;
+    });
     if(state.cancelled)throw new Error('中止しました。');
-    const rows=base.map(row=>{const detail=details.get(`${row.master_key}|${row.chart}`)||{};return {...row,version_score:Number(detail.version_score)||0,current_clear_status:detail.current_clear_status||'failed'};})
+    const rows=base.map(row=>({...row,version_score:Number(row.version_score)||0,current_clear_status:row.current_clear_status||'failed'}))
       .filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none'||Number(row.version_score)>0||row.current_clear_status!=='failed')
       .map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面・ポップンクラスを確認中…`;
