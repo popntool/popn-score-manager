@@ -2116,3 +2116,150 @@ body > .psm-floating-medal-picker > .rank-filter-option .compact-medal-empty{
     height:23px;
   }
 }
+
+
+/* v3.3.44: final alignment fixes for filters, banner fallback, and NO PLAY rows. */
+
+/* The old score-filter grid rules still target these IDs/classes.
+   Explicitly neutralize them inside the new expandable layout. */
+#scoresPanel .score-basic-filter-grid #levelFilter,
+#scoresPanel .score-basic-filter-grid #versionFilter,
+#scoresPanel .score-side-panel-grid .history-medal-filter,
+#scoresPanel .score-side-panel-grid .current-medal-filter,
+#scoresPanel .score-side-panel-grid .history-rank-filter,
+#scoresPanel .score-side-panel-grid .current-rank-filter{
+  grid-column:auto!important;
+  grid-row:auto!important;
+}
+
+/* Basic conditions: two exactly equal columns, labels stacked uniformly. */
+#scoresPanel .score-basic-filter-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:stretch!important;
+}
+#scoresPanel .score-basic-filter-grid > label{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:4px!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+}
+#scoresPanel .score-basic-filter-grid > label > span{
+  display:block!important;
+  min-height:0!important;
+  line-height:1.25!important;
+}
+#scoresPanel .score-basic-filter-grid select{
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  margin:0!important;
+}
+
+/* History/current: medal and rank use the exact same two-column geometry. */
+#scoresPanel .score-side-panel-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  align-items:stretch!important;
+}
+#scoresPanel .score-side-panel-grid > .score-select-field{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  gap:4px!important;
+  width:100%!important;
+  min-width:0!important;
+  margin:0!important;
+}
+#scoresPanel .score-side-panel-grid > .score-select-field > span{
+  display:block!important;
+  min-height:0!important;
+  line-height:1.25!important;
+}
+#scoresPanel .score-side-panel-grid .filter-medal-wrap,
+#scoresPanel .score-side-panel-grid .filter-rank-wrap,
+#scoresPanel .score-side-panel-grid .filter-medal-button,
+#scoresPanel .score-side-panel-grid .filter-rank-button{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  margin:0!important;
+}
+
+/* NO IMAGE is a fallback only. It must be centered and must not visually sit behind real banners. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .song-banner.banner-empty{
+  display:grid!important;
+  place-items:center!important;
+  text-align:center!important;
+  padding:0!important;
+  background:var(--surface-2)!important;
+  color:var(--muted)!important;
+  font-size:clamp(8px,1.75cqw,13px)!important;
+  font-weight:800!important;
+  line-height:1!important;
+  object-fit:initial!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 img.song-banner:not(.banner-empty){
+  display:block!important;
+  background:transparent!important;
+  object-fit:contain!important;
+  object-position:center center!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 img.song-banner:not(.banner-empty)::before,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 img.song-banner:not(.banner-empty)::after{
+  content:none!important;
+}
+
+/* One centered NO PLAY field replaces the three independent dash cells. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record-unplayed{
+  position:absolute!important;
+  top:56.818182%!important;
+  height:43.181818%!important;
+  box-sizing:border-box!important;
+  display:grid!important;
+  place-items:center!important;
+  margin:0!important;
+  padding:0!important;
+  border-top:1px solid var(--line)!important;
+  border-right:1px solid var(--line)!important;
+  color:var(--muted)!important;
+  font-size:clamp(7px,1.58cqw,12px)!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:.02em!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1) .score-record-unplayed{
+  left:21.052632%!important;
+  width:25.986842%!important;
+  background:var(--admin-history-bg,#eef8ff)!important;
+}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(2) .score-record-unplayed{
+  left:54.934211%!important;
+  width:25.986842%!important;
+  background:var(--admin-current-bg,#fff0f7)!important;
+}
+
+/* Ensure any older dash placeholders cannot leak into no-play rows. */
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-medal,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-rank,
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record.is-no-play .score-record-score{
+  display:none!important;
+}
+
+@media(max-width:430px){
+  #scoresPanel .score-basic-filter-grid,
+  #scoresPanel .score-side-panel-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+}
