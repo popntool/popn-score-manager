@@ -1,4 +1,4 @@
-const VERSION="3.3.49";
+const VERSION="3.3.50";
 
 async function fetchPartial(name){
   const response=await fetch(`./partials/${name}.html?v=${VERSION}`,{cache:"no-store"});
@@ -30,10 +30,10 @@ async function boot(){
     document.querySelector("#adminPanelMount").innerHTML=adminPanel;
     document.querySelector("#adminDialogMount").innerHTML=adminDialog;
 
-    const {checkOnLaunch,watchForUpdates}=await import(`./js/version-check.js?v=${VERSION}`);
+    const {checkOnLaunch,watchForUpdates}=await import(`./version-check.js?v=${VERSION}`);
     if(await checkOnLaunch())return;
     watchForUpdates();
-    await import(`./js/app.js?v=${VERSION}`);
+    await import(`./app.js?v=${VERSION}`);
   }catch(error){
     console.error("Application bootstrap failed:",error);
     window.psmLoading?.error(error);
