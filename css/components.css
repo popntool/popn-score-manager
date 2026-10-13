@@ -19,9 +19,6 @@
 select,input{min-height:44px;padding:8px 10px;border:2px solid var(--line);border-radius:10px;background:var(--page);color:var(--text)}
 .score-list,.user-list{display:grid;}
 
-.song-banner{display:block;width:150px;max-height:64px;object-fit:contain;border-radius:7px;background:#fff}
-.banner-empty{display:grid;place-items:center;min-height:56px;color:var(--muted);font-size:.7rem;font-weight:900;border:1px dashed var(--line)}
-
 .result{display:grid;justify-items:end;}
 .result strong{font-size:1.25rem;}
 .medal{background:var(--surface-2);}
