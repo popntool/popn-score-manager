@@ -1996,3 +1996,123 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
     font-size:.75rem;
   }
 }
+
+
+/* v3.3.43: align filter controls and use image-style rank pickers like medals. */
+#scoresPanel .score-basic-filter-grid > label,
+#scoresPanel .score-side-panel-grid > .score-select-field{
+  min-width:0!important;
+  width:100%!important;
+  align-self:stretch!important;
+}
+#scoresPanel .score-basic-filter-grid select,
+#scoresPanel .filter-medal-wrap,
+#scoresPanel .filter-rank-wrap,
+#scoresPanel .filter-medal-button,
+#scoresPanel .filter-rank-button{
+  box-sizing:border-box!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+}
+#scoresPanel .filter-rank-wrap{position:relative;min-width:0;}
+#scoresPanel .filter-rank-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  height:38px;
+  min-height:38px;
+  padding:0 10px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:var(--field-fill);
+  color:var(--text);
+  font:inherit;
+  font-weight:850;
+}
+#scoresPanel .filter-rank-button img{
+  display:block;
+  width:36px;
+  height:26px;
+  object-fit:contain;
+}
+#scoresPanel .filter-rank-button span{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#scoresPanel .filter-rank-button b{
+  width:7px;
+  height:7px;
+  margin-left:auto;
+  border-right:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  transform:rotate(45deg);
+  flex:0 0 auto;
+}
+#scoresPanel .filter-rank-button[aria-expanded="true"] b{
+  transform:rotate(-135deg);
+  margin-top:4px;
+}
+#scoresPanel #rankFilter,
+#scoresPanel #currentRankFilter{
+  grid-column:auto!important;
+  grid-row:auto!important;
+}
+body > .psm-floating-medal-picker > .rank-filter-option img{
+  width:34px;
+  height:24px;
+}
+body > .psm-floating-medal-picker > .rank-filter-option .compact-medal-empty{
+  font-size:.9rem;
+  font-weight:900;
+}
+#scoresPanel .score-side-panel-grid{
+  align-items:end!important;
+}
+#scoresPanel .score-side-panel-grid > .score-select-field{
+  display:grid!important;
+  grid-template-rows:auto 38px!important;
+  gap:3px!important;
+}
+#scoresPanel .score-side-panel-grid > .score-select-field > span{
+  min-height:1.15em;
+  display:flex;
+  align-items:flex-end;
+}
+#scoresPanel .score-basic-filter-grid{
+  align-items:end!important;
+}
+#scoresPanel .score-basic-filter-grid > label{
+  display:grid!important;
+  grid-template-rows:auto 38px!important;
+  gap:3px!important;
+}
+#scoresPanel .score-basic-filter-grid > label > span{
+  min-height:1.15em;
+  display:flex;
+  align-items:flex-end;
+}
+#scoresPanel .score-basic-filter-grid select{
+  height:38px!important;
+  min-height:38px!important;
+}
+
+@media(max-width:430px){
+  #scoresPanel .filter-rank-button,
+  #scoresPanel .score-basic-filter-grid select{
+    height:36px!important;
+    min-height:36px!important;
+    padding-inline:7px;
+    font-size:.68rem;
+  }
+  #scoresPanel .score-side-panel-grid > .score-select-field,
+  #scoresPanel .score-basic-filter-grid > label{
+    grid-template-rows:auto 36px!important;
+  }
+  #scoresPanel .filter-rank-button img{
+    width:31px;
+    height:23px;
+  }
+}

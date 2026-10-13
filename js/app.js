@@ -58,7 +58,7 @@ function updateScoreFilterSummary(){const chips=$("#scoreActiveFilterChips"),cou
 function setScoreDetailPanelState(which,open){const filterButton=$("#scoreFilterToggle"),sortButton=$("#scoreSortToggle"),filterPanel=$("#scoreFilterPanel"),sortPanel=$("#scoreSortPanel");if(which==="filter"){filterPanel.hidden=!open;filterButton.setAttribute("aria-expanded",String(open));filterButton.classList.toggle("is-open",open);if(open){sortPanel.hidden=true;sortButton.setAttribute("aria-expanded","false");sortButton.classList.remove("is-open");}}else{sortPanel.hidden=!open;sortButton.setAttribute("aria-expanded",String(open));sortButton.classList.toggle("is-open",open);if(open){filterPanel.hidden=true;filterButton.setAttribute("aria-expanded","false");filterButton.classList.remove("is-open");}}}
 function closeScoreDetailPanels(){setScoreDetailPanelState("filter",false);setScoreDetailPanelState("sort",false);}
 function toggleScoreDetailPanel(which){const panel=$(which==="filter"?"#scoreFilterPanel":"#scoreSortPanel");setScoreDetailPanelState(which,panel.hidden);}
-function resetScoreFilters(){const preferredLevel=getPreferredLevelFilterValue();$("#searchInput").value="";$("#levelFilter").value=[...$("#levelFilter").options].some(option=>option.value===preferredLevel)?preferredLevel:"ALL";$("#versionFilter").value="ALL";$("#rankFilter").value="ALL";$("#currentRankFilter").value="ALL";$("#filterMedalPicker [data-filter-medal=\"ALL\"]")?.click();$("#filterCurrentMedalPicker [data-filter-medal=\"ALL\"]")?.click();}
+function resetScoreFilters(){const preferredLevel=getPreferredLevelFilterValue();$("#searchInput").value="";$("#levelFilter").value=[...$("#levelFilter").options].some(option=>option.value===preferredLevel)?preferredLevel:"ALL";$("#versionFilter").value="ALL";$("#filterMedalPicker [data-filter-medal=\"ALL\"]")?.click();$("#filterCurrentMedalPicker [data-filter-medal=\"ALL\"]")?.click();$("#filterRankPicker [data-filter-rank=\"ALL\"]")?.click();$("#filterCurrentRankPicker [data-filter-rank=\"ALL\"]")?.click();}
 function resetScoreSort(){const field=$("#scoreSortField");field.value="medal";$("#scoreSortOrder").value=DEFAULT_SCORE_SORT_ORDER[field.value]||"asc";}
 async function toggleTheme(){const theme=document.documentElement.dataset.theme==="dark"?"light":"dark";setTheme(theme);try{await saveDisplayPreferences({theme});}catch(error){alert(`表示設定を保存できませんでした：${error.message||error}`);}}
 function populateAverageLevelOptions(){
@@ -185,7 +185,7 @@ async function loadGuideDialog(){
   if($("#guideDialog"))return $("#guideDialog");
   if(!guideLoadPromise){
     guideLoadPromise=(async()=>{
-      const response=await fetch("./partials/guide.html?v=3.3.41");
+      const response=await fetch("./partials/guide.html?v=3.3.43");
       if(!response.ok)throw new Error(`HTTP ${response.status}`);
       const template=document.createElement("template");
       template.innerHTML=await response.text();
@@ -291,6 +291,57 @@ function setupMedalFilter(inputId,buttonId,pickerId,description){
 }
 setupMedalFilter("#medalFilter","#filterMedalButton","#filterMedalPicker","歴代メダル");
 setupMedalFilter("#currentMedalFilter","#filterCurrentMedalButton","#filterCurrentMedalPicker","今作メダル");
+const filterRanks=[
+ ["ALL","全ランク",""],
+ ["S+","S+","splus.png"],["S","S","s.png"],["AAA","AAA","aaa.png"],["AA+","AA+","aaplus.png"],
+ ["AA","AA","aa.png"],["A+","A+","aplus.png"],["A","A","a.png"],["B+","B+","bplus.png"],
+ ["B","B","b.png"],["C","C","c.png"],["D","D","d.png"],["E","E","e.png"],
+ ["UNPLAYED","未プレー",""]
+];
+function setupRankFilter(inputId,buttonId,pickerId,description){
+ const input=$(inputId),button=$(buttonId),picker=$(pickerId),image=button.querySelector("img"),label=button.querySelector("span"),home=picker.parentElement;
+ const rankUrl=file=>file?`./assets/ranks/${file}`:"";
+ picker.innerHTML=filterRanks.map(([code,name,file])=>`<button type="button" class="compact-medal-option rank-filter-option" data-filter-rank="${code}" title="${name}" aria-label="${name}">${code==="ALL"?'<span class="filter-medal-all">すべて</span>':file?`<img src="${rankUrl(file)}" alt="">`:'<span class="compact-medal-empty" aria-hidden="true">－</span>'}</button>`).join("");
+ const close=()=>{
+  picker.hidden=true;button.setAttribute("aria-expanded","false");
+  if(picker.parentElement!==home)home.append(picker);
+  picker.classList.remove("psm-floating-medal-picker");
+  picker.style.removeProperty("left");picker.style.removeProperty("right");picker.style.removeProperty("top");picker.style.removeProperty("width");picker.style.removeProperty("height");picker.style.removeProperty("max-height");
+ };
+ activeMedalFilters.add({button,picker,close});
+ function open(){
+  for(const filter of activeMedalFilters)filter.close();
+  document.body.append(picker);
+  picker.classList.add("psm-floating-medal-picker");
+  picker.hidden=false;
+  picker.style.removeProperty("height");picker.style.removeProperty("width");picker.style.removeProperty("max-height");
+  const rect=button.getBoundingClientRect(),panel=$("#scoresPanel").getBoundingClientRect(),viewport=window.visualViewport,
+   leftEdge=viewport?.offsetLeft||0,topEdge=viewport?.offsetTop||0,
+   viewWidth=viewport?.width||window.innerWidth,viewHeight=viewport?.height||window.innerHeight,
+   width=picker.getBoundingClientRect().width,
+   left=Math.max(leftEdge+12,Math.min(panel.left+(panel.width-width)/2,leftEdge+viewWidth-width-12)),
+   desiredHeight=picker.scrollHeight,roomBelow=topEdge+viewHeight-rect.bottom-12,roomAbove=rect.top-topEdge-12,
+   above=roomBelow<desiredHeight&&roomAbove>roomBelow,
+   available=Math.max(44,Math.min(270,above?roomAbove-6:roomBelow-6));
+  picker.style.left=`${left}px`;picker.style.right="auto";picker.style.maxHeight=`${available}px`;
+  const actualHeight=picker.getBoundingClientRect().height;
+  picker.style.top=`${above?Math.max(topEdge+6,rect.top-actualHeight-6):rect.bottom+6}px`;
+  button.setAttribute("aria-expanded","true");
+ }
+ button.addEventListener("click",()=>picker.hidden?open():close());
+ picker.addEventListener("click",event=>{const option=event.target.closest("[data-filter-rank]");if(!option)return;select(option.dataset.filterRank);close();input.dispatchEvent(new Event("change"));});
+ function select(code){
+  const found=filterRanks.find(([value])=>value===code)||filterRanks[0],name=found[1],file=found[2],url=rankUrl(file);
+  input.value=found[0];image.src=url;image.hidden=!url;
+  label.textContent=found[0]==="ALL"?"全ランク":found[0]==="UNPLAYED"?"未プレー":"";
+  label.hidden=Boolean(url);
+  button.title=`${description}：${name}`;button.setAttribute("aria-label",`${description}：${name}`);
+  picker.querySelectorAll("[data-filter-rank]").forEach(option=>option.setAttribute("aria-pressed",String(option.dataset.filterRank===found[0])));
+ }
+ select("ALL");
+}
+setupRankFilter("#rankFilter","#filterRankButton","#filterRankPicker","歴代ランク");
+setupRankFilter("#currentRankFilter","#filterCurrentRankButton","#filterCurrentRankPicker","今作ランク");
 // A body-level palette must close when the viewport moves or the user taps elsewhere.
 document.addEventListener("pointerdown",event=>{for(const filter of activeMedalFilters){if(!filter.picker.hidden&&!filter.picker.contains(event.target)&&!filter.button.contains(event.target))filter.close();}});
 window.addEventListener("scroll",()=>{for(const filter of activeMedalFilters)if(!filter.picker.hidden)filter.close();},true);

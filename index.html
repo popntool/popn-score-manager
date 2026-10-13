@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffd34e">
-  <meta name="psm-app-version" content="3.3.42">
+  <meta name="psm-app-version" content="3.3.43">
   <meta name="description" content="pop'n musicのスコアとメダルを管理する非公式ツール">
   <link rel="icon" type="image/x-icon" sizes="any" href="./assets/psm-favicon-315.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="./assets/psm-icon-192-315.png">
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="./css/components.css?v=3.0.127">
   <link rel="stylesheet" href="./css/themes.css">
 <link rel="stylesheet" href="./css/responsive.css?v=3.1.9">
-<link rel="stylesheet" href="./css/app.css?v=3.3.42">
+<link rel="stylesheet" href="./css/app.css?v=3.3.43">
   <link rel="stylesheet" href="./css/loading-screen.css?v=3.1.6">
   <link rel="stylesheet" href="./css/average-scores.css?v=3.0.141">
   <link rel="stylesheet" href="./css/version-check.css?v=3.1.23">
@@ -211,14 +211,14 @@
                 <div class="score-side-panel-head"><h3>歴代</h3><p>これまでのプレイ記録</p></div>
                 <div class="score-side-panel-grid">
                   <label class="score-select-field"><span>メダル</span><div class="filter-medal-wrap history-medal-filter"><input id="medalFilter" type="hidden" value="ALL"><button id="filterMedalButton" class="filter-medal-button" type="button" aria-label="歴代メダル：全メダル" aria-expanded="false"><img alt="" hidden><span>全メダル</span><b aria-hidden="true"></b></button><div id="filterMedalPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div></label>
-                  <label class="score-select-field"><span>ランク</span><select id="rankFilter" aria-label="歴代ランク"><option value="ALL">全ランク</option><option>S+</option><option>S</option><option>AAA</option><option>AA+</option><option>AA</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D</option><option>E</option><option value="UNPLAYED">未プレー</option></select></label>
+                  <label class="score-select-field"><span>ランク</span><div class="filter-rank-wrap history-rank-filter"><input id="rankFilter" type="hidden" value="ALL"><button id="filterRankButton" class="filter-rank-button" type="button" aria-label="歴代ランク：全ランク" aria-expanded="false"><img alt="" hidden><span>全ランク</span><b aria-hidden="true"></b></button><div id="filterRankPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div></label>
                 </div>
               </section>
               <section class="score-side-panel score-current-panel" aria-label="今作の絞り込み">
                 <div class="score-side-panel-head"><h3>今作</h3><p>選択中バージョンの記録</p></div>
                 <div class="score-side-panel-grid">
                   <label class="score-select-field"><span>メダル</span><div class="filter-medal-wrap current-medal-filter"><input id="currentMedalFilter" type="hidden" value="ALL"><button id="filterCurrentMedalButton" class="filter-medal-button" type="button" aria-label="今作メダル：全メダル" aria-expanded="false"><img alt="" hidden><span>全メダル</span><b aria-hidden="true"></b></button><div id="filterCurrentMedalPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div></label>
-                  <label class="score-select-field"><span>ランク</span><select id="currentRankFilter" aria-label="今作ランク"><option value="ALL">全ランク</option><option>S+</option><option>S</option><option>AAA</option><option>AA+</option><option>AA</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D</option><option>E</option><option value="UNPLAYED">未プレー</option></select></label>
+                  <label class="score-select-field"><span>ランク</span><div class="filter-rank-wrap current-rank-filter"><input id="currentRankFilter" type="hidden" value="ALL"><button id="filterCurrentRankButton" class="filter-rank-button" type="button" aria-label="今作ランク：全ランク" aria-expanded="false"><img alt="" hidden><span>全ランク</span><b aria-hidden="true"></b></button><div id="filterCurrentRankPicker" class="filter-medal-picker compact-filter-medal-picker" hidden></div></div></label>
                 </div>
               </section>
             </div>
@@ -330,7 +330,7 @@
 <strong>APP VERSION</strong>
 <small>pop'n Score Manager</small>
 </span>
-<b>3.3.42</b>
+<b>3.3.43</b>
 </div>
       <button id="appUpdateMenu" class="setting-row app-update-menu" type="button" hidden><span><strong>新しいバージョンがあります</strong><small>最新版に更新できます</small></span><b>↻</b></button>
       </div>
@@ -525,10 +525,10 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module">
     // Check release metadata before loading the application. Network errors must not block startup.
-    import("./js/version-check.js?v=3.3.42").then(async ({checkOnLaunch, watchForUpdates}) => {
+    import("./js/version-check.js?v=3.3.43").then(async ({checkOnLaunch, watchForUpdates}) => {
       if (await checkOnLaunch()) return; // Navigating to the fresh HTML; skip loading this copy.
       watchForUpdates();
-      await import("./js/app.js?v=3.3.42");
+      await import("./js/app.js?v=3.3.43");
     }).catch(error => {
       console.error("Application module failed to load:", error);
       window.psmLoading?.error(error);
