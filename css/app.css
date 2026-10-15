@@ -1145,15 +1145,16 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
   width:6.578947%!important;
   font-size:clamp(8px,1.84cqw,14px)!important;
   font-weight:900!important;
+  font-family:Arial,"Helvetica Neue",sans-serif!important;
+  line-height:normal!important;
   color:#fff!important;
   isolation:isolate!important;
 }
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{
   left:6.578947%!important;
   width:6.578947%!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
+  display:grid!important;
+  place-items:center!important;
   font-family:Arial,"Helvetica Neue",sans-serif!important;
   font-size:clamp(9px,2.30cqw,17px)!important;
   font-weight:700!important;
@@ -1178,7 +1179,7 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
 }
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
   width:85%!important;
-  height:66%!important;
+  height:60%!important;
   background:var(--admin-level-fill,#fbe7ee)!important;
 }
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.ex{--badge-fill:#f05d86!important}
