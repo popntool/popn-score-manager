@@ -975,6 +975,17 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.sco
   text-size-adjust:100%!important;
   container-type:inline-size;
 }
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v300.score-card-v312::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:56.818182%;
+  height:1px;
+  background:var(--line);
+  pointer-events:none;
+  z-index:5;
+}
 
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-card-upper,
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-card-lower,
@@ -999,7 +1010,7 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ba
   margin:0!important;
   padding:0!important;
   border:0!important;
-  border-right:0!important;
+  border-right:1px solid var(--line)!important;
   overflow:hidden!important;
   border-radius:0!important;
 }
@@ -1031,7 +1042,7 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
   justify-content:flex-start!important;
   margin:0!important;
   padding:0 clamp(5px,1.32cqw,10px)!important;
-  border-right:1px solid var(--line)!important;
+  border-right:0!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
   white-space:nowrap!important;
@@ -1114,7 +1125,7 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
   place-items:center!important;
   margin:0!important;
   padding:0!important;
-  border-top:1px solid var(--line)!important;
+  border-top:0!important;
   border-right:1px solid var(--line)!important;
   border-bottom:0!important;
   border-left:0!important;
@@ -1140,8 +1151,13 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{
   left:6.578947%!important;
   width:6.578947%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-family:Arial,"Helvetica Neue",sans-serif!important;
   font-size:clamp(9px,2.30cqw,17px)!important;
-  font-weight:850!important;
+  font-weight:700!important;
+  line-height:normal!important;
   color:#273b74!important;
   isolation:isolate!important;
 }
@@ -1243,7 +1259,7 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .sc
   place-items:center!important;
   margin:0!important;
   padding:0!important;
-  border-top:1px solid var(--line)!important;
+  border-top:0!important;
   border-right:1px solid var(--line)!important;
   color:var(--muted)!important;
   font-size:clamp(7px,1.58cqw,12px)!important;
