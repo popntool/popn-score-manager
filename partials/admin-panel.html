@@ -7,9 +7,11 @@
         <button data-admin-tab="users" type="button">ユーザーリスト</button>
         <button data-admin-tab="requests" type="button">登録依頼</button>
         <button data-admin-tab="banners" type="button">バナー依頼</button>
+        <button data-admin-tab="corrections" type="button">修正依頼</button>
         <button data-admin-tab="feedback" type="button">要望・不具合</button>
       </nav>
       <div class="admin-toolbar"><input id="adminSearch" type="search" placeholder="検索"><button id="adminWikiSyncButton" class="sub-button admin-wiki-sync-button" type="button">wiki同期</button><button id="adminAddButton" class="main-button" type="button">追加</button></div>
       <div id="adminMasterFilters" class="admin-master-filters"><select id="adminLevelFilter" aria-label="レベル"><option value="ALL">全レベル</option></select><select id="adminVersionFilter" aria-label="カテゴリ"><option value="ALL">全カテゴリ</option><option value="UNSET">未設定</option></select><select id="adminChartFilter" aria-label="譜面"><option value="ALL">全譜面</option><option>LIGHT</option><option>NORMAL</option><option>HYPER</option><option>EX</option></select></div>
+      <div id="adminCorrectionControls" class="admin-correction-controls" hidden><button type="button" data-correction-select="all">全選択</button><button type="button" data-correction-select="none">全解除</button><button type="button" data-correction-batch="approved">一括承認</button><button type="button" data-correction-batch="rejected">一括却下</button></div>
       <div id="adminContent" class="admin-content"><div class="empty">管理データを読み込みます。</div></div>
     </section>
