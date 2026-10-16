@@ -4,9 +4,9 @@ import{changePassword,changeUsername,currentUser,loadMyProfile,login,logout,onAu
 import{downloadSongMaster,importSongMaster}from"./songs.js?v=3.3.3";
 import{currentMedalCode,currentMedalForNewSong,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.3.35";
 import{loadScoreCatalogCached as loadScoreCatalog}from"./catalog-cache.js?v=3.2.49";
-import{loadUsers,invalidateUserCache,warmMissingUserSummaries}from"./users.js?v=3.3.63";
+import{loadUsers,invalidateUserCache,warmMissingUserSummaries}from"./users.js?v=3.3.64";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.2.49";
-import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.3.63";
+import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.3.64";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.2.49";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.3.7";
 import{loadWikiDifficulty,syncWikiDifficultyRange}from"./wiki-sync.js?v=3.2.49";
