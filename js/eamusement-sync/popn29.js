@@ -195,6 +195,10 @@
       await yieldUi();
     }
   }
+  function hasExplicitNoPlayMessage(doc){
+    const detail=doc.querySelector("#mu_detail");
+    return Boolean(detail?.querySelector("#title") && detail?.querySelector("#artist") && /プレーデータがありません[。．]?/.test(detail.textContent||""));
+  }
   function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}if(!versionRow||!hasPlayCount)continue;const current_clear_status=counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':counts.play===0?'unplayed':'failed';result.set(chart,{version_score:number(versionRow.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
   async function adaptiveDetailMap(items,worker,onDone,onRetry){
     let cursor=0,active=0,done=0,limit=Math.min(DETAIL_INITIAL,Math.max(1,items.length));
@@ -281,7 +285,14 @@
     status.textContent=`プレー済み${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
     await adaptiveDetailMap(detailGroups,async(group,index,hooks)=>{
       let values;
-      try{values=parseDetail(await getDoc(group.url,'曲詳細',2,hooks));}
+      try{
+        const doc=await getDoc(group.url,'曲詳細',2,hooks);
+        // The official detail page explicitly states that this song has no current-play data.
+        // Its historical medal/score from the list must still be transmitted unchanged.
+        values=hasExplicitNoPlayMessage(doc)
+          ? new Map(group.rows.map(row=>[row.chart,{version_score:0,current_clear_status:'unplayed'}]))
+          : parseDetail(doc);
+      }
       catch(error){throw new Error(`曲詳細取得失敗（${group.rows[0]?.title||'曲名不明'}）：${error?.message||error}`);}
       for(const row of group.rows){
         const value=values.get(row.chart);
