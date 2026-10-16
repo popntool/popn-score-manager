@@ -4,9 +4,9 @@ import{changePassword,changeUsername,currentUser,loadMyProfile,login,logout,onAu
 import{downloadSongMaster,importSongMaster}from"./songs.js?v=3.3.3";
 import{currentMedalCode,currentMedalForNewSong,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.3.35";
 import{loadScoreCatalogCached as loadScoreCatalog}from"./catalog-cache.js?v=3.2.49";
-import{loadUsers,invalidateUserCache}from"./users.js?v=3.3.62";
+import{loadUsers,invalidateUserCache,warmMissingUserSummaries}from"./users.js?v=3.3.63";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.2.49";
-import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.3.48";
+import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.3.63";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.2.49";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.3.7";
 import{loadWikiDifficulty,syncWikiDifficultyRange}from"./wiki-sync.js?v=3.2.49";
@@ -160,6 +160,7 @@ async function refreshUsers(reset=false){
  if(request!==userRequest||version!==selectedGameVersion?.id||search!==$("#userSearchInput").value)return;
  userRows=rows;
  userPage=renderUsers(userRows,userPage,new Set(rivals.map(x=>x.user_id)),myUserId);
+ warmMissingUserSummaries(version,userRows,()=>refreshUsers(false));
 }
 async function refreshAdminNotices(){const box=$("#adminNoticeList");if(!box||!admin){if(box)box.hidden=true;return;}const notices=await loadAdminNotices(),items=[["requests","登録依頼","未承認",notices.requests],["banners","バナー依頼","未承認",notices.banners],["feedback","要望・不具合","未確認",notices.feedback]].filter(([, , ,count])=>count>0);box.hidden=!items.length;box.innerHTML=items.map(([tab,label,status,count])=>`<button type="button" data-admin-notice-tab="${tab}"><strong>${label}</strong><span>${status} ${count}件</span><b>›</b></button>`).join("");}
 for(const button of document.querySelectorAll(".tabs button"))button.addEventListener("click",async()=>{if(button.dataset.tab==="admin"&&!admin)return;showTab(button.dataset.tab);if(button.dataset.tab==="admin"){await Promise.all([renderAdmin(),refreshAdminNotices()]);}if(button.dataset.tab==="users"&&isConfigured){try{await refreshUsers(false);}catch(error){alert(`ユーザー一覧を読み込めませんでした。時間をおいて再試行してください。\n${error.message||error}`);}}});

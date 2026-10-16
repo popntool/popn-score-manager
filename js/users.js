@@ -52,3 +52,36 @@ export async function loadUsers(search="",gameVersionId=null){
  if(!query)return rows;
  return rows.filter(row=>normalized(row.username).includes(query));
 }
+
+// Background cache refill: at most 3 users per tab session and version.
+// Do not delay the initial list request, and never run simultaneous writes.
+const warmAttempts=new Map();
+const warming=new Set();
+export function warmMissingUserSummaries(gameVersionId,rows,onUpdated){
+ const key=String(gameVersionId||'');
+ if(!key||warming.has(key)||!rows.some(r=>Number(r.pop_class)===-1))return;
+ const already=warmAttempts.get(key)||0;
+ if(already>=3)return;
+ warming.add(key);
+ (async()=>{
+  try{
+   let count=already;
+   while(count<3){
+    const {data,error}=await requireDb().rpc('refresh_user_summaries_batch_v363',{
+      p_search:'',p_game_version_id:gameVersionId
+    });
+    if(error)throw error;
+    count++;warmAttempts.set(key,count);
+    if(Number(data)<=0)break;
+    // Invalidate cache before notifying the UI to redraw with real values.
+    entries.delete(key);
+    if(typeof onUpdated==='function')await onUpdated();
+    await new Promise(resolve=>setTimeout(resolve,200));
+   }
+  }catch(error){
+   // Keep the normal user list usable even when the optional refresh fails.
+   console.warn('PSR background refresh failed',error);
+   warmAttempts.set(key,3);
+  }finally{warming.delete(key);}
+ })();
+}
