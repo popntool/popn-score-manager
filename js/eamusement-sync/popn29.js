@@ -190,21 +190,44 @@
     if(anchors.length&&items.length===0){
       console.warn('公式曲一覧に譜面が見つかりましたが、プレー済みデータは0件です。', {url:doc.URL,anchors:anchors.length});
     }
-    return {rows:items.map(item=>({master_key:resolved.get(identity(item)),...item})),signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
+    // The page may contain only unplayed charts. That is NOT the end of pagination.
+    const options=[...doc.querySelectorAll('#s_page option')];
+    const pageNumbers=options.map(option=>Number(option.value)).filter(Number.isInteger);
+    const lastPage=pageNumbers.length?Math.max(...pageNumbers):null;
+    return {rows:items.map(item=>({master_key:resolved.get(identity(item)),...item})),
+      anchorCount:anchors.length,lastPage,
+      signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
   }
 
   async function scanTarget(target,onPage){
     const seen=new Set();
+    let completed=false;
     for(let page=0;page<MAX_PAGE&&!state.cancelled;page++){
       const parsed=await parseList(await getDoc(listUrl(target,page),`${target.label} page=${page}`));
-      if(!parsed.rows.length||seen.has(parsed.signature))break;
+      // An empty *played* list is expected on pages made up entirely of unplayed songs.
+      // Only an empty official song list (or the final pagination option) ends the scan.
+      if(parsed.anchorCount===0){
+        if(page===0)throw new Error(`${target.label}: 公式一覧の楽曲を取得できませんでした。`);
+        if(parsed.lastPage!==null&&page<=parsed.lastPage)
+          throw new Error(`${target.label}: ${page+1}ページ目の曲一覧が空です。`);
+        completed=true;
+        break;
+      }
+      if(seen.has(parsed.signature)){
+        // The official site may return the final page for an out-of-range request.
+        if(parsed.lastPage!==null&&page<=parsed.lastPage)
+          throw new Error(`${target.label}: ${page+1}ページ目に同一の曲一覧が返されました。`);
+        completed=true;
+        break;
+      }
       seen.add(parsed.signature);
       state.records.push(...parsed.rows);
       state.pages++;
       onPage?.();
-      // Give Safari/Chrome a chance to paint the progress UI and release parsed DOM objects.
+      if(parsed.lastPage!==null&&page>=parsed.lastPage){completed=true;break;}
       await yieldUi();
     }
+    if(!completed&&!state.cancelled)throw new Error(`${target.label}: 曲一覧が${MAX_PAGE}ページを超えたため、安全のため同期を中止しました。`);
   }
   function hasExplicitNoPlayMessage(doc){
     const detail=doc.querySelector("#mu_detail");
