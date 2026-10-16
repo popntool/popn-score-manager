@@ -195,7 +195,7 @@
       await yieldUi();
     }
   }
-  function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}const current_clear_status=hasPlayCount&&counts.play===0?'unplayed':counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':'failed';result.set(chart,{version_score:number(versionRow?.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
+  function parseDetail(doc){const result=new Map(),ids={LIGHT:'light',NORMAL:'normal',HYPER:'hyper',EX:'ex'};for(const [chart,id] of Object.entries(ids)){const section=doc.querySelector(`#${id}`);if(!section)continue;const tables=[...section.querySelectorAll('table')];if(tables.length<2)continue;const versionTable=tables.find(table=>/VERSION/i.test(table.previousElementSibling?.textContent||''))||tables[1],versionRow=versionTable?.querySelector('tr.score td.play_value')?.closest('tr'),counts={play:0,clear:0,full_combo:0,perfect:0};let hasPlayCount=false;for(const tr of versionTable?.querySelectorAll('tr')||[]){const label=clean(tr.querySelector('th,td')?.textContent).replace(/[ 　]/g,''),value=number(tr.querySelector('td.play_value')?.textContent||tr.lastElementChild?.textContent);if(/PERFECT回数/i.test(label))counts.perfect=value;else if(/FULLCOMBO回数/i.test(label))counts.full_combo=value;else if(/クリア回数/.test(label))counts.clear=value;else if(/プレー回数/.test(label)){counts.play=value;hasPlayCount=true;}}if(!versionRow||!hasPlayCount)continue;const current_clear_status=counts.perfect>0?'perfect':counts.full_combo>0?'full_combo':counts.clear>0?'clear':counts.play===0?'unplayed':'failed';result.set(chart,{version_score:number(versionRow.querySelector('td.play_value')?.textContent),current_clear_status,version_counts:counts});}return result;}
   async function adaptiveDetailMap(items,worker,onDone,onRetry){
     let cursor=0,active=0,done=0,limit=Math.min(DETAIL_INITIAL,Math.max(1,items.length));
     let ewma=0,cleanSuccesses=0,settled=false;
@@ -283,8 +283,10 @@
       const values=parseDetail(await getDoc(group.url,'曲詳細',2,hooks));
       for(const row of group.rows){
         const value=values.get(row.chart);
-        row.version_score=Number(value?.version_score)||0;
-        row.current_clear_status=value?.current_clear_status||'failed';
+        // A missing chart section is a parse failure, never a FAILED play.
+        if(!value)throw new Error(`曲詳細から${row.chart}の今作データを取得できませんでした: ${row.title}`);
+        row.version_score=value.version_score;
+        row.current_clear_status=value.current_clear_status;
       }
       values.clear();
     },(count,total,parallel)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中（${parallel}並列）`;},(info,done,total,parallel)=>{
