@@ -167,9 +167,17 @@
 
       // レベル一覧(mu_lv.html)は従来どおり1行=1譜面。
       if(d.length<4)continue;
-      const history=historyCell(d[3]);
-      const item={...base,level:Number(clean(d[2].textContent)),chart:clean(d[1].textContent).toUpperCase(),...history};
-      if(!['LIGHT','NORMAL','HYPER','EX'].includes(item.chart)||!Number.isFinite(item.level))continue;
+      const chart=clean(d[1]?.textContent).toUpperCase();
+      const levelText=clean(d[2]?.textContent);
+      const level=Number(levelText);
+      if(!['LIGHT','NORMAL','HYPER','EX'].includes(chart)||!Number.isFinite(level)||level<1||level>50)continue;
+      // mu_lv may have an extra column. Identify the score cell from its medal/rank
+      // images rather than assuming the fourth div always contains the play result.
+      // An actual 0-score FAILED entry is still played if a FAILED medal is present.
+      const scoreCells=d.slice(3).filter(cell=>cell.querySelector('img[src*="meda_"]'));
+      const scoreCell=scoreCells[0]||d[3];
+      const history=historyCell(scoreCell);
+      const item={...base,level,chart,...history};
       if(!hasPlayedHistory(item))continue;
       items.push(item);
     }
@@ -179,6 +187,9 @@
     const unique=new Map();
     for(const item of items){const key=identity(item);if(!unique.has(key))unique.set(key,masterKey(item));}
     const resolved=new Map(await Promise.all([...unique].map(async([key,promise])=>[key,await promise])));
+    if(anchors.length&&items.length===0){
+      console.warn('公式曲一覧に譜面が見つかりましたが、プレー済みデータは0件です。', {url:doc.URL,anchors:anchors.length});
+    }
     return {rows:items.map(item=>({master_key:resolved.get(identity(item)),...item})),signature:anchors.map(a=>a.getAttribute('href')).sort().join('\n')};
   }
 
