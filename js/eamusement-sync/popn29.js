@@ -7,7 +7,7 @@
   const RETURN_URL='https://popntool.github.io/popn-score-manager/';
   const MOBILE_LIKE=/iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent||'')||(navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=4);
   const LIST_CONCURRENCY=MOBILE_LIKE?2:6,MAX_PAGE=200;
-  const DETAIL_MIN=MOBILE_LIKE?2:5,DETAIL_INITIAL=MOBILE_LIKE?4:8,DETAIL_MAX=MOBILE_LIKE?6:10;
+  const DETAIL_MIN=MOBILE_LIKE?1:2,DETAIL_INITIAL=MOBILE_LIKE?2:4,DETAIL_MAX=MOBILE_LIKE?3:5;
   const REQUEST_TIMEOUT_MS=MOBILE_LIKE?15000:18000;
   const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   const yieldUi=()=>new Promise(resolve=>{
@@ -26,7 +26,7 @@
   if(window.__POPN_SCORE_SYNC_RUNNING__){alert('同期処理は実行中です。');return;}
   window.__POPN_SCORE_SYNC_RUNNING__=true;
 
-  const state={cancelled:false,pages:0,records:[],started:Date.now()};
+  const state={cancelled:false,failed:false,pages:0,records:[],started:Date.now()};
   const box=document.createElement('div');
   Object.assign(box.style,{position:'fixed',top:'12px',right:'12px',zIndex:2147483647,width:'min(430px,calc(100vw - 24px))',padding:'14px',border:'3px solid #334b93',borderRadius:'14px',background:'#fff9df',color:'#17244d',fontFamily:'Arial, "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif',fontSize:'14px',fontWeight:'700',lineHeight:'1.5',boxShadow:'0 6px 24px #0006'});
   box.className='popn-score-sync-box';
@@ -202,7 +202,7 @@
     const clampLimit=value=>Math.max(Math.min(DETAIL_MIN,items.length||1),Math.min(DETAIL_MAX,items.length||1,value));
     const hooks={
       retry(info){
-        onRetry?.(info,done,items.length,limit);
+        if(!state.failed)onRetry?.(info,done,items.length,limit);
         const status=info.status;
         if(status===0||status===429||status>=500){
           limit=clampLimit(Math.max(DETAIL_MIN,Math.floor(limit/2)));
@@ -223,7 +223,7 @@
     };
     return await new Promise((resolve,reject)=>{
       const finish=()=>{if(!settled){settled=true;resolve();}};
-      const fail=error=>{if(!settled){settled=true;reject(error);}};
+      const fail=error=>{if(!settled){settled=true;state.failed=true;state.cancelled=true;reject(error);}};
       const pump=()=>{
         if(settled)return;
         if((state.cancelled||cursor>=items.length)&&active===0){finish();return;}
@@ -234,7 +234,7 @@
             try{
               await worker(item,index,hooks);
               done++;
-              onDone?.(done,items.length,limit,ewma);
+              if(!state.failed)onDone?.(done,items.length,limit,ewma);
               if(MOBILE_LIKE||done%2===0)await yieldUi();
               if(MOBILE_LIKE&&done%40===0)await sleep(120);
             }catch(error){
@@ -280,7 +280,9 @@
     progress.max=Math.max(1,detailGroups.length);progress.value=0;
     status.textContent=`プレー済み${base.length}譜面を確認・詳細取得 ${detailGroups.length}曲`;
     await adaptiveDetailMap(detailGroups,async(group,index,hooks)=>{
-      const values=parseDetail(await getDoc(group.url,'曲詳細',2,hooks));
+      let values;
+      try{values=parseDetail(await getDoc(group.url,'曲詳細',2,hooks));}
+      catch(error){throw new Error(`曲詳細取得失敗（${group.rows[0]?.title||'曲名不明'}）：${error?.message||error}`);}
       for(const row of group.rows){
         const value=values.get(row.chart);
         // A missing chart section is a parse failure, never a FAILED play.
@@ -289,9 +291,9 @@
         row.current_clear_status=value.current_clear_status;
       }
       values.clear();
-    },(count,total,parallel)=>{progress.value=count;status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中（${parallel}並列）`;},(info,done,total,parallel)=>{
+    },(count,total,parallel)=>{progress.value=count;if(!state.failed)status.textContent=`曲詳細 ${count}/${total}曲・今作スコアを取得中（${parallel}並列）`;},(info,done,total,parallel)=>{
       const reason=info.reason==='timeout'?'応答待ちを打ち切って再試行':info.status===429?'アクセス集中のため待機・再試行':'通信エラーを再試行';
-      status.textContent=`曲詳細 ${done}/${total}曲・${reason}（${parallel}並列）`;
+      if(!state.failed)status.textContent=`曲詳細 ${done}/${total}曲・${reason}（${parallel}並列）`;
     });
     if(state.cancelled)throw new Error('中止しました。');
     const rows=base.map(row=>({...row,version_score:Number(row.version_score)||0,current_clear_status:row.current_clear_status||'failed'}))
@@ -304,5 +306,5 @@
     const compressed=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer());
     status.textContent=`取得完了：${rows.length}譜面${popn_class===null?"":"・ポップンクラス "+popn_class.toFixed(2)}。サイトへ戻ります…`;
     location.href=RETURN_URL+'#popn-sync-gzip='+encodeURIComponent(toBase64(compressed));
-  }catch(e){const status=box.querySelector('[data-status]');if(status)status.textContent=`エラー：${e?.message||e}`;const cancel=box.querySelector('[data-cancel]');if(cancel){cancel.textContent='閉じる';cancel.disabled=false;cancel.onclick=()=>box.remove();}console.error(e);window.__POPN_SCORE_SYNC_RUNNING__=false;}
+  }catch(e){state.failed=true;state.cancelled=true;const status=box.querySelector('[data-status]');if(status)status.textContent=`同期を中止しました（取得済みデータは送信されていません）。エラー：${e?.message||e}`;const cancel=box.querySelector('[data-cancel]');if(cancel){cancel.textContent='閉じる';cancel.disabled=false;cancel.onclick=()=>box.remove();}console.error(e);window.__POPN_SCORE_SYNC_RUNNING__=false;}
 })();
