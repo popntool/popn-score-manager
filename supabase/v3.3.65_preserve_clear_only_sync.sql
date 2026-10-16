@@ -31,7 +31,7 @@ begin
   where coalesce(x.score,0)>0 or coalesce(x.version_score,0)>0
      or coalesce(nullif(lower(x.medal_code),'none'),'')<>''
      or coalesce(nullif(lower(x.rank_code),'none'),'')<>''
-     or lower(coalesce(x.current_clear_status,'')) in ('unplayed','clear','full_combo','perfect');
+     or lower(coalesce(x.current_clear_status,'')) in ('failed','clear','full_combo','perfect');
 
   -- Song master levels are managed through the request/approval workflow.
 
@@ -42,7 +42,7 @@ begin
     ) where coalesce(score,0)>0 or coalesce(version_score,0)>0
        or coalesce(nullif(lower(medal_code),'none'),'')<>''
        or coalesce(nullif(lower(rank_code),'none'),'')<>''
-       or lower(coalesce(current_clear_status,'')) in ('unplayed','clear','full_combo','perfect')
+       or lower(coalesce(current_clear_status,'')) in ('failed','clear','full_combo','perfect')
   ), unresolved as materialized (
     select x.* from input x
     where not exists(select 1 from public.songs s where s.master_key=x.master_key)
@@ -83,7 +83,7 @@ begin
     ) where coalesce(score,0)>0 or coalesce(version_score,0)>0
        or coalesce(nullif(lower(medal_code),'none'),'')<>''
        or coalesce(nullif(lower(rank_code),'none'),'')<>''
-       or lower(coalesce(current_clear_status,'')) in ('unplayed','clear','full_combo','perfect')
+       or lower(coalesce(current_clear_status,'')) in ('failed','clear','full_combo','perfect')
   ), unresolved as materialized (
     select x.* from input x
     where not exists(select 1 from public.songs s where s.master_key=x.master_key)
@@ -132,7 +132,7 @@ begin
     ) where coalesce(score,0)>0 or coalesce(version_score,0)>0
        or coalesce(nullif(lower(medal_code),'none'),'')<>''
        or coalesce(nullif(lower(rank_code),'none'),'')<>''
-       or lower(coalesce(current_clear_status,'')) in ('unplayed','clear','full_combo','perfect')
+       or lower(coalesce(current_clear_status,'')) in ('failed','clear','full_combo','perfect')
   ), resolved as materialized (
     select x.*,coalesce(exact_song.id,identity_song.id,title_artist_song.id) song_id
     from input x
@@ -178,7 +178,7 @@ begin
     ) where coalesce(score,0)>0 or coalesce(version_score,0)>0
        or coalesce(nullif(lower(medal_code),'none'),'')<>''
        or coalesce(nullif(lower(rank_code),'none'),'')<>''
-       or lower(coalesce(current_clear_status,'')) in ('unplayed','clear','full_combo','perfect')
+       or lower(coalesce(current_clear_status,'')) in ('failed','clear','full_combo','perfect')
   ), resolved as materialized (
     select x.*,coalesce(exact_song.id,identity_song.id,title_artist_song.id) song_id
     from input x
@@ -213,7 +213,9 @@ begin
   where x.song_id is not null
     and NOT (
       coalesce(x.version_score,0)=0
-      and lower(coalesce(x.current_clear_status,'')) in ('unplayed','clear','full_combo','perfect')
+      and lower(coalesce(x.current_clear_status,'')) = 'unplayed'
+      and coalesce(nullif(lower(x.medal_code),'none'),'') = ''
+      and coalesce(nullif(lower(x.rank_code),'none'),'') = ''
     )
   order by x.song_id,upper(x.chart),x.version_score desc nulls last,x.score desc nulls last
   on conflict(user_id,song_id,chart,game_version_id) do update set

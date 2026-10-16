@@ -295,7 +295,7 @@
     });
     if(state.cancelled)throw new Error('中止しました。');
     const rows=base.map(row=>({...row,version_score:Number(row.version_score)||0,current_clear_status:row.current_clear_status||'failed'}))
-      .filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none'||Number(row.version_score)>0||row.current_clear_status!=='failed')
+      .filter(row=>Number(row.score)>0||row.medal_code!=='none'||row.rank_code!=='none'||Number(row.version_score)>0||row.current_clear_status!=='unplayed')
       .map(({detail_url,...row})=>row);
     status.textContent=`${rows.length}譜面・ポップンクラスを確認中…`;
     await yieldUi();
