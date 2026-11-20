@@ -53,35 +53,37 @@ export async function loadUsers(search="",gameVersionId=null){
  return rows.filter(row=>normalized(row.username).includes(query));
 }
 
-// Background cache refill: at most 3 users per tab session and version.
-// Do not delay the initial list request, and never run simultaneous writes.
+// Refresh invalidated or older-revision summaries without blocking the list.
+// Search prioritizes the requested username; the unfiltered list refills gradually.
+// A single background worker per version avoids competing writes.
 const warmAttempts=new Map();
 const warming=new Set();
-export function warmMissingUserSummaries(gameVersionId,rows,onUpdated){
- const key=String(gameVersionId||'');
- if(!key||warming.has(key)||!rows.some(r=>Number(r.pop_class)===-1))return;
+export function warmMissingUserSummaries(gameVersionId,rows,onUpdated,search=''){
+ const version=String(gameVersionId||'');
+ const query=String(search||'').trim();
+ const key=`${version}|${normalized(query)}`;
+ if(!version||!rows.some(r=>Number(r.pop_class)===-1)||warming.has(version))return;
+ const maxAttempts=query?12:6;
  const already=warmAttempts.get(key)||0;
- if(already>=3)return;
- warming.add(key);
+ if(already>=maxAttempts)return;
+ warming.add(version);
  (async()=>{
   try{
    let count=already;
-   while(count<3){
+   while(count<maxAttempts){
     const {data,error}=await requireDb().rpc('refresh_user_summaries_batch_v363',{
-      p_search:'',p_game_version_id:gameVersionId
+      p_search:query,p_game_version_id:gameVersionId
     });
     if(error)throw error;
     count++;warmAttempts.set(key,count);
     if(Number(data)<=0)break;
-    // Invalidate cache before notifying the UI to redraw with real values.
-    entries.delete(key);
+    entries.delete(version);
     if(typeof onUpdated==='function')await onUpdated();
-    await new Promise(resolve=>setTimeout(resolve,200));
+    await new Promise(resolve=>setTimeout(resolve,300));
    }
   }catch(error){
-   // Keep the normal user list usable even when the optional refresh fails.
    console.warn('PSR background refresh failed',error);
-   warmAttempts.set(key,3);
-  }finally{warming.delete(key);}
+   warmAttempts.set(key,maxAttempts);
+  }finally{warming.delete(version);}
  })();
 }
