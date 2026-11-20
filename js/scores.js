@@ -36,9 +36,30 @@ export async function loadMyScores(userId,selectedVersion=null,versionMetadata=n
   level:row.songs[`${row.chart.toLowerCase()}_level`]});});}
 export async function loadScoreCatalog(userId,selectedVersion=null){const db=requireDb(),[versions,wikiMap]=await Promise.all([loadVersionMetadata(db),loadWikiDifficultyMetadata(db)]),songs=[];for(let from=0;;from+=1000){const{data,error}=await db.from("songs").select("id,master_key,genre,title,artist,banner_url,light_level,normal_level,hyper_level,ex_level,version_id").order("title").range(from,from+999);if(error)throw error;songs.push(...(data||[]));if(!data||data.length<1000)break;}const registered=userId?await loadMyScores(userId,selectedVersion,versions):[],scoreMap=new Map(registered.map(row=>[`${row.song_id}|${row.chart}`,row]));return songs.flatMap(song=>[["LIGHT","light_level"],["NORMAL","normal_level"],["HYPER","hyper_level"],["EX","ex_level"]].filter(([,key])=>Number(song[key])>0).map(([chart,key])=>{const wiki=wikiMap.get(`${song.id}|${chart}`)||{wiki_difficulty_text:"",wiki_difficulty_value:null},saved=scoreMap.get(`${song.id}|${chart}`);return saved?{...saved,...wiki}:{...song,...wiki,id:`catalog:${song.id}:${chart}`,song_id:song.id,chart,level:song[key],version_name:versions.get(song.version_id)?.name||"未設定",version_order:versions.get(song.version_id)?.sort_order??9999,version_is_current:selectedVersion?song.version_id===selectedVersion.id:Boolean(versions.get(song.version_id)?.is_current),score:0,official_score:0,manual_history_score:0,version_score:0,current_clear_status:"unplayed",current_medal_code:"none",medal_code:"none",rank_code:"none",source:"catalog"};}));}
 const FAILED_MEDALS=new Set(["h","i","j","l","m","n","failed_15_16","failed_12_14","failed_0_11"]);
-const truncate2=value=>Math.floor((Number(value)||0)*100+Number.EPSILON)/100;
-export function songPopClass(row,score=row?.version_score,currentClearStatus=row?.current_clear_status){const n=Math.max(0,Math.min(100000,Number(score)||0)),level=Math.max(0,Number(row?.level)||0),status=String(currentClearStatus||"failed").toLowerCase();if(status==="unplayed")return 0;const bonus=status==="perfect"?3000:status==="full_combo"?2000:status==="clear"?1000:status==="long_off"?300:status==="easy"?200:0;return truncate2((level*level*n/6000+bonus)/200);}
-export function popClassSelection(rows){const mapped=rows.filter(row=>Number(row.version_score)>0&&String(row.current_clear_status||"failed").toLowerCase()!=="unplayed").map(row=>({...row,pop_class:songPopClass(row)})),sort=(a,b)=>b.pop_class-a.pop_class||Number(b.version_score||0)-Number(a.version_score||0)||String(a.title||"").localeCompare(String(b.title||""),"ja"),current=mapped.filter(row=>row.version_is_current).sort(sort).slice(0,20),other=mapped.filter(row=>!row.version_is_current).sort(sort).slice(0,40),hundredths=[...current,...other].reduce((sum,row)=>sum+Math.round(row.pop_class*100),0),total=Math.floor(hundredths/60)/100;return{current,other,total};}
+export function songPopClass(row){
+ // Display only: current ratings come from the single database PSR engine.
+ // Historical snapshots already contain the saved per-song rating.
+ if(row?.psr_calculated!=null)return Number(row.psr_calculated)||0;
+ if(row?.position!=null&&row?.pop_class!=null)return Number(row.pop_class)||0;
+ return 0;
+}
+export function popClassSelection(rows){
+ // The DB engine is the only authority for current PSR and TOP 20/40 selection.
+ // Historical snapshots contain the selected chart ratings saved at that time.
+ if(rows?.psrCanonical){
+  const byPos=(a,b)=>Number(a.psr_position)-Number(b.psr_position);
+  return{current:rows.filter(r=>r.psr_selected&&r.version_is_current).sort(byPos),
+   other:rows.filter(r=>r.psr_selected&&!r.version_is_current).sort(byPos),total:rows.psrTotal};
+ }
+ if(Array.isArray(rows)&&rows.every(r=>r.pop_class!==undefined&&r.position!==undefined)){
+  const byPos=(a,b)=>Number(a.position)-Number(b.position);
+  const current=rows.filter(r=>r.version_is_current).sort(byPos).slice(0,20);
+  const other=rows.filter(r=>!r.version_is_current).sort(byPos).slice(0,40);
+  const hundredths=[...current,...other].reduce((sum,r)=>sum+Math.round(Number(r.pop_class)*100),0);
+  return{current,other,total:Math.floor(hundredths/60)/100};
+ }
+ throw new Error("PSR集計が未取得です。画面を再読み込みしてください。");
+}
 export function rankFromScore(score,medalCode="none"){const n=Math.max(0,Math.min(100000,Number(score)||0)),medal=String(medalCode||"none").toLowerCase(),cleared=medal!=="none"&&!FAILED_MEDALS.has(medal);let result;if(n>=99000)result="S+";else if(n>=98000)result="S";else if(n>=95000)result="AAA";else if(n>=93000)result="AA+";else if(n>=90000)result="AA";else if(n>=86000)result="A+";else if(n>=82000)result="A";else if(n>=77000)result="B+";else if(n>=72000)result="B";else if(n>=62000)result="C";else if(n>=50000)result="D";else result="E";return !cleared&&["S+","S","AAA","AA+","AA"].includes(result)?"A+":result;}
 export async function saveScore(songId,chart,historyScore,versionScore,medalCode,currentClearStatus,currentMedalCode,gameVersion){const history=Math.max(0,Math.min(100000,Number(historyScore)||0)),version=Math.max(0,Math.min(100000,Number(versionScore)||0)),{error}=await requireDb().rpc("save_manual_score_v320",{p_song_id:songId,p_chart:chart,p_history_score:history,p_version_score:version,p_medal_code:medalCode,p_rank_code:rankFromScore(version,currentMedalCode),p_current_clear_status:currentClearStatus,p_current_medal_code:currentMedalCode,p_game_version_id:gameVersion.id});if(error)throw error;}
 export async function syncScores(records,onProgress,gameVersion){

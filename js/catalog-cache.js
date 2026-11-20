@@ -1,10 +1,10 @@
 import{requireDb}from"./supabase.js";
-import{loadScoreCatalog as loadScoreCatalogFresh}from"./scores.js?v=3.3.65";
+import{loadScoreCatalog as loadScoreCatalogFresh}from"./scores.js?v=3.3.77";
 
 const DB_NAME="popn-score-manager-cache";
 const DB_VERSION=1;
 const STORE="score_catalogs";
-const CACHE_SCHEMA="v3365";
+const CACHE_SCHEMA="v3377";
 const MAX_ENTRIES=6;
 
 function openCacheDb(){
@@ -48,19 +48,36 @@ async function revisionToken(){
 }
 function cacheKey(userId,selectedVersion){return `${CACHE_SCHEMA}:${userId}:${selectedVersion?.id||"default"}`;}
 
+async function attachCanonicalPsr(rows,selectedVersion){
+ if(!selectedVersion?.id)return rows;
+ const{data,error}=await requireDb().rpc("my_psr_values_v3377",{p_game_version_id:selectedVersion.id});
+ if(error)throw new Error(`PSR集計を取得できませんでした：${error.message||error}`);
+ const byChart=new Map((data||[]).map(item=>[`${item.song_id}|${item.chart}`,item]));
+ for(const row of rows){
+  const item=byChart.get(`${row.song_id}|${row.chart}`);
+  row.psr_calculated=item?Number(item.pop_class):0;
+  row.psr_selected=Boolean(item?.selected);
+  row.psr_position=item?Number(item.position):0;
+  if(item){row.version_score=Number(item.version_score);row.current_clear_status=item.current_clear_status;}
+ }
+ const total=Number(data?.[0]?.total??0);
+ Object.defineProperty(rows,"psrTotal",{value:total,configurable:true});
+ Object.defineProperty(rows,"psrCanonical",{value:true,configurable:true});
+ return rows;
+}
 export async function loadScoreCatalogCached(userId,selectedVersion=null){
  if(!userId)return[];
  let revision;
  try{revision=await revisionToken();}catch(error){
   console.warn("Catalog revision check failed; loading fresh data.",error);
-  return loadScoreCatalogFresh(userId,selectedVersion);
+  return attachCanonicalPsr(await loadScoreCatalogFresh(userId,selectedVersion),selectedVersion);
  }
  const key=cacheKey(userId,selectedVersion);
  try{
   const cached=await readCache(key);
-  if(cached?.revision===revision&&Array.isArray(cached.data))return cached.data;
+  if(cached?.revision===revision&&Array.isArray(cached.data))return attachCanonicalPsr(cached.data,selectedVersion);
  }catch(error){console.warn("Catalog cache read failed.",error);}
  const data=await loadScoreCatalogFresh(userId,selectedVersion);
  try{await writeCache({key,revision,cachedAt:Date.now(),data});}catch(error){console.warn("Catalog cache write failed.",error);}
- return data;
+ return attachCanonicalPsr(data,selectedVersion);
 }
