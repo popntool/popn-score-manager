@@ -1,4 +1,4 @@
-import{currentMedalCode,rankFromScore,popClassSelection,songPopClass}from"./scores.js?v=3.3.77";
+import{currentMedalCode,rankFromScore,popClassSelection,songPopClass}from"./scores.js?v=3.3.79";
 
 const currentRankForRow=row=>rankFromScore(Number(row?.version_score)||0,currentMedalCode(row));
 

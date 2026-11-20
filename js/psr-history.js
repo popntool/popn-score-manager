@@ -1,5 +1,5 @@
 import{requireDb}from"./supabase.js";
-import{popClassSelection}from"./scores.js?v=3.3.77";
+import{popClassSelection}from"./scores.js?v=3.3.79";
 
 const selectRows=rows=>{const{current,other,total}=popClassSelection(rows);return{total,rows:[...current,...other].map((r,i)=>({song_id:r.song_id,master_key:r.master_key,chart:r.chart,level:r.level,genre:r.genre,title:r.title,artist:r.artist,banner_url:r.banner_url,version_is_current:r.version_is_current,score:r.score,version_score:r.version_score,medal_code:r.medal_code,current_medal_code:r.current_medal_code||"none",current_clear_status:r.current_clear_status,pop_class:r.pop_class,position:(r.version_is_current?i+1:i-current.length+1)}))};};
 export async function listPsrSnapshots(){const{data,error}=await requireDb().from("psr_snapshots").select("id,created_at,total,official_popn_class,rows").order("created_at",{ascending:false}).limit(100);if(error)throw error;return data||[];}

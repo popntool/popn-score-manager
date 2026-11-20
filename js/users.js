@@ -53,37 +53,3 @@ export async function loadUsers(search="",gameVersionId=null){
  return rows.filter(row=>normalized(row.username).includes(query));
 }
 
-// Refresh invalidated or older-revision summaries without blocking the list.
-// Search prioritizes the requested username; the unfiltered list refills gradually.
-// A single background worker per version avoids competing writes.
-const warmAttempts=new Map();
-const warming=new Set();
-export function warmMissingUserSummaries(gameVersionId,rows,onUpdated,search=''){
- const version=String(gameVersionId||'');
- const query=String(search||'').trim();
- const key=`${version}|${normalized(query)}`;
- if(!version||!rows.some(r=>Number(r.pop_class)===-1)||warming.has(version))return;
- const maxAttempts=query?12:6;
- const already=warmAttempts.get(key)||0;
- if(already>=maxAttempts)return;
- warming.add(version);
- (async()=>{
-  try{
-   let count=already;
-   while(count<maxAttempts){
-    const {data,error}=await requireDb().rpc('refresh_user_summaries_batch_v363',{
-      p_search:query,p_game_version_id:gameVersionId
-    });
-    if(error)throw error;
-    count++;warmAttempts.set(key,count);
-    if(Number(data)<=0)break;
-    entries.delete(version);
-    if(typeof onUpdated==='function')await onUpdated();
-    await new Promise(resolve=>setTimeout(resolve,300));
-   }
-  }catch(error){
-   console.warn('PSR background refresh failed',error);
-   warmAttempts.set(key,maxAttempts);
-  }finally{warming.delete(version);}
- })();
-}
