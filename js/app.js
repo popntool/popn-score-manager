@@ -2,17 +2,17 @@ import{isConfigured,requireDb}from"./supabase.js";
 import{levelScoreAverages}from"./average-scores.js?v=3.2.49";
 import{changePassword,changeUsername,currentUser,loadMyProfile,login,logout,onAuthChange,register,saveDisplayPreferences,saveOfficialPopnClass,savePoptomo}from"./auth.js?v=3.2.49";
 import{downloadSongMaster,importSongMaster}from"./songs.js?v=3.3.3";
-import{currentMedalCode,currentMedalForNewSong,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.3.79";
-import{loadScoreCatalogCached as loadScoreCatalog}from"./catalog-cache.js?v=3.3.79";
-import{loadUsers,invalidateUserCache}from"./users.js?v=3.3.79";
-import{saveMyPsrSummary}from"./psr-summary.js?v=3.3.79";
+import{currentMedalCode,currentMedalForNewSong,rankFromScore,saveScore,songPopClass,syncScores,diagnoseSyncMatches,diagnoseTitleOnlyMatches}from"./scores.js?v=3.3.81";
+import{loadScoreCatalogCached as loadScoreCatalog}from"./catalog-cache.js?v=3.3.81";
+import{loadUsers,invalidateUserCache}from"./users.js?v=3.3.81";
+import{saveMyPsrSummary}from"./psr-summary.js?v=3.3.81";
 import{loadRivals,toggleRival,saveVisibility,rivalSongScores}from"./rivals.js?v=3.2.49";
-import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.3.79";
+import{filterScores,MEDALS,medalInfo,medalInfo as rivalMedalInfo,renderPopClass,renderScores,renderStats,renderUsers,setTheme,showTab}from"./ui.js?v=3.3.81";
 import{loadBannerRequestSongs,loadFeedbackHistory,submitBannerRequest,submitFeedback,submitSongRequest}from"./requests.js?v=3.2.49";
 import{approveBannerRequest,approveSongRequest,clearMyRegisteredScores,currentAdminTab,deleteFeedback,deleteUser,deleteVersion,exportUserScoresCsv,isAdmin,loadAdminNotices,loadVersions,rejectBannerRequest,renderAdmin,saveSong,saveVersion,setAdminMasterFilters,setAdminPage,setAdminSearch,setAdminTab,updateStatus,uploadSongBanner}from"./admin.js?v=3.3.7";
 import{loadWikiDifficulty,syncWikiDifficultyRange}from"./wiki-sync.js?v=3.2.49";
-import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.3.79";
-import{listPsrSnapshots,savePsrSnapshot,deletePsrSnapshot,comparePsrSnapshot}from"./psr-history.js?v=3.3.79";
+import{shareLevelMedalImage,shareMedalDistributionImage,sharePopClassImage}from"./share.js?v=3.3.81";
+import{listPsrSnapshots,savePsrSnapshot,deletePsrSnapshot,comparePsrSnapshot}from"./psr-history.js?v=3.3.81";
 
 let scores=[],scorePage=1,userRows=[],userPage=1,userRequest=0,rivals=[],myUserId=null,authMode="login",selectedSong=null,editingScoreId=null,admin=false,adminEdit=null,preferenceUserId=null,officialPopnClass=null,gameVersions=[],selectedGameVersion=null,scoreLoadKey="",scoreDataDirty=true,adminCheckedUserId=null,rivalsLoadedUserId=null,refreshAuthPromise=null; 
 const $=selector=>document.querySelector(selector);
@@ -216,7 +216,7 @@ async function loadGuideDialog(){
   if($("#guideDialog"))return $("#guideDialog");
   if(!guideLoadPromise){
     guideLoadPromise=(async()=>{
-      const response=await fetch("./partials/guide.html?v=3.3.48");
+      const response=await fetch("./partials/guide.html?v=3.3.81");
       if(!response.ok)throw new Error(`HTTP ${response.status}`);
       const template=document.createElement("template");
       template.innerHTML=await response.text();

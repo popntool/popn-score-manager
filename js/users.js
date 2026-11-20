@@ -25,7 +25,7 @@ async function loadBaseList(gameVersionId){
    // A timed-out RPC may be transient while the database refills invalidated
    // summary caches. Retry only this read-only request; never retry writes.
    for(let attempt=0;;attempt++){
-     const{data,error}=await requireDb().rpc("list_user_summaries_v31",{
+     const{data,error}=await requireDb().rpc("list_user_summaries_v3381",{
        p_search:"",p_game_version_id:gameVersionId
      });
      if(!error)return data||[];
