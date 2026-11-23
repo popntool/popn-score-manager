@@ -1,3 +1,4 @@
+import{drawOfficialBadge}from"./chart-badges.js?v=3.3.84";
 import{popClassSelection,songPopClass}from"./scores.js?v=3.3.79";
 import{medalInfo}from"./ui.js?v=3.2.49";
 
@@ -59,9 +60,11 @@ function canvas(width,height){const c=document.createElement("canvas");c.width=w
 async function blobFromCanvas(c,type="image/jpeg"){if(type==="image/png")return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/png"));let quality=.86,blob=null;for(let i=0;i<5;i++){blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/jpeg",quality));if(blob.size<=TARGET_BYTES||quality<=.58)break;quality-=.07;}return blob;}
 async function shareBlob(blob,filename,title){const type=blob.type||(/\.png$/i.test(filename)?"image/png":"image/jpeg"),file=new File([blob],filename,{type}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
 
-const CHART_STYLE={EX:["#e9478e","#141414"],HYPER:["#efbd31","#141414"],NORMAL:["#33b75d","#141414"],LIGHT:["#3695d5","#141414"]};
 function chartLevelStack(ctx,chart,level,x,y,w,h){
- const[bg,fg]=CHART_STYLE[chart]||["#eef1f7",INK],chartH=Math.floor(h*.53),shortChart={LIGHT:"L",NORMAL:"N",HYPER:"H",EX:"EX"}[chart]||String(chart||"").slice(0,2);rounded(ctx,x,y,w,chartH,4,bg,null,0);text(ctx,shortChart,x+w/2,y+chartH/2,10,900,fg,"center");text(ctx,String(level??"-"),x+w/2,y+chartH+Math.max(7,(h-chartH)/2),11,900,INK,"center");
+ const size=Math.min(w,Math.floor((h-2)/2));
+ const top=y+Math.max(0,Math.floor((h-size*2-2)/2));
+ drawOfficialBadge(ctx,chart,"chart",null,x+(w-size)/2,top,size);
+ drawOfficialBadge(ctx,chart,"level",level,x+(w-size)/2,top+size+2,size);
 }
 function scoreTileLayout(row,x,y,w,h){
  const inner=3,cellGap=2,medalCellW=28,stackCellW=31,scoreCellW=44,psrCellW=42,bannerH=h-inner*2;

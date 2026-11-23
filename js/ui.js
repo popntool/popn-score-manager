@@ -1,3 +1,4 @@
+import{officialBadgeSvg}from"./chart-badges.js?v=3.3.84";
 import{currentMedalCode,rankFromScore,popClassSelection,songPopClass}from"./scores.js?v=3.3.81";
 
 const currentRankForRow=row=>rankFromScore(Number(row?.version_score)||0,currentMedalCode(row));
@@ -9,7 +10,6 @@ export const MEDALS=[
  ["perfect","PERFECT","perfect_00.png"],["fc_1_5","FC・GOOD 1～5","full_combo_00.png"],["fc_6_20","FC・GOOD 6～20","full_combo_01.png"],["fc_21_plus","FC・GOOD 21以上","full_combo_02.png"],["clear_bad_1_5","クリア・BAD 1～5","bad_00.png"],["clear_bad_6_20","クリア・BAD 6～20","bad_01.png"],
  ["clear_bad_21_plus","クリア・BAD 21以上","bad_02.png"],["long_off","ロングオフ","long_off.png"],["easy","EASYクリア","easy.png"],["failed_15_16","FAILED・15～16粒","groove_00.png"],["failed_12_14","FAILED・12～14粒","groove_01.png"],["failed_0_11","FAILED・11粒以下","groove_02.png"]
 ];
-const CHART_SHORT={LIGHT:"L",NORMAL:"N",HYPER:"H",EX:"EX"};
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function coolPerfectMedalHtml(extraClass=""){return `<img class="cool-perfect-medal${extraClass?` ${extraClass}`:""}" src="./assets/cool-perfect.png" alt="COOL PERFECT" title="COOL PERFECT">`;}
 
@@ -30,7 +30,7 @@ function scoreCard(row,useCurrentMedal=false){
  return `<article class="score-card-v300 score-card-v312">
  <div class="score-card-upper">${row.banner_url?`<img class="song-banner" src="${esc(row.banner_url)}" alt="" loading="lazy">`:'<div class="song-banner banner-empty">NO IMAGE</div>'}
  <div class="score-records">${record("歴代",row.medal_code,historyMedal,historyScore)}${record("今作",nowCode,nowMedal,currentScore)}</div></div>
- <div class="score-card-lower"><span class="card-chart ${String(row.chart||"").toLowerCase()}">${CHART_SHORT[row.chart]||esc(row.chart)}</span><span class="card-genre">${esc(row.genre)}</span><span class="card-psr-label">PSR</span><button class="score-edit" type="button" data-edit-score="${esc(row.id)}">編集</button><strong class="card-level">${Number(row.level)||"－"}</strong><h2 class="card-title">${esc(row.title)}</h2><strong class="card-popclass">${songPopClass(row).toFixed(2)}</strong></div>
+ <div class="score-card-lower"><span class="card-chart ${String(row.chart||"").toLowerCase()}">${officialBadgeSvg(row.chart,"chart")}</span><span class="card-genre">${esc(row.genre)}</span><span class="card-psr-label">PSR</span><button class="score-edit" type="button" data-edit-score="${esc(row.id)}">編集</button><strong class="card-level">${officialBadgeSvg(row.chart,"level",row.level)}</strong><h2 class="card-title">${esc(row.title)}</h2><strong class="card-popclass">${songPopClass(row).toFixed(2)}</strong></div>
  </article>`;
 }
 export function renderScores(rows,page=1){

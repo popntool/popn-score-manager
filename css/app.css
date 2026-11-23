@@ -1,4 +1,3 @@
-
 .tabs{grid-template-columns:repeat(3,1fr)}
 .tabs.has-admin{grid-template-columns:repeat(4,1fr)}
 
@@ -885,9 +884,9 @@ textarea,
 .sync-update-thumb{display:flex;align-items:center;justify-content:flex-start;width:150px;height:50px;box-sizing:border-box;}
 .sync-update-banner{display:block;width:150px;height:50px;object-fit:contain;border:1px solid #d8e1f4;border-radius:10px;background:#fff;box-sizing:border-box;}
 .sync-update-no-banner{display:grid;place-items:center;width:150px;height:50px;border:1px solid #d8e1f4;border-radius:10px;background:#f7fbff;color:#ff6da5;font-size:22px;font-weight:900;}
-.sync-update-chart-level{display:grid;grid-template-rows:auto auto;align-self:stretch;min-width:0;border-radius:11px;overflow:hidden;background:#e4efff;}
-.sync-update-chart,.sync-update-level{display:flex;align-items:center;justify-content:center;min-height:25px;padding:2px 6px;font-size:.76rem;font-weight:900;white-space:nowrap;}
-.sync-update-chart{background:#e9478e;color:#141414;}.sync-update-chart.hyper{background:#efbd31}.sync-update-chart.normal{background:#33b75d}.sync-update-chart.light{background:#3695d5}.sync-update-level{background:var(--sync-level-color,#e9478e);color:#141414;}.sync-update-chart-level:has(.sync-update-chart.hyper){--sync-level-color:#efbd31}.sync-update-chart-level:has(.sync-update-chart.normal){--sync-level-color:#33b75d}.sync-update-chart-level:has(.sync-update-chart.light){--sync-level-color:#3695d5}
+.sync-update-chart-level{display:grid;grid-template-rows:1fr 1fr;align-items:center;justify-items:center;align-self:stretch;min-width:0;gap:2px;background:transparent;}
+.sync-update-chart,.sync-update-level{display:grid;place-items:center;width:100%;min-width:0;min-height:0;padding:0;background:transparent;color:inherit;}
+.sync-update-chart .official-badge-svg,.sync-update-level .official-badge-svg{display:block;width:min(100%,27px);height:auto;aspect-ratio:1;}
 .sync-update-song-title{min-width:0;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;color:#172c65;font-size:1.05rem;line-height:1.35;word-break:break-word;}
 .sync-update-changes{display:grid;gap:12px;}
 .sync-update-change-block{display:grid;grid-template-rows:auto auto;gap:6px;}
@@ -907,7 +906,7 @@ textarea,
 .sync-update-medal-empty{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#edf0f5;color:#758198;font-weight:900;}
 .sync-update-actions{padding:2px 16px 16px;display:flex;justify-content:center;}.sync-update-actions .main-button{min-width:180px;border-radius:999px;background:#ff4f91;box-shadow:0 5px 0 #d72f70;}
 @media(min-width:641px){.sync-update-list{padding:16px 20px}.sync-update-item{padding:18px 20px}.sync-update-top{grid-template-columns:170px 58px minmax(0,1fr);gap:14px}.sync-update-thumb,.sync-update-banner,.sync-update-no-banner{width:170px;height:56px}.sync-update-heading-grid,.sync-update-value-grid{column-gap:24px}.sync-update-heading-cell:nth-child(2),.sync-update-value-cell:nth-child(2){padding-left:24px}.sync-update-song-title{font-size:1.1rem}.sync-update-score-value b{font-size:1.06rem}.sync-update-score-value .is-new{font-size:1.16rem}.sync-update-medal img{width:40px;height:40px}}
-@media(max-width:640px){.sync-update-dialog{width:calc(100vw - 14px)}.sync-update-modal{border-radius:22px}.sync-update-head{padding:20px 16px 14px}.sync-update-list{padding:10px;gap:10px;max-height:62vh}.sync-update-item{gap:12px;padding:13px}.sync-update-top{grid-template-columns:112px 44px minmax(0,1fr);gap:9px}.sync-update-thumb,.sync-update-banner,.sync-update-no-banner{width:112px;height:38px}.sync-update-chart,.sync-update-level{min-height:19px;padding:1px 4px;font-size:.7rem}.sync-update-song-title{font-size:.93rem}.sync-update-heading-grid,.sync-update-value-grid{column-gap:12px}.sync-update-heading-cell:nth-child(2),.sync-update-value-cell:nth-child(2){padding-left:12px}.sync-update-heading-cell{min-height:26px}.sync-update-heading-cell span{min-height:26px;padding:2px 8px;font-size:.7rem}.sync-update-value-cell{min-height:38px;gap:6px}.sync-update-score-value b{font-size:.88rem}.sync-update-score-value .is-new{font-size:.96rem}.sync-update-medal img{width:34px;height:34px}.sync-update-medal{min-width:32px}.sync-update-actions{padding:0 10px 12px}.sync-update-title-row{gap:8px}.sync-update-count{min-height:30px;padding:3px 9px}.sync-update-head p{font-size:.86rem}}
+@media(max-width:640px){.sync-update-dialog{width:calc(100vw - 14px)}.sync-update-modal{border-radius:22px}.sync-update-head{padding:20px 16px 14px}.sync-update-list{padding:10px;gap:10px;max-height:62vh}.sync-update-item{gap:12px;padding:13px}.sync-update-top{grid-template-columns:112px 44px minmax(0,1fr);gap:9px}.sync-update-thumb,.sync-update-banner,.sync-update-no-banner{width:112px;height:38px}.sync-update-song-title{font-size:.93rem}.sync-update-heading-grid,.sync-update-value-grid{column-gap:12px}.sync-update-heading-cell:nth-child(2),.sync-update-value-cell:nth-child(2){padding-left:12px}.sync-update-heading-cell{min-height:26px}.sync-update-heading-cell span{min-height:26px;padding:2px 8px;font-size:.7rem}.sync-update-value-cell{min-height:38px;gap:6px}.sync-update-score-value b{font-size:.88rem}.sync-update-score-value .is-new{font-size:.96rem}.sync-update-medal img{width:34px;height:34px}.sync-update-medal{min-width:32px}.sync-update-actions{padding:0 10px 12px}.sync-update-title-row{gap:8px}.sync-update-count{min-height:30px;padding:3px 9px}.sync-update-head p{font-size:.86rem}}
 /* v3.2.59: sync failures can be inspected without exposing retry counters. */
 .sync-failure-dialog{width:min(680px,calc(100vw - 24px));max-width:680px;padding:0;border:0;background:transparent;}
 .sync-failure-dialog::backdrop{background:rgba(18,31,68,.58);backdrop-filter:blur(2px);}
@@ -1139,58 +1138,26 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
   line-height:1!important;
 }
 
-/* EX + level */
+/* Official badge geometry is shared by all chart/level cells. */
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart{
   left:0!important;
   width:6.578947%!important;
-  font-size:clamp(8px,1.84cqw,14px)!important;
-  font-weight:900!important;
-  font-family:Arial,"Helvetica Neue",sans-serif!important;
-  line-height:normal!important;
-  color:#141414!important;
-  isolation:isolate!important;
 }
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{
   left:6.578947%!important;
   width:6.578947%!important;
-  display:grid!important;
-  place-items:center!important;
-  font-family:Arial,"Helvetica Neue",sans-serif!important;
-  font-size:clamp(9px,2.30cqw,17px)!important;
-  font-weight:700!important;
-  line-height:normal!important;
-  color:#141414!important;
-  isolation:isolate!important;
 }
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before,
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  border-radius:999px;
-  z-index:-1;
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 :is(.card-chart,.card-level){
+  background:var(--surface)!important;
+  overflow:hidden!important;
 }
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before{
-  width:85%!important;
-  height:60%!important;
-  background:var(--badge-fill,#e9478e)!important;
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 :is(.card-chart,.card-level) .official-badge-svg{
+  display:block;
+  width:min(86%,27px);
+  max-height:92%;
+  aspect-ratio:1;
+  height:auto;
 }
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
-  width:85%!important;
-  height:60%!important;
-  background:var(--admin-level-fill,#fbe7ee)!important;
-}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.ex{--badge-fill:#e9478e!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.hyper{--badge-fill:#efbd31!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.normal{--badge-fill:#33b75d!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.light{--badge-fill:#3695d5!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#e9478e}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#efbd31}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#33b75d}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#3695d5}
-
 /* history/current visual groups */
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1)>*{
   background:var(--admin-history-bg,#eef8ff)!important;
@@ -1326,11 +1293,6 @@ html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassConte
   background:#31415f!important;
   color:#dce8ff!important;
 }
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#e9478e}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#efbd31}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#33b75d}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#3695d5}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{color:#141414!important}
 
 /* iPhone Safari: disable text inflation at the document level as well. */
 html,body{
