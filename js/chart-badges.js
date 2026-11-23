@@ -41,7 +41,12 @@ export function drawOfficialBadge(ctx,chart,kind,value,x,y,size){
  ctx.beginPath();ctx.moveTo(20,18.5);ctx.quadraticCurveTo(19,18.5,19,22);ctx.lineTo(19,27);ctx.strokeStyle=p.top;ctx.lineWidth=2;ctx.lineCap='round';ctx.globalAlpha=.6;ctx.stroke();ctx.globalAlpha=1;
  ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.lineJoin='round';ctx.fillStyle='#08080a';ctx.strokeStyle=p.glow;
  function glyph(text,y,fontSize,lineWidth,spacing){ctx.font=`1000 ${fontSize}px ${FONT}`;ctx.lineWidth=lineWidth;if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing=spacing;ctx.strokeText(text,36,y);ctx.fillText(text,36,y);if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing='0px';}
- if(isLevel){glyph('Lv.',27,14.3,.7);glyph(shown,56,31,1.5);}
+ if(isLevel){
+  // The inset colored face spans y=15.5..56.5. Keep both label and
+  // numerals within it even with a font's descent and outline stroke.
+  glyph('Lv.',27,13.2,.7);
+  glyph(shown,50,26,1.25);
+ }
  else{
   ctx.font=`900 31px ${FONT}`;
   // EX uses the same font height as L/N/H. Only its horizontal width is fitted.
