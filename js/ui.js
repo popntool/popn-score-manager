@@ -9,7 +9,7 @@ export const MEDALS=[
  ["perfect","PERFECT","perfect_00.png"],["fc_1_5","FC・GOOD 1～5","full_combo_00.png"],["fc_6_20","FC・GOOD 6～20","full_combo_01.png"],["fc_21_plus","FC・GOOD 21以上","full_combo_02.png"],["clear_bad_1_5","クリア・BAD 1～5","bad_00.png"],["clear_bad_6_20","クリア・BAD 6～20","bad_01.png"],
  ["clear_bad_21_plus","クリア・BAD 21以上","bad_02.png"],["long_off","ロングオフ","long_off.png"],["easy","EASYクリア","easy.png"],["failed_15_16","FAILED・15～16粒","groove_00.png"],["failed_12_14","FAILED・12～14粒","groove_01.png"],["failed_0_11","FAILED・11粒以下","groove_02.png"]
 ];
-const CHART_SHORT={LIGHT:"LT",NORMAL:"NM",HYPER:"HP",EX:"EX"};
+const CHART_SHORT={LIGHT:"L",NORMAL:"N",HYPER:"H",EX:"EX"};
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function coolPerfectMedalHtml(extraClass=""){return `<img class="cool-perfect-medal${extraClass?` ${extraClass}`:""}" src="./assets/cool-perfect.png" alt="COOL PERFECT" title="COOL PERFECT">`;}
 

@@ -887,7 +887,7 @@ textarea,
 .sync-update-no-banner{display:grid;place-items:center;width:150px;height:50px;border:1px solid #d8e1f4;border-radius:10px;background:#f7fbff;color:#ff6da5;font-size:22px;font-weight:900;}
 .sync-update-chart-level{display:grid;grid-template-rows:auto auto;align-self:stretch;min-width:0;border-radius:11px;overflow:hidden;background:#e4efff;}
 .sync-update-chart,.sync-update-level{display:flex;align-items:center;justify-content:center;min-height:25px;padding:2px 6px;font-size:.76rem;font-weight:900;white-space:nowrap;}
-.sync-update-chart{background:#ff82aa;color:#fff;}.sync-update-chart.hyper{background:#ffe37d;color:#695500}.sync-update-chart.normal{background:#bff0a4;color:#225d31}.sync-update-chart.light{background:#cae7ff;color:#315c88}.sync-update-level{background:#e4efff;color:#284d86;}
+.sync-update-chart{background:#e9478e;color:#141414;}.sync-update-chart.hyper{background:#efbd31}.sync-update-chart.normal{background:#33b75d}.sync-update-chart.light{background:#3695d5}.sync-update-level{background:var(--sync-level-color,#e9478e);color:#141414;}.sync-update-chart-level:has(.sync-update-chart.hyper){--sync-level-color:#efbd31}.sync-update-chart-level:has(.sync-update-chart.normal){--sync-level-color:#33b75d}.sync-update-chart-level:has(.sync-update-chart.light){--sync-level-color:#3695d5}
 .sync-update-song-title{min-width:0;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;color:#172c65;font-size:1.05rem;line-height:1.35;word-break:break-word;}
 .sync-update-changes{display:grid;gap:12px;}
 .sync-update-change-block{display:grid;grid-template-rows:auto auto;gap:6px;}
@@ -1147,7 +1147,7 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
   font-weight:900!important;
   font-family:Arial,"Helvetica Neue",sans-serif!important;
   line-height:normal!important;
-  color:#fff!important;
+  color:#141414!important;
   isolation:isolate!important;
 }
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{
@@ -1159,7 +1159,7 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
   font-size:clamp(9px,2.30cqw,17px)!important;
   font-weight:700!important;
   line-height:normal!important;
-  color:#273b74!important;
+  color:#141414!important;
   isolation:isolate!important;
 }
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before,
@@ -1175,21 +1175,21 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .ca
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart::before{
   width:85%!important;
   height:60%!important;
-  background:var(--badge-fill,#f05d86)!important;
+  background:var(--badge-fill,#e9478e)!important;
 }
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level::before{
   width:85%!important;
   height:60%!important;
   background:var(--admin-level-fill,#fbe7ee)!important;
 }
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.ex{--badge-fill:#f05d86!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.hyper{--badge-fill:#f4c84f!important;color:#4a3500!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.normal{--badge-fill:#57b86a!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.light{--badge-fill:#62a5e8!important}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#fde6ed}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#fff5cf}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#e4f6e8}
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#e5f1fd}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.ex{--badge-fill:#e9478e!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.hyper{--badge-fill:#efbd31!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.normal{--badge-fill:#33b75d!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-chart.light{--badge-fill:#3695d5!important}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#e9478e}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#efbd31}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#33b75d}
+body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#3695d5}
 
 /* history/current visual groups */
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1)>*{
@@ -1326,11 +1326,11 @@ html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassConte
   background:#31415f!important;
   color:#dce8ff!important;
 }
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#563440}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#51492c}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#294634}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#29425d}
-html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{color:#f4e9f0!important}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.ex){--admin-level-fill:#e9478e}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.hyper){--admin-level-fill:#efbd31}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.normal){--admin-level-fill:#33b75d}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312:has(.card-chart.light){--admin-level-fill:#3695d5}
+html[data-theme="dark"] body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .card-level{color:#141414!important}
 
 /* iPhone Safari: disable text inflation at the document level as well. */
 html,body{
