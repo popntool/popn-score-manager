@@ -42,31 +42,31 @@ export function drawOfficialBadge(ctx,chart,kind,value,x,y,size){
  ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.lineJoin='round';ctx.fillStyle='#08080a';ctx.strokeStyle=p.glow;
  function glyph(text,y,fontSize,lineWidth,spacing){ctx.font=`1000 ${fontSize}px ${FONT}`;ctx.lineWidth=lineWidth;if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing=spacing;ctx.strokeText(text,36,y);ctx.fillText(text,36,y);if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing='0px';}
  if(isLevel){
-  // Fit the *actual rendered glyph bounds*, not the nominal CSS font size.
-  // Fonts differ between iOS Safari and desktop Chrome. Fixed 26px text with
-  // an alphabetic baseline could touch/overlap the black inner bezel.
-  const textBox=(text,{top,bottom,left=19,right=53,fontSize,outline=1.1})=>{
-   const maxW=right-left-2, maxH=bottom-top-2;
-   let size=fontSize,metrics;
-   do{
-    ctx.font=`1000 ${size}px ${FONT}`;
+  // The official level icon has a compact Lv. header and a much larger
+  // two-digit numeral. Keep each glyph inside the coloured face (15.5..56.5)
+  // without scaling the numeral down to the header's narrow line box.
+  const fitGlyph=(text,box,nominalSize,outline)=>{
+   const [left,top,right,bottom]=box;
+   const maxWidth=right-left-2*outline;
+   const maxHeight=bottom-top-2*outline;
+   let fontSize=nominalSize;
+   let metrics;
+   for(;fontSize>=9;fontSize-=.5){
+    ctx.font=`1000 ${fontSize}px ${FONT}`;
     metrics=ctx.measureText(text);
-    const width=(metrics.actualBoundingBoxLeft||0)+(metrics.actualBoundingBoxRight||0);
-    const height=(metrics.actualBoundingBoxAscent||0)+(metrics.actualBoundingBoxDescent||0);
-    if(width+outline*2<=maxW&&height+outline*2<=maxH)break;
-    size-=.5;
-   }while(size>=8);
-   const ascent=metrics.actualBoundingBoxAscent||size*.8;
-   const descent=metrics.actualBoundingBoxDescent||size*.2;
-   const baseline=top+(bottom-top-(ascent+descent))/2+ascent;
+    const width=metrics.actualBoundingBoxLeft+metrics.actualBoundingBoxRight;
+    const height=metrics.actualBoundingBoxAscent+metrics.actualBoundingBoxDescent;
+    if(Math.max(width,metrics.width)<=maxWidth&&height<=maxHeight)break;
+   }
+   const ascent=metrics.actualBoundingBoxAscent;
+   const descent=metrics.actualBoundingBoxDescent;
+   const baseline=(top+bottom+ascent-descent)/2;
    ctx.lineWidth=outline;
    ctx.strokeText(text,36,baseline);
    ctx.fillText(text,36,baseline);
   };
-  // Keep both rows distinctly within the face (15.5..56.5), with
-  // a visible gap between the label and numeral and below the numeral.
-  textBox('Lv.',{top:19,bottom:29,fontSize:11,outline:.55});
-  textBox(shown,{top:34,bottom:49,fontSize:19,outline:.9});
+  fitGlyph('Lv.',[19,18.5,53,29],12.5,.55);
+  fitGlyph(shown,[18.5,30,53.5,54.5],29,1.0);
  }
 
  else{
