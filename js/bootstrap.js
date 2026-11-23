@@ -1,4 +1,4 @@
-const VERSION="3.3.85";
+const VERSION="3.3.86";
 
 async function fetchPartial(name){
   const response=await fetch(`./partials/${name}.html?v=${VERSION}`,{cache:"no-store"});

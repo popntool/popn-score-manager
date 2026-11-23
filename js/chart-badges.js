@@ -13,12 +13,20 @@ function keyOf(chart){const key=String(chart||'').toUpperCase();return Object.pr
 function badgeText(chart,kind,value){const key=keyOf(chart);if(kind!=='level')return BADGE_SHORT[key];const num=Number(value);return Number.isInteger(num)&&num>=0&&num<=99?String(num):'–';}
 // Deliberately no SVG gradient IDs: multiple badges in one document must not
 // accidentally reuse another element's gradient definition.
-export function officialBadgeSvg(chart,kind,value){
- const key=keyOf(chart),p=BADGE_PALETTE[key],isLevel=kind==='level',valueText=badgeText(chart,kind,value);
+// Render the same SVG as an image rather than inserting inline SVG into grid cells.
+// Chromium can clip inline SVG content when the score card uses absolute-positioned
+// grid children; an intrinsic 72x72 image avoids this score-tab-only failure.
+function badgeSvgMarkup(chart,kind,value){
+ const key=keyOf(chart),p=BADGE_PALETTE[key],isLevel=kind==='level',shown=badgeText(chart,kind,value);
  const glyph=isLevel
-  ? `<text x="36" y="27" font-family='${FONT}' font-size="14.5" font-weight="1000" text-anchor="middle" stroke="${p.glow}" stroke-width="0.6" paint-order="stroke fill" fill="#0b0a0c">Lv.</text><text x="36" y="56" font-family='${FONT}' font-size="30" font-weight="1000" text-anchor="middle" stroke="${p.glow}" stroke-width="1.35" stroke-linejoin="round" paint-order="stroke fill" fill="#08080a">${valueText}</text>`
-  : `<text x="36" y="48.5" font-family='${FONT}' font-size="${valueText==='EX'?26:37}" font-weight="1000" letter-spacing="${valueText==='EX'?-1:0}" text-anchor="middle" stroke="${p.glow}" stroke-width="${valueText==='EX'?1.2:1.35}" stroke-linejoin="round" paint-order="stroke fill" fill="#08080a">${valueText}</text>`;
- return `<svg class="official-badge-svg" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${isLevel?'Lv.'+valueText:key}"><rect x="1.5" y="1.5" width="69" height="69" rx="18.5" fill="#050607" stroke="#07080a" stroke-width="2"/><rect x="4.7" y="4.7" width="62.6" height="62.6" rx="15.8" fill="${p.outer}" stroke="${p.edge}" stroke-width="5.4"/><rect x="11" y="11" width="50" height="50" rx="9.8" fill="#050607" stroke="#050607" stroke-width="4.8"/><rect x="15.5" y="15.5" width="41" height="41" rx="6.8" fill="${p.face}" stroke="${p.bottom}" stroke-width="1.2"/><path d="M20 18.5 Q19 18.5 19 22 V27" fill="none" stroke="${p.top}" stroke-width="2" opacity=".6" stroke-linecap="round"/>${glyph}</svg>`;
+  ? `<text x="36" y="27" font-family='${FONT}' font-size="14.3" font-weight="900" text-anchor="middle" stroke="${p.glow}" stroke-width=".7" stroke-linejoin="round" paint-order="stroke fill" fill="#070709">Lv.</text><text x="36" y="56" font-family='${FONT}' font-size="31" font-weight="900" text-anchor="middle" stroke="${p.glow}" stroke-width="1.5" stroke-linejoin="round" paint-order="stroke fill" fill="#070709">${shown}</text>`
+  : `<text x="36" y="49" font-family='${FONT}' font-size="35" font-weight="900" ${shown==='EX'?'textLength="34" lengthAdjust="spacingAndGlyphs"':''} text-anchor="middle" stroke="${p.glow}" stroke-width="1.35" stroke-linejoin="round" paint-order="stroke fill" fill="#070709">${shown}</text>`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72"><rect x="1.5" y="1.5" width="69" height="69" rx="18.5" fill="#050607" stroke="#07080a" stroke-width="2"/><rect x="4.7" y="4.7" width="62.6" height="62.6" rx="15.8" fill="${p.outer}" stroke="${p.edge}" stroke-width="5.4"/><rect x="11" y="11" width="50" height="50" rx="9.8" fill="#050607" stroke="#050607" stroke-width="4.8"/><rect x="15.5" y="15.5" width="41" height="41" rx="6.8" fill="${p.face}" stroke="${p.bottom}" stroke-width="1.2"/><path d="M20 18.5 Q19 18.5 19 22 V27" fill="none" stroke="${p.top}" stroke-width="2" opacity=".6" stroke-linecap="round"/>${glyph}</svg>`;
+}
+export function officialBadgeSvg(chart,kind,value){
+ const svg=badgeSvgMarkup(chart,kind,value);
+ const label=kind==='level'?`Lv.${badgeText(chart,kind,value)}`:badgeText(chart,kind,value);
+ return `<img class="official-badge-image" width="72" height="72" alt="${label}" draggable="false" decoding="sync" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}">`;
 }
 export function drawOfficialBadge(ctx,chart,kind,value,x,y,size){
  const key=keyOf(chart),p=BADGE_PALETTE[key],isLevel=kind==='level',shown=badgeText(chart,kind,value);
@@ -31,6 +39,14 @@ export function drawOfficialBadge(ctx,chart,kind,value,x,y,size){
  ctx.beginPath();ctx.moveTo(20,18.5);ctx.quadraticCurveTo(19,18.5,19,22);ctx.lineTo(19,27);ctx.strokeStyle=p.top;ctx.lineWidth=2;ctx.lineCap='round';ctx.globalAlpha=.6;ctx.stroke();ctx.globalAlpha=1;
  ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.lineJoin='round';ctx.fillStyle='#08080a';ctx.strokeStyle=p.glow;
  function glyph(text,y,fontSize,lineWidth,spacing){ctx.font=`1000 ${fontSize}px ${FONT}`;ctx.lineWidth=lineWidth;if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing=spacing;ctx.strokeText(text,36,y);ctx.fillText(text,36,y);if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing='0px';}
- if(isLevel){glyph('Lv.',27,14.5,.6);glyph(shown,56,30,1.35);}else glyph(shown,48.5,shown==='EX'?26:37,shown==='EX'?1.2:1.35,shown==='EX'?'-1px':null);
+ if(isLevel){glyph('Lv.',27,14.3,.7);glyph(shown,56,31,1.5);}
+ else{
+  ctx.font=`900 35px ${FONT}`;
+  // EX uses the same font height as L/N/H. Only its horizontal width is fitted.
+  const w=ctx.measureText(shown).width;
+  if(shown==='EX'&&w>34){ctx.save();ctx.translate(36,0);ctx.scale(34/w,1);ctx.translate(-36,0);}
+  glyph(shown,49,35,1.35);
+  if(shown==='EX'&&w>34)ctx.restore();
+ }
  ctx.restore();
 }

@@ -1,4 +1,4 @@
-import{officialBadgeSvg}from"./chart-badges.js?v=3.3.85";
+import{officialBadgeSvg}from"./chart-badges.js?v=3.3.86";
 import{isConfigured,requireDb}from"./supabase.js";
 import{levelScoreAverages}from"./average-scores.js?v=3.2.49";
 import{changePassword,changeUsername,currentUser,loadMyProfile,login,logout,onAuthChange,register,saveDisplayPreferences,saveOfficialPopnClass,savePoptomo}from"./auth.js?v=3.2.49";
