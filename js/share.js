@@ -1,4 +1,4 @@
-import{drawOfficialBadge}from"./chart-badges.js?v=3.3.84";
+import{drawOfficialBadge}from"./chart-badges.js?v=3.3.85";
 import{popClassSelection,songPopClass}from"./scores.js?v=3.3.79";
 import{medalInfo}from"./ui.js?v=3.2.49";
 
@@ -60,43 +60,43 @@ function canvas(width,height){const c=document.createElement("canvas");c.width=w
 async function blobFromCanvas(c,type="image/jpeg"){if(type==="image/png")return await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/png"));let quality=.86,blob=null;for(let i=0;i<5;i++){blob=await new Promise((resolve,reject)=>c.toBlob(b=>b?resolve(b):reject(new Error("画像を作成できませんでした。")),"image/jpeg",quality));if(blob.size<=TARGET_BYTES||quality<=.58)break;quality-=.07;}return blob;}
 async function shareBlob(blob,filename,title){const type=blob.type||(/\.png$/i.test(filename)?"image/png":"image/jpeg"),file=new File([blob],filename,{type}),data={files:[file],title,text:SHARE_TEXT};if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share(data);return"shared";}catch(error){if(error?.name==="AbortError")return"cancelled";}}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);return"downloaded";}
 
-function chartLevelStack(ctx,chart,level,x,y,w,h){
- const size=Math.min(w,Math.floor((h-2)/2));
- const top=y+Math.max(0,Math.floor((h-size*2-2)/2));
- drawOfficialBadge(ctx,chart,"chart",null,x+(w-size)/2,top,size);
- drawOfficialBadge(ctx,chart,"level",level,x+(w-size)/2,top+size+2,size);
-}
-function scoreTileLayout(row,x,y,w,h){
- const inner=3,cellGap=2,medalCellW=28,stackCellW=31,scoreCellW=44,psrCellW=42,bannerH=h-inner*2;
- const score=String(Number(row.version_score||0)),psr=songPopClass(row).toFixed(2);
- const fixedW=medalCellW+stackCellW+scoreCellW+psrCellW+cellGap*4;
- const bannerW=Math.max(96,Math.floor(w-inner*2-fixedW));
- const banner={x:x+inner,y:y+inner,w:bannerW,h:bannerH};
- const stack={x:banner.x+banner.w+cellGap,y:y+inner,w:stackCellW,h:bannerH};
- const medal={x:stack.x+stack.w+cellGap,y:y+inner,w:medalCellW,h:bannerH};
- const scoreCell={x:medal.x+medal.w+cellGap,y:y+inner,w:scoreCellW,h:bannerH};
- const psrCell={x:scoreCell.x+scoreCell.w+cellGap,y:y+inner,w:psrCellW,h:bannerH};
- return{banner,stack,medal,scoreCell,psrCell,score,psr};
+function scoreTileLayout(x,y,w,h){
+ // Banner is followed by exactly five horizontally aligned fields:
+ // difficulty | level | current medal | current score | song PSR.
+ const pad=5,gap=3,chartW=40,levelW=40,medalW=41,scoreW=69,psrW=58;
+ const fixed=chartW+levelW+medalW+scoreW+psrW+gap*5;
+ const bannerW=w-pad*2-fixed;
+ if(bannerW<115)throw new Error('PSR画像の列幅が不足しています。');
+ let cursor=x+pad;
+ const banner={x:cursor,y:y+pad,w:bannerW,h:h-pad*2};cursor+=bannerW+gap;
+ const chart={x:cursor,y:y+pad,w:chartW,h:h-pad*2};cursor+=chartW+gap;
+ const level={x:cursor,y:y+pad,w:levelW,h:h-pad*2};cursor+=levelW+gap;
+ const medal={x:cursor,y:y+pad,w:medalW,h:h-pad*2};cursor+=medalW+gap;
+ const score={x:cursor,y:y+pad,w:scoreW,h:h-pad*2};cursor+=scoreW+gap;
+ const psr={x:cursor,y:y+pad,w:psrW,h:h-pad*2};
+ return{banner,chart,level,medal,score,psr};
 }
 function drawMetricColumn(ctx,label,value,cell){
- text(ctx,label,cell.x+cell.w/2,cell.y+Math.round(cell.h*.30),8.2,800,MUTED,"center");
- text(ctx,value,cell.x+cell.w/2,cell.y+Math.round(cell.h*.72),9.5,900,INK,"center");
+ text(ctx,label,cell.x+cell.w/2,cell.y+Math.round(cell.h*.30),9.7,800,MUTED,'center');
+ text(ctx,value,cell.x+cell.w/2,cell.y+Math.round(cell.h*.73),12,900,INK,'center');
 }
 async function drawScoreTile(ctx,row,x,y,w,h){
- rounded(ctx,x,y,w,h,7,PANEL,LINE,2);
- const cell=scoreTileLayout(row,x,y,w,h);
+ rounded(ctx,x,y,w,h,8,PANEL,LINE,2);
+ const cell=scoreTileLayout(x,y,w,h);
  await drawBanner(ctx,row,cell.banner.x,cell.banner.y,cell.banner.w,cell.banner.h,false);
- const medalSize=Math.min(24,cell.medal.h);
+ const badgeSize=Math.min(39,cell.chart.h);
+ drawOfficialBadge(ctx,row.chart,'chart',null,cell.chart.x+(cell.chart.w-badgeSize)/2,cell.chart.y+(cell.chart.h-badgeSize)/2,badgeSize);
+ drawOfficialBadge(ctx,row.chart,'level',row.level,cell.level.x+(cell.level.w-badgeSize)/2,cell.level.y+(cell.level.h-badgeSize)/2,badgeSize);
+ const medalSize=Math.min(34,cell.medal.h);
  await drawMedal(ctx,row,cell.medal.x+(cell.medal.w-medalSize)/2,cell.medal.y+(cell.medal.h-medalSize)/2,medalSize,true);
- chartLevelStack(ctx,row.chart,row.level,cell.stack.x,cell.stack.y,cell.stack.w,cell.stack.h);
- drawMetricColumn(ctx,"スコア",cell.score,cell.scoreCell);
- drawMetricColumn(ctx,"PSR",cell.psr,cell.psrCell);
+ drawMetricColumn(ctx,'スコア',String(Number(row.version_score||0)),cell.score);
+ drawMetricColumn(ctx,'PSR',songPopClass(row).toFixed(2),cell.psr);
 }
 function columnHeader(ctx,label,count,x,y,w){text(ctx,label,x,y+13,16,900,INK);text(ctx,`${count}曲`,x+w,y+13,11,800,MUTED,"right");ctx.fillStyle=LINE;ctx.fillRect(x,y+26,w,2);}
 export async function sharePopClassImage(rows,username,officialPopnClass=null){
  const{current,other,total}=popClassSelection(rows),all=[...current,...other];if(!all.length)throw new Error("PSR対象曲がありません。");
  await preload(all,[],true);
- const width=900,pad=15,gapX=7,gapY=5,cols=3,rowsPerCol=20,tileW=(width-pad*2-gapX*(cols-1))/cols,tileH=45,gridY=123;
+ const width=1410,pad=18,gapX=9,gapY=5,cols=3,rowsPerCol=20,tileW=(width-pad*2-gapX*(cols-1))/cols,tileH=52,gridY=123;
  const height=gridY+rowsPerCol*(tileH+gapY)+29;
  const[c,ctx]=canvas(width,height),hasOfficial=officialPopnClass!==null&&officialPopnClass!==""&&Number.isFinite(Number(officialPopnClass)),official=hasOfficial?Number(officialPopnClass):null;header(ctx,"Popn Score Rating 対象曲一覧",`${hasOfficial?`ポップンクラス ${official.toFixed(2)}　`:""}PSR ${total.toFixed(2)}`,username,width);
  columnHeader(ctx,"今作 TOP 20",current.length,pad,87,tileW);

@@ -1,4 +1,4 @@
-import{officialBadgeSvg}from"./chart-badges.js?v=3.3.84";
+import{officialBadgeSvg}from"./chart-badges.js?v=3.3.85";
 import{currentMedalCode,rankFromScore,popClassSelection,songPopClass}from"./scores.js?v=3.3.81";
 
 const currentRankForRow=row=>rankFromScore(Number(row?.version_score)||0,currentMedalCode(row));
