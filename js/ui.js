@@ -1,4 +1,4 @@
-import{officialBadgeSvg}from"./chart-badges.js?v=3.3.86";
+import{officialBadgeHtml,paintOfficialBadges}from"./chart-badges.js?v=3.3.87";
 import{currentMedalCode,rankFromScore,popClassSelection,songPopClass}from"./scores.js?v=3.3.81";
 
 const currentRankForRow=row=>rankFromScore(Number(row?.version_score)||0,currentMedalCode(row));
@@ -30,7 +30,7 @@ function scoreCard(row,useCurrentMedal=false){
  return `<article class="score-card-v300 score-card-v312">
  <div class="score-card-upper">${row.banner_url?`<img class="song-banner" src="${esc(row.banner_url)}" alt="" loading="lazy">`:'<div class="song-banner banner-empty">NO IMAGE</div>'}
  <div class="score-records">${record("歴代",row.medal_code,historyMedal,historyScore)}${record("今作",nowCode,nowMedal,currentScore)}</div></div>
- <div class="score-card-lower"><span class="card-chart ${String(row.chart||"").toLowerCase()}">${officialBadgeSvg(row.chart,"chart")}</span><span class="card-genre">${esc(row.genre)}</span><span class="card-psr-label">PSR</span><button class="score-edit" type="button" data-edit-score="${esc(row.id)}">編集</button><strong class="card-level">${officialBadgeSvg(row.chart,"level",row.level)}</strong><h2 class="card-title">${esc(row.title)}</h2><strong class="card-popclass">${songPopClass(row).toFixed(2)}</strong></div>
+ <div class="score-card-lower"><span class="card-chart ${String(row.chart||"").toLowerCase()}">${officialBadgeHtml(row.chart,"chart")}</span><span class="card-genre">${esc(row.genre)}</span><span class="card-psr-label">PSR</span><button class="score-edit" type="button" data-edit-score="${esc(row.id)}">編集</button><strong class="card-level">${officialBadgeHtml(row.chart,"level",row.level)}</strong><h2 class="card-title">${esc(row.title)}</h2><strong class="card-popclass">${songPopClass(row).toFixed(2)}</strong></div>
  </article>`;
 }
 export function renderScores(rows,page=1){
@@ -44,9 +44,9 @@ export function renderScores(rows,page=1){
  compareField=(a,b,key,dir=defaultDirection[key]??1)=>{if(key==="title")return String(a.title||"").localeCompare(String(b.title||""),"ja")*dir;const av=numericValue(a,key),bv=numericValue(b,key);if(key==="wiki_difficulty"){if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return-1;}return(av-bv)*dir;},
  compare=(a,b)=>{let result;if(field==="wiki_difficulty"){result=compareField(a,b,"level",-1);if(result)return result;result=compareField(a,b,"wiki_difficulty",direction);if(result)return result;}else{result=compareField(a,b,field,direction);if(result)return result;}for(const key of priority){if(key===field||(field==="wiki_difficulty"&&key==="level"))continue;result=compareField(a,b,key);if(result)return result;}return (chartOrder[a.chart]??9)-(chartOrder[b.chart]??9);},
  sorted=[...rows].sort(compare),pages=Math.ceil(sorted.length/PAGE_SIZE),current=Math.min(Math.max(1,Number(page)||1),pages),start=(current-1)*PAGE_SIZE;
- list.innerHTML=sorted.slice(start,start+PAGE_SIZE).map(scoreCard).join("")+`<nav class="score-pager"><span>${sorted.length.toLocaleString("ja-JP")}件中 ${(start+1).toLocaleString("ja-JP")}～${Math.min(start+PAGE_SIZE,sorted.length).toLocaleString("ja-JP")}件</span>${pager(current,pages,"score-page")}</nav>`;return current;
+ list.innerHTML=sorted.slice(start,start+PAGE_SIZE).map(scoreCard).join("")+`<nav class="score-pager"><span>${sorted.length.toLocaleString("ja-JP")}件中 ${(start+1).toLocaleString("ja-JP")}～${Math.min(start+PAGE_SIZE,sorted.length).toLocaleString("ja-JP")}件</span>${pager(current,pages,"score-page")}</nav>`;paintOfficialBadges(list);return current;
 }
-export function renderPopClass(rows){const{current,other,total}=popClassSelection(rows),section=(title,items,limit)=>`<section class="popclass-group"><div class="popclass-group-title"><h2>${title}</h2><span>${items.length}/${limit}曲</span></div><div class="score-list">${items.length?items.map(item=>scoreCard(item,true)).join(""):'<div class="empty">対象曲がありません。</div>'}</div></section>`;document.querySelector("#totalPopClass").textContent=total.toFixed(2);document.querySelector("#popclassContent").innerHTML=section("新曲枠",current,20)+section("旧曲枠",other,40);return total;}
+export function renderPopClass(rows){const{current,other,total}=popClassSelection(rows),section=(title,items,limit)=>`<section class="popclass-group"><div class="popclass-group-title"><h2>${title}</h2><span>${items.length}/${limit}曲</span></div><div class="score-list">${items.length?items.map(item=>scoreCard(item,true)).join(""):'<div class="empty">対象曲がありません。</div>'}</div></section>`;document.querySelector("#totalPopClass").textContent=total.toFixed(2);document.querySelector("#popclassContent").innerHTML=section("新曲枠",current,20)+section("旧曲枠",other,40);paintOfficialBadges(document.querySelector("#popclassContent"));return total;}
 const MEDAL_GROUPS=[
  ["perfect",["perfect","a"]],["fc_1_5",["fc_1_5","b"]],["fc_6_20",["fc_6_20","c"]],["fc_21_plus",["fc_21_plus","d"]],
  ["clear_bad_1_5",["clear_bad_1_5","e"]],["clear_bad_6_20",["clear_bad_6_20","f"]],["clear_bad_21_plus",["clear_bad_21_plus","g"]],

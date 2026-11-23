@@ -1,4 +1,4 @@
-import{drawOfficialBadge}from"./chart-badges.js?v=3.3.86";
+import{drawOfficialBadge}from"./chart-badges.js?v=3.3.87";
 import{popClassSelection,songPopClass}from"./scores.js?v=3.3.79";
 import{medalInfo}from"./ui.js?v=3.2.49";
 

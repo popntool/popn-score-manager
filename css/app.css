@@ -886,7 +886,7 @@ textarea,
 .sync-update-no-banner{display:grid;place-items:center;width:150px;height:50px;border:1px solid #d8e1f4;border-radius:10px;background:#f7fbff;color:#ff6da5;font-size:22px;font-weight:900;}
 .sync-update-chart-level{display:grid;grid-template-rows:1fr 1fr;align-items:center;justify-items:center;align-self:stretch;min-width:0;gap:2px;background:transparent;}
 .sync-update-chart,.sync-update-level{display:grid;place-items:center;width:100%;min-width:0;min-height:0;padding:0;background:transparent;color:inherit;}
-.sync-update-chart .official-badge-image,.sync-update-level .official-badge-image{display:block;width:min(100%,27px);height:auto;aspect-ratio:1;object-fit:contain;}
+.sync-update-chart .official-badge-canvas,.sync-update-level .official-badge-canvas{display:block;width:min(68%,28px);height:auto;aspect-ratio:1;object-fit:contain;flex:none;}
 .sync-update-song-title{min-width:0;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;color:#172c65;font-size:1.05rem;line-height:1.35;word-break:break-word;}
 .sync-update-changes{display:grid;gap:12px;}
 .sync-update-change-block{display:grid;grid-template-rows:auto auto;gap:6px;}
@@ -1151,15 +1151,23 @@ body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 :is
   background:var(--surface)!important;
   overflow:hidden!important;
 }
-body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 :is(.card-chart,.card-level) .official-badge-image{
-  display:block;
-  width:min(86%,27px);
-  max-height:92%;
-  aspect-ratio:1;
-  height:auto;
-  object-fit:contain;
-  min-width:0;
-  min-height:0;
+/* Score and PSR tabs share the same badge renderer and intrinsic size.
+   Reserve whitespace around every badge, including desktop score cards. */
+#scoreList .score-card-v312 :is(.card-chart,.card-level) > .official-badge-canvas,
+#popclassContent .score-card-v312 :is(.card-chart,.card-level) > .official-badge-canvas{
+  display:block!important;
+  width:min(62%,32px)!important;
+  height:auto!important;
+  max-width:32px!important;
+  max-height:32px!important;
+  aspect-ratio:1!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:auto!important;
+  padding:0!important;
+  flex:none!important;
+  background:transparent!important;
+  border:0!important;
 }
 /* history/current visual groups */
 body.score-card-responsive :is(#scoreList,#popclassContent) .score-card-v312 .score-record:nth-child(1)>*{
