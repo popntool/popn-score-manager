@@ -42,31 +42,19 @@ export function drawOfficialBadge(ctx,chart,kind,value,x,y,size){
  ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.lineJoin='round';ctx.fillStyle='#08080a';ctx.strokeStyle=p.glow;
  function glyph(text,y,fontSize,lineWidth,spacing){ctx.font=`1000 ${fontSize}px ${FONT}`;ctx.lineWidth=lineWidth;if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing=spacing;ctx.strokeText(text,36,y);ctx.fillText(text,36,y);if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing='0px';}
  if(isLevel){
-  // The official level icon has a compact Lv. header and a much larger
-  // two-digit numeral. Keep each glyph inside the coloured face (15.5..56.5)
-  // without scaling the numeral down to the header's narrow line box.
-  const fitGlyph=(text,box,nominalSize,outline)=>{
-   const [left,top,right,bottom]=box;
-   const maxWidth=right-left-2*outline;
-   const maxHeight=bottom-top-2*outline;
-   let fontSize=nominalSize;
-   let metrics;
-   for(;fontSize>=9;fontSize-=.5){
-    ctx.font=`1000 ${fontSize}px ${FONT}`;
-    metrics=ctx.measureText(text);
-    const width=metrics.actualBoundingBoxLeft+metrics.actualBoundingBoxRight;
-    const height=metrics.actualBoundingBoxAscent+metrics.actualBoundingBoxDescent;
-    if(Math.max(width,metrics.width)<=maxWidth&&height<=maxHeight)break;
-   }
-   const ascent=metrics.actualBoundingBoxAscent;
-   const descent=metrics.actualBoundingBoxDescent;
-   const baseline=(top+bottom+ascent-descent)/2;
-   ctx.lineWidth=outline;
-   ctx.strokeText(text,36,baseline);
-   ctx.fillText(text,36,baseline);
-  };
-  fitGlyph('Lv.',[19,18.5,53,29],12.5,.55);
-  fitGlyph(shown,[18.5,30,53.5,54.5],29,1.0);
+  // Fixed-size typography: never fit the numeral to a height-based bounding
+  // box. On Safari/Chrome actualBoundingBoxAscent varies by installed font,
+  // which previously reduced two-digit levels to tiny lettering. Instead,
+  // keep the official-style large numbers and constrain their width only.
+  // Face is 15.5..56.5; header and number use separate fixed baselines.
+  ctx.font=`900 10.5px ${FONT}`;
+  ctx.lineWidth=.65;
+  ctx.strokeText('Lv.',36,28,26);
+  ctx.fillText('Lv.',36,28,26);
+  ctx.font=`1000 29px ${FONT}`;
+  ctx.lineWidth=1.05;
+  ctx.strokeText(shown,36,52,34);
+  ctx.fillText(shown,36,52,34);
  }
 
  else{
