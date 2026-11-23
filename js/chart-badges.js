@@ -42,11 +42,33 @@ export function drawOfficialBadge(ctx,chart,kind,value,x,y,size){
  ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.lineJoin='round';ctx.fillStyle='#08080a';ctx.strokeStyle=p.glow;
  function glyph(text,y,fontSize,lineWidth,spacing){ctx.font=`1000 ${fontSize}px ${FONT}`;ctx.lineWidth=lineWidth;if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing=spacing;ctx.strokeText(text,36,y);ctx.fillText(text,36,y);if(spacing&&'letterSpacing'in ctx)ctx.letterSpacing='0px';}
  if(isLevel){
-  // The inset colored face spans y=15.5..56.5. Keep both label and
-  // numerals within it even with a font's descent and outline stroke.
-  glyph('Lv.',27,13.2,.7);
-  glyph(shown,50,26,1.25);
+  // Fit the *actual rendered glyph bounds*, not the nominal CSS font size.
+  // Fonts differ between iOS Safari and desktop Chrome. Fixed 26px text with
+  // an alphabetic baseline could touch/overlap the black inner bezel.
+  const textBox=(text,{top,bottom,left=19,right=53,fontSize,outline=1.1})=>{
+   const maxW=right-left-2, maxH=bottom-top-2;
+   let size=fontSize,metrics;
+   do{
+    ctx.font=`1000 ${size}px ${FONT}`;
+    metrics=ctx.measureText(text);
+    const width=(metrics.actualBoundingBoxLeft||0)+(metrics.actualBoundingBoxRight||0);
+    const height=(metrics.actualBoundingBoxAscent||0)+(metrics.actualBoundingBoxDescent||0);
+    if(width+outline*2<=maxW&&height+outline*2<=maxH)break;
+    size-=.5;
+   }while(size>=8);
+   const ascent=metrics.actualBoundingBoxAscent||size*.8;
+   const descent=metrics.actualBoundingBoxDescent||size*.2;
+   const baseline=top+(bottom-top-(ascent+descent))/2+ascent;
+   ctx.lineWidth=outline;
+   ctx.strokeText(text,36,baseline);
+   ctx.fillText(text,36,baseline);
+  };
+  // Keep both rows distinctly within the face (15.5..56.5), with
+  // a visible gap between the label and numeral and below the numeral.
+  textBox('Lv.',{top:19,bottom:29,fontSize:11,outline:.55});
+  textBox(shown,{top:34,bottom:49,fontSize:19,outline:.9});
  }
+
  else{
   ctx.font=`900 31px ${FONT}`;
   // EX uses the same font height as L/N/H. Only its horizontal width is fitted.
